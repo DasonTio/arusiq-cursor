@@ -1,0 +1,1069 @@
+<title>ARUSIQ Phase 1 Design Set</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --ground:#F4F6FB;
+  --surface:#FFFFFF;
+  --surface-2:#EDF1F8;
+  --ink:#0F172A;
+  --ink-2:#44506B;
+  --ink-3:#6B7A94;
+  --line:#D9E1EE;
+  --line-2:#C3CDE0;
+
+  --navy:#1B2F6E;
+  --navy-deep:#0F1B45;
+  --navy-800:#16255A;
+  --red:#D62027;
+  --blue:#2F6BFF;
+
+  --crit:#D32F2F;
+  --warn:#C2680A;
+  --ok:#1E9E5A;
+  --unk:#6B7A94;
+  --crit-fill:#FDECEC; --crit-line:#F3B9B9; --crit-text:#B3151A;
+  --warn-fill:#FDF4DD; --warn-line:#EFD79A; --warn-text:#8A5A00;
+  --ok-fill:#E9F6EE;   --ok-line:#A9DCC0;   --ok-text:#12703F;
+  --unk-fill:#EEF1F6;  --unk-line:#C9D2E2;  --unk-text:#55627A;
+
+  --on-dark:#FFFFFF;
+  --on-dark-2:#C3CCE0;
+  --on-dark-3:#8E9CBC;
+
+  --s1:#1B2F6E; --s2:#2F6BFF; --s3:#007B88; --s4:#D62027; --s5:#B46B00; --s6:#6B4FA8;
+
+  --display:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
+  --body:"Inter","Segoe UI",system-ui,sans-serif;
+  --maxw:1120px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#080D1C;
+    --surface:#101935;
+    --surface-2:#16224A;
+    --ink:#E9EDF7;
+    --ink-2:#B3BFD8;
+    --ink-3:#8E9CBC;
+    --line:#22315C;
+    --line-2:#2C3D6E;
+    --navy:#7D95D8;
+    --navy-deep:#0A1230;
+    --navy-800:#111B3E;
+    --red:#FF6B6F;
+    --blue:#7FA5FF;
+    --crit:#FF8A8A; --warn:#F5CE5E; --ok:#5FD69A; --unk:#9AA8C4;
+    --crit-fill:#2A1216; --crit-line:#5C2026; --crit-text:#FF9D9D;
+    --warn-fill:#2A2110; --warn-line:#5C4517; --warn-text:#F5CE5E;
+    --ok-fill:#0F2419;   --ok-line:#1E5236;   --ok-text:#6FDCA4;
+    --unk-fill:#161F38;  --unk-line:#2C3A5C;  --unk-text:#A6B3CC;
+    --s1:#7D95D8; --s2:#7FA5FF; --s3:#3FBCC8; --s4:#FF6B6F; --s5:#E0A245; --s6:#A88BE0;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#080D1C;
+  --surface:#101935;
+  --surface-2:#16224A;
+  --ink:#E9EDF7;
+  --ink-2:#B3BFD8;
+  --ink-3:#8E9CBC;
+  --line:#22315C;
+  --line-2:#2C3D6E;
+  --navy:#7D95D8;
+  --navy-deep:#0A1230;
+  --navy-800:#111B3E;
+  --red:#FF6B6F;
+  --blue:#7FA5FF;
+  --crit:#FF8A8A; --warn:#F5CE5E; --ok:#5FD69A; --unk:#9AA8C4;
+  --crit-fill:#2A1216; --crit-line:#5C2026; --crit-text:#FF9D9D;
+  --warn-fill:#2A2110; --warn-line:#5C4517; --warn-text:#F5CE5E;
+  --ok-fill:#0F2419;   --ok-line:#1E5236;   --ok-text:#6FDCA4;
+  --unk-fill:#161F38;  --unk-line:#2C3A5C;  --unk-text:#A6B3CC;
+  --s1:#7D95D8; --s2:#7FA5FF; --s3:#3FBCC8; --s4:#FF6B6F; --s5:#E0A245; --s6:#A88BE0;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;background:var(--ground);color:var(--ink);
+  font-family:var(--body);font-size:15px;line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 28px}
+section{padding:56px 0;border-top:1px solid var(--line)}
+section:first-of-type{border-top:0}
+
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0}
+h2{font-size:29px;font-weight:800;letter-spacing:-.02em;line-height:1.15}
+h3{font-size:18px;font-weight:700;letter-spacing:-.01em}
+h4{font-size:14px;font-weight:700}
+p{margin:0}
+.lede{color:var(--ink-2);max-width:64ch;font-size:16px}
+
+.eyebrow{
+  font-family:var(--body);font-size:11px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--ink-3);
+}
+.sec-head{display:flex;flex-direction:column;gap:10px;margin-bottom:30px}
+.sec-head .row{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.tag{
+  font-size:11px;font-weight:600;letter-spacing:.04em;color:var(--ink-3);
+  border:1px solid var(--line-2);border-radius:999px;padding:2px 9px;white-space:nowrap;
+}
+
+/* masthead */
+.mast{background:var(--navy-deep);color:var(--on-dark);padding:44px 0 0}
+.mast .wrap{padding-bottom:0}
+.mast-grid{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:44px;align-items:end}
+.logo{display:flex;align-items:center;gap:11px;margin-bottom:22px}
+.logo-mark{width:30px;height:30px;flex:none}
+.logo-word{font-family:var(--display);font-weight:800;font-size:17px;letter-spacing:.02em;color:#fff}
+.logo-word i{color:#FF6B6F;font-style:normal}
+.logo-sub{font-size:10px;letter-spacing:.3em;color:var(--on-dark-3);text-transform:uppercase;margin-top:1px}
+.mast h1{font-size:44px;font-weight:800;letter-spacing:-.03em;line-height:1.08;color:#fff}
+.mast .lede{color:var(--on-dark-2);margin-top:14px;font-size:16px}
+.mast-meta{display:flex;flex-direction:column;gap:12px;padding-bottom:6px}
+.mast-meta .mrow{display:flex;gap:12px;font-size:13px;border-top:1px solid rgba(255,255,255,.12);padding-top:10px}
+.mast-meta .mrow span:first-child{color:var(--on-dark-3);min-width:92px;flex:none}
+.mast-meta .mrow span:last-child{color:var(--on-dark)}
+.docstrip{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:rgba(255,255,255,.13);margin-top:40px;border-top:1px solid rgba(255,255,255,.13)}
+.docstrip div{background:var(--navy-deep);padding:16px 18px 20px}
+.docstrip .id{font-family:var(--display);font-weight:800;font-size:13px;color:#FF6B6F;letter-spacing:.04em}
+.docstrip .nm{font-size:13px;color:#fff;font-weight:600;margin-top:4px;line-height:1.3}
+.docstrip .st{font-size:11px;color:var(--on-dark-3);margin-top:6px}
+
+/* generic panels */
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+
+figure{margin:0}
+figcaption{font-size:12px;color:var(--ink-3);margin-top:12px;max-width:72ch}
+.svgbox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:20px}
+.svgbox svg{display:block;min-width:640px;width:100%;height:auto}
+
+/* part groups */
+.pg{border:1px solid var(--line);border-radius:10px;background:var(--surface);overflow:hidden}
+.pg-h{padding:13px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px}
+.pg-h .dot{width:9px;height:9px;border-radius:3px;flex:none}
+.pg-h h3{font-size:14px}
+.pg-h .n{margin-left:auto;font-size:11px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.pg ul{list-style:none;margin:0;padding:6px 0}
+.pg li{padding:7px 16px;font-size:13.5px;color:var(--ink-2);display:flex;gap:10px;align-items:baseline}
+.pg li + li{border-top:1px solid var(--line)}
+.pg li b{color:var(--ink);font-weight:600}
+.pg li .sig{margin-left:auto;font-size:11px;color:var(--ink-3);text-align:right;flex:none;max-width:48%}
+
+/* severity band */
+.band{background:var(--navy-deep);color:var(--on-dark);border-top:0}
+.band h2{color:#fff}
+.band .lede{color:var(--on-dark-2)}
+.band .eyebrow{color:var(--on-dark-3)}
+.sev{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.sev-c{border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:18px;background:rgba(255,255,255,.035);display:flex;flex-direction:column;gap:10px}
+.sev-top{display:flex;align-items:center;gap:10px}
+.sev-ic{width:26px;height:26px;flex:none}
+.sev-c h3{font-size:16px;color:#fff}
+.sev-c .means{font-size:13.5px;color:var(--on-dark-2);min-height:3.6em}
+.sev-c .act{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase}
+.sev-c .ex{font-size:12px;color:var(--on-dark-3);border-top:1px solid rgba(255,255,255,.12);padding-top:10px;line-height:1.45}
+.sev-tok{display:flex;gap:6px;flex-wrap:wrap;font-size:10.5px;font-variant-numeric:tabular-nums;color:var(--on-dark-3)}
+.sev-tok span{border:1px solid rgba(255,255,255,.16);border-radius:4px;padding:1px 5px}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.rule{border-left:2px solid #FF6B6F;padding:2px 0 2px 14px}
+.rule b{display:block;font-size:13px;color:#fff;font-family:var(--display);font-weight:700}
+.rule span{font-size:12.5px;color:var(--on-dark-2)}
+
+/* roles */
+.role{border:1px solid var(--line);border-radius:10px;background:var(--surface);display:flex;flex-direction:column;overflow:hidden}
+.role-h{padding:16px 18px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+.role-h .who{font-size:11px;letter-spacing:.11em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.role-h h3{margin-top:5px;font-size:17px}
+.role-h .q{font-size:12.5px;color:var(--ink-2);margin-top:7px;font-style:italic}
+.role-b{padding:16px 18px;display:flex;flex-direction:column;gap:12px;flex:1}
+.role-b .lbl{font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:700}
+.role-b ul{list-style:none;margin:5px 0 0;padding:0;display:flex;flex-direction:column;gap:5px}
+.role-b li{font-size:13px;color:var(--ink-2);padding-left:14px;position:relative}
+.role-b li::before{content:"";position:absolute;left:0;top:.55em;width:5px;height:5px;border-radius:1px;background:var(--navy)}
+.role-f{margin-top:auto;padding:12px 18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+/* KPI tiles */
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.kpi{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px}
+.kpi .k-l{font-size:12px;color:var(--ink-3);font-weight:500}
+.kpi .k-v{font-family:var(--display);font-weight:800;font-size:32px;letter-spacing:-.025em;line-height:1.1;margin-top:6px;font-variant-numeric:tabular-nums}
+.kpi .k-u{font-size:13px;color:var(--ink-2);font-weight:600}
+.kpi .k-n{font-size:11.5px;color:var(--ink-3);margin-top:7px;line-height:1.4}
+
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:600;
+  border-radius:999px;padding:2px 8px;border:1px solid;letter-spacing:.02em;white-space:nowrap}
+.chip.sim{background:transparent;border-style:dashed;border-color:var(--unk-line);color:var(--unk-text)}
+.chip.est{background:transparent;border-color:var(--unk-line);color:var(--unk-text)}
+.chip.prov{background:var(--warn-fill);border-color:var(--warn-line);color:var(--warn-text)}
+.chip.ver{background:var(--ok-fill);border-color:var(--ok-line);color:var(--ok-text)}
+
+/* table */
+.tbl{width:100%;border-collapse:collapse;font-size:13px}
+.tbl th{
+  text-align:left;font-family:var(--body);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-3);font-weight:700;padding:0 12px 9px;border-bottom:1px solid var(--line-2);
+}
+.tbl td{padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink-2)}
+.tbl td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+.tbl .num{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.tblbox{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px 6px 4px}
+
+/* findings */
+.fbar{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+.fb{border-radius:8px;padding:14px 16px;border:1px solid}
+.fb .n{font-family:var(--display);font-weight:800;font-size:28px;line-height:1;font-variant-numeric:tabular-nums}
+.fb .l{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;margin-top:6px}
+.fb .d{font-size:11.5px;margin-top:6px;line-height:1.4}
+.fb.c{background:var(--crit-fill);border-color:var(--crit-line);color:var(--crit-text)}
+.fb.h{background:var(--warn-fill);border-color:var(--warn-line);color:var(--warn-text)}
+.fb.m{background:var(--unk-fill);border-color:var(--unk-line);color:var(--unk-text)}
+.fb.l2{background:var(--surface);border-color:var(--line);color:var(--ink-3)}
+
+.prog{display:flex;flex-direction:column;gap:14px}
+.prow{display:grid;grid-template-columns:118px 1fr 84px;gap:14px;align-items:center}
+.prow .pl{font-size:13px;font-weight:600}
+.prow .pt{height:24px;border-radius:5px;background:var(--surface-2);overflow:hidden;display:flex;border:1px solid var(--line)}
+.prow .pt i{display:block;height:100%}
+.prow .pn{font-size:12px;color:var(--ink-3);text-align:right;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:18px;flex-wrap:wrap;font-size:12px;color:var(--ink-3);margin-top:6px}
+.legend span{display:flex;align-items:center;gap:7px}
+.legend i{width:11px;height:11px;border-radius:3px;display:block}
+
+.fixlist{display:grid;grid-template-columns:repeat(2,1fr);gap:0 30px}
+.fix{display:grid;grid-template-columns:52px 1fr;gap:12px;padding:13px 0;border-top:1px solid var(--line);align-items:start}
+.fix .fid{font-size:11px;font-weight:700;color:var(--crit-text);background:var(--crit-fill);border:1px solid var(--crit-line);
+  border-radius:4px;padding:2px 0;text-align:center;font-variant-numeric:tabular-nums}
+.fix.hi .fid{color:var(--warn-text);background:var(--warn-fill);border-color:var(--warn-line)}
+.fix b{font-size:13.5px;font-family:var(--display);display:block;font-weight:700}
+.fix span{font-size:12.5px;color:var(--ink-2);display:block;margin-top:3px}
+.fix em{font-style:normal;color:var(--ok-text);font-weight:600}
+
+footer{background:var(--navy-deep);color:var(--on-dark-2);padding:40px 0;font-size:12.5px}
+footer .wrap{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}
+footer b{color:#fff;font-family:var(--display);display:block;margin-bottom:7px;font-size:13px}
+footer ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+footer .note{max-width:38ch;color:var(--on-dark-3)}
+
+@media (max-width:960px){
+  .mast-grid{grid-template-columns:1fr;gap:26px}
+  .docstrip{grid-template-columns:repeat(2,1fr)}
+  .grid-3,.sev,.kpis,.grid-4{grid-template-columns:repeat(2,1fr)}
+  .rules{grid-template-columns:1fr}
+  .fixlist{grid-template-columns:1fr}
+}
+@media (max-width:620px){
+  .wrap{padding:0 18px}
+  .mast h1{font-size:32px}
+  h2{font-size:23px}
+  .grid-2,.grid-3,.sev,.kpis,.grid-4,.fbar,.docstrip{grid-template-columns:1fr}
+  .prow{grid-template-columns:1fr;gap:6px}
+  .prow .pn{text-align:left}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div class="mast-grid">
+      <div>
+        <div class="logo">
+          <svg class="logo-mark" viewBox="0 0 32 32" aria-hidden="true">
+            <path d="M4 26 L14 6 L24 26" fill="none" stroke="#fff" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+            <path d="M2 21 H12" fill="none" stroke="#FF6B6F" stroke-width="2.4" stroke-linecap="round"/>
+            <circle cx="26" cy="21" r="3.4" fill="#FF6B6F"/>
+          </svg>
+          <div>
+            <div class="logo-word">ARUS<i>IQ</i></div>
+            <div class="logo-sub">Technologies</div>
+          </div>
+        </div>
+        <h1>The Phase&nbsp;1 design set, in one page</h1>
+        <p class="lede">Everything the stakeholder asked for, traced into requirements, checked, and drawn.
+          This is the visual companion to D5, D6, D7 and the D8 conformance review &mdash; built to be read in
+          ten minutes before the two-week prototype sprint begins.</p>
+      </div>
+      <div class="mast-meta">
+        <div class="mrow"><span>Product</span><span>Smart AC Intelligence Platform</span></div>
+        <div class="mrow"><span>Phase 1A</span><span>Clickable UI/UX prototype &middot; split units</span></div>
+        <div class="mrow"><span>Sprint</span><span>10 working days from 14 Sep 2026</span></div>
+        <div class="mrow"><span>Reviewed</span><span>12 Sep 2026 &middot; 36 findings, all closed</span></div>
+      </div>
+    </div>
+    <div class="docstrip">
+      <div><div class="id">D5 &middot; R2</div><div class="nm">User Requirements Specification</div><div class="st">53 interview items &rarr; numbered requirements</div></div>
+      <div><div class="id">D6 &middot; R2</div><div class="nm">Product Requirements Document</div><div class="st">22 epics &middot; 60 functional requirements</div></div>
+      <div><div class="id">D7 &middot; R2</div><div class="nm">UI Design Guideline</div><div class="st">Foundations + 14 product components</div></div>
+      <div><div class="id">D8</div><div class="nm">Conformance Review</div><div class="st">The evidence the set is complete</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- ─────────────────────────────  SYSTEM  ───────────────────────────── -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="row"><span class="eyebrow">01 &middot; What is being built</span><span class="tag">D6 &sect;1 &middot; D3</span></div>
+      <h2>One hidden gadget, three dashboards, four outbound channels</h2>
+      <p class="lede">A small module inside the air conditioner turns any brand into a monitored asset.
+        Everything else &mdash; the alerts, the bill, the carbon, the service call &mdash; is derived from what it reports.</p>
+    </div>
+    <figure>
+      <div class="svgbox">
+        <svg viewBox="0 0 980 300" role="img" aria-label="System diagram: gadget inside the air conditioner reports over MQTT to the ARUSIQ platform, which serves three role applications and four outbound adapters.">
+          <defs>
+            <marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+              <path d="M0 0 L10 5 L0 10 z" fill="currentColor"/>
+            </marker>
+          </defs>
+          <g font-family="Inter, sans-serif" color="var(--line-2)">
+
+            <!-- unit -->
+            <rect x="14" y="52" width="196" height="196" rx="9" fill="var(--surface-2)" stroke="var(--line-2)"/>
+            <text x="30" y="76" font-size="10.5" font-weight="700" letter-spacing="1.4" fill="var(--ink-3)">THE UNIT</text>
+            <rect x="30" y="90" width="164" height="42" rx="5" fill="var(--surface)" stroke="var(--line-2)"/>
+            <text x="42" y="110" font-size="12" font-weight="600" fill="var(--ink)">Indoor unit</text>
+            <text x="42" y="124" font-size="10.5" fill="var(--ink-3)">any brand &middot; split, cassette</text>
+            <rect x="30" y="176" width="164" height="42" rx="5" fill="var(--surface)" stroke="var(--line-2)"/>
+            <text x="42" y="196" font-size="12" font-weight="600" fill="var(--ink)">Outdoor unit</text>
+            <text x="42" y="210" font-size="10.5" fill="var(--ink-3)">compressor &middot; condenser</text>
+            <line x1="112" y1="132" x2="112" y2="176" stroke="var(--line-2)" stroke-width="1.5" stroke-dasharray="3 3"/>
+            <rect x="62" y="142" width="100" height="24" rx="12" fill="var(--navy)" stroke="none"/>
+            <text x="112" y="158" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">gadget · hidden</text>
+
+            <!-- link -->
+            <line x1="212" y1="150" x2="288" y2="150" stroke="var(--ink-3)" stroke-width="1.6" marker-end="url(#ar)" color="var(--ink-3)"/>
+            <text x="250" y="140" font-size="10" fill="var(--ink-3)" text-anchor="middle">MQTT</text>
+            <text x="250" y="167" font-size="9.5" fill="var(--ink-3)" text-anchor="middle">signed · buffered 72 h</text>
+
+            <!-- platform -->
+            <rect x="292" y="52" width="196" height="196" rx="9" fill="var(--navy-deep)"/>
+            <text x="308" y="76" font-size="10.5" font-weight="700" letter-spacing="1.4" fill="#8E9CBC">PLATFORM</text>
+            <g font-size="11.5" fill="#fff">
+              <text x="308" y="102">Rules &amp; alerts</text>
+              <text x="308" y="126">Baseline &amp; savings</text>
+              <text x="308" y="150">Scope 2 &amp; MRV</text>
+              <text x="308" y="174">Work orders</text>
+              <text x="308" y="198">Policy ladder</text>
+              <text x="308" y="222">Audit trail</text>
+            </g>
+            <line x1="300" y1="110" x2="472" y2="110" stroke="#2C3D6E" stroke-width="1"/>
+            <line x1="300" y1="134" x2="472" y2="134" stroke="#2C3D6E" stroke-width="1"/>
+            <line x1="300" y1="158" x2="472" y2="158" stroke="#2C3D6E" stroke-width="1"/>
+            <line x1="300" y1="182" x2="472" y2="182" stroke="#2C3D6E" stroke-width="1"/>
+            <line x1="300" y1="206" x2="472" y2="206" stroke="#2C3D6E" stroke-width="1"/>
+
+            <!-- fan out to roles -->
+            <line x1="490" y1="150" x2="560" y2="90"  stroke="var(--ink-3)" stroke-width="1.4" marker-end="url(#ar)" color="var(--ink-3)"/>
+            <line x1="490" y1="150" x2="560" y2="150" stroke="var(--ink-3)" stroke-width="1.4" marker-end="url(#ar)" color="var(--ink-3)"/>
+            <line x1="490" y1="150" x2="560" y2="210" stroke="var(--ink-3)" stroke-width="1.4" marker-end="url(#ar)" color="var(--ink-3)"/>
+
+            <rect x="566" y="66"  width="176" height="48" rx="7" fill="var(--surface)" stroke="var(--navy)" stroke-width="1.5"/>
+            <text x="580" y="86"  font-size="12.5" font-weight="700" fill="var(--ink)">Client</text>
+            <text x="580" y="102" font-size="10.5" fill="var(--ink-3)">comfort · bill · savings · carbon</text>
+
+            <rect x="566" y="126" width="176" height="48" rx="7" fill="var(--surface)" stroke="var(--navy)" stroke-width="1.5"/>
+            <text x="580" y="146" font-size="12.5" font-weight="700" fill="var(--ink)">Technician</text>
+            <text x="580" y="162" font-size="10.5" fill="var(--ink-3)">queue · evidence · checklist</text>
+
+            <rect x="566" y="186" width="176" height="48" rx="7" fill="var(--surface)" stroke="var(--navy)" stroke-width="1.5"/>
+            <text x="580" y="206" font-size="12.5" font-weight="700" fill="var(--ink)">Admin / HQ</text>
+            <text x="580" y="222" font-size="10.5" fill="var(--ink-3)">fleet · dispatch · approvals</text>
+
+            <!-- adapters -->
+            <line x1="746" y1="150" x2="806" y2="150" stroke="var(--ink-3)" stroke-width="1.4" marker-end="url(#ar)" color="var(--ink-3)"/>
+            <rect x="812" y="52" width="154" height="196" rx="9" fill="var(--surface-2)" stroke="var(--line-2)"/>
+            <text x="828" y="76" font-size="10.5" font-weight="700" letter-spacing="1.4" fill="var(--ink-3)">ADAPTERS</text>
+            <g font-size="11.5" fill="var(--ink)">
+              <text x="828" y="106">WhatsApp &amp; email</text>
+              <text x="828" y="142">Payment gateway</text>
+              <text x="828" y="178">Carbon platform API</text>
+              <text x="828" y="214">Public API &amp; webhooks</text>
+            </g>
+            <g fill="var(--ink-3)" font-size="9.5">
+              <text x="828" y="120">notices in the user’s language</text>
+              <text x="828" y="156">card · VA · e-wallet</text>
+              <text x="828" y="192">quote · retire · transfer</text>
+              <text x="828" y="228">assets · telemetry · alerts</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+      <figcaption>Phase 1A builds the three role applications against simulated telemetry. The gadget (Phase&nbsp;1C)
+        and the live adapters (Phase&nbsp;1B) arrive later against the same contracts, so nothing drawn here is thrown away.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  PARTS  ───────────────────────────── -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="row"><span class="eyebrow">02 &middot; What is monitored</span><span class="tag">UR-MNT-02…06 &middot; FR-20, 23, 24</span></div>
+      <h2>Twelve parts, three groups, one severity each</h2>
+      <p class="lede">&ldquo;Monitor every aspect&rdquo; is not a slogan in the requirements &mdash; it is an enumerated list.
+        Each part carries its own health, its own evidence, and its own recommended action.</p>
+    </div>
+    <div class="grid-3">
+      <div class="pg">
+        <div class="pg-h"><span class="dot" style="background:var(--s2)"></span><h3>Indoor unit</h3><span class="n">5 parts</span></div>
+        <ul>
+          <li><b>Air filter</b><span class="sig">pressure drop, run hours</span></li>
+          <li><b>Evaporator coil</b><span class="sig">approach temp, frost</span></li>
+          <li><b>Blower motor &amp; fan</b><span class="sig">current, vibration</span></li>
+          <li><b>Condensate drain &amp; pan</b><span class="sig">level, overflow</span></li>
+          <li><b>Vents &amp; louvers</b><span class="sig">airflow, actuator</span></li>
+        </ul>
+      </div>
+      <div class="pg">
+        <div class="pg-h"><span class="dot" style="background:var(--s4)"></span><h3>Outdoor unit</h3><span class="n">4 parts</span></div>
+        <ul>
+          <li><b>Condenser coil</b><span class="sig">discharge vs ambient</span></li>
+          <li><b>Compressor</b><span class="sig">current, cycling, vibration</span></li>
+          <li><b>Condenser fan &amp; blades</b><span class="sig">current, imbalance</span></li>
+          <li><b>Refrigerant lines</b><span class="sig">superheat, subcooling trend</span></li>
+        </ul>
+      </div>
+      <div class="pg">
+        <div class="pg-h"><span class="dot" style="background:var(--s5)"></span><h3>Electrical &amp; control</h3><span class="n">3 parts</span></div>
+        <ul>
+          <li><b>Thermostat &amp; sensors</b><span class="sig">drift, disagreement</span></li>
+          <li><b>Capacitor &amp; contactor</b><span class="sig">start current, chatter</span></li>
+          <li><b>Electrical wiring</b><span class="sig">voltage sag, harmonics</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="grid-2" style="margin-top:22px">
+      <div class="panel">
+        <h4 style="color:var(--crit-text)">Acute signals &mdash; act before it stops</h4>
+        <p style="font-size:13.5px;color:var(--ink-2);margin-top:8px">
+          Vibration outside the learned envelope, discharge temperature rising against ambient, and a fall in superheat
+          or subcooling that means charge is being lost. Each names the part it implicates and the measurement that
+          triggered it. <b style="color:var(--ink)">FR-23</b></p>
+      </div>
+      <div class="panel">
+        <h4 style="color:var(--warn-text)">Slow signals &mdash; trend, not threshold</h4>
+        <p style="font-size:13.5px;color:var(--ink-2);margin-top:8px">
+          A gradual charge decline consistent with a microscopic leak; a rising pressure drop consistent with filter or
+          coil fouling. Reported as a trend with a projected failure date and a confidence band, so a cheap repair
+          replaces an emergency one. <b style="color:var(--ink)">FR-24</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  SEVERITY  ───────────────────────────── -->
+<section class="band">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="row"><span class="eyebrow">03 &middot; The language of the interface</span><span class="tag" style="border-color:rgba(255,255,255,.2);color:var(--on-dark-3)">D7 R2 &sect;3 &middot; UR-MNT-01</span></div>
+      <h2>Red, orange, green &mdash; and the grey the interview did not ask for</h2>
+      <p class="lede">The stakeholder asked for three alert colours. A fourth is mandatory: a sensor that has gone quiet
+        is not healthy, and painting it green would be a lie the whole product is judged on.</p>
+    </div>
+    <div class="sev">
+      <div class="sev-c">
+        <div class="sev-top">
+          <svg class="sev-ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 L22 20 H2 Z" fill="#FF8A8A"/><rect x="11" y="9" width="2" height="6" rx="1" fill="#0F1B45"/><rect x="11" y="16.4" width="2" height="2" rx="1" fill="#0F1B45"/></svg>
+          <h3>Critical</h3>
+        </div>
+        <div class="means">Failing now, or about to. Comfort, safety, cost or the asset is at risk.</div>
+        <div class="act" style="color:#FF8A8A">Act now</div>
+        <div class="ex">Compressor overheating &middot; refrigerant charge lost &middot; unit stopped &middot; restriction applied</div>
+        <div class="sev-tok"><span>mark #D32F2F</span><span>text #B3151A</span><span>6.9:1</span></div>
+      </div>
+      <div class="sev-c">
+        <div class="sev-top">
+          <svg class="sev-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#F5CE5E"/><rect x="11" y="6.6" width="2" height="7.2" rx="1" fill="#0F1B45"/><rect x="11" y="15.4" width="2" height="2" rx="1" fill="#0F1B45"/></svg>
+          <h3>Warning</h3>
+        </div>
+        <div class="means">Degrading. It still works, but it will not keep working.</div>
+        <div class="act" style="color:#F5CE5E">Plan action</div>
+        <div class="ex">Filter approaching its limit &middot; slow refrigerant decline &middot; payment overdue in grace &middot; SLA approaching</div>
+        <div class="sev-tok"><span>mark #C2680A</span><span>text #8A5A00</span><span>5.9:1</span></div>
+      </div>
+      <div class="sev-c">
+        <div class="sev-top">
+          <svg class="sev-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10" fill="#5FD69A"/><path d="M7.4 12.3 L10.6 15.4 L16.6 9.1" fill="none" stroke="#0F1B45" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <h3>Normal</h3>
+        </div>
+        <div class="means">Within the expected envelope for this unit, this room and these conditions.</div>
+        <div class="act" style="color:#5FD69A">Nothing</div>
+        <div class="ex">All parts healthy &middot; within SLA &middot; paid &middot; baseline tracking as modelled</div>
+        <div class="sev-tok"><span>mark #1E9E5A</span><span>text #12703F</span><span>6.2:1</span></div>
+      </div>
+      <div class="sev-c">
+        <div class="sev-top">
+          <svg class="sev-ic" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="#9AA8C4" stroke-width="2.4" stroke-dasharray="3.4 3.2"/></svg>
+          <h3>No data</h3>
+        </div>
+        <div class="means">We do not know. Offline, no sensor fitted, or the reading is too stale to trust.</div>
+        <div class="act" style="color:#9AA8C4">Restore visibility</div>
+        <div class="ex">Gadget offline &middot; no CO&#8322; module fitted &middot; last reading 4 hours old &middot; possible tamper</div>
+        <div class="sev-tok"><span>mark #6B7A94</span><span>text #55627A</span><span>6.2:1</span></div>
+      </div>
+    </div>
+    <div class="rules">
+      <div class="rule"><b>Never colour alone</b><span>Colour plus icon shape plus a written label. Render any screen in greyscale and every status must still be readable.</span></div>
+      <div class="rule"><b>Roll-up takes the worst</b><span>One critical unit makes the floor, the property and the portfolio critical. Unknown never masks critical; both are counted.</span></div>
+      <div class="rule"><b>Every severity leads somewhere</b><span>A critical or warning element always opens the alert, the unit or the queue. A status that cannot be clicked is a dead end and is not permitted.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  ROLES  ───────────────────────────── -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="row"><span class="eyebrow">04 &middot; Three dashboards</span><span class="tag">FR-10, 11, 12, 12a</span></div>
+      <h2>Each role opens on the decision it owns</h2>
+      <p class="lede">Not on a wall of data. The reference implementations both lead with what needs a person today,
+        and it is also the fastest way to hit the sixty-second comprehension goal.</p>
+    </div>
+    <div class="grid-3">
+      <div class="role">
+        <div class="role-h">
+          <div class="who">End user &middot; client</div>
+          <h3>Is my home comfortable, and what is it costing me?</h3>
+          <div class="q">&ldquo;Strong visible and graphical dashboard&rdquo;</div>
+        </div>
+        <div class="role-b">
+          <div><div class="lbl">Opens on</div>
+            <ul><li>Carbon reduced this month, on a dark hero</li><li>Comfort now, per room</li><li>Anything red or orange</li></ul></div>
+          <div><div class="lbl">Can do</div>
+            <ul><li>Control and schedule any authorised unit</li><li>See savings against what normal would have cost</li><li>Raise and track a service request</li><li>See the bill, the notice and pay</li></ul></div>
+        </div>
+        <div class="role-f">UR-CLI-01…12 &middot; 13 requirements</div>
+      </div>
+      <div class="role">
+        <div class="role-h">
+          <div class="who">Technician &middot; internal &amp; 3rd party</div>
+          <h3>What do I fix first, and what will I find when I get there?</h3>
+          <div class="q">&ldquo;Know what the problem is in advance&rdquo;</div>
+        </div>
+        <div class="role-b">
+          <div><div class="lbl">Opens on</div>
+            <ul><li>Assigned work queue, critical first</li><li>SLA risk before age</li><li>Device health across the round</li></ul></div>
+          <div><div class="lbl">Can do</div>
+            <ul><li>Review the evidence behind a prediction</li><li>Tell confirmed from suspected from sensor fault</li><li>Complete the checklist per part group</li><li>Close with evidence, or escalate</li></ul></div>
+        </div>
+        <div class="role-f">UR-TEC-01…09 &middot; 3rd parties see assigned work only</div>
+      </div>
+      <div class="role">
+        <div class="role-h">
+          <div class="who">Admin &middot; HQ</div>
+          <h3>What needs me today, across the whole fleet?</h3>
+          <div class="q">&ldquo;Plan and proactively help to manage&rdquo;</div>
+        </div>
+        <div class="role-b">
+          <div><div class="lbl">Opens on</div>
+            <ul><li>Decisions needed, and how many carry SLA risk</li><li>Critical events and connectivity</li><li>Payment attention and the approval queue</li></ul></div>
+          <div><div class="lbl">Can do</div>
+            <ul><li>Dispatch service and track the funnel</li><li>Review and approve a restriction, with audit</li><li>Set thresholds, tariffs and grid factors</li><li>Issue Scope 2 and MRV reports</li></ul></div>
+        </div>
+        <div class="role-f">UR-ADM-01…13 &middot; every sensitive action audited</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  LADDER  ───────────────────────────── -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="row"><span class="eyebrow">05 &middot; The most sensitive feature</span><span class="tag">EP-09 &middot; UR-PAY-01…06 &middot; FR-50…57</span></div>
+      <h2>Cooling is never cut off. It is stepped down, with a gate at every step</h2>
+      <p class="lede">The interview asked for the ability to slow or stop an air conditioner when a rent-to-own customer
+        stops paying. Taken literally that is a switch. Specified responsibly it is a ladder &mdash; and the R2 revision
+        added the half that was missing: how service comes back, and how a customer argues.</p>
+    </div>
+    <figure>
+      <div class="svgbox">
+        <svg viewBox="0 0 980 320" role="img" aria-label="Restriction ladder: four escalating steps, each gated by notice, grace period and dual approval, with automatic verified restoration on payment.">
+          <g font-family="Inter, sans-serif">
+            <!-- baseline -->
+            <line x1="40" y1="272" x2="820" y2="272" stroke="var(--line-2)" stroke-width="1"/>
+
+            <!-- steps -->
+            <g>
+              <rect x="52"  y="218" width="168" height="54" rx="6" fill="var(--ok-fill)"   stroke="var(--ok-line)"/>
+              <rect x="242" y="176" width="168" height="96" rx="6" fill="var(--warn-fill)" stroke="var(--warn-line)"/>
+              <rect x="432" y="134" width="168" height="138" rx="6" fill="var(--warn-fill)" stroke="var(--warn-line)"/>
+              <rect x="622" y="92"  width="168" height="180" rx="6" fill="var(--crit-fill)" stroke="var(--crit-line)"/>
+            </g>
+            <g font-size="10.5" font-weight="700" letter-spacing="1.2">
+              <text x="66"  y="240" fill="var(--ok-text)">STEP 1</text>
+              <text x="256" y="198" fill="var(--warn-text)">STEP 2</text>
+              <text x="446" y="156" fill="var(--warn-text)">STEP 3</text>
+              <text x="636" y="114" fill="var(--crit-text)">STEP 4 · LAST</text>
+            </g>
+            <g font-size="14" font-weight="700" fill="var(--ink)" font-family="Plus Jakarta Sans, sans-serif">
+              <text x="66"  y="259">Reminder</text>
+              <text x="256" y="217">Warmer minimum</text>
+              <text x="446" y="175">Eco lock + hours</text>
+              <text x="636" y="133">Stop</text>
+            </g>
+            <g font-size="11" fill="var(--ink-2)">
+              <text x="256" y="234">setpoint floor 26 °C</text>
+              <text x="446" y="192">limited daily window</text>
+              <text x="636" y="150">never for a space flagged</text>
+              <text x="636" y="165">health-sensitive</text>
+            </g>
+
+            <!-- gates -->
+            <g>
+              <line x1="226" y1="272" x2="226" y2="60" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="3 4"/>
+              <line x1="416" y1="272" x2="416" y2="60" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="3 4"/>
+              <line x1="606" y1="272" x2="606" y2="60" stroke="var(--line-2)" stroke-width="1" stroke-dasharray="3 4"/>
+            </g>
+            <g font-size="10" fill="var(--ink-3)" text-anchor="middle">
+              <text x="226" y="52">GATE</text><text x="416" y="52">GATE</text><text x="606" y="52">GATE</text>
+              <text x="226" y="40" font-size="9.5">notice · grace · 2 approvals</text>
+              <text x="416" y="40" font-size="9.5">notice · grace · 2 approvals</text>
+              <text x="606" y="40" font-size="9.5">notice · grace · 2 approvals</text>
+            </g>
+
+            <!-- restore -->
+            <path d="M790 92 C 880 92, 880 300, 470 300 L 120 300" fill="none" stroke="var(--ok)" stroke-width="2" stroke-linecap="round"/>
+            <path d="M128 300 L114 294 L114 306 Z" fill="var(--ok)"/>
+            <rect x="360" y="286" width="240" height="28" rx="14" fill="var(--ok-fill)" stroke="var(--ok-line)"/>
+            <text x="480" y="304" font-size="11.5" font-weight="700" fill="var(--ok-text)" text-anchor="middle">payment confirmed → restored &amp; verified at the unit</text>
+
+            <!-- axis label -->
+            <text x="40" y="290" font-size="10.5" fill="var(--ink-3)">time overdue →</text>
+
+            <!-- side notes -->
+            <g font-size="11" fill="var(--ink-2)">
+              <text x="838" y="118" font-weight="700" font-family="Plus Jakarta Sans, sans-serif" fill="var(--ink)">Always</text>
+              <text x="838" y="138">WhatsApp or email notice</text>
+              <text x="838" y="154">in the user’s language</text>
+              <text x="838" y="176">Amount, date, what changes</text>
+              <text x="838" y="198">A way to pay</text>
+              <text x="838" y="220">A way to dispute</text>
+              <text x="838" y="242">Every step audited</text>
+            </g>
+            <line x1="826" y1="100" x2="826" y2="252" stroke="var(--navy)" stroke-width="2"/>
+          </g>
+        </svg>
+      </div>
+      <figcaption>A dispute pauses escalation until a person answers (UR-PAY-06). Phase 1A demonstrates the governed
+        process as a labelled simulation only &mdash; the ladder stays disabled until the per-market legal review signs off.</figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  SAVINGS & CARBON  ───────────────────────────── -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="row"><span class="eyebrow">06 &middot; The commercial claim</span><span class="tag">FR-61, 70, 71, 72 &middot; UR-ENE-07</span></div>
+      <h2>&ldquo;What it would have been&rdquo; is a number we have to defend</h2>
+      <p class="lede">Every savings figure is a comparison against a counterfactual. The method behind that
+        counterfactual is published, versioned and dated inside the product &mdash; and the chart is not permitted
+        without a link to it.</p>
+    </div>
+    <div class="kpis" id="kpis">
+      <div class="kpi">
+        <div class="k-l">Energy saved this month</div>
+        <div class="k-v"><span id="kwh">—</span> <span class="k-u">kWh</span></div>
+        <div class="k-n"><span class="chip sim">Simulated</span></div>
+      </div>
+      <div class="kpi">
+        <div class="k-l">Against baseline</div>
+        <div class="k-v"><span id="pct">—</span><span class="k-u">%</span></div>
+        <div class="k-n">Target is 10&ndash;20&thinsp;% or more <span class="chip est" style="margin-left:4px">Estimated</span></div>
+      </div>
+      <div class="kpi">
+        <div class="k-l">Cost avoided</div>
+        <div class="k-v"><span class="k-u" style="font-size:17px">Rp</span> <span id="idr">—</span></div>
+        <div class="k-n">at Rp 1,700 / kWh <span class="chip est" style="margin-left:4px">Estimated</span></div>
+      </div>
+      <div class="kpi">
+        <div class="k-l">Emissions avoided</div>
+        <div class="k-v"><span id="co2">—</span> <span class="k-u">kgCO&#8322;e</span></div>
+        <div class="k-n">grid factor 0.87 kgCO&#8322;e/kWh <span class="chip prov" style="margin-left:4px">Provisional</span></div>
+      </div>
+    </div>
+
+    <figure style="margin-top:22px">
+      <div class="svgbox">
+        <svg id="chart" viewBox="0 0 980 300" role="img" aria-label="Daily electricity use over thirty days: the dashed baseline is what the unit would have consumed; the solid line is actual consumption with the solution; the shaded band between them is the saving.">
+          <g id="chart-g" font-family="Inter, sans-serif"></g>
+        </svg>
+      </div>
+      <figcaption>Illustrative Phase&nbsp;1A data, drawn to the scale shown. In the prototype every figure on this
+        chart carries a <span class="chip sim">Simulated</span> chip, and an aggregate always inherits the weakest
+        provenance of its inputs &mdash; one simulated reading makes the whole total simulated.</figcaption>
+    </figure>
+
+    <div class="grid-2" style="margin-top:26px">
+      <div class="panel" style="border-left:3px solid var(--s3)">
+        <h4>CO&#8322; ppm is not kgCO&#8322;e</h4>
+        <p style="font-size:13.5px;color:var(--ink-2);margin-top:8px">
+          Indoor carbon-dioxide <b style="color:var(--ink)">concentration</b> tells you the air is stale and you will
+          feel sleepy. Greenhouse-gas <b style="color:var(--ink)">emissions</b> from electricity are a different
+          quantity in a different unit. They are never shown on the same card, and never added together.
+          <b style="color:var(--ink)">UR-AIR-06 &middot; FR-66</b></p>
+      </div>
+      <div class="panel" style="border-left:3px solid var(--s4)">
+        <h4>Avoided emissions are not carbon credits</h4>
+        <p style="font-size:13.5px;color:var(--ink-2);margin-top:8px">
+          Until an accepted methodology and an independent verifier say otherwise, a saving is a saving. The prototype
+          never uses the word &ldquo;credit&rdquo;; the tokenization screen is a labelled mock; and Scope&nbsp;2
+          reporting is what gets sold first. <b style="color:var(--ink)">UR-CAR-08</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  PHASES  ───────────────────────────── -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="row"><span class="eyebrow">07 &middot; Sequence</span><span class="tag">D6 &sect;5 &middot; &sect;12</span></div>
+      <h2>Clickable first, hardware last</h2>
+      <p class="lede">The interview was explicit about the order: prove the experience before building the thing that
+        feeds it. Each phase is a real gate, not a label on a plan.</p>
+    </div>
+    <figure>
+      <div class="svgbox">
+        <svg viewBox="0 0 980 222" role="img" aria-label="Phase timeline: 1A clickable prototype, 1B functional platform, 1C gadget and pilot, then Phase 2 HVAC and a future carbon-as-a-service stage.">
+          <g font-family="Inter, sans-serif">
+            <line x1="40" y1="96" x2="944" y2="96" stroke="var(--line-2)" stroke-width="2"/>
+            <g id="phases">
+              <!-- 1A -->
+              <circle cx="98" cy="96" r="9" fill="var(--red)"/>
+              <rect x="40" y="118" width="168" height="88" rx="7" fill="var(--surface-2)" stroke="var(--line-2)"/>
+              <text x="56" y="140" font-size="13.5" font-weight="700" font-family="Plus Jakarta Sans, sans-serif" fill="var(--ink)">1A Prototype</text>
+              <text x="56" y="158" font-size="11" fill="var(--ink-2)">Clickable UI/UX, split units</text>
+              <text x="56" y="174" font-size="11" fill="var(--ink-2)">Simulated telemetry</text>
+              <text x="56" y="194" font-size="10.5" font-weight="700" fill="var(--red)">2-week sprint · now</text>
+              <text x="56" y="84" font-size="10.5" font-weight="700" letter-spacing="1.2" fill="var(--ink-3)">YOU ARE HERE</text>
+
+              <!-- 1B -->
+              <circle cx="288" cy="96" r="7" fill="var(--navy)"/>
+              <rect x="230" y="118" width="168" height="88" rx="7" fill="var(--surface)" stroke="var(--line)"/>
+              <text x="246" y="140" font-size="13.5" font-weight="700" font-family="Plus Jakarta Sans, sans-serif" fill="var(--ink)">1B Platform</text>
+              <text x="246" y="158" font-size="11" fill="var(--ink-2)">Multi-tenant, rules engine</text>
+              <text x="246" y="174" font-size="11" fill="var(--ink-2)">Live notices &amp; payments</text>
+              <text x="246" y="194" font-size="10.5" fill="var(--ink-3)">Stage 2, months 1–2</text>
+
+              <!-- 1C -->
+              <circle cx="478" cy="96" r="7" fill="var(--navy)"/>
+              <rect x="420" y="118" width="168" height="88" rx="7" fill="var(--surface)" stroke="var(--line)"/>
+              <text x="436" y="140" font-size="13.5" font-weight="700" font-family="Plus Jakarta Sans, sans-serif" fill="var(--ink)">1C Gadget</text>
+              <text x="436" y="158" font-size="11" fill="var(--ink-2)">Hidden module, signed meter</text>
+              <text x="436" y="174" font-size="11" fill="var(--ink-2)">30-unit pilot, SDPPI filing</text>
+              <text x="436" y="194" font-size="10.5" fill="var(--ink-3)">Stage 2, months 2–3</text>
+
+              <!-- 2 -->
+              <circle cx="668" cy="96" r="7" fill="var(--navy)"/>
+              <rect x="610" y="118" width="168" height="88" rx="7" fill="var(--surface)" stroke="var(--line)"/>
+              <text x="626" y="140" font-size="13.5" font-weight="700" font-family="Plus Jakarta Sans, sans-serif" fill="var(--ink)">2 HVAC</text>
+              <text x="626" y="158" font-size="11" fill="var(--ink-2)">Central, cassette, VRF</text>
+              <text x="626" y="174" font-size="11" fill="var(--ink-2)">Real ventilation control</text>
+              <text x="626" y="194" font-size="10.5" fill="var(--ink-3)">Phase 2</text>
+
+              <!-- future -->
+              <circle cx="858" cy="96" r="7" fill="none" stroke="var(--ink-3)" stroke-width="2" stroke-dasharray="2.6 2.6"/>
+              <rect x="800" y="118" width="168" height="88" rx="7" fill="var(--surface)" stroke="var(--line)" stroke-dasharray="4 4"/>
+              <text x="816" y="140" font-size="13.5" font-weight="700" font-family="Plus Jakarta Sans, sans-serif" fill="var(--ink-3)">Future</text>
+              <text x="816" y="158" font-size="11" fill="var(--ink-3)">Verified credits, tokens</text>
+              <text x="816" y="174" font-size="11" fill="var(--ink-3)">Live trading API, solar</text>
+              <text x="816" y="194" font-size="10.5" fill="var(--ink-3)">Needs a verifier</text>
+            </g>
+            <g font-size="10.5" fill="var(--ink-3)">
+              <text x="40" y="40" font-weight="700" letter-spacing="1.2">GATE BETWEEN EACH</text>
+              <text x="40" y="58">Stage 2 go / no-go · measured savings vs baseline · tamper events verified · pen test &amp; SDPPI before launch</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+    </figure>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  REVIEW  ───────────────────────────── -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="row"><span class="eyebrow">08 &middot; The conformance review</span><span class="tag">D8 &middot; 12 Sep 2026</span></div>
+      <h2>What the review found, and what R2 changed</h2>
+      <p class="lede">Three passes: does every interview line reach a requirement; does every identifier the documents
+        cite actually exist; and could a developer build each screen from the design system as written.</p>
+    </div>
+
+    <div class="fbar">
+      <div class="fb c"><div class="n">8</div><div class="l">Critical</div><div class="d">The prototype could not be built, or would be built wrong.</div></div>
+      <div class="fb h"><div class="n">11</div><div class="l">High</div><div class="d">A promise made to the stakeholder had no requirement carrying it.</div></div>
+      <div class="fb m"><div class="n">11</div><div class="l">Medium</div><div class="d">A real gap that would surface in Stage 2 rather than Stage 1.</div></div>
+      <div class="fb l2"><div class="n">6</div><div class="l">Low</div><div class="d">Numbering, versioning and typographical defects.</div></div>
+    </div>
+
+    <div class="panel" style="margin-bottom:26px">
+      <h3 style="margin-bottom:4px">Interview coverage, before and after</h3>
+      <p style="font-size:13px;color:var(--ink-2);margin-bottom:18px">Each of the 53 statements in the stakeholder
+        interview, traced into a user requirement, an epic, a functional requirement and a UI component. An item counts
+        as covered only when all four links exist.</p>
+      <div class="prog">
+        <div class="prow">
+          <div class="pl">Before R2</div>
+          <div class="pt">
+            <i style="width:58.5%;background:var(--ok)"></i>
+            <i style="width:22.6%;background:var(--warn)"></i>
+            <i style="width:18.9%;background:var(--crit)"></i>
+          </div>
+          <div class="pn">31 / 53</div>
+        </div>
+        <div class="prow">
+          <div class="pl">After R2</div>
+          <div class="pt"><i style="width:100%;background:var(--ok)"></i></div>
+          <div class="pn">53 / 53</div>
+        </div>
+      </div>
+      <div class="legend">
+        <span><i style="background:var(--ok)"></i>Fully covered</span>
+        <span><i style="background:var(--warn)"></i>Partial &mdash; prose, assumption or goal only</span>
+        <span><i style="background:var(--crit)"></i>Absent &mdash; no requirement at all</span>
+      </div>
+    </div>
+
+    <h3 style="margin-bottom:2px">The eight that mattered most</h3>
+    <div class="fixlist">
+      <div class="fix">
+        <div class="fid">F-01</div>
+        <div><b>Voice was named but never specified</b>
+          <span>D5 titled a section &ldquo;Language and voice&rdquo; and D6 named an epic &ldquo;Multilingual and voice&rdquo;, but no requirement existed. The one line that made the product distinctive was unbuildable.
+          <em>&rarr; UR-VOICE-01…05, FR-05…07, D7 &sect;14.12</em></span></div>
+      </div>
+      <div class="fix">
+        <div class="fid">F-02</div>
+        <div><b>The gadget had no requirements</b>
+          <span>Small, cheap, hidden, un-removable without an alert &mdash; the hardware premise of the business, cited by the traceability table but written nowhere.
+          <em>&rarr; UR-DEV-01…08, FR-80…86</em></span></div>
+      </div>
+      <div class="fix">
+        <div class="fid">F-03</div>
+        <div><b>Three epics were missing from the epic list</b>
+          <span>EP-09 payment control, EP-20 gadget, EP-21 HVAC &mdash; all referenced by other sections. EP-09 is a Must for Phase 1A and is the commercial reason the platform exists.
+          <em>&rarr; restored with behaviour and priority</em></span></div>
+      </div>
+      <div class="fix">
+        <div class="fid">F-04</div>
+        <div><b>21 functional requirements did not exist</b>
+          <span>The traceability ranges promised FR-05…07, 23, 24, 46, 72, 75, 76, 80…86, 90…92, 103, 104. A developer following traceability landed on nothing.
+          <em>&rarr; all 21 defined, &sect;7.10 added</em></span></div>
+      </div>
+      <div class="fix">
+        <div class="fid">F-05</div>
+        <div><b>Nothing said how service comes back</b>
+          <span>The restriction ladder specified how to take cooling away but not how to restore it on payment, nor how a customer disputes it. A demonstration without those reads as a threat.
+          <em>&rarr; UR-PAY-02, 04, 05, 06 &middot; FR-54, 57</em></span></div>
+      </div>
+      <div class="fix">
+        <div class="fid">F-06</div>
+        <div><b>Two brand palettes were in play</b>
+          <span>D7 specified #022465 / #DB1217; the logo, the build brief and the already-built prototype use #1B2F6E / #D62027. Three artefacts would have shipped in two identities.
+          <em>&rarr; logo values are canonical</em></span></div>
+      </div>
+      <div class="fix">
+        <div class="fid">F-07</div>
+        <div><b>The design system had no alert colours</b>
+          <span>Red, orange, green and grey is the product&rsquo;s core language. D7 had form-field states only &mdash; no orange tier, no grey tier, no mapping to severity at all.
+          <em>&rarr; D7 &sect;3, the four-tier token set</em></span></div>
+      </div>
+      <div class="fix">
+        <div class="fid">F-08</div>
+        <div><b>No way to label a number as simulated</b>
+          <span>D6 requires 100&thinsp;% of figures to declare their provenance. No component could carry it, so a prototype full of simulated readings would have presented them as measured.
+          <em>&rarr; D7 &sect;14.3 provenance chip</em></span></div>
+      </div>
+    </div>
+
+    <div class="tblbox" style="margin-top:30px">
+      <table class="tbl">
+        <thead>
+          <tr><th>Document</th><th>Verdict before</th><th>What R2 added</th><th class="num">Pages</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>D5 R2 &mdash; URS</td>
+            <td>Approve with changes</td>
+            <td>UR-VOICE, UR-DEV and UR-HVAC families; 13 requirements that D6 cited but D5 never defined; continuous section numbering; one phase notation</td>
+            <td class="num">13</td>
+          </tr>
+          <tr>
+            <td>D6 R2 &mdash; PRD</td>
+            <td>Approve with changes</td>
+            <td>EP-09, EP-20, EP-21 restored; 24 functional requirements defined; &sect;7.10 HVAC; decisions-needed dashboard opening; dispute route</td>
+            <td class="num">16</td>
+          </tr>
+          <tr>
+            <td>D7 R2 &mdash; UI Guideline</td>
+            <td>Not fit for build</td>
+            <td>Severity system, provenance chip, 14 product components, data-visualisation system, dark surfaces, measured contrast, responsive type, 375 and 1536 breakpoints, localisation</td>
+            <td class="num">28</td>
+          </tr>
+          <tr>
+            <td>D8 &mdash; Review</td>
+            <td>&mdash;</td>
+            <td>New. The 53-item coverage checklist, 36 findings with resolutions, reference-site analysis, and the five risks the revision does not remove</td>
+            <td class="num">13</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────  RISKS  ───────────────────────────── -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="row"><span class="eyebrow">09 &middot; Still open</span><span class="tag">D8 &sect;6</span></div>
+      <h2>Five things the revision does not fix</h2>
+      <p class="lede">These are honest limits, not oversights. They are listed here so the design set is signed off
+        with them in view rather than discovered during the pilot.</p>
+    </div>
+    <div class="grid-4">
+      <div class="panel">
+        <h4>No legal basis yet</h4>
+        <p style="font-size:12.5px;color:var(--ink-2);margin-top:7px">Payment-linked restriction needs a contract clause and a per-market review. Phase 1A demonstrates a labelled simulation; enforcement waits for sign-off.</p>
+      </div>
+      <div class="panel">
+        <h4>A split unit recirculates air</h4>
+        <p style="font-size:12.5px;color:var(--ink-2);margin-top:7px">Fresh-air control needs a connected fan, fresh-air unit or damper. Where none exists the interface must say so and give the manual action.</p>
+      </div>
+      <div class="panel">
+        <h4>No registry route for credits</h4>
+        <p style="font-size:12.5px;color:var(--ink-2);margin-top:7px">AC-efficiency micro-offsets have no accepted methodology confirmed. Sell Scope&nbsp;2 reporting first; never print the word &ldquo;credit&rdquo;.</p>
+      </div>
+      <div class="panel">
+        <h4>Voice in Bahasa Indonesia</h4>
+        <p style="font-size:12.5px;color:var(--ink-2);margin-top:7px">Recognition accuracy is unproven. Because text is equally capable by requirement, poor recognition degrades convenience, not capability.</p>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:14px;border-left:3px solid var(--red)">
+      <h4>Two decisions to settle before the sprint starts</h4>
+      <p style="font-size:13.5px;color:var(--ink-2);margin-top:7px">
+        Who may flag a space as health-sensitive &mdash; it blocks the stop step of the ladder &mdash; and whether one or
+        two approvers are required at each step. Both are cheap to decide now and expensive to retrofit; both change
+        FR-52 and FR-53.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <b>The design set</b>
+      <ul>
+        <li>D5 R2 &middot; User Requirements Specification</li>
+        <li>D6 R2 &middot; Product Requirements Document</li>
+        <li>D7 R2 &middot; UI Design Guideline</li>
+        <li>D8 &middot; Requirements Conformance Review</li>
+      </ul>
+    </div>
+    <div>
+      <b>Supporting</b>
+      <ul>
+        <li>D1 Use Case Specification</li>
+        <li>D2 UI/UX Flow &amp; Screen Design</li>
+        <li>D3 System &amp; Solution Architecture</li>
+        <li>D4 Monitoring Rules, Air Quality &amp; Carbon Methodology</li>
+      </ul>
+    </div>
+    <div>
+      <b>Status</b>
+      <p class="note">All four documents approved for build. Phase 1A proceeds: a clickable prototype of the three role
+        dashboards on labelled simulated data, delivered in a two-week sprint from 14 September 2026.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // ---- baseline vs actual, one scale for marks, ticks and labels ----
+  var base = [14.1,14.6,13.9,14.8,15.2,14.3,13.7,14.9,15.4,14.2,
+              13.8,14.6,15.1,14.4,13.9,14.7,15.3,14.1,13.6,14.8,
+              15.0,14.2,13.8,14.9,15.2,14.0,13.7,14.6,15.1,14.3];
+  var n = base.length;
+  var act = base.map(function(v,i){ return v * (0.975 - 0.26 * (i/(n-1))); });
+
+  var W = 980, H = 300, ml = 52, mr = 158, mt = 26, mb = 46;
+  var pw = W - ml - mr, ph = H - mt - mb;
+  var yMax = 18;
+  var x = function(i){ return ml + (i/(n-1)) * pw; };
+  var y = function(v){ return mt + ph - (v/yMax) * ph; };
+
+  var g = document.getElementById('chart-g');
+  if(!g) return;
+  var svgns = 'http://www.w3.org/2000/svg';
+  function el(t, attrs, text){
+    var e = document.createElementNS(svgns, t);
+    for(var k in attrs) e.setAttribute(k, attrs[k]);
+    if(text != null) e.textContent = text;
+    g.appendChild(e);
+    return e;
+  }
+
+  // gridlines + y labels
+  [0,5,10,15].forEach(function(v){
+    el('line', {x1:ml, y1:y(v), x2:ml+pw, y2:y(v), stroke:'var(--line)', 'stroke-width':1});
+    el('text', {x:ml-10, y:y(v)+4, 'font-size':11, fill:'var(--ink-3)', 'text-anchor':'end',
+                'font-family':'Inter, sans-serif'}, v);
+  });
+  el('text', {x:ml-10, y:mt-8, 'font-size':10.5, fill:'var(--ink-3)', 'text-anchor':'end',
+              'font-family':'Inter, sans-serif', 'font-weight':700}, 'kWh');
+
+  // savings band
+  var band = '';
+  for(var i=0;i<n;i++) band += (i?'L':'M') + x(i).toFixed(1) + ' ' + y(base[i]).toFixed(1) + ' ';
+  for(var j=n-1;j>=0;j--) band += 'L' + x(j).toFixed(1) + ' ' + y(act[j]).toFixed(1) + ' ';
+  el('path', {d: band + 'Z', fill:'var(--ok-fill)', stroke:'none', opacity:'0.95'});
+
+  function poly(arr){
+    return arr.map(function(v,i){ return x(i).toFixed(1) + ',' + y(v).toFixed(1); }).join(' ');
+  }
+  el('polyline', {points: poly(base), fill:'none', stroke:'var(--unk)', 'stroke-width':2,
+                  'stroke-dasharray':'6 3', 'stroke-linejoin':'round'});
+  el('polyline', {points: poly(act), fill:'none', stroke:'var(--s1)', 'stroke-width':2.4,
+                  'stroke-linejoin':'round', 'stroke-linecap':'round'});
+  // emphasised endpoint
+  el('circle', {cx:x(n-1), cy:y(act[n-1]), r:4.5, fill:'var(--s1)'});
+
+  // x axis
+  el('line', {x1:ml, y1:y(0), x2:ml+pw, y2:y(0), stroke:'var(--line-2)', 'stroke-width':1});
+  [[0,'day 1'],[9,'day 10'],[19,'day 20'],[29,'day 30']].forEach(function(t){
+    el('text', {x:x(t[0]), y:y(0)+20, 'font-size':11, fill:'var(--ink-3)', 'text-anchor':'middle',
+                'font-family':'Inter, sans-serif'}, t[1]);
+  });
+
+  // right-hand labels, anchored to the lines they name
+  el('text', {x:ml+pw+14, y:y(base[n-1])+4, 'font-size':12, fill:'var(--unk-text)', 'font-weight':600,
+              'font-family':'Inter, sans-serif'}, 'Normal (baseline)');
+  el('text', {x:ml+pw+14, y:y(base[n-1])+20, 'font-size':10.5, fill:'var(--ink-3)',
+              'font-family':'Inter, sans-serif'}, 'what it would have used');
+  el('text', {x:ml+pw+14, y:y(act[n-1])+4, 'font-size':12, fill:'var(--s1)', 'font-weight':700,
+              'font-family':'Inter, sans-serif'}, 'With ARUSIQ');
+  el('text', {x:ml+pw+14, y:y(act[n-1])+20, 'font-size':10.5, fill:'var(--ink-3)',
+              'font-family':'Inter, sans-serif'}, 'actual metered use');
+  el('rect', {x:ml+pw+14, y:mt+6, width:12, height:12, rx:2, fill:'var(--ok-fill)', stroke:'var(--ok-line)'});
+  el('text', {x:ml+pw+32, y:mt+16, 'font-size':11, fill:'var(--ink-2)',
+              'font-family':'Inter, sans-serif'}, 'the saving');
+
+  // ---- totals, computed from the same arrays the chart drew ----
+  var sum = function(a){ return a.reduce(function(p,c){ return p+c; }, 0); };
+  var tb = sum(base), ta = sum(act), saved = tb - ta;
+  var pct = saved / tb * 100;
+  document.getElementById('kwh').textContent = Math.round(saved);
+  document.getElementById('pct').textContent = pct.toFixed(1);
+  document.getElementById('idr').textContent = Math.round(saved * 1700).toLocaleString('en-US');
+  document.getElementById('co2').textContent = (saved * 0.87).toFixed(0);
+})();
+</script>
