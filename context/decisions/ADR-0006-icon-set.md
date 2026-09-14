@@ -4,11 +4,11 @@
 
 ## Context
 
-D7 §7 fully specifies the icon *frame* — 20 px live area, 2 px safe area, 24 px
+D7 §7 fully specifies the icon _frame_ — 20 px live area, 2 px safe area, 24 px
 total, outline style — but D7 §20 records the actual set as **recognised gap #2**:
-*"Icon library name, stroke weight and licence. Stroke weight is the property
+_"Icon library name, stroke weight and licence. Stroke weight is the property
 that makes an outline set cohere; two icons at 24 px with 1.5 px and 2 px
-strokes look mismatched at a glance."* It blocks "icon set adoption; commercial
+strokes look mismatched at a glance."_ It blocks "icon set adoption; commercial
 release".
 
 This blocks more than it appears to. Severity is required to carry **colour +
@@ -27,7 +27,7 @@ the `iconSize` token (24 / 20 / 16).
    stroke and roughly a 20 px live area — D7 §7's specification, with no
    rescaling. Rescaling an icon set is how stroke weights drift apart.
 2. **Licence.** ISC — permissive, commercial-safe, no attribution burden. D7
-   names licence explicitly because this gap blocks *commercial release*.
+   names licence explicitly because this gap blocks _commercial release_.
 3. **Coverage.** ~1,500 icons. The product needs glyphs for twelve HVAC part
    groups, four severities, tamper, four delivery channels, four restriction
    steps and four provenance labels. Smaller sets (Heroicons, ~300) run out.

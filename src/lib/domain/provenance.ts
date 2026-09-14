@@ -10,10 +10,10 @@
  */
 
 export const PROVENANCE = {
-  simulated:   { rank: 0, labelKey: 'provenance.simulated'   },
-  estimated:   { rank: 1, labelKey: 'provenance.estimated'   },
+  simulated: { rank: 0, labelKey: 'provenance.simulated' },
+  estimated: { rank: 1, labelKey: 'provenance.estimated' },
   provisional: { rank: 2, labelKey: 'provenance.provisional' },
-  verified:    { rank: 3, labelKey: 'provenance.verified'    },
+  verified: { rank: 3, labelKey: 'provenance.verified' },
 } as const;
 
 export type Provenance = keyof typeof PROVENANCE;

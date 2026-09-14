@@ -10,24 +10,28 @@ sprint. React 19 + TypeScript + Vite.
 
 ## Where to look
 
-| Question | File |
-| --- | --- |
-| What are we building, for whom, and why | `context/10-product.md` |
-| Domain model: severity, parts, roles, hierarchy | `context/20-domain.md` |
-| Any visual decision — colour, type, spacing, component | `context/30-design-system.md` |
-| Where code goes, who owns which files | `context/40-architecture.md` |
-| Working alongside other agents | `context/50-agent-protocol.md` |
-| Is this finished? | `context/60-definition-of-done.md` |
-| Exact requirement text, screen→FR map, invariants | `context/requirements/requirements.json` |
-| Why a contested call was made the way it was | `context/decisions/` |
-| Source of truth, when the above disagree | `docs/*.pdf`, `docs/*.docx` |
+| Question                                               | File                                     |
+| ------------------------------------------------------ | ---------------------------------------- |
+| What are we building, for whom, and why                | `context/10-product.md`                  |
+| Domain model: severity, parts, roles, hierarchy        | `context/20-domain.md`                   |
+| Any visual decision — colour, type, spacing, component | `context/30-design-system.md`            |
+| Where code goes, who owns which files                  | `context/40-architecture.md`             |
+| Working alongside other agents                         | `context/50-agent-protocol.md`           |
+| Is this finished?                                      | `context/60-definition-of-done.md`       |
+| Exact requirement text, screen→FR map, invariants      | `context/requirements/requirements.json` |
+| Why a contested call was made the way it was           | `context/decisions/` (7 ADRs)            |
+| Prop contracts for every primitive                     | `src/components/contracts.ts`            |
+| Source of truth, when the above disagree               | `docs/*.pdf`, `docs/*.docx`              |
 
 `context/00-INDEX.md` has the full map with token costs.
 
 ## The gate
 
 ```
-npm run verify      # contrast · tokens · provenance · i18n · types · lint · trace
+npm run verify        # self-test · contrast · tokens · provenance · i18n
+                      # · types · lint · tests · trace
+npm run new:screen <id>   # scaffold a screen from its requirements
+npm run trace             # requirement → code coverage
 ```
 
 **Run it before you report work as done.** It is not advisory; `npm run build`
@@ -42,7 +46,7 @@ the screen looks right.
 
 1. **Every figure carries provenance** — Simulated | Estimated | Provisional |
    Verified, beside the figure, never in a page footer. An aggregate inherits
-   the *weakest* provenance of its inputs.
+   the _weakest_ provenance of its inputs.
 2. **Severity is colour + shape + label.** Never a bare coloured dot, including
    in charts. Roll-up precedence is `critical > warning > unknown > normal`.
 3. **Grey is not a pass.** It means "we do not know", always carries a last-seen
@@ -52,7 +56,7 @@ the screen looks right.
 5. **Indoor CO₂ ppm and kgCO₂e emissions never share a card**, an axis, an icon
    or a tile group. They share a chemical symbol and nothing else.
 6. **The word "credit" is Verified-only** — and Phase 1A has no verified data,
-   so the word does not appear. Say *avoided emissions*.
+   so the word does not appear. Say _avoided emissions_.
 7. **Restriction is a ladder, never a switch.** Notice → grace → dual approval
    at every step. `stop` is unreachable for health-sensitive spaces. If the
    interface presents step 4 as one toggle, the safety policy is not
@@ -70,6 +74,10 @@ the screen looks right.
 
 ## How to work here
 
+- **Implement against the contracts.** `src/components/contracts.ts` holds the
+  prop interfaces for every primitive. They are deliberately strict — a figure
+  without provenance, a chart without a text alternative or a route without
+  `allowedRoles` does not compile. Do not loosen one to make a screen easier.
 - **Read before you write.** `context/30-design-system.md` before any UI;
   `requirements.json` before any feature. Guessing at a value that is already
   specified is the most expensive mistake available in this repo.

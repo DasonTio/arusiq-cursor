@@ -1,4 +1,4 @@
-# ADR-0005 · A dark hero *surface*, not a dark *mode*
+# ADR-0005 · A dark hero _surface_, not a dark _mode_
 
 **Status** Accepted · 2026-09-14 · **Reverse cost** four tokens + one matrix re-run
 
@@ -7,12 +7,12 @@
 D6 FR-10 specifies the Client overview as opening on a **hero showing carbon
 reduced this month**, and D8 describes it explicitly as "on a dark hero".
 
-D7 §5.2 says the opposite: *"Phase 1 is light mode only. Do not add a dark
+D7 §5.2 says the opposite: _"Phase 1 is light mode only. Do not add a dark
 variant: a dark theme nobody has designed looks supported and is not, and adding
-one means re-running the entire contrast matrix against four more surfaces."*
+one means re-running the entire contrast matrix against four more surfaces."_
 
-D7 §20 then lists the dark hero as **recognised gap #5**, blocking *all three
-dashboards*.
+D7 §20 then lists the dark hero as **recognised gap #5**, blocking _all three
+dashboards_.
 
 ## Decision
 
@@ -42,16 +42,16 @@ fifth surface did not loosen any existing check.
 Severity needs **no** inverse variant — all four marks already clear 3:1 on
 `#0B1933`:
 
-| Token | Value | On inverse | Bar |
-| --- | --- | --- | --- |
-| `on-inverse` (white-1) | `#FFFFFF` | 17.48:1 | 4.5 |
-| `on-inverse-muted` | `#919191` | 5.55:1 | 4.5 |
-| `eco-on-inverse` | `#00A0B1` | 5.55:1 | 4.5 |
-| `border-on-inverse` | `#707070` | 3.53:1 | 3.0 |
-| `severity-critical-mark` | `#D32F2F` | 3.51:1 | 3.0 |
-| `severity-warning-mark` | `#C2680A` | 4.39:1 | 3.0 |
-| `severity-normal-mark` | `#1C9253` | 4.40:1 | 3.0 |
-| `severity-unknown-mark` | `#6B7A94` | 4.03:1 | 3.0 |
+| Token                    | Value     | On inverse | Bar |
+| ------------------------ | --------- | ---------- | --- |
+| `on-inverse` (white-1)   | `#FFFFFF` | 17.48:1    | 4.5 |
+| `on-inverse-muted`       | `#919191` | 5.55:1     | 4.5 |
+| `eco-on-inverse`         | `#00A0B1` | 5.55:1     | 4.5 |
+| `border-on-inverse`      | `#707070` | 3.53:1     | 3.0 |
+| `severity-critical-mark` | `#D32F2F` | 3.51:1     | 3.0 |
+| `severity-warning-mark`  | `#C2680A` | 4.39:1     | 3.0 |
+| `severity-normal-mark`   | `#1C9253` | 4.40:1     | 3.0 |
+| `severity-unknown-mark`  | `#6B7A94` | 4.03:1     | 3.0 |
 
 The two text tokens are pitched at **5.5:1 rather than the 4.5:1 minimum**.
 `state-eco` lightened to exactly 4.5 measured 4.51:1 — a pass with no headroom,

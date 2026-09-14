@@ -11,7 +11,10 @@
  */
 
 export const RESTRICTION_STEP = [
-  'reminder', 'setpointRaised', 'ecoLockLimitedHours', 'stop',
+  'reminder',
+  'setpointRaised',
+  'ecoLockLimitedHours',
+  'stop',
 ] as const;
 
 export type RestrictionStep = (typeof RESTRICTION_STEP)[number];

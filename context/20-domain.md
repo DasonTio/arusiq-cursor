@@ -24,12 +24,12 @@ breadcrumb level carries its own roll-up severity.
 
 Four levels, three channels. **Colour never travels alone.**
 
-| Level | Domain value | Shape | Means | Leads to |
-| --- | --- | --- | --- | --- |
-| Red | `critical` | square | Failing now, or about to | Act now |
-| Orange | `warning` | triangle | Degrading; still works, won't keep working | Plan action |
-| Grey | `unknown` | dashed ring | Offline, no sensor, or too stale to trust | Restore visibility |
-| Green | `normal` | circle | Within the expected envelope | Nothing |
+| Level  | Domain value | Shape       | Means                                      | Leads to           |
+| ------ | ------------ | ----------- | ------------------------------------------ | ------------------ |
+| Red    | `critical`   | square      | Failing now, or about to                   | Act now            |
+| Orange | `warning`    | triangle    | Degrading; still works, won't keep working | Plan action        |
+| Grey   | `unknown`    | dashed ring | Offline, no sensor, or too stale to trust  | Restore visibility |
+| Green  | `normal`     | circle      | Within the expected envelope               | Nothing            |
 
 **Roll-up precedence: `critical > warning > unknown > normal`.** Grey outranks
 green because an unknown unit may be the broken one. Use `rollUp()` from
@@ -70,20 +70,20 @@ Four labels, and every figure in the product carries one. Ranked, because an
 **aggregate inherits the weakest provenance of its inputs** — one simulated
 reading makes the whole total simulated. Use `weakestProvenance()`.
 
-| Label | Applies to |
-| --- | --- |
-| `simulated` | Every telemetry value in Phase 1A |
-| `estimated` | Avoided emissions and savings before verification |
-| `provisional` | MRV packages below 90 % completeness |
-| `verified` | Independently verified under an accepted methodology |
+| Label         | Applies to                                           |
+| ------------- | ---------------------------------------------------- |
+| `simulated`   | Every telemetry value in Phase 1A                    |
+| `estimated`   | Avoided emissions and savings before verification    |
+| `provisional` | MRV packages below 90 % completeness                 |
+| `verified`    | Independently verified under an accepted methodology |
 
 `verified` is the only label under which the word **credit** is permissible.
 Phase 1A has no verified data, so the word does not appear anywhere.
 
 ## Command lifecycle
 
-A control is not a toggle that flips. The interface distinguishes *we asked*
-from *the machine did it*.
+A control is not a toggle that flips. The interface distinguishes _we asked_
+from _the machine did it_.
 
 `sent → acknowledged → verified` · plus `failed` and `queued` (offline).
 
@@ -94,12 +94,12 @@ attempt, not afterwards.
 
 ## Restriction ladder
 
-| Step | Action | Effect on cooling |
-| --- | --- | --- |
-| 1 | `reminder` | None |
-| 2 | `setpointRaised` | Still cools, warmer floor (e.g. 26 °C) |
-| 3 | `ecoLockLimitedHours` | Mode fixed to Eco, operating window reduced |
-| 4 | `stop` | Stops — **blocked for health-sensitive spaces** |
+| Step | Action                | Effect on cooling                               |
+| ---- | --------------------- | ----------------------------------------------- |
+| 1    | `reminder`            | None                                            |
+| 2    | `setpointRaised`      | Still cools, warmer floor (e.g. 26 °C)          |
+| 3    | `ecoLockLimitedHours` | Mode fixed to Eco, operating window reduced     |
+| 4    | `stop`                | Stops — **blocked for health-sensitive spaces** |
 
 Each step renders as a **persistent banner on the affected unit** — not a
 dismissible toast — carrying the step, the reason, the grace period remaining
@@ -110,10 +110,10 @@ and a pay action. Every step shows requester, approver and timestamp to Admin.
 They share a chemical symbol and nothing else. Separate cards, distinct labels,
 distinct icons, never a shared axis, never added together.
 
-| | Measures | Unit | Accent |
-| --- | --- | --- | --- |
-| **Air freshness** | Indoor CO₂ concentration in the room | `ppm` | Info |
-| **Emissions** | Greenhouse gas from electricity used | `kgCO₂e` | Eco |
+|                   | Measures                             | Unit     | Accent |
+| ----------------- | ------------------------------------ | -------- | ------ |
+| **Air freshness** | Indoor CO₂ concentration in the room | `ppm`    | Info   |
+| **Emissions**     | Greenhouse gas from electricity used | `kgCO₂e` | Eco    |
 
 Carbon lifecycle: `metered kWh → × versioned grid factor → Scope 2 emissions →
 MRV package → verified reduction → offset/exchange`. **The grid factor is
@@ -132,9 +132,9 @@ suppresses these alerts during planned service.
 Confusing the last two is how a dashboard comes to imply that a unit consumed
 0 kWh when it was simply offline.
 
-| State | Means | Treatment |
-| --- | --- | --- |
-| `loading` | Request in flight | Skeletons matching the final layout — never a spinner over a blank page |
-| `empty` | Nothing exists yet | Explain what would appear, offer the action that creates the first one |
-| `error` | The request failed | Say what failed, offer a retry |
-| `noData` | Exists, but has not reported | **Grey severity with a last-seen time.** Never an empty state, never a zero |
+| State     | Means                        | Treatment                                                                   |
+| --------- | ---------------------------- | --------------------------------------------------------------------------- |
+| `loading` | Request in flight            | Skeletons matching the final layout — never a spinner over a blank page     |
+| `empty`   | Nothing exists yet           | Explain what would appear, offer the action that creates the first one      |
+| `error`   | The request failed           | Say what failed, offer a retry                                              |
+| `noData`  | Exists, but has not reported | **Grey severity with a last-seen time.** Never an empty state, never a zero |

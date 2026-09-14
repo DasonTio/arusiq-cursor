@@ -1,0 +1,47 @@
+---
+description: Definition of done — applies when building or reviewing a screen
+globs: ["src/features/**", "src/patterns/**"]
+alwaysApply: false
+---
+
+Done means all three columns pass, not just the first.
+
+## 1 · Mechanical — `npm run verify`
+
+self-test · contrast · tokens · provenance · i18n · types · lint · tests · trace.
+Run it before you claim anything. The `afterFileEdit` hook runs a subset on
+every edit; it is not a substitute for the full gate.
+
+## 2 · Requirement
+
+- Every FR in the screen's `satisfies` list is **implemented, not stubbed**
+- `@requirement FR-xx` in the file header, and `npm run trace` counts it
+- Anything marked `MOCKED` / `SIMULATED` is a **convincing, visibly labelled
+  simulation** — not a TODO, not a real integration
+
+## 3 · Judgement — what no tool can check
+
+- [ ] **All four data states exist** — `loading` skeletons matching the final
+      layout, `empty` offering the action that creates the first item, `error`
+      with a retry, `noData` as grey with a last-seen time. Not four variations
+      on a spinner. Use the `DataStateProps` union; it makes the wrong shape
+      unconstructible.
+- [ ] **Switch to Indonesian and look at it.** Strings run 20–30 % longer. Every
+      truncation and wrap bug lives here and no tool will find it.
+- [ ] **375 px and 200 % zoom** — no horizontal scroll at either.
+- [ ] **Tab through the whole screen.** Every stop visible, every action
+      reachable.
+- [ ] Does it open on **the decision its role owns**, or on a wall of data?
+- [ ] One primary action per area.
+- [ ] No dead ends — every alert and every severity leads somewhere.
+
+## What done is not
+
+- ✗ "It renders." A screen that is green everywhere demonstrates nothing — the
+  unhappy paths are the product. Offline units, stale readings, absent sensors,
+  failed commands and a restricted unit all need to be visible in the demo.
+- ✗ "Verify passes." Verify proves you did not break the rules. It cannot tell
+  you the screen answers the question its role opens on.
+- ✗ "I'll add provenance / empty states / Indonesian later." Each is a full
+  second pass over every screen. That is exactly why they are gated from the
+  first commit rather than the last.

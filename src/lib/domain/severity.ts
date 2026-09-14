@@ -9,10 +9,10 @@
  */
 
 export const SEVERITY = {
-  critical: { rank: 3, shape: 'square',     labelKey: 'severity.critical' },
-  warning:  { rank: 2, shape: 'triangle',   labelKey: 'severity.warning'  },
-  unknown:  { rank: 1, shape: 'dashedRing', labelKey: 'severity.unknown'  },
-  normal:   { rank: 0, shape: 'circle',     labelKey: 'severity.normal'   },
+  critical: { rank: 3, shape: 'square', labelKey: 'severity.critical' },
+  warning: { rank: 2, shape: 'triangle', labelKey: 'severity.warning' },
+  unknown: { rank: 1, shape: 'dashedRing', labelKey: 'severity.unknown' },
+  normal: { rank: 0, shape: 'circle', labelKey: 'severity.normal' },
 } as const;
 
 export type Severity = keyof typeof SEVERITY;

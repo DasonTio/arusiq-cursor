@@ -6,14 +6,14 @@ they are listed rather than assumed.
 
 ## 1 · Mechanical — `npm run verify`
 
-| Gate | Proves |
-| --- | --- |
-| `contrast` | Every colour token clears WCAG against all four legal surfaces |
-| `tokens` | No raw hex, px, z-index; no layout transitions; no dark mode; tokens.ts in sync |
-| `provenance` | Every metric component declares its origin; no forbidden "credit"; ppm and kgCO₂e separated |
-| `i18n` | No hardcoded user-facing strings, no concatenated formats, no English-sized controls |
-| `types` · `lint` | — |
-| `trace` | The requirement is claimed by a file |
+| Gate             | Proves                                                                                      |
+| ---------------- | ------------------------------------------------------------------------------------------- |
+| `contrast`       | Every colour token clears WCAG against all four legal surfaces                              |
+| `tokens`         | No raw hex, px, z-index; no layout transitions; no dark mode; tokens.ts in sync             |
+| `provenance`     | Every metric component declares its origin; no forbidden "credit"; ppm and kgCO₂e separated |
+| `i18n`           | No hardcoded user-facing strings, no concatenated formats, no English-sized controls        |
+| `types` · `lint` | —                                                                                           |
+| `trace`          | The requirement is claimed by a file                                                        |
 
 ## 2 · Requirement — does it do what was asked
 
@@ -53,7 +53,7 @@ Phase 1A is demo-ready when:
 
 - `npm run trace:strict` passes — every **Must** requirement is claimed
 - The eight stakeholder journeys run end to end in under 10 minutes
-- A new user answers *"what needs attention?"* in under 60 seconds
+- A new user answers _"what needs attention?"_ in under 60 seconds
 - Lighthouse accessibility ≥ 90 on each of the three dashboards
 - Every figure on every screen carries a provenance label — the one claim the
   whole design set is judged on

@@ -19,7 +19,7 @@ wastes a turn.
    composes: a 10 % tint, a nested radius, a `gap()` level. Every token you add
    is a decision every future agent must now make.
 2. **Build primitives so features cannot get them wrong.** If provenance is a
-   *required prop*, no screen can omit it. If `SeverityIndicator` takes a
+   _required prop_, no screen can omit it. If `SeverityIndicator` takes a
    `Severity` and renders mark, shape and label together, no screen can ship a
    bare dot. Push correctness into the type signature, not into documentation.
 3. **Review against D7.** Use the screen review checklist in

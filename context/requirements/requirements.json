@@ -4,120 +4,552 @@
     "product": "ARUSIQ Smart AC Intelligence Platform",
     "phase": "1A",
     "phaseDescription": "Clickable UI/UX prototype for split units on labelled simulated data. Two-week sprint.",
-    "sources": ["D5 URS R2", "D6 PRD R2", "D7 UI Design Guideline R2", "D8 Conformance Review"],
-    "outOfScope": ["real devices", "real notifications", "real payments", "registry-grade carbon credits", "dark mode", "HVAC"]
+    "sources": [
+      "D5 URS R2",
+      "D6 PRD R2",
+      "D7 UI Design Guideline R2",
+      "D8 Conformance Review"
+    ],
+    "outOfScope": [
+      "real devices",
+      "real notifications",
+      "real payments",
+      "registry-grade carbon credits",
+      "dark mode",
+      "HVAC"
+    ]
   },
 
   "roles": [
-    { "id": "client",    "opensOn": "Is my home comfortable, and what is it costing me?",
-      "emphasis": ["comfort now", "energy today", "savings", "active alerts", "maintenance timeline", "carbon hero"],
-      "scope": "own spaces only" },
-    { "id": "technician-internal", "opensOn": "What do I fix first, and what will I find when I get there?",
-      "emphasis": ["work queue", "priority alerts", "component health", "device health", "route"],
-      "scope": "assigned customers, sites and units" },
-    { "id": "technician-thirdparty", "opensOn": "Same, limited strictly to assigned work.",
+    {
+      "id": "client",
+      "opensOn": "Is my home comfortable, and what is it costing me?",
+      "emphasis": [
+        "comfort now",
+        "energy today",
+        "savings",
+        "active alerts",
+        "maintenance timeline",
+        "carbon hero"
+      ],
+      "scope": "own spaces only"
+    },
+    {
+      "id": "technician-internal",
+      "opensOn": "What do I fix first, and what will I find when I get there?",
+      "emphasis": [
+        "work queue",
+        "priority alerts",
+        "component health",
+        "device health",
+        "route"
+      ],
+      "scope": "assigned customers, sites and units"
+    },
+    {
+      "id": "technician-thirdparty",
+      "opensOn": "Same, limited strictly to assigned work.",
       "emphasis": ["assigned work only"],
-      "scope": "assigned work orders only — enforced in NAVIGATION, not only in data (D7 §18.2)" },
-    { "id": "admin",     "opensOn": "What needs me today, across the whole fleet?",
-      "emphasis": ["decisions needed", "fleet map", "critical events", "service funnel", "payment attention", "command activity", "energy portfolio", "MRV status"],
-      "scope": "all" }
+      "scope": "assigned work orders only — enforced in NAVIGATION, not only in data (D7 §18.2)"
+    },
+    {
+      "id": "admin",
+      "opensOn": "What needs me today, across the whole fleet?",
+      "emphasis": [
+        "decisions needed",
+        "fleet map",
+        "critical events",
+        "service funnel",
+        "payment attention",
+        "command activity",
+        "energy portfolio",
+        "MRV status"
+      ],
+      "scope": "all"
+    }
   ],
 
   "invariants": [
-    { "id": "INV-PROVENANCE", "rule": "Every figure carries Simulated | Estimated | Provisional | Verified, next to the figure itself — never in a page-level disclaimer.", "source": "D6 NFR Data integrity, D7 §11", "enforcedBy": "tools/verify-provenance.mjs + required TS prop" },
-    { "id": "INV-AGGREGATE", "rule": "An aggregate inherits the WEAKEST provenance of its inputs. One simulated reading makes the whole total simulated.", "source": "D8", "enforcedBy": "weakestProvenance() in tokens.ts" },
-    { "id": "INV-SEVERITY", "rule": "Severity always renders colour + shape + label. A bare coloured dot is not acceptable anywhere, including in charts.", "source": "D5 UR-MNT-01, D7 §4.1, §18", "enforcedBy": "SeverityIndicator component contract" },
-    { "id": "INV-GREY", "rule": "Grey means 'we do not know'. A grey unit is never counted as green in a roll-up, and always carries a last-seen timestamp.", "source": "D7 §4.1, D5 UR-SYS-02", "enforcedBy": "rollUp() precedence critical > warning > unknown > normal" },
-    { "id": "INV-NO-FABRICATION", "rule": "Never fabricate a value. Missing is not zero: an absent sensor is stated as absent; an unreported unit is grey, not 0 kWh.", "source": "D5 UR-SYS-02, D7 §11.2, §18.3", "enforcedBy": "LoadState discriminates noData from empty" },
-    { "id": "INV-CO2", "rule": "Indoor CO2 ppm and kgCO2e emissions are on SEPARATE cards with distinct labels and distinct icons. Never the same tile group, never a shared axis, never added together.", "source": "D5 UR-AIR-06, D6 FR-66, D7 §14.1", "enforcedBy": "tools/verify-provenance.mjs co2-separation rule" },
-    { "id": "INV-CREDIT", "rule": "The word 'credit' is permissible only under Verified provenance. Everything else says 'avoided emissions'. Phase 1A never uses it.", "source": "D5 UR-CAR-08, D7 §11.2", "enforcedBy": "tools/verify-provenance.mjs forbidden-word rule" },
-    { "id": "INV-SAFE-CONTROL", "rule": "Restriction is a four-step ladder with notice, grace period and dual approval at every step. Never a single switch. 'Stop' is blocked for health-sensitive spaces.", "source": "D6 §10, D5 UR-PAY-03, D7 §13.2", "enforcedBy": "isStepPermitted() + RestrictionLadder component contract" },
-    { "id": "INV-COMMAND", "rule": "A control is not a toggle that flips. It shows Sent > Acknowledged > Verified, and only Verified settles it into the new position.", "source": "D6 FR-40, D7 §13.1", "enforcedBy": "CommandState + isSettled()" },
-    { "id": "INV-SPLIT-UNIT", "rule": "A split unit recirculates air. The interface never claims fresh-air control for a split unit alone; the recommendation and the capability are two different components.", "source": "D5 constraint, D7 §14.2", "enforcedBy": "review checklist" },
-    { "id": "INV-MOCK-LABEL", "rule": "Mark the mock as a mock. An unlabelled screen of a trading interface that does not yet exist will be mistaken for one that does.", "source": "D7 §14.4", "enforcedBy": "review checklist" },
-    { "id": "INV-I18N", "rule": "No user-facing string is hardcoded. Numbers, currency, dates and temperature come from the locale, never string concatenation. EN and ID at launch.", "source": "D5 UR-LANG-01/02, D7 §19.2", "enforcedBy": "tools/verify-i18n.mjs" },
-    { "id": "INV-NO-DEAD-END", "rule": "No screen is a dead end — every alert leads to an action, and every severity is clickable.", "source": "D5 acceptance principle 3, D7 §4.3", "enforcedBy": "review checklist" },
-    { "id": "INV-SCOPE", "rule": "Role scoping is proven by attempting unauthorised navigation for each role. Third-party technicians see assigned work only.", "source": "D5 UR-SYS-05, UR-TEC-02", "enforcedBy": "route guard tests" }
+    {
+      "id": "INV-PROVENANCE",
+      "rule": "Every figure carries Simulated | Estimated | Provisional | Verified, next to the figure itself — never in a page-level disclaimer.",
+      "source": "D6 NFR Data integrity, D7 §11",
+      "enforcedBy": "tools/verify-provenance.mjs + required TS prop"
+    },
+    {
+      "id": "INV-AGGREGATE",
+      "rule": "An aggregate inherits the WEAKEST provenance of its inputs. One simulated reading makes the whole total simulated.",
+      "source": "D8",
+      "enforcedBy": "weakestProvenance() in tokens.ts"
+    },
+    {
+      "id": "INV-SEVERITY",
+      "rule": "Severity always renders colour + shape + label. A bare coloured dot is not acceptable anywhere, including in charts.",
+      "source": "D5 UR-MNT-01, D7 §4.1, §18",
+      "enforcedBy": "SeverityIndicator component contract"
+    },
+    {
+      "id": "INV-GREY",
+      "rule": "Grey means 'we do not know'. A grey unit is never counted as green in a roll-up, and always carries a last-seen timestamp.",
+      "source": "D7 §4.1, D5 UR-SYS-02",
+      "enforcedBy": "rollUp() precedence critical > warning > unknown > normal"
+    },
+    {
+      "id": "INV-NO-FABRICATION",
+      "rule": "Never fabricate a value. Missing is not zero: an absent sensor is stated as absent; an unreported unit is grey, not 0 kWh.",
+      "source": "D5 UR-SYS-02, D7 §11.2, §18.3",
+      "enforcedBy": "LoadState discriminates noData from empty"
+    },
+    {
+      "id": "INV-CO2",
+      "rule": "Indoor CO2 ppm and kgCO2e emissions are on SEPARATE cards with distinct labels and distinct icons. Never the same tile group, never a shared axis, never added together.",
+      "source": "D5 UR-AIR-06, D6 FR-66, D7 §14.1",
+      "enforcedBy": "tools/verify-provenance.mjs co2-separation rule"
+    },
+    {
+      "id": "INV-CREDIT",
+      "rule": "The word 'credit' is permissible only under Verified provenance. Everything else says 'avoided emissions'. Phase 1A never uses it.",
+      "source": "D5 UR-CAR-08, D7 §11.2",
+      "enforcedBy": "tools/verify-provenance.mjs forbidden-word rule"
+    },
+    {
+      "id": "INV-SAFE-CONTROL",
+      "rule": "Restriction is a four-step ladder with notice, grace period and dual approval at every step. Never a single switch. 'Stop' is blocked for health-sensitive spaces.",
+      "source": "D6 §10, D5 UR-PAY-03, D7 §13.2",
+      "enforcedBy": "isStepPermitted() + RestrictionLadder component contract"
+    },
+    {
+      "id": "INV-COMMAND",
+      "rule": "A control is not a toggle that flips. It shows Sent > Acknowledged > Verified, and only Verified settles it into the new position.",
+      "source": "D6 FR-40, D7 §13.1",
+      "enforcedBy": "CommandState + isSettled()"
+    },
+    {
+      "id": "INV-SPLIT-UNIT",
+      "rule": "A split unit recirculates air. The interface never claims fresh-air control for a split unit alone; the recommendation and the capability are two different components.",
+      "source": "D5 constraint, D7 §14.2",
+      "enforcedBy": "review checklist"
+    },
+    {
+      "id": "INV-MOCK-LABEL",
+      "rule": "Mark the mock as a mock. An unlabelled screen of a trading interface that does not yet exist will be mistaken for one that does.",
+      "source": "D7 §14.4",
+      "enforcedBy": "review checklist"
+    },
+    {
+      "id": "INV-I18N",
+      "rule": "No user-facing string is hardcoded. Numbers, currency, dates and temperature come from the locale, never string concatenation. EN and ID at launch.",
+      "source": "D5 UR-LANG-01/02, D7 §19.2",
+      "enforcedBy": "tools/verify-i18n.mjs"
+    },
+    {
+      "id": "INV-NO-DEAD-END",
+      "rule": "No screen is a dead end — every alert leads to an action, and every severity is clickable.",
+      "source": "D5 acceptance principle 3, D7 §4.3",
+      "enforcedBy": "review checklist"
+    },
+    {
+      "id": "INV-SCOPE",
+      "rule": "Role scoping is proven by attempting unauthorised navigation for each role. Third-party technicians see assigned work only.",
+      "source": "D5 UR-SYS-05, UR-TEC-02",
+      "enforcedBy": "route guard tests"
+    }
   ],
 
   "screens": [
-    { "id": "auth.sign-in",           "role": ["all"],    "satisfies": ["FR-01", "FR-04"] },
-    { "id": "auth.forgot-password",   "role": ["all"],    "satisfies": ["FR-03"] },
-    { "id": "client.overview",        "role": ["client"], "satisfies": ["FR-10", "FR-15"], "note": "Dark hero: carbon reduced this month. Then comfort per room, then anything red or orange." },
-    { "id": "client.spaces",          "role": ["client"], "satisfies": ["FR-13"] },
-    { "id": "client.unit-detail",     "role": ["client"], "satisfies": ["FR-14", "FR-20", "FR-40", "FR-41"] },
-    { "id": "client.energy",          "role": ["client"], "satisfies": ["FR-60", "FR-61", "FR-62"] },
-    { "id": "client.air-quality",     "role": ["client"], "satisfies": ["FR-63", "FR-65", "FR-66"] },
-    { "id": "client.carbon",          "role": ["client"], "satisfies": ["FR-70", "FR-71", "FR-66"] },
-    { "id": "client.maintenance",     "role": ["client"], "satisfies": ["FR-30", "FR-33"] },
-    { "id": "client.billing",         "role": ["client"], "satisfies": ["FR-50", "FR-51", "FR-52"] },
-    { "id": "tech.queue",             "role": ["technician-internal", "technician-thirdparty"], "satisfies": ["FR-11", "FR-34"] },
-    { "id": "tech.work-order",        "role": ["technician-internal", "technician-thirdparty"], "satisfies": ["FR-32", "FR-25"] },
-    { "id": "tech.diagnostics",       "role": ["technician-internal"], "satisfies": ["FR-20", "FR-21", "FR-83"] },
-    { "id": "admin.overview",         "role": ["admin"],  "satisfies": ["FR-12"], "note": "Opens on decisions needed and how many carry SLA risk." },
-    { "id": "admin.fleet",            "role": ["admin"],  "satisfies": ["FR-13"] },
-    { "id": "admin.alerts",           "role": ["admin"],  "satisfies": ["FR-21", "FR-22", "FR-27"] },
-    { "id": "admin.dispatch",         "role": ["admin"],  "satisfies": ["FR-31"] },
-    { "id": "admin.payments",         "role": ["admin"],  "satisfies": ["FR-50", "FR-52"] },
-    { "id": "admin.energy-portfolio", "role": ["admin"],  "satisfies": ["FR-61"] },
-    { "id": "admin.mrv",              "role": ["admin"],  "satisfies": ["FR-70", "FR-71", "FR-73", "FR-74"] },
-    { "id": "admin.settings",         "role": ["admin"],  "satisfies": ["FR-100", "FR-101"] },
-    { "id": "admin.audit",            "role": ["admin"],  "satisfies": ["FR-102"] },
-    { "id": "shared.assistant",       "role": ["all"],    "satisfies": ["FR-04"], "note": "Text and voice with visible transcript; text fallback always present." },
-    { "id": "shared.notifications",   "role": ["all"],    "satisfies": ["FR-22"] }
+    { "id": "auth.sign-in", "role": ["all"], "satisfies": ["FR-01", "FR-04"] },
+    { "id": "auth.forgot-password", "role": ["all"], "satisfies": ["FR-03"] },
+    {
+      "id": "client.overview",
+      "role": ["client"],
+      "satisfies": ["FR-10", "FR-15"],
+      "note": "Dark hero: carbon reduced this month. Then comfort per room, then anything red or orange."
+    },
+    { "id": "client.spaces", "role": ["client"], "satisfies": ["FR-13"] },
+    {
+      "id": "client.unit-detail",
+      "role": ["client"],
+      "satisfies": ["FR-14", "FR-20", "FR-40", "FR-41"]
+    },
+    {
+      "id": "client.energy",
+      "role": ["client"],
+      "satisfies": ["FR-60", "FR-61", "FR-62"]
+    },
+    {
+      "id": "client.air-quality",
+      "role": ["client"],
+      "satisfies": ["FR-63", "FR-65", "FR-66"]
+    },
+    {
+      "id": "client.carbon",
+      "role": ["client"],
+      "satisfies": ["FR-70", "FR-71", "FR-66"]
+    },
+    { "id": "client.maintenance", "role": ["client"], "satisfies": ["FR-30", "FR-33"] },
+    {
+      "id": "client.billing",
+      "role": ["client"],
+      "satisfies": ["FR-50", "FR-51", "FR-52"]
+    },
+    {
+      "id": "tech.queue",
+      "role": ["technician-internal", "technician-thirdparty"],
+      "satisfies": ["FR-11", "FR-34"]
+    },
+    {
+      "id": "tech.work-order",
+      "role": ["technician-internal", "technician-thirdparty"],
+      "satisfies": ["FR-32", "FR-25"]
+    },
+    {
+      "id": "tech.diagnostics",
+      "role": ["technician-internal"],
+      "satisfies": ["FR-20", "FR-21", "FR-83"]
+    },
+    {
+      "id": "admin.overview",
+      "role": ["admin"],
+      "satisfies": ["FR-12"],
+      "note": "Opens on decisions needed and how many carry SLA risk."
+    },
+    { "id": "admin.fleet", "role": ["admin"], "satisfies": ["FR-13"] },
+    {
+      "id": "admin.alerts",
+      "role": ["admin"],
+      "satisfies": ["FR-21", "FR-22", "FR-27"]
+    },
+    { "id": "admin.dispatch", "role": ["admin"], "satisfies": ["FR-31"] },
+    { "id": "admin.payments", "role": ["admin"], "satisfies": ["FR-50", "FR-52"] },
+    { "id": "admin.energy-portfolio", "role": ["admin"], "satisfies": ["FR-61"] },
+    {
+      "id": "admin.mrv",
+      "role": ["admin"],
+      "satisfies": ["FR-70", "FR-71", "FR-73", "FR-74"]
+    },
+    { "id": "admin.settings", "role": ["admin"], "satisfies": ["FR-100", "FR-101"] },
+    { "id": "admin.audit", "role": ["admin"], "satisfies": ["FR-102"] },
+    {
+      "id": "shared.assistant",
+      "role": ["all"],
+      "satisfies": ["FR-04"],
+      "note": "Text and voice with visible transcript; text fallback always present."
+    },
+    { "id": "shared.notifications", "role": ["all"], "satisfies": ["FR-22"] }
   ],
 
   "requirements": [
-    { "id": "FR-01",  "priority": "Must",   "epic": "EP-01", "satisfies": ["UR-AUTH-01", "UR-AUTH-04"], "statement": "Sign in with email or phone and password, lockout after 5 failures, role-based landing." },
-    { "id": "FR-02",  "priority": "Must",   "epic": "EP-01", "satisfies": ["UR-AUTH-02"], "statement": "Sign out for this device and for all devices." },
-    { "id": "FR-03",  "priority": "Must",   "epic": "EP-01", "satisfies": ["UR-AUTH-03"], "statement": "Forgot password with neutral confirmation and time-limited link. MOCKED in 1A." },
-    { "id": "FR-04",  "priority": "Must",   "epic": "EP-13", "satisfies": ["UR-LANG-01", "UR-LANG-02"], "statement": "Language switch on EVERY screen; all strings, templates and formats from locale packs. EN and ID at launch." },
-    { "id": "FR-10",  "priority": "Must",   "epic": "EP-02", "satisfies": ["UR-CLI-01"], "statement": "Client overview: hero (carbon reduced this month), KPI tiles, room rows with comfort verdict, active alerts, energy sparkline, maintenance timeline." },
-    { "id": "FR-11",  "priority": "Must",   "epic": "EP-02", "satisfies": ["UR-TEC-01"], "statement": "Technician overview: work queue, priority alerts, route, device health." },
-    { "id": "FR-12",  "priority": "Must",   "epic": "EP-02", "satisfies": ["UR-ADM-01"], "statement": "Admin/HQ overview: fleet map, critical events, service funnel, payment attention, command activity, energy portfolio, MRV status." },
-    { "id": "FR-13",  "priority": "Must",   "epic": "EP-03", "satisfies": ["UR-ASSET-01", "UR-ADM-02"], "statement": "Category and space hierarchy Home|Office > property > floor > room > unit, with worst-status roll-up and search." },
-    { "id": "FR-14",  "priority": "Must",   "epic": "EP-04", "satisfies": ["UR-CLI-02", "UR-CLI-03"], "statement": "Unit detail: current values and freshness, trends, part-level health, controls, carbon card, schedule, history." },
-    { "id": "FR-15",  "priority": "Must",   "epic": "EP-04", "satisfies": ["UR-SYS-02"], "statement": "Show grey values with last-seen time when data is stale; NEVER fabricate values." },
-    { "id": "FR-20",  "priority": "Must",   "epic": "EP-05", "satisfies": ["UR-MNT-01", "UR-MNT-02", "UR-MNT-03", "UR-MNT-04"], "statement": "Classify each of the 12 monitored parts across indoor, outdoor and electrical groups as green, orange, red or grey." },
-    { "id": "FR-21",  "priority": "Must",   "epic": "EP-06", "satisfies": ["UR-MNT-01", "UR-TEC-04"], "statement": "Alerts carry evidence (signals, thresholds, duration), confidence, likely cause, impact if ignored, recommended action." },
-    { "id": "FR-22",  "priority": "Must",   "epic": "EP-06", "satisfies": ["UR-CLI-08", "UR-COM-01", "UR-COM-02"], "statement": "Deliver alerts in-app, push, WhatsApp, email per severity and preference, in the user's language, with delivery status. MOCKED in 1A." },
-    { "id": "FR-25",  "priority": "Must",   "epic": "EP-16", "satisfies": ["UR-MNT-08"], "statement": "Label predictions SUSPECTED until a technician verdict. Render suspected with a dashed border, not a different colour." },
-    { "id": "FR-27",  "priority": "Should", "epic": "EP-15", "satisfies": ["UR-ADM-09"], "statement": "Admin configures thresholds, hysteresis, durations and escalation with a preview of affected units. PREVIEW only in 1A." },
-    { "id": "FR-30",  "priority": "Must",   "epic": "EP-07", "satisfies": ["UR-CLI-09"], "statement": "Client creates a service request prefilled from an alert or unit, with type, photos, preferred slots and channel." },
-    { "id": "FR-31",  "priority": "Must",   "epic": "EP-07", "satisfies": ["UR-ADM-08", "UR-MNT-07"], "statement": "Admin creates, prioritises and assigns work orders with SLA; auto-creates preventive work orders." },
-    { "id": "FR-32",  "priority": "Must",   "epic": "EP-07", "satisfies": ["UR-TEC-03", "UR-TEC-06", "UR-TEC-07", "UR-TEC-08"], "statement": "Technician reviews evidence, completes the part-group checklist, records parts and findings, closes or escalates." },
-    { "id": "FR-33",  "priority": "Should", "epic": "EP-07", "satisfies": ["UR-CLI-10"], "statement": "Maintenance history, contracts, warranty dates, renewals, upcoming visits; export service reports." },
-    { "id": "FR-34",  "priority": "Must",   "epic": "EP-07", "satisfies": ["UR-TEC-02"], "statement": "Scope third-party technicians to assigned work orders ONLY." },
-    { "id": "FR-40",  "priority": "Must",   "epic": "EP-08", "satisfies": ["UR-CLI-07", "UR-ADM-07"], "statement": "Change power, mode, setpoint and fan speed with a confirmation showing target, current value and any policy limit; show Sent > Acknowledged > Verified. SIMULATED in 1A." },
-    { "id": "FR-41",  "priority": "Must",   "epic": "EP-08", "satisfies": ["UR-ENE-02"], "statement": "Weekly schedules with offline fallback." },
-    { "id": "FR-50",  "priority": "Must",   "epic": "EP-09", "satisfies": ["UR-CLI-11"], "statement": "Client sees balance, due date, payment methods, instructions, notice history and any restriction state. SIMULATED in 1A." },
-    { "id": "FR-51",  "priority": "Must",   "epic": "EP-09", "satisfies": ["UR-PAY-02"], "statement": "Reminders and overdue notices by WhatsApp and email with a payment link, in the client's language, with delivery recorded. MOCKED in 1A." },
-    { "id": "FR-52",  "priority": "Must",   "epic": "EP-09", "satisfies": ["UR-PAY-01", "UR-PAY-03", "UR-ADM-06"], "statement": "Restriction ladder: reminder > minimum setpoint raised > Eco lock and limited hours > off. Each step with notice, grace period, requester plus approver, and audit. SIMULATED in 1A." },
-    { "id": "FR-60",  "priority": "Must",   "epic": "EP-10", "satisfies": ["UR-ENE-01"], "statement": "Meter power and energy per unit; show watts, kWh today and month, and cost from the tariff. SIMULATED in 1A." },
-    { "id": "FR-61",  "priority": "Must",   "epic": "EP-10", "satisfies": ["UR-ENE-07", "UR-CLI-05"], "statement": "Show normal (adjusted baseline) vs with-solution consumption, the saving in kWh, cost and percentage, AND the method and completeness behind it. The chart is not permitted without a link to the method." },
-    { "id": "FR-62",  "priority": "Should", "epic": "EP-10", "satisfies": ["UR-ENE-07"], "statement": "Attribute savings to levers (Eco, setpoint >= 23C, schedule, occupancy, filter cleaning) and show 'how you save' actions." },
-    { "id": "FR-63",  "priority": "Should", "epic": "EP-11", "satisfies": ["UR-AIR-01"], "statement": "Display CO2 ppm, humidity, PM2.5 and TVOC where fitted with plain-language bands; STATE WHICH SENSORS ARE MISSING. MOCKED in 1A." },
-    { "id": "FR-65",  "priority": "Must",   "epic": "EP-11", "satisfies": ["UR-AIR-04"], "statement": "Alert when filters need washing or replacing, from filter-health rules and run hours." },
-    { "id": "FR-66",  "priority": "Must",   "epic": "EP-11", "satisfies": ["UR-AIR-06"], "statement": "Keep indoor CO2 ppm and kgCO2e emissions on SEPARATE cards with distinct labels." },
-    { "id": "FR-70",  "priority": "Must",   "epic": "EP-12", "satisfies": ["UR-CAR-01"], "statement": "Scope 2 emissions = kWh x versioned regional grid factor, with source and effective date SHOWN, not hidden." },
-    { "id": "FR-71",  "priority": "Must",   "epic": "EP-12", "satisfies": ["UR-CAR-02", "UR-CAR-08"], "statement": "Avoided emissions from saved kWh x grid factor; label estimated, provisional (completeness < 90%) or verified. MOCKED in 1A." },
-    { "id": "FR-73",  "priority": "Should", "epic": "EP-19", "satisfies": ["UR-CAR-06"], "statement": "Corporate sustainability reports by tenant, floor, site and period. SIMPLE REPORT ONLY in 1A." },
-    { "id": "FR-74",  "priority": "Should", "epic": "EP-19", "satisfies": ["UR-CAR-04", "UR-CAR-05"], "statement": "Carbon platform / registry connection with dual approval and certificates. CLEARLY LABELLED MOCK in 1A." },
-    { "id": "FR-83",  "priority": "Must",   "epic": "EP-14", "satisfies": ["UR-DEV-04", "UR-DEV-05", "UR-TEC-09"], "statement": "Detect enclosure opening, movement, cable disconnect and power loss; raise possible-tamper and removal alerts. Tamper has its OWN icon and filter and does not dissolve into the maintenance queue. SIMULATED in 1A." },
-    { "id": "FR-100", "priority": "Should", "epic": "EP-15", "satisfies": ["UR-ADM-04"], "statement": "Manage organisations, users, roles and scopes; invite in the user's language." },
-    { "id": "FR-101", "priority": "Should", "epic": "EP-15", "satisfies": ["UR-ADM-10"], "statement": "Manage tariffs and grid emission factors as versioned tables with effective dates." },
-    { "id": "FR-102", "priority": "Must",   "epic": "EP-15", "satisfies": ["UR-ADM-13"], "statement": "Append-only audit of sensitive actions, approvals, deliveries, commands and calculations; export." }
+    {
+      "id": "FR-01",
+      "priority": "Must",
+      "epic": "EP-01",
+      "satisfies": ["UR-AUTH-01", "UR-AUTH-04"],
+      "statement": "Sign in with email or phone and password, lockout after 5 failures, role-based landing."
+    },
+    {
+      "id": "FR-02",
+      "priority": "Must",
+      "epic": "EP-01",
+      "satisfies": ["UR-AUTH-02"],
+      "statement": "Sign out for this device and for all devices."
+    },
+    {
+      "id": "FR-03",
+      "priority": "Must",
+      "epic": "EP-01",
+      "satisfies": ["UR-AUTH-03"],
+      "statement": "Forgot password with neutral confirmation and time-limited link. MOCKED in 1A."
+    },
+    {
+      "id": "FR-04",
+      "priority": "Must",
+      "epic": "EP-13",
+      "satisfies": ["UR-LANG-01", "UR-LANG-02"],
+      "statement": "Language switch on EVERY screen; all strings, templates and formats from locale packs. EN and ID at launch."
+    },
+    {
+      "id": "FR-10",
+      "priority": "Must",
+      "epic": "EP-02",
+      "satisfies": ["UR-CLI-01"],
+      "statement": "Client overview: hero (carbon reduced this month), KPI tiles, room rows with comfort verdict, active alerts, energy sparkline, maintenance timeline."
+    },
+    {
+      "id": "FR-11",
+      "priority": "Must",
+      "epic": "EP-02",
+      "satisfies": ["UR-TEC-01"],
+      "statement": "Technician overview: work queue, priority alerts, route, device health."
+    },
+    {
+      "id": "FR-12",
+      "priority": "Must",
+      "epic": "EP-02",
+      "satisfies": ["UR-ADM-01"],
+      "statement": "Admin/HQ overview: fleet map, critical events, service funnel, payment attention, command activity, energy portfolio, MRV status."
+    },
+    {
+      "id": "FR-13",
+      "priority": "Must",
+      "epic": "EP-03",
+      "satisfies": ["UR-ASSET-01", "UR-ADM-02"],
+      "statement": "Category and space hierarchy Home|Office > property > floor > room > unit, with worst-status roll-up and search."
+    },
+    {
+      "id": "FR-14",
+      "priority": "Must",
+      "epic": "EP-04",
+      "satisfies": ["UR-CLI-02", "UR-CLI-03"],
+      "statement": "Unit detail: current values and freshness, trends, part-level health, controls, carbon card, schedule, history."
+    },
+    {
+      "id": "FR-15",
+      "priority": "Must",
+      "epic": "EP-04",
+      "satisfies": ["UR-SYS-02"],
+      "statement": "Show grey values with last-seen time when data is stale; NEVER fabricate values."
+    },
+    {
+      "id": "FR-20",
+      "priority": "Must",
+      "epic": "EP-05",
+      "satisfies": ["UR-MNT-01", "UR-MNT-02", "UR-MNT-03", "UR-MNT-04"],
+      "statement": "Classify each of the 12 monitored parts across indoor, outdoor and electrical groups as green, orange, red or grey."
+    },
+    {
+      "id": "FR-21",
+      "priority": "Must",
+      "epic": "EP-06",
+      "satisfies": ["UR-MNT-01", "UR-TEC-04"],
+      "statement": "Alerts carry evidence (signals, thresholds, duration), confidence, likely cause, impact if ignored, recommended action."
+    },
+    {
+      "id": "FR-22",
+      "priority": "Must",
+      "epic": "EP-06",
+      "satisfies": ["UR-CLI-08", "UR-COM-01", "UR-COM-02"],
+      "statement": "Deliver alerts in-app, push, WhatsApp, email per severity and preference, in the user's language, with delivery status. MOCKED in 1A."
+    },
+    {
+      "id": "FR-25",
+      "priority": "Must",
+      "epic": "EP-16",
+      "satisfies": ["UR-MNT-08"],
+      "statement": "Label predictions SUSPECTED until a technician verdict. Render suspected with a dashed border, not a different colour."
+    },
+    {
+      "id": "FR-27",
+      "priority": "Should",
+      "epic": "EP-15",
+      "satisfies": ["UR-ADM-09"],
+      "statement": "Admin configures thresholds, hysteresis, durations and escalation with a preview of affected units. PREVIEW only in 1A."
+    },
+    {
+      "id": "FR-30",
+      "priority": "Must",
+      "epic": "EP-07",
+      "satisfies": ["UR-CLI-09"],
+      "statement": "Client creates a service request prefilled from an alert or unit, with type, photos, preferred slots and channel."
+    },
+    {
+      "id": "FR-31",
+      "priority": "Must",
+      "epic": "EP-07",
+      "satisfies": ["UR-ADM-08", "UR-MNT-07"],
+      "statement": "Admin creates, prioritises and assigns work orders with SLA; auto-creates preventive work orders."
+    },
+    {
+      "id": "FR-32",
+      "priority": "Must",
+      "epic": "EP-07",
+      "satisfies": ["UR-TEC-03", "UR-TEC-06", "UR-TEC-07", "UR-TEC-08"],
+      "statement": "Technician reviews evidence, completes the part-group checklist, records parts and findings, closes or escalates."
+    },
+    {
+      "id": "FR-33",
+      "priority": "Should",
+      "epic": "EP-07",
+      "satisfies": ["UR-CLI-10"],
+      "statement": "Maintenance history, contracts, warranty dates, renewals, upcoming visits; export service reports."
+    },
+    {
+      "id": "FR-34",
+      "priority": "Must",
+      "epic": "EP-07",
+      "satisfies": ["UR-TEC-02"],
+      "statement": "Scope third-party technicians to assigned work orders ONLY."
+    },
+    {
+      "id": "FR-40",
+      "priority": "Must",
+      "epic": "EP-08",
+      "satisfies": ["UR-CLI-07", "UR-ADM-07"],
+      "statement": "Change power, mode, setpoint and fan speed with a confirmation showing target, current value and any policy limit; show Sent > Acknowledged > Verified. SIMULATED in 1A."
+    },
+    {
+      "id": "FR-41",
+      "priority": "Must",
+      "epic": "EP-08",
+      "satisfies": ["UR-ENE-02"],
+      "statement": "Weekly schedules with offline fallback."
+    },
+    {
+      "id": "FR-50",
+      "priority": "Must",
+      "epic": "EP-09",
+      "satisfies": ["UR-CLI-11"],
+      "statement": "Client sees balance, due date, payment methods, instructions, notice history and any restriction state. SIMULATED in 1A."
+    },
+    {
+      "id": "FR-51",
+      "priority": "Must",
+      "epic": "EP-09",
+      "satisfies": ["UR-PAY-02"],
+      "statement": "Reminders and overdue notices by WhatsApp and email with a payment link, in the client's language, with delivery recorded. MOCKED in 1A."
+    },
+    {
+      "id": "FR-52",
+      "priority": "Must",
+      "epic": "EP-09",
+      "satisfies": ["UR-PAY-01", "UR-PAY-03", "UR-ADM-06"],
+      "statement": "Restriction ladder: reminder > minimum setpoint raised > Eco lock and limited hours > off. Each step with notice, grace period, requester plus approver, and audit. SIMULATED in 1A."
+    },
+    {
+      "id": "FR-60",
+      "priority": "Must",
+      "epic": "EP-10",
+      "satisfies": ["UR-ENE-01"],
+      "statement": "Meter power and energy per unit; show watts, kWh today and month, and cost from the tariff. SIMULATED in 1A."
+    },
+    {
+      "id": "FR-61",
+      "priority": "Must",
+      "epic": "EP-10",
+      "satisfies": ["UR-ENE-07", "UR-CLI-05"],
+      "statement": "Show normal (adjusted baseline) vs with-solution consumption, the saving in kWh, cost and percentage, AND the method and completeness behind it. The chart is not permitted without a link to the method."
+    },
+    {
+      "id": "FR-62",
+      "priority": "Should",
+      "epic": "EP-10",
+      "satisfies": ["UR-ENE-07"],
+      "statement": "Attribute savings to levers (Eco, setpoint >= 23C, schedule, occupancy, filter cleaning) and show 'how you save' actions."
+    },
+    {
+      "id": "FR-63",
+      "priority": "Should",
+      "epic": "EP-11",
+      "satisfies": ["UR-AIR-01"],
+      "statement": "Display CO2 ppm, humidity, PM2.5 and TVOC where fitted with plain-language bands; STATE WHICH SENSORS ARE MISSING. MOCKED in 1A."
+    },
+    {
+      "id": "FR-65",
+      "priority": "Must",
+      "epic": "EP-11",
+      "satisfies": ["UR-AIR-04"],
+      "statement": "Alert when filters need washing or replacing, from filter-health rules and run hours."
+    },
+    {
+      "id": "FR-66",
+      "priority": "Must",
+      "epic": "EP-11",
+      "satisfies": ["UR-AIR-06"],
+      "statement": "Keep indoor CO2 ppm and kgCO2e emissions on SEPARATE cards with distinct labels."
+    },
+    {
+      "id": "FR-70",
+      "priority": "Must",
+      "epic": "EP-12",
+      "satisfies": ["UR-CAR-01"],
+      "statement": "Scope 2 emissions = kWh x versioned regional grid factor, with source and effective date SHOWN, not hidden."
+    },
+    {
+      "id": "FR-71",
+      "priority": "Must",
+      "epic": "EP-12",
+      "satisfies": ["UR-CAR-02", "UR-CAR-08"],
+      "statement": "Avoided emissions from saved kWh x grid factor; label estimated, provisional (completeness < 90%) or verified. MOCKED in 1A."
+    },
+    {
+      "id": "FR-73",
+      "priority": "Should",
+      "epic": "EP-19",
+      "satisfies": ["UR-CAR-06"],
+      "statement": "Corporate sustainability reports by tenant, floor, site and period. SIMPLE REPORT ONLY in 1A."
+    },
+    {
+      "id": "FR-74",
+      "priority": "Should",
+      "epic": "EP-19",
+      "satisfies": ["UR-CAR-04", "UR-CAR-05"],
+      "statement": "Carbon platform / registry connection with dual approval and certificates. CLEARLY LABELLED MOCK in 1A."
+    },
+    {
+      "id": "FR-83",
+      "priority": "Must",
+      "epic": "EP-14",
+      "satisfies": ["UR-DEV-04", "UR-DEV-05", "UR-TEC-09"],
+      "statement": "Detect enclosure opening, movement, cable disconnect and power loss; raise possible-tamper and removal alerts. Tamper has its OWN icon and filter and does not dissolve into the maintenance queue. SIMULATED in 1A."
+    },
+    {
+      "id": "FR-100",
+      "priority": "Should",
+      "epic": "EP-15",
+      "satisfies": ["UR-ADM-04"],
+      "statement": "Manage organisations, users, roles and scopes; invite in the user's language."
+    },
+    {
+      "id": "FR-101",
+      "priority": "Should",
+      "epic": "EP-15",
+      "satisfies": ["UR-ADM-10"],
+      "statement": "Manage tariffs and grid emission factors as versioned tables with effective dates."
+    },
+    {
+      "id": "FR-102",
+      "priority": "Must",
+      "epic": "EP-15",
+      "satisfies": ["UR-ADM-13"],
+      "statement": "Append-only audit of sensitive actions, approvals, deliveries, commands and calculations; export."
+    }
   ],
 
   "monitoredParts": {
     "$comment": "D6 FR-20. 'Monitor every aspect' is an enumerated list, not a slogan. Each part carries its own health, evidence and recommended action.",
-    "indoor":     [ { "id": "air-filter", "signals": ["pressure drop", "run hours"] }, { "id": "evaporator-coil", "signals": ["approach temp", "frost"] }, { "id": "blower-motor-fan", "signals": ["current", "vibration"] }, { "id": "condensate-drain-pan", "signals": ["level", "overflow"] }, { "id": "vents-louvers", "signals": ["airflow", "actuator"] } ],
-    "outdoor":    [ { "id": "condenser-coil", "signals": ["discharge vs ambient"] }, { "id": "compressor", "signals": ["current", "cycling", "vibration"] }, { "id": "condenser-fan-blades", "signals": ["current", "imbalance"] }, { "id": "refrigerant-lines", "signals": ["superheat", "subcooling trend"] } ],
-    "electrical": [ { "id": "thermostat-sensors", "signals": ["drift", "disagreement"] }, { "id": "capacitor-contactor", "signals": ["start current", "chatter"] }, { "id": "electrical-wiring", "signals": ["voltage sag", "harmonics"] } ]
+    "indoor": [
+      { "id": "air-filter", "signals": ["pressure drop", "run hours"] },
+      { "id": "evaporator-coil", "signals": ["approach temp", "frost"] },
+      { "id": "blower-motor-fan", "signals": ["current", "vibration"] },
+      { "id": "condensate-drain-pan", "signals": ["level", "overflow"] },
+      { "id": "vents-louvers", "signals": ["airflow", "actuator"] }
+    ],
+    "outdoor": [
+      { "id": "condenser-coil", "signals": ["discharge vs ambient"] },
+      { "id": "compressor", "signals": ["current", "cycling", "vibration"] },
+      { "id": "condenser-fan-blades", "signals": ["current", "imbalance"] },
+      { "id": "refrigerant-lines", "signals": ["superheat", "subcooling trend"] }
+    ],
+    "electrical": [
+      { "id": "thermostat-sensors", "signals": ["drift", "disagreement"] },
+      { "id": "capacitor-contactor", "signals": ["start current", "chatter"] },
+      { "id": "electrical-wiring", "signals": ["voltage sag", "harmonics"] }
+    ]
   },
 
   "openDecisions": [
-    { "id": "OD-01", "question": "Who may flag a space as health-sensitive? It blocks the stop step of the ladder.", "blocks": ["FR-52", "FR-53"], "source": "D8 §6", "status": "open" },
-    { "id": "OD-02", "question": "One or two approvers at each restriction step?", "blocks": ["FR-52"], "source": "D8 §6", "status": "open" }
+    {
+      "id": "OD-01",
+      "question": "Who may flag a space as health-sensitive? It blocks the stop step of the ladder.",
+      "blocks": ["FR-52", "FR-53"],
+      "source": "D8 §6",
+      "status": "open"
+    },
+    {
+      "id": "OD-02",
+      "question": "One or two approvers at each restriction step?",
+      "blocks": ["FR-52"],
+      "source": "D8 §6",
+      "status": "open"
+    }
   ]
 }

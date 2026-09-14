@@ -1,0 +1,48 @@
+---
+description: Directory ownership and the handoff report — applies when writing any source file
+globs: ["src/**"]
+alwaysApply: false
+---
+
+Parallel agents fail on write conflicts long before they fail on reasoning.
+Ownership is by **directory**, not by feature description.
+
+| Area | Owner | Everyone else |
+| --- | --- | --- |
+| `src/design-system/` | design system | read-only — request via ADR |
+| `src/components/`, `src/patterns/` | design system | read-only — request additions |
+| `src/lib/domain/`, `src/lib/simulation/` | platform | read-only |
+| `src/lib/i18n/locales/*.json` | **append-only for everyone** | add keys, never edit another agent's |
+| `src/features/<role>/` | that role's agent | hands off |
+| `tools/`, `context/`, `eslint-rules/` | harness | propose, don't silently edit |
+
+**Locale files are the one shared write surface.** Namespace your keys by screen
+(`client.overview.heroTitle`, not `heroTitle`) and add to **both** `en.json` and
+`id.json` — `npm run verify:i18n` fails on parity drift.
+
+**Need something from a directory you don't own?** Ask for it, or write against
+the documented contract in `src/components/contracts.ts` and flag the
+dependency. Do not reach in.
+
+## Before you start
+
+- Check `npm run trace` — is your requirement already claimed by a file?
+- Confirm you own the directory you are about to write to.
+
+## When you finish
+
+Report in this shape — it is what the next agent needs and nothing more:
+
+```
+Requirement(s):  FR-10, FR-15
+Files:           src/features/client/Overview.tsx (+3)
+Verify:          pass
+Not done:        empty state for the maintenance timeline — needs the
+                 work-order shape from the platform agent
+Decisions:       used a tinted severity chip rather than a filled badge
+Open questions:  none
+```
+
+**"Not done" is the most valuable line.** Silence there is read as completeness,
+and that is how a sprint arrives at a demo with three broken screens nobody
+flagged.

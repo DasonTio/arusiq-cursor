@@ -34,14 +34,14 @@ in a diff; `p-4` requires knowing the scale factor.
 ## Honest trade-off
 
 Tailwind's constrained utility vocabulary is a genuinely good fit for agent-written
-UI, and the argument for it is not weak — it makes the *common* case terse and the
-*deviant* case visibly ugly. It loses here on the second source of truth and the
+UI, and the argument for it is not weak — it makes the _common_ case terse and the
+_deviant_ case visibly ugly. It loses here on the second source of truth and the
 `em`-derived padding, not on principle. If this project were greenfield without a
 fully-specified design system, the call could reasonably go the other way.
 
 ## Consequences
 
 - Component styles live in `<Component>.module.css` beside the component.
-- Shared values are *always* tokens. A value used twice is a token.
+- Shared values are _always_ tokens. A value used twice is a token.
 - `verify-tokens.mjs` scans `.ts`, `.tsx` and `.css` and exempts only
   `tokens.css`.

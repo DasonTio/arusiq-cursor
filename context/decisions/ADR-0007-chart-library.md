@@ -4,8 +4,8 @@
 
 ## Context
 
-D7 §12 opens with the reason this needs deciding up front: *"Charts are where a
-design system leaks most, because chart libraries ship their own defaults."*
+D7 §12 opens with the reason this needs deciding up front: _"Charts are where a
+design system leaks most, because chart libraries ship their own defaults."_
 Those defaults are actively wrong here — a chart library will happily give you a
 green series, a 12 px grey axis label, an entrance animation and a fixed pixel
 width, and every one of those breaks a stated rule.

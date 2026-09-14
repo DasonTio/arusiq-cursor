@@ -27,15 +27,26 @@ const CLEAN = 'tools/__fixtures__/clean';
 /** Each rule id must appear in the violating run's output. */
 const EXPECTED = {
   'tools/verify-tokens.mjs': [
-    'no-raw-color', 'no-raw-px', 'no-raw-z-index', 'motion-budget',
-    'motion-layout', 'light-mode-only',
+    'no-raw-color',
+    'no-raw-px',
+    'no-raw-z-index',
+    'motion-budget',
+    'motion-layout',
+    'light-mode-only',
+    'unknown-breakpoint',
   ],
   'tools/verify-provenance.mjs': [
-    'metric-needs-provenance', 'bare-figure', 'forbidden-word-credit', 'co2-separation',
+    'metric-needs-provenance',
+    'bare-figure',
+    'forbidden-word-credit',
+    'co2-separation',
   ],
   'tools/verify-i18n.mjs': [
-    'hardcoded-text', 'hardcoded-prop', 'concatenated-format',
-    'sized-to-english', 'physical-direction',
+    'hardcoded-text',
+    'hardcoded-prop',
+    'concatenated-format',
+    'sized-to-english',
+    'physical-direction',
   ],
 };
 
@@ -57,14 +68,18 @@ for (const [script, rules] of Object.entries(EXPECTED)) {
   if (good.code !== 0)
     failures.push(
       `${script} FAILED the clean fixture — a false positive. A noisy gate gets ` +
-      `disabled, which is worse than no gate.\n${good.out.split('\n').slice(0, 12).join('\n')}`,
+        `disabled, which is worse than no gate.\n${good.out.split('\n').slice(0, 12).join('\n')}`,
     );
 }
 
 if (failures.length) {
-  console.error(`\n  ✗ self-test — ${failures.length} problem(s) with the verifiers themselves\n`);
+  console.error(
+    `\n  ✗ self-test — ${failures.length} problem(s) with the verifiers themselves\n`,
+  );
   for (const f of failures) console.error(`      · ${f}`);
   console.error('');
   process.exit(1);
 }
-console.log(`  ✓ self-test — ${checked} assertions: every rule fires on the violating fixture and stays quiet on the clean one`);
+console.log(
+  `  ✓ self-test — ${checked} assertions: every rule fires on the violating fixture and stays quiet on the clean one`,
+);

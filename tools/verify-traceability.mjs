@@ -22,9 +22,14 @@ const unknown = [];
 
 for (const file of globSync('src/**/*.{ts,tsx}')) {
   const src = readFileSync(file, 'utf8');
-  for (const m of src.matchAll(/@requirement\s+([A-Z]{2}-[\w-]+(?:\s+[A-Z]{2}-[\w-]+)*)/g)) {
+  for (const m of src.matchAll(
+    /@requirement\s+([A-Z]{2}-[\w-]+(?:\s+[A-Z]{2}-[\w-]+)*)/g,
+  )) {
     for (const id of m[1].split(/\s+/)) {
-      if (!known.has(id)) { unknown.push({ file, id }); continue; }
+      if (!known.has(id)) {
+        unknown.push({ file, id });
+        continue;
+      }
       if (!claimed.has(id)) claimed.set(id, []);
       claimed.get(id).push(file);
     }
@@ -39,8 +44,12 @@ const doneShould = should.filter((r) => claimed.has(r.id));
 
 console.log(`\n  Phase 1A traceability — requirement → code`);
 console.log('  ' + '─'.repeat(70));
-console.log(`  Must    ${String(doneMust.length).padStart(2)} / ${must.length}  (${pct(doneMust.length, must.length)}%)`);
-console.log(`  Should  ${String(doneShould.length).padStart(2)} / ${should.length}  (${pct(doneShould.length, should.length)}%)`);
+console.log(
+  `  Must    ${String(doneMust.length).padStart(2)} / ${must.length}  (${pct(doneMust.length, must.length)}%)`,
+);
+console.log(
+  `  Should  ${String(doneShould.length).padStart(2)} / ${should.length}  (${pct(doneShould.length, should.length)}%)`,
+);
 
 const openMust = must.filter((r) => !claimed.has(r.id));
 if (openMust.length) {
@@ -49,16 +58,23 @@ if (openMust.length) {
 }
 
 if (unknown.length) {
-  console.error(`\n  ✗ ${unknown.length} @requirement tag(s) reference an ID that does not exist:`);
+  console.error(
+    `\n  ✗ ${unknown.length} @requirement tag(s) reference an ID that does not exist:`,
+  );
   for (const u of unknown) console.error(`      ${u.file}  ${u.id}`);
-  console.error(`\n  This is exactly the D8 finding F-04 failure mode: traceability pointing at nothing.`);
+  console.error(
+    `\n  This is exactly the D8 finding F-04 failure mode: traceability pointing at nothing.`,
+  );
   process.exit(1);
 }
 
 const open = spec.openDecisions.filter((d) => d.status === 'open');
 if (open.length) {
-  console.log(`\n  ⚠ ${open.length} open decision(s) blocking requirements — cheap now, expensive to retrofit:`);
-  for (const d of open) console.log(`      ${d.id}  ${d.question}  → blocks ${d.blocks.join(', ')}`);
+  console.log(
+    `\n  ⚠ ${open.length} open decision(s) blocking requirements — cheap now, expensive to retrofit:`,
+  );
+  for (const d of open)
+    console.log(`      ${d.id}  ${d.question}  → blocks ${d.blocks.join(', ')}`);
 }
 
 if (strict && openMust.length) {

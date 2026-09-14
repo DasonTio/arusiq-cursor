@@ -61,7 +61,8 @@ void i18n.use(initReactI18next).init({
   // English fallback hides the bug until after launch.
   saveMissing: import.meta.env.DEV,
   missingKeyHandler: import.meta.env.DEV
-    ? (lngs, _ns, key) => console.error(`[i18n] missing key "${key}" for ${lngs.join(', ')}`)
+    ? (lngs, _ns, key) =>
+        console.error(`[i18n] missing key "${key}" for ${lngs.join(', ')}`)
     : undefined,
 });
 

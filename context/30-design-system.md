@@ -1,7 +1,7 @@
 # Design system — working rules
 
 Distilled from **D7 UI Design Guideline R2** into decisions you can act on.
-Values live in `src/design-system/tokens.css`; this file is the *judgement*
+Values live in `src/design-system/tokens.css`; this file is the _judgement_
 around them.
 
 > **Why this file exists.** AI-generated UI is mediocre by default because it
@@ -26,7 +26,7 @@ around them.
 Three families. **They do not borrow from each other.**
 
 - **Brand** — identity and actions. `brand-primary` navy for the one primary
-  action per area; `brand-red` for secondary actions. Brand red is *not* a
+  action per area; `brand-red` for secondary actions. Brand red is _not_ a
   problem signal, and the similar hue is intentional: users separate them by
   context — an action label in an action area versus a status word with an icon
   beside the thing it describes.
@@ -42,8 +42,8 @@ hairline mark border**. There is no solid-filled severity badge — no single
 foreground clears 4.5:1 across all four marks, and the tinted form reads calmer
 in a dense dashboard anyway.
 
-**Severity colours are not series colours.** A green line reads as *healthy*,
-not as *series 2*. Charts: `brand-primary` for a single series; `brand-primary`
+**Severity colours are not series colours.** A green line reads as _healthy_,
+not as _series 2_. Charts: `brand-primary` for a single series; `brand-primary`
 solid vs `gray-4` **dashed** for actual-vs-baseline; `state-eco` for savings and
 carbon. The baseline is dashed as well as grey, because line style survives
 colour blindness and greyscale printing — and the 10–20 % savings comparison is
@@ -62,14 +62,14 @@ height; body is `1.4 ×`.
 content structure (one `h1`, no skipped levels); pick the size from the
 responsive ramp:
 
-| Role | 375 | 768 | 1024+ |
-| --- | --- | --- | --- |
-| Auth / marketing h1 | 32 | 48 | 56 |
-| Dashboard page title | 24 | 32 | 32 |
-| Section heading | 20 | 20 | 24 |
-| Card title | 18 | 18 | 20 |
-| Metric value | 32 | 40 | 40 |
-| Body / meta / caption | 16 / 14 / 12 | — | — |
+| Role                  | 375          | 768 | 1024+ |
+| --------------------- | ------------ | --- | ----- |
+| Auth / marketing h1   | 32           | 48  | 56    |
+| Dashboard page title  | 24           | 32  | 32    |
+| Section heading       | 20           | 20  | 24    |
+| Card title            | 18           | 18  | 20    |
+| Metric value          | 32           | 40  | 40    |
+| Body / meta / caption | 16 / 14 / 12 | —   | —     |
 
 **H1 and H2 never appear unprefixed.** At 375 px the content column is 343 px;
 "Energy portfolio" at 48 px measures ~446 px and blows straight through it.
@@ -103,7 +103,7 @@ icon rail at 768, persistent sidebar + breadcrumbs at 1024+.
 - **Elevation** — three levels, and **a shadow is never the only boundary**.
   Shadow contrast against white is far below 3:1 and it vanishes in bright
   ambient light on a cheap panel, which is exactly this product's mobile
-  context. Cards carry a `gray-5` border *and* a shadow.
+  context. Cards carry a `gray-5` border _and_ a shadow.
 - **Motion** — transform and opacity only; nothing over 320 ms; reduced-motion
   honoured globally in the base layer. **Never animate a live value** — a
   telemetry number that morphs between readings is harder to read than one that
@@ -166,17 +166,25 @@ half; these are the ones only a person or a reviewing agent can judge.
 
 ## Recognised gaps
 
-Scheduled, not open-ended. Each blocks a specific piece of work — if your task
-is one of these, resolve it in an ADR first rather than inventing values:
+Two of D7 §20's five are now closed. The rest are scheduled, not open-ended —
+if your task needs one, resolve it in an ADR first rather than inventing values:
 
 1. **Categorical chart ramp** (`chart/1..6`, tuned for adjacent-colour
-   discrimination and checked for deuteranopia) — blocks the Admin energy
-   portfolio. The palette currently supports three distinguishable series.
-2. **Icon library, stroke weight and licence** — blocks icon-set adoption.
-   Stroke weight is what makes an outline set cohere.
-3. **Map treatment** — style, markers, clustering, routes. Blocks the Admin
-   fleet map and technician routing.
-4. **Part-level health diagram** for the twelve components — blocks the
-   Technician dashboard.
-5. **Dark hero surface** — the client overview opens on a dark hero, but Phase 1
-   is otherwise light-only, so it needs its own contrast matrix.
+   discrimination and checked for deuteranopia) — blocks `admin.energy-portfolio`.
+   The palette supports three distinguishable series today.
+2. ~~Icon library~~ — **closed by ADR-0006.** Lucide, outline, stroke locked at
+   2 px, ISC licence. The stroke is set by the icon primitive and not exposed.
+3. **Map treatment** — style, markers, clustering, routes. Blocks `admin.fleet`
+   and technician routing.
+4. **Part-level health diagram** for the twelve components — blocks
+   `tech.diagnostics`. Lucide has no compressor or evaporator-coil glyph, so
+   this is genuine illustration work.
+5. ~~Dark hero surface~~ — **closed by ADR-0005.** A scoped fifth _surface_, not
+   a dark _mode_: `--surface-inverse` plus three foreground tokens, measured.
+   Severity marks needed no inverse variant. Do not spread it to a second
+   component without revisiting the ADR.
+
+Also settled: **charts are Recharts behind mandatory wrappers** (ADR-0007). A
+direct `recharts` import from a feature file is an ESLint error — the wrapper
+hard-codes the dashed baseline, the required text alternative and the disabled
+entrance animation.

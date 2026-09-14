@@ -14,7 +14,10 @@
 import type { ComponentType } from 'react';
 
 export const ROLES = [
-  'client', 'technician-internal', 'technician-thirdparty', 'admin',
+  'client',
+  'technician-internal',
+  'technician-thirdparty',
+  'admin',
 ] as const;
 export type Role = (typeof ROLES)[number];
 

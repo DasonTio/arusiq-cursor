@@ -6,3 +6,15 @@ docs
 *.pdf
 *.docx
 tools/__fixtures__
+
+# The ONE formatting exemption in this repo, and it is deliberate.
+#
+# tokens.css is read as a reference table, not as ordinary code: the values are
+# column-aligned with their measured contrast ratios beside them, which is how a
+# designer or an agent checks a value at a glance. Prettier flattens that
+# alignment (180 lines) and lowercases every hex, which then disagrees with the
+# uppercase values cited throughout context/decisions/.
+#
+# Everything else in src/ IS formatted. If you want a second exemption, that is
+# a conversation, not a one-line addition.
+src/design-system/tokens.css

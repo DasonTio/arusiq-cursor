@@ -241,7 +241,11 @@ export interface EmissionsCardProps {
  */
 export type DataStateProps =
   | { state: 'loading'; skeleton: ReactNode }
-  | { state: 'empty'; explanationKey: I18nKey; createAction: { labelKey: I18nKey; onAct: () => void } }
+  | {
+      state: 'empty';
+      explanationKey: I18nKey;
+      createAction: { labelKey: I18nKey; onAct: () => void };
+    }
   | { state: 'error'; whatFailedKey: I18nKey; onRetry: () => void }
   | { state: 'noData'; lastSeen: string | null };
 

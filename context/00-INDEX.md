@@ -9,16 +9,24 @@ So the documents are **distilled once, here, by hand**, into task-shaped files.
 Load the one file your task needs. The PDFs stay in `docs/` and remain
 authoritative when a detail is missing or contested.
 
-| File | ~tokens | Load when |
-| --- | --- | --- |
-| `10-product.md` | 1.2k | Starting a feature; deciding what "done" means for a screen |
-| `20-domain.md` | 1.6k | Modelling data; naming things; anything involving severity, parts or roll-up |
-| `30-design-system.md` | 2.6k | **Any** visual work. Non-optional before writing a component |
-| `40-architecture.md` | 1.4k | Creating files; wiring routes; touching simulated data |
-| `50-agent-protocol.md` | 1.3k | More than one agent is active |
-| `60-definition-of-done.md` | 0.8k | Before reporting work complete, and in review |
-| `requirements/requirements.json` | 5.5k | Query it — don't read it end to end |
-| `decisions/*.md` | 0.4k each | A value in the design system looks wrong, or a doc contradicts another |
+| File                             | ~tokens   | Load when                                                                    |
+| -------------------------------- | --------- | ---------------------------------------------------------------------------- |
+| `10-product.md`                  | 1.2k      | Starting a feature; deciding what "done" means for a screen                  |
+| `20-domain.md`                   | 1.6k      | Modelling data; naming things; anything involving severity, parts or roll-up |
+| `30-design-system.md`            | 2.6k      | **Any** visual work. Non-optional before writing a component                 |
+| `40-architecture.md`             | 1.4k      | Creating files; wiring routes; touching simulated data                       |
+| `50-agent-protocol.md`           | 1.3k      | More than one agent is active                                                |
+| `60-definition-of-done.md`       | 0.8k      | Before reporting work complete, and in review                                |
+| `requirements/requirements.json` | 5.5k      | Query it — don't read it end to end                                          |
+| `decisions/*.md`                 | 0.4k each | A value in the design system looks wrong, or a doc contradicts another       |
+
+Code-level context that is often the faster answer:
+
+| File                          | Load when                                                 |
+| ----------------------------- | --------------------------------------------------------- |
+| `src/components/contracts.ts` | Building any component — the prop interfaces are the spec |
+| `src/lib/simulation/types.ts` | Anything touching data                                    |
+| `src/lib/domain/`             | Severity, provenance, commands, the restriction ladder    |
 
 ## Querying rather than reading
 

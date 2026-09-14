@@ -24,7 +24,14 @@ export type Elevation = (typeof elevation)[number];
 export const duration = ['fast', 'base', 'slow'] as const;
 export type Duration = (typeof duration)[number];
 
-export const layer = ['base', 'sticky', 'dropdown', 'overlay', 'modal', 'toast'] as const;
+export const layer = [
+  'base',
+  'sticky',
+  'dropdown',
+  'overlay',
+  'modal',
+  'toast',
+] as const;
 export type Layer = (typeof layer)[number];
 
 /** D7 §7 — 24 px is the default frame; 20 px inline and in icon buttons;
@@ -35,15 +42,26 @@ export type IconSize = (typeof iconSize)[number];
 /** D7 §6.4 — heading LEVEL and heading SIZE are independent. Pick the level
  *  from the content structure, the size from this ramp. */
 export const TYPE_ROLE = [
-  'authH1', 'authH2', 'pageTitle', 'sectionHeading',
-  'cardTitle', 'metricValue', 'body', 'meta', 'caption',
+  'authH1',
+  'authH2',
+  'pageTitle',
+  'sectionHeading',
+  'cardTitle',
+  'metricValue',
+  'body',
+  'meta',
+  'caption',
 ] as const;
 export type TypeRole = (typeof TYPE_ROLE)[number];
 
 /** D7 §8.1 — 375 is the primary mobile target, 320 the hard floor, 1536 the
  *  maximum frame with content capped at 1360 and centred. */
 export const BREAKPOINTS = {
-  mobile: 375, tablet: 768, desktop: 1024, hd: 1440, max: 1536,
+  mobile: 375,
+  tablet: 768,
+  desktop: 1024,
+  hd: 1440,
+  max: 1536,
 } as const;
 
 /** D7 §5.2 — the legal surfaces. Every foreground clears its contrast bar

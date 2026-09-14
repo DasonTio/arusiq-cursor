@@ -31,12 +31,12 @@ Use **#1B2F6E** and **#D62027**.
    that does not require re-issuing the other three.
 3. **Accessibility does not break the tie.** Both pairs clear AA comfortably:
 
-   | | on white-1 | white text on it |
-   | --- | --- | --- |
-   | D7 #022465 | 14.55:1 | 14.55:1 |
-   | **D8 #1B2F6E** | **12.51:1** | **12.51:1** |
-   | D7 #DB1217 | 5.11:1 | 5.11:1 |
-   | **D8 #D62027** | **5.13:1** | **5.13:1** |
+   |                | on white-1  | white text on it |
+   | -------------- | ----------- | ---------------- |
+   | D7 #022465     | 14.55:1     | 14.55:1          |
+   | **D8 #1B2F6E** | **12.51:1** | **12.51:1**      |
+   | D7 #DB1217     | 5.11:1      | 5.11:1           |
+   | **D8 #D62027** | **5.13:1**  | **5.13:1**       |
 
    The reds are within 0.02 of each other. This is purely an identity question.
 

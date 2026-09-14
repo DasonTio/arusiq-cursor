@@ -31,8 +31,14 @@ ruleTester.run('require-provenance-prop', plugin.rules['require-provenance-prop'
   invalid: [
     { code: `const a = <Metric value={1} />;`, errors: [{ messageId: 'missing' }] },
     { code: `const a = <ChartCard data={d} />;`, errors: [{ messageId: 'missing' }] },
-    { code: `const a = <Metric provenance={undefined} />;`, errors: [{ messageId: 'nullish' }] },
-    { code: `const a = <Metric provenance={null} />;`, errors: [{ messageId: 'nullish' }] },
+    {
+      code: `const a = <Metric provenance={undefined} />;`,
+      errors: [{ messageId: 'nullish' }],
+    },
+    {
+      code: `const a = <Metric provenance={null} />;`,
+      errors: [{ messageId: 'nullish' }],
+    },
   ],
 });
 
@@ -47,23 +53,45 @@ ruleTester.run('no-hardcoded-jsx-text', plugin.rules['no-hardcoded-jsx-text'], {
   invalid: [
     { code: `const a = <p>Hello world</p>;`, errors: [{ messageId: 'text' }] },
     // The case a line-based regex misses entirely: Prettier-wrapped JSX.
-    { code: `const a = (\n  <button>\n    Save changes\n  </button>\n);`, errors: [{ messageId: 'text' }] },
-    { code: `const a = <input placeholder="Enter your email" />;`, errors: [{ messageId: 'prop' }] },
-    { code: `const a = <img alt="A photo of the unit" />;`, errors: [{ messageId: 'prop' }] },
+    {
+      code: `const a = (\n  <button>\n    Save changes\n  </button>\n);`,
+      errors: [{ messageId: 'text' }],
+    },
+    {
+      code: `const a = <input placeholder="Enter your email" />;`,
+      errors: [{ messageId: 'prop' }],
+    },
+    {
+      code: `const a = <img alt="A photo of the unit" />;`,
+      errors: [{ messageId: 'prop' }],
+    },
   ],
 });
 
-ruleTester.run('no-raw-value-in-style-prop', plugin.rules['no-raw-value-in-style-prop'], {
-  valid: [
-    { code: `const a = <div style={{ color: 'var(--color-gray-1)' }} />;` },
-    { code: `const a = <div style={{ padding: 'var(--space-3)' }} />;` },
-    // 0 and 1px hairlines are allowed.
-    { code: `const a = <div style={{ borderWidth: '1px' }} />;` },
-    { code: `const a = <div style={{ margin: '0px' }} />;` },
-  ],
-  invalid: [
-    { code: `const a = <div style={{ color: '#ff0000' }} />;`, errors: [{ messageId: 'color' }] },
-    { code: `const a = <div style={{ background: 'rgba(0,0,0,.5)' }} />;`, errors: [{ messageId: 'color' }] },
-    { code: `const a = <div style={{ padding: '13px' }} />;`, errors: [{ messageId: 'length' }] },
-  ],
-});
+ruleTester.run(
+  'no-raw-value-in-style-prop',
+  plugin.rules['no-raw-value-in-style-prop'],
+  {
+    valid: [
+      { code: `const a = <div style={{ color: 'var(--color-gray-1)' }} />;` },
+      { code: `const a = <div style={{ padding: 'var(--space-3)' }} />;` },
+      // 0 and 1px hairlines are allowed.
+      { code: `const a = <div style={{ borderWidth: '1px' }} />;` },
+      { code: `const a = <div style={{ margin: '0px' }} />;` },
+    ],
+    invalid: [
+      {
+        code: `const a = <div style={{ color: '#ff0000' }} />;`,
+        errors: [{ messageId: 'color' }],
+      },
+      {
+        code: `const a = <div style={{ background: 'rgba(0,0,0,.5)' }} />;`,
+        errors: [{ messageId: 'color' }],
+      },
+      {
+        code: `const a = <div style={{ padding: '13px' }} />;`,
+        errors: [{ messageId: 'length' }],
+      },
+    ],
+  },
+);

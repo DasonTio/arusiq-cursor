@@ -18,10 +18,10 @@ what static analysis cannot see.
   label. Render the screen in greyscale mentally: is every status still readable?
 - **Bare dots.** Not acceptable anywhere, including chart legends and points.
 - **Charts without a text alternative** — a table, a summary sentence, or a
-  data-view toggle. And an accessible name describing *what it shows*, not its
+  data-view toggle. And an accessible name describing _what it shows_, not its
   type.
-- **Heading structure.** One `h1`, no skipped levels. Note that heading *level*
-  and heading *size* are independent — a 24 px `h2` is correct, not a bug.
+- **Heading structure.** One `h1`, no skipped levels. Note that heading _level_
+  and heading _size_ are independent — a 24 px `h2` is correct, not a bug.
 - **Focus.** Tab the whole screen. Every stop visible, every action reachable,
   nothing with `outline: none` and no replacement.
 - **Targets.** 44 × 44 minimum. Compact 32 px controls must pad the hit area.

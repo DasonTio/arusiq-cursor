@@ -12,12 +12,22 @@
 
 /** Components that render a measured figure (D6 NFR Data integrity). */
 const METRIC_COMPONENTS = new Set([
-  'Metric', 'KpiTile', 'MetricValue', 'ChartCard', 'SavingsChart', 'CarbonCard',
+  'Metric',
+  'KpiTile',
+  'MetricValue',
+  'ChartCard',
+  'SavingsChart',
+  'CarbonCard',
 ]);
 
 /** Props whose string value reaches a user or assistive technology. */
 const TEXT_PROPS = new Set([
-  'placeholder', 'aria-label', 'title', 'alt', 'aria-description', 'aria-placeholder',
+  'placeholder',
+  'aria-label',
+  'title',
+  'alt',
+  'aria-description',
+  'aria-placeholder',
 ]);
 
 const hasExemption = (context, node, marker) => {
@@ -25,21 +35,28 @@ const hasExemption = (context, node, marker) => {
   const line = node.loc.start.line;
   return sc.getAllComments().some((c) => {
     const t = c.value;
-    return t.includes(marker) &&
-      (c.loc.end.line === line || c.loc.end.line === line - 1 || c.loc.start.line === line);
+    return (
+      t.includes(marker) &&
+      (c.loc.end.line === line ||
+        c.loc.end.line === line - 1 ||
+        c.loc.start.line === line)
+    );
   });
 };
 
 const requireProvenanceProp = {
   meta: {
     type: 'problem',
-    docs: { description: 'Every figure declares Simulated | Estimated | Provisional | Verified' },
+    docs: {
+      description:
+        'Every figure declares Simulated | Estimated | Provisional | Verified',
+    },
     schema: [],
     messages: {
       missing:
-        "<{{name}}> has no `provenance` prop. D6 requires 100 % of figures labelled, beside the figure itself (D7 §11). An aggregate inherits the weakest provenance of its inputs.",
+        '<{{name}}> has no `provenance` prop. D6 requires 100 % of figures labelled, beside the figure itself (D7 §11). An aggregate inherits the weakest provenance of its inputs.',
       nullish:
-        "<{{name}}> has a nullish `provenance`. A figure with unknown origin is exactly what the label exists to prevent.",
+        '<{{name}}> has a nullish `provenance`. A figure with unknown origin is exactly what the label exists to prevent.',
     },
   },
   create(context) {
@@ -56,7 +73,8 @@ const requireProvenanceProp = {
         // A spread may supply it; do not second-guess that.
         const hasSpread = node.attributes.some((a) => a.type === 'JSXSpreadAttribute');
         if (!attr) {
-          if (!hasSpread) context.report({ node, messageId: 'missing', data: { name } });
+          if (!hasSpread)
+            context.report({ node, messageId: 'missing', data: { name } });
           return;
         }
         // `null` parses as a Literal; `undefined` parses as an Identifier.
@@ -67,7 +85,8 @@ const requireProvenanceProp = {
           const isNullish =
             (e.type === 'Literal' && e.value === null) ||
             (e.type === 'Identifier' && e.name === 'undefined');
-          if (isNullish) context.report({ node: attr, messageId: 'nullish', data: { name } });
+          if (isNullish)
+            context.report({ node: attr, messageId: 'nullish', data: { name } });
         }
       },
     };
@@ -94,7 +113,8 @@ const noHardcodedJsxText = {
         if (!text || !WORDS.test(text)) return;
         if (hasExemption(context, node, 'i18n-exempt')) return;
         context.report({
-          node, messageId: 'text',
+          node,
+          messageId: 'text',
           data: { text: text.replace(/\s+/g, ' ').slice(0, 44) },
         });
       },
@@ -102,11 +122,13 @@ const noHardcodedJsxText = {
         if (node.name.type !== 'JSXIdentifier') return;
         const prop = node.name.name;
         if (!TEXT_PROPS.has(prop)) return;
-        if (node.value?.type !== 'Literal' || typeof node.value.value !== 'string') return;
+        if (node.value?.type !== 'Literal' || typeof node.value.value !== 'string')
+          return;
         if (!WORDS.test(node.value.value)) return;
         if (hasExemption(context, node, 'i18n-exempt')) return;
         context.report({
-          node, messageId: 'prop',
+          node,
+          messageId: 'prop',
           data: { prop, text: node.value.value.slice(0, 36) },
         });
       },
@@ -120,9 +142,12 @@ const noRawValueInStyleProp = {
     docs: { description: 'Inline styles use design tokens, never raw values' },
     schema: [],
     messages: {
-      color: 'Raw colour "{{value}}" in a style prop — use var(--color-…) from tokens.css.',
-      length: 'Raw length "{{value}}" in a style prop — use var(--space-N) (4·8·16·24·32·40·56·72·80·96·120) or a radius/target token.',
-      zIndex: 'Raw z-index "{{value}}" — use var(--z-base|sticky|dropdown|overlay|modal|toast). The number that beat everything else is the number the next person has to beat (D7 §10.4).',
+      color:
+        'Raw colour "{{value}}" in a style prop — use var(--color-…) from tokens.css.',
+      length:
+        'Raw length "{{value}}" in a style prop — use var(--space-N) (4·8·16·24·32·40·56·72·80·96·120) or a radius/target token.',
+      zIndex:
+        'Raw z-index "{{value}}" — use var(--z-base|sticky|dropdown|overlay|modal|toast). The number that beat everything else is the number the next person has to beat (D7 §10.4).',
     },
   },
   create(context) {
@@ -131,9 +156,15 @@ const noRawValueInStyleProp = {
     const check = (node, key, raw) => {
       if (typeof raw !== 'string') return;
       if (raw.includes('var(--')) return;
-      if (key === 'zIndex') { context.report({ node, messageId: 'zIndex', data: { value: raw } }); return; }
+      if (key === 'zIndex') {
+        context.report({ node, messageId: 'zIndex', data: { value: raw } });
+        return;
+      }
       const c = raw.match(COLOR);
-      if (c) { context.report({ node, messageId: 'color', data: { value: c[0] } }); return; }
+      if (c) {
+        context.report({ node, messageId: 'color', data: { value: c[0] } });
+        return;
+      }
       const m = raw.match(LENGTH);
       if (m && Number(m[1]) !== 0 && Number(m[1]) !== 1)
         context.report({ node, messageId: 'length', data: { value: m[0] } });
@@ -148,7 +179,11 @@ const noRawValueInStyleProp = {
           if (p.type !== 'Property') continue;
           const key = p.key.name ?? p.key.value;
           if (p.value.type === 'Literal') check(p.value, key, String(p.value.value));
-          if (p.value.type === 'Literal' && typeof p.value.value === 'number' && key === 'zIndex')
+          if (
+            p.value.type === 'Literal' &&
+            typeof p.value.value === 'number' &&
+            key === 'zIndex'
+          )
             check(p.value, 'zIndex', String(p.value.value));
         }
       },

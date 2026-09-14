@@ -5,7 +5,7 @@
 ## Context
 
 Phase 1A runs entirely on simulated telemetry. Phase 1B replaces it with real
-ingestion. The stated intent is that *"nothing drawn here is thrown away"* — the
+ingestion. The stated intent is that _"nothing drawn here is thrown away"_ — the
 screens must survive the swap untouched.
 
 ## Decision
@@ -21,7 +21,7 @@ the source**.
 
 D6's data-integrity NFR requires 100 % of figures to be labelled, and D8 adds
 that an aggregate inherits the weakest provenance of its inputs. Both are
-properties of a *value*, not of a *tile*. If the UI applies the label, then:
+properties of a _value_, not of a _tile_. If the UI applies the label, then:
 
 - every new screen is a fresh chance to forget it;
 - aggregates cannot compute their own provenance, because the inputs have lost it;

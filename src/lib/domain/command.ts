@@ -8,7 +8,11 @@
  */
 
 export const COMMAND_STATE = [
-  'sent', 'acknowledged', 'verified', 'failed', 'queued',
+  'sent',
+  'acknowledged',
+  'verified',
+  'failed',
+  'queued',
 ] as const;
 
 export type CommandState = (typeof COMMAND_STATE)[number];

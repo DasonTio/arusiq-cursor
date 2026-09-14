@@ -1,11 +1,11 @@
-import js from '@eslint/js'
-import globals from 'globals'
-import reactHooks from 'eslint-plugin-react-hooks'
-import reactRefresh from 'eslint-plugin-react-refresh'
-import jsxA11y from 'eslint-plugin-jsx-a11y'
-import tseslint from 'typescript-eslint'
-import { defineConfig, globalIgnores } from 'eslint/config'
-import arusiq from './eslint-rules/index.js'
+import js from '@eslint/js';
+import globals from 'globals';
+import reactHooks from 'eslint-plugin-react-hooks';
+import reactRefresh from 'eslint-plugin-react-refresh';
+import jsxA11y from 'eslint-plugin-jsx-a11y';
+import tseslint from 'typescript-eslint';
+import { defineConfig, globalIgnores } from 'eslint/config';
+import arusiq from './eslint-rules/index.js';
 
 export default defineConfig([
   globalIgnores(['dist', 'coverage', 'node_modules', 'tools/__fixtures__']),
@@ -40,13 +40,18 @@ export default defineConfig([
       // D7 §12 / ADR-0007 — charts go through the wrappers in src/patterns,
       // which hard-code the dashed baseline, the text alternative and the
       // disabled entrance animation. A direct import bypasses all of it.
-      'no-restricted-imports': ['error', {
-        paths: [{
-          name: 'recharts',
-          message:
-            'Import a chart wrapper from src/patterns instead. Recharts defaults break D7 §12 (green series, 12px grey axes, entrance animation, fixed widths).',
-        }],
-      }],
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'recharts',
+              message:
+                'Import a chart wrapper from src/patterns instead. Recharts defaults break D7 §12 (green series, 12px grey axes, entrance animation, fixed widths).',
+            },
+          ],
+        },
+      ],
     },
   },
 
@@ -72,4 +77,4 @@ export default defineConfig([
     extends: [js.configs.recommended],
     languageOptions: { globals: globals.node },
   },
-])
+]);

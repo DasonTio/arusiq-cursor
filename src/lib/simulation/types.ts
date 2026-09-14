@@ -54,8 +54,13 @@ export interface AssetNode {
   rollUp: { severity: Severity; contributing: number; total: number };
 }
 
-export interface Property extends AssetNode { category: Category; floors: Floor[] }
-export interface Floor extends AssetNode { rooms: Room[] }
+export interface Property extends AssetNode {
+  category: Category;
+  floors: Floor[];
+}
+export interface Floor extends AssetNode {
+  rooms: Room[];
+}
 export interface Room extends AssetNode {
   units: Unit[];
   /** D6 FR-53 — blocks the `stop` rung of the restriction ladder. */
@@ -137,9 +142,18 @@ export interface CarbonSummary {
 export interface TelemetryAdapter {
   listProperties(scope: { role: string; userId: string }): Promise<Property[]>;
   getUnit(unitId: string): Promise<Unit | null>;
-  getEnergy(unitId: string, period: { from: string; to: string }): Promise<EnergySeries>;
-  getCarbon(scopeId: string, period: { from: string; to: string }): Promise<CarbonSummary>;
+  getEnergy(
+    unitId: string,
+    period: { from: string; to: string },
+  ): Promise<EnergySeries>;
+  getCarbon(
+    scopeId: string,
+    period: { from: string; to: string },
+  ): Promise<CarbonSummary>;
   /** Returns the lifecycle state; callers render Sent → Acknowledged →
    *  Verified rather than flipping the control (D7 §13.1). */
-  sendCommand(unitId: string, change: Partial<Unit['control']>): Promise<{ state: CommandState }>;
+  sendCommand(
+    unitId: string,
+    change: Partial<Unit['control']>,
+  ): Promise<{ state: CommandState }>;
 }

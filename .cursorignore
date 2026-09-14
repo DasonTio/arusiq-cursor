@@ -1,0 +1,16 @@
+# Kept out of Cursor's context and indexing.
+#
+# docs/ holds the source PDFs and the .docx design guideline — roughly 500 KB of
+# binary that indexes badly and is already distilled into context/. An agent
+# that retrieves a PDF fragment gets worse information than one that reads
+# context/30-design-system.md, and it spends far more of the window doing it.
+# The documents remain authoritative for a human; they are not agent context.
+docs/
+
+node_modules/
+dist/
+coverage/
+package-lock.json
+
+# Deliberately non-conformant by design. Indexing it teaches the wrong patterns.
+tools/__fixtures__/

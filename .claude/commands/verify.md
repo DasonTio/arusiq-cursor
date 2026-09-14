@@ -5,6 +5,7 @@ description: Run the full gate and explain any failure in terms of the rule it b
 Run `npm run verify`.
 
 For each failure, report:
+
 - the file and line
 - **the rule, and the requirement or D7 section behind it** — not just the
   regex that fired

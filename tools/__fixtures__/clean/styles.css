@@ -5,3 +5,11 @@
   transition: opacity var(--duration-base) var(--easing-standard);
   border: 1px solid var(--color-gray-5);
 }
+
+/* Documented frames only — these must NOT be flagged. */
+@media (min-width: 768px) {
+  .good { padding-inline: var(--grid-margin-tablet); }
+}
+@media (min-width: 1440px) {
+  .good { padding-inline: var(--grid-margin-hd); }
+}
