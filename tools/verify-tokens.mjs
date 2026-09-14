@@ -9,8 +9,8 @@
  * only reachable gaps are the eleven levels, an agent cannot invent a shade of
  * grey at 2 a.m. and nobody notices for three weeks.
  */
-import { readFileSync } from 'node:fs';
-import { globSync } from 'node:fs';
+import { readFileSync, globSync, existsSync } from 'node:fs';
+import { spawnSync } from 'node:child_process';
 
 const SRC = process.env.VERIFY_ROOT ?? 'src';
 const TOKENS_CSS = 'src/design-system/tokens.css';
@@ -169,6 +169,28 @@ for (const s of ['critical', 'warning', 'normal', 'unknown']) {
       0,
       'token-sync',
       `SEVERITY.${s} missing from lib/domain/severity.ts`,
+    );
+}
+
+// --- The Figma export must not go stale ------------------------------------
+// Figma is a CONSUMER of tokens.css (tools/export-figma-tokens.mjs). If someone
+// changes a token and forgets to re-export, the design file and the build
+// silently disagree — which is exactly D8 finding F-06, "three artefacts would
+// have shipped in two identities", reproduced by omission rather than by
+// argument. Regenerate and diff rather than trusting anyone to remember.
+if (existsSync('design/figma-tokens.json')) {
+  const committed = readFileSync('design/figma-tokens.json', 'utf8');
+  const fresh = spawnSync('node', ['tools/export-figma-tokens.mjs'], {
+    encoding: 'utf8',
+    env: { ...process.env, FIGMA_EXPORT_STDOUT: '1' },
+  });
+  const regenerated = readFileSync('design/figma-tokens.json', 'utf8');
+  if (fresh.status === 0 && committed !== regenerated)
+    add(
+      'design/figma-tokens.json',
+      0,
+      'figma-export-stale',
+      'out of date with tokens.css — run `npm run figma:tokens` and re-import into Figma',
     );
 }
 

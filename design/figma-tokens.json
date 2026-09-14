@@ -1,0 +1,454 @@
+{
+  "color": {
+    "brand": {
+      "primary": {
+        "$type": "color",
+        "$value": "#1B2F6E",
+        "$description": "12.51:1 on white-1 · main action, selected/active"
+      },
+      "primary-deep": {
+        "$type": "color",
+        "$value": "#0B1933",
+        "$description": "17.48:1 · dark hero, deepest brand surface"
+      },
+      "red": {
+        "$type": "color",
+        "$value": "#D62027",
+        "$description": "5.13:1 · secondary button. NOT a problem signal."
+      }
+    },
+    "state": {
+      "info": {
+        "fill": {
+          "$type": "color",
+          "$value": "#2F80ED",
+          "$description": "non-text use only"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#115FC8"
+        }
+      },
+      "eco": {
+        "fill": {
+          "$type": "color",
+          "$value": "#007B88",
+          "$description": "sustainability channel. Never severity."
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#00606B"
+        }
+      },
+      "success": {
+        "fill": {
+          "$type": "color",
+          "$value": "#27AE60"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#19713F"
+        }
+      },
+      "warning": {
+        "fill": {
+          "$type": "color",
+          "$value": "#E2B93B"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#796012"
+        }
+      },
+      "error": {
+        "fill": {
+          "$type": "color",
+          "$value": "#EB5757"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#C41717"
+        }
+      },
+      "$description": "Form and interface feedback ONLY — never severity. Fills never carry text; where a state colour becomes type use its -text variant. Eco is the sustainability channel and never indicates severity."
+    },
+    "severity": {
+      "critical": {
+        "mark": {
+          "$type": "color",
+          "$value": "#D32F2F",
+          "$description": "4.98:1 · shape: square"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#B3151A",
+          "$description": "6.91:1"
+        }
+      },
+      "warning": {
+        "mark": {
+          "$type": "color",
+          "$value": "#C2680A",
+          "$description": "3.98:1 · shape: triangle"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#895900",
+          "$description": "4.55:1 on sunken"
+        }
+      },
+      "normal": {
+        "mark": {
+          "$type": "color",
+          "$value": "#1C9253",
+          "$description": "3.01:1 on sunken · circle"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#12703F",
+          "$description": "6.15:1"
+        }
+      },
+      "unknown": {
+        "mark": {
+          "$type": "color",
+          "$value": "#6B7A94",
+          "$description": "4.34:1 · shape: dashed ring"
+        },
+        "text": {
+          "$type": "color",
+          "$value": "#55627A",
+          "$description": "6.15:1"
+        }
+      },
+      "$description": "Severity is a SEPARATE family from state (ADR-0002). Every use carries mark + shape + label — circle / triangle / square / dashed ring. A bare coloured dot is not acceptable anywhere, including charts. There is NO solid-filled severity badge: no foreground clears 4.5:1 across all four marks. Use a 10% tint with the -text foreground and a hairline border in the mark colour."
+    },
+    "neutral": {
+      "black-1": {
+        "$type": "color",
+        "$value": "#1D1D1D",
+        "$description": "headings; text on warning/success/error fills"
+      },
+      "black-2": {
+        "$type": "color",
+        "$value": "#282828",
+        "$description": "alternate heading tone; dark surfaces"
+      },
+      "gray-1": {
+        "$type": "color",
+        "$value": "#333333",
+        "$description": "default body text"
+      },
+      "gray-2": {
+        "$type": "color",
+        "$value": "#4F4F4F",
+        "$description": "secondary + meta text; chart axes; provenance"
+      },
+      "gray-3": {
+        "$type": "color",
+        "$value": "#7F7F7F",
+        "$description": "CONTROL BORDERS only. Never text — see ADR-0002"
+      },
+      "gray-4": {
+        "$type": "color",
+        "$value": "#BDBDBD",
+        "$description": "decorative dividers, disabled borders, baseline"
+      },
+      "gray-5": {
+        "$type": "color",
+        "$value": "#E0E0E0",
+        "$description": "surfaces, table stripes. Never a control border"
+      },
+      "white-1": {
+        "$type": "color",
+        "$value": "#FFFFFF",
+        "$description": "page background"
+      },
+      "white-2": {
+        "$type": "color",
+        "$value": "#F5F5F5",
+        "$description": "raised cards, inset panels, table headers"
+      },
+      "$description": "Every neutral has ONE role. gray-3 is a CONTROL BORDER, not text — at 4.00:1 it is below the 4.5:1 text bar, so placeholders use gray-2 (ADR-0002). gray-4 and gray-5 are decorative; an input outlined in either is an accessibility failure."
+    },
+    "inverse": {
+      "default": {
+        "$type": "color",
+        "$value": "#FFFFFF",
+        "$description": "17.48:1"
+      },
+      "muted": {
+        "$type": "color",
+        "$value": "#919191",
+        "$description": "5.55:1 · labels, meta"
+      },
+      "eco": {
+        "$type": "color",
+        "$value": "#00A0B1",
+        "$description": "5.55:1 · carbon value"
+      },
+      "border": {
+        "$type": "color",
+        "$value": "#707070",
+        "$description": "3.53:1 · hairlines"
+      }
+    }
+  },
+  "surface": {
+    "page": {
+      "$type": "color",
+      "$value": "#FFFFFF"
+    },
+    "raised": {
+      "$type": "color",
+      "$value": "#F5F5F5"
+    },
+    "sunken": {
+      "$type": "color",
+      "$value": "#E0E0E0"
+    },
+    "inverse": {
+      "$type": "color",
+      "$value": "#0B1933",
+      "$description": "ADR-0005 · hero only"
+    }
+  },
+  "typography": {
+    "family": {
+      "heading": {
+        "$type": "fontFamily",
+        "$value": "'Plus Jakarta Sans Variable', 'Plus Jakarta Sans',\n                  ui-sans-serif, system-ui, sans-serif"
+      },
+      "body": {
+        "$type": "fontFamily",
+        "$value": "'Inter Variable', 'Inter',\n                  ui-sans-serif, system-ui, sans-serif"
+      }
+    },
+    "size": {
+      "h1": {
+        "$type": "dimension",
+        "$value": "3.5rem"
+      },
+      "h2": {
+        "$type": "dimension",
+        "$value": "3rem"
+      },
+      "h3": {
+        "$type": "dimension",
+        "$value": "2.5rem"
+      },
+      "h4": {
+        "$type": "dimension",
+        "$value": "2rem"
+      },
+      "h5": {
+        "$type": "dimension",
+        "$value": "1.5rem"
+      },
+      "h6": {
+        "$type": "dimension",
+        "$value": "1.25rem"
+      },
+      "lg": {
+        "$type": "dimension",
+        "$value": "1.25rem"
+      },
+      "md": {
+        "$type": "dimension",
+        "$value": "1.125rem"
+      },
+      "normal": {
+        "$type": "dimension",
+        "$value": "1rem"
+      },
+      "sm": {
+        "$type": "dimension",
+        "$value": "0.875rem"
+      },
+      "caption": {
+        "$type": "dimension",
+        "$value": "0.75rem"
+      }
+    },
+    "weight": {
+      "regular": {
+        "$type": "fontWeight",
+        "$value": 400
+      },
+      "semibold": {
+        "$type": "fontWeight",
+        "$value": 600
+      },
+      "bold": {
+        "$type": "fontWeight",
+        "$value": 700,
+        "$description": "--- Spacing · D7 §9 · eleven levels. 48/64/88 are deliberately absent. --"
+      }
+    }
+  },
+  "spacing": {
+    "1": {
+      "$type": "dimension",
+      "$value": "0.25rem",
+      "$description": "4px · density step: table rows, chip padding"
+    },
+    "2": {
+      "$type": "dimension",
+      "$value": "0.5rem",
+      "$description": "8px"
+    },
+    "3": {
+      "$type": "dimension",
+      "$value": "1rem",
+      "$description": "16px"
+    },
+    "4": {
+      "$type": "dimension",
+      "$value": "1.5rem",
+      "$description": "24px"
+    },
+    "5": {
+      "$type": "dimension",
+      "$value": "2rem",
+      "$description": "32px"
+    },
+    "6": {
+      "$type": "dimension",
+      "$value": "2.5rem",
+      "$description": "40px"
+    },
+    "7": {
+      "$type": "dimension",
+      "$value": "3.5rem",
+      "$description": "56px"
+    },
+    "8": {
+      "$type": "dimension",
+      "$value": "4.5rem",
+      "$description": "72px"
+    },
+    "9": {
+      "$type": "dimension",
+      "$value": "5rem",
+      "$description": "80px"
+    },
+    "10": {
+      "$type": "dimension",
+      "$value": "6rem",
+      "$description": "96px"
+    },
+    "11": {
+      "$type": "dimension",
+      "$value": "7.5rem",
+      "$description": "120px"
+    },
+    "$description": "The only legal gaps. 48, 64 and 88 are deliberately ABSENT so the scale stays coarse enough to decide quickly. Textfield and Expressive Button padding is derived from font size in em and may fall outside this scale — that is the one exemption, and it is not a licence for arbitrary spacing."
+  },
+  "radius": {
+    "xs": {
+      "$type": "dimension",
+      "$value": "2px"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "16px"
+    },
+    "full": {
+      "$type": "dimension",
+      "$value": "9999px"
+    }
+  },
+  "elevation": {
+    "sm": {
+      "$type": "shadow",
+      "$value": "0 1px 2px 0 rgb(29 29 29 / 0.06), 0 1px 3px 0 rgb(29 29 29 / 0.08)"
+    },
+    "md": {
+      "$type": "shadow",
+      "$value": "0 2px 6px -1px rgb(29 29 29 / 0.10), 0 4px 12px -2px rgb(29 29 29 / 0.08)"
+    },
+    "lg": {
+      "$type": "shadow",
+      "$value": "0 8px 20px -4px rgb(29 29 29 / 0.14), 0 16px 32px -8px rgb(29 29 29 / 0.10)",
+      "$description": "--- Motion · D7 §10.3 · transform and opacity only. Nothing over 320ms. -"
+    }
+  },
+  "motion": {
+    "duration": {
+      "fast": {
+        "$type": "duration",
+        "$value": "120ms"
+      },
+      "base": {
+        "$type": "duration",
+        "$value": "200ms"
+      },
+      "slow": {
+        "$type": "duration",
+        "$value": "320ms"
+      }
+    }
+  },
+  "layout": {
+    "target-min": {
+      "$type": "dimension",
+      "$value": "44px",
+      "$description": "--- Grid · D7 §8 · margins and gutters fixed, columns flex --------------"
+    },
+    "grid-margin-mobile": {
+      "$type": "dimension",
+      "$value": "1rem",
+      "$description": "16px @ 375"
+    },
+    "grid-margin-tablet": {
+      "$type": "dimension",
+      "$value": "1.5rem",
+      "$description": "24px @ 768"
+    },
+    "grid-margin-desktop": {
+      "$type": "dimension",
+      "$value": "2rem",
+      "$description": "32px @ 1024"
+    },
+    "grid-margin-hd": {
+      "$type": "dimension",
+      "$value": "2.5rem",
+      "$description": "40px @ 1440+"
+    },
+    "grid-gutter-mobile": {
+      "$type": "dimension",
+      "$value": "1rem"
+    },
+    "grid-gutter-tablet": {
+      "$type": "dimension",
+      "$value": "1.5rem"
+    },
+    "grid-gutter-desktop": {
+      "$type": "dimension",
+      "$value": "1.5rem"
+    },
+    "grid-gutter-hd": {
+      "$type": "dimension",
+      "$value": "1.875rem",
+      "$description": "30px — grid gutter, not spacing"
+    },
+    "content-max": {
+      "$type": "dimension",
+      "$value": "85rem",
+      "$description": "1360px, centred above 1440px"
+    }
+  },
+  "$description": "Generated from src/design-system/tokens.css by tools/export-figma-tokens.mjs. DO NOT EDIT IN FIGMA — edit the CSS and re-export, or the two drift and you recreate D8 finding F-06. Changing a token requires an ADR."
+}
