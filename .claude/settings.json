@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Bash(npm run verify)",
+      "Bash(npm run verify:*)",
+      "Bash(npm run trace)",
+      "Bash(npm run trace:strict)",
+      "Bash(npm run lint)",
+      "Bash(npm run typecheck)",
+      "Bash(node tools/*)",
+      "Bash(npx tsc:*)",
+      "Bash(git status)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)"
+    ]
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_FILE_PATHS\" | grep -qE '\\.(ts|tsx|css)$'; then node tools/verify-tokens.mjs && node tools/verify-provenance.mjs && node tools/verify-i18n.mjs; fi",
+            "timeout": 60
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if echo \"$CLAUDE_FILE_PATHS\" | grep -q 'design-system/tokens.css'; then echo '--- tokens.css changed: re-deriving the contrast matrix ---'; node tools/verify-contrast.mjs; fi",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

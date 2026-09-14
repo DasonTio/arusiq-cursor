@@ -1,0 +1,44 @@
+---
+description: Design system rules — applies to all UI and style files
+globs: ["src/**/*.tsx", "src/**/*.css"]
+alwaysApply: false
+---
+
+Read `context/30-design-system.md` before any visual decision. Values come from
+`src/design-system/tokens.css`; `src/design-system/` is **read-only** to feature
+work — changing a token requires an ADR.
+
+**No raw values.** No hex, no `rgb()`, no px (except `0` and `1px` hairlines),
+no `z-index` number, no `@media (prefers-color-scheme)`. `verify-tokens.mjs`
+fails the build on all of these.
+
+- **Spacing** — only 4·8·16·24·32·40·56·72·80·96·120 (`var(--space-1..11)`).
+  48, 64 and 88 do not exist. Use `gap` on the parent, not margins on children.
+  Logical properties (`inline-start`), never `left`/`right`.
+- **Colour** — three families that never borrow from each other: brand
+  (identity + actions), state (form feedback), severity (the four alert levels).
+  State fills never carry text; use the `-text` variant. Severity renders as
+  **10 % tint + text-safe foreground + hairline border** — there is no
+  solid-filled severity badge (ADR-0002).
+- **Charts** — severity colours are not series colours. Single series:
+  `brand-primary`. Actual vs baseline: `brand-primary` solid vs `gray-4`
+  **dashed** — the dash matters more than the colour. Savings/carbon:
+  `state-eco`. Every chart needs a text alternative.
+- **Type** — heading *level* (structure) and heading *size* (the responsive
+  ramp) are independent. One `h1`, no skipped levels. H1/H2 never unprefixed:
+  at 375 px the column is 343 px.
+- **Radius** — a child's radius is the parent's minus the gap between them.
+- **Elevation** — a shadow is never the only boundary; cards carry a `gray-5`
+  border too.
+- **Motion** — transform and opacity only, nothing over 320 ms, and **never
+  animate a live value**. A telemetry number that morphs between readings is
+  harder to read than one that swaps.
+- **Focus** — visible two-tone ring, 2 px offset, on everything interactive.
+  Never removed without replacement.
+- **Targets** — 44 × 44 minimum. Compact controls pad the hit area, not the glyph.
+
+Every component needs all four data states: `loading` (skeletons matching the
+final layout — never a spinner over a blank page), `empty` (offer the creating
+action), `error` (say what failed, offer retry), `noData` (**grey with a
+last-seen time — never a zero, never an empty state**). Decide them up front;
+retrofitting means a rewrite.

@@ -1,111 +1,73 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+/* =============================================================================
+   Base layer. D7 §6 typography, §10.3 motion, §10.5 focus, §19 accessibility.
+   Global concerns only — component styles live with their components.
+   ========================================================================== */
+@import './design-system/tokens.css';
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+*, *::before, *::after { box-sizing: border-box; }
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
-
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+html {
+  /* D7 §8.2 — layout must survive 200 % zoom, so nothing is sized in absolute
+     pixels. Type scales from the root, which honours the user's browser size. */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
+  background: var(--surface-page);
+  color: var(--color-gray-1);
+  font-family: var(--font-body);
+  font-size: var(--font-size-normal);
+  line-height: var(--line-height-normal);
+  /* D7 §6.5 — kWh, Rupiah, °C and ppm are read in columns and refreshed live.
+     Proportional figures make those columns jitter on every update. Set once,
+     globally, not per component. */
+  font-variant-numeric: tabular-nums;
+  -webkit-font-smoothing: antialiased;
 }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-h4);
   margin: 0;
 }
+h6 { font-weight: var(--font-weight-semibold); }
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
+/* D7 §10.5 — a visible focus indicator on every interactive element, at 3:1
+   against both the control and its surroundings. The 2 px offset exposes the
+   surface behind the control; a single-tone ring sitting directly on a Primary
+   fill measures 1.67:1 and is invisible. Never remove without replacing. */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: var(--radius-sm);
 }
 
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* D7 §10.6 — 44×44 is a requirement, not a size category. Compact controls
+   keep their 32 px visual size and pad the HIT AREA out to the minimum. */
+:where(button, a[href], [role='button']) {
+  min-block-size: var(--target-min);
+  min-inline-size: var(--target-min);
+}
+
+/* D7 §8.2 — content is capped and centred; margins grow, columns do not. */
+.shell {
+  inline-size: 100%;
+  max-inline-size: var(--content-max);
+  margin-inline: auto;
+  padding-inline: var(--grid-margin-mobile);
+}
+@media (min-width: 768px)  { .shell { padding-inline: var(--grid-margin-tablet); } }
+@media (min-width: 1024px) { .shell { padding-inline: var(--grid-margin-desktop); } }
+@media (min-width: 1440px) { .shell { padding-inline: var(--grid-margin-hd); } }
+
+/* Screen-reader-only text — the text alternative every chart and every
+   icon-only control needs (D7 §12.2, §7.1). */
+.sr-only {
+  position: absolute;
+  inline-size: 1px; block-size: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%);
+  white-space: nowrap;
 }

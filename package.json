@@ -5,9 +5,17 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "npm run verify && vite build",
+    "preview": "vite preview",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "typecheck": "tsc -b",
+    "verify": "node tools/verify.mjs",
+    "verify:contrast": "node tools/verify-contrast.mjs",
+    "verify:tokens": "node tools/verify-tokens.mjs",
+    "verify:provenance": "node tools/verify-provenance.mjs",
+    "verify:i18n": "node tools/verify-i18n.mjs",
+    "trace": "node tools/verify-traceability.mjs",
+    "trace:strict": "node tools/verify-traceability.mjs --strict"
   },
   "dependencies": {
     "react": "^19.2.8",
@@ -26,5 +34,8 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.69.0",
     "vite": "^8.3.0"
+  },
+  "engines": {
+    "node": ">=22"
   }
 }

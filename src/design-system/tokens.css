@@ -1,0 +1,153 @@
+/* =============================================================================
+   ARUSIQ Design Tokens — the single source of truth for every visual value.
+   Traceable to D7 UI Design Guideline R2 (12 Sep 2026).
+
+   THIS FILE IS OWNED BY THE DESIGN SYSTEM. Feature agents MUST NOT edit it.
+   Adding, removing or changing a token requires an ADR in context/decisions/.
+   Every raw hex or px value elsewhere in src/ is a build failure — see
+   tools/verify-tokens.mjs.
+   ========================================================================== */
+
+:root {
+  /* --- Brand · D7 §2 · see ADR-0001 (logo values are canonical, D8 F-06) --- */
+  --color-brand-primary:      #1B2F6E; /* 12.51:1 on white-1 · main action, selected/active */
+  --color-brand-primary-deep: #0B1933; /* 17.48:1 · dark hero, deepest brand surface       */
+  --color-brand-red:          #D62027; /*  5.13:1 · secondary button. NOT a problem signal. */
+
+  /* --- State · D7 §3 · interface + form feedback ONLY, never severity ------
+     Fills carry no text. Where a state colour becomes type, use *-text.      */
+  --color-state-info:         #2F80ED; /* non-text use only                                */
+  --color-state-info-text:    #115FC8;
+  --color-state-eco:          #007B88; /* sustainability channel. Never severity.          */
+  --color-state-eco-text:     #00606B;
+  --color-state-success:      #27AE60;
+  --color-state-success-text: #19713F;
+  --color-state-warning:      #E2B93B;
+  --color-state-warning-text: #796012;
+  --color-state-error:        #EB5757;
+  --color-state-error-text:   #C41717;
+
+  /* --- Severity · D7 §4 · see ADR-0002 (own ramp, not the state fills) -----
+     The product's core alerting mechanic. Colour NEVER travels alone:
+     every severity renders mark + shape + label. Precedence in a roll-up is
+     critical > warning > unknown > normal. Grey is not a pass.               */
+  --color-severity-critical-mark: #D32F2F; /* 4.98:1 · shape: square       */
+  --color-severity-critical-text: #B3151A; /* 6.91:1                       */
+  --color-severity-warning-mark:  #C2680A; /* 3.98:1 · shape: triangle     */
+  --color-severity-warning-text:  #895900; /* 4.55:1 on sunken             */
+  --color-severity-normal-mark:   #1C9253; /* 3.01:1 on sunken · circle    */
+  --color-severity-normal-text:   #12703F; /* 6.15:1                       */
+  --color-severity-unknown-mark:  #6B7A94; /* 4.34:1 · shape: dashed ring  */
+  --color-severity-unknown-text:  #55627A; /* 6.15:1                       */
+
+  /* --- Neutrals · D7 §5 · every neutral has one role ---------------------- */
+  --color-black-1: #1D1D1D; /* headings; text on warning/success/error fills  */
+  --color-black-2: #282828; /* alternate heading tone; dark surfaces          */
+  --color-gray-1:  #333333; /* default body text                              */
+  --color-gray-2:  #4F4F4F; /* secondary + meta text; chart axes; provenance  */
+  --color-gray-3:  #7F7F7F; /* CONTROL BORDERS only. Never text — see ADR-0002*/
+  --color-gray-4:  #BDBDBD; /* decorative dividers, disabled borders, baseline*/
+  --color-gray-5:  #E0E0E0; /* surfaces, table stripes. Never a control border*/
+  --color-white-1: #FFFFFF; /* page background                                */
+  --color-white-2: #F5F5F5; /* raised cards, inset panels, table headers      */
+
+  /* --- Surfaces · D7 §5.2 · the four legal backgrounds --------------------
+     Every foreground token clears its bar against ALL FOUR, not white alone.
+     Phase 1 is light mode only. Do not add a dark variant (D7 §5.2).         */
+  --surface-page:   var(--color-white-1);
+  --surface-raised: var(--color-white-2);
+  --surface-sunken: var(--color-gray-5);
+  /* --surface-callout is {state|severity} at 10%, composed per component.    */
+
+  /* --- Typography · D7 §6 ------------------------------------------------- */
+  --font-heading: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    'Inter', ui-sans-serif, system-ui, sans-serif;
+
+  --font-size-h1: 3.5rem;    --line-height-h1: 1.1;  /* 56px · Bold 700      */
+  --font-size-h2: 3rem;      --line-height-h2: 1.1;  /* 48px · Bold 700      */
+  --font-size-h3: 2.5rem;    --line-height-h3: 1.1;  /* 40px · Bold 700      */
+  --font-size-h4: 2rem;      --line-height-h4: 1.1;  /* 32px · Bold 700      */
+  --font-size-h5: 1.5rem;    --line-height-h5: 1.1;  /* 24px · Bold 700      */
+  --font-size-h6: 1.25rem;   --line-height-h6: 1.1;  /* 20px · SemiBold 600  */
+
+  --font-size-lg:      1.25rem;  --line-height-lg:      1.4; /* 20px */
+  --font-size-md:      1.125rem; --line-height-md:      1.4; /* 18px */
+  --font-size-normal:  1rem;     --line-height-normal:  1.4; /* 16px */
+  --font-size-sm:      0.875rem; --line-height-sm:      1.4; /* 14px */
+  --font-size-caption: 0.75rem;  --line-height-caption: 1.4; /* 12px */
+
+  --font-weight-regular:  400;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* --- Spacing · D7 §9 · eleven levels. 48/64/88 are deliberately absent. -- */
+  --space-1: 0.25rem;  /*   4px · density step: table rows, chip padding     */
+  --space-2: 0.5rem;   /*   8px */
+  --space-3: 1rem;     /*  16px */
+  --space-4: 1.5rem;   /*  24px */
+  --space-5: 2rem;     /*  32px */
+  --space-6: 2.5rem;   /*  40px */
+  --space-7: 3.5rem;   /*  56px */
+  --space-8: 4.5rem;   /*  72px */
+  --space-9: 5rem;     /*  80px */
+  --space-10: 6rem;    /*  96px */
+  --space-11: 7.5rem;  /* 120px */
+
+  /* --- Radius · D7 §10.1 · nested child radius = parent radius − gap ------- */
+  --radius-xs:   2px;
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-xl:   16px;
+  --radius-full: 9999px;
+
+  /* --- Elevation · D7 §10.2 · a shadow is NEVER the only boundary ---------
+     Cards carry a gray-5 border AND a shadow. Three levels is the whole scale.*/
+  --shadow-sm: 0 1px 2px 0 rgb(29 29 29 / 0.06), 0 1px 3px 0 rgb(29 29 29 / 0.08);
+  --shadow-md: 0 2px 6px -1px rgb(29 29 29 / 0.10), 0 4px 12px -2px rgb(29 29 29 / 0.08);
+  --shadow-lg: 0 8px 20px -4px rgb(29 29 29 / 0.14), 0 16px 32px -8px rgb(29 29 29 / 0.10);
+
+  /* --- Motion · D7 §10.3 · transform and opacity only. Nothing over 320ms. - */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --easing-standard: cubic-bezier(0.2, 0, 0.2, 1);
+
+  /* --- Layering · D7 §10.4 · six named steps, nothing outside them --------- */
+  --z-base:     0;
+  --z-sticky:   100;
+  --z-dropdown: 200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+
+  /* --- Focus · D7 §10.5 · two-tone ring, 2px offset. Never removed. -------- */
+  --focus-ring-color:  var(--color-brand-primary-deep);
+  --focus-ring-width:  2px;
+  --focus-ring-offset: 2px;
+
+  /* --- Target · D7 §10.6, §17.4 ------------------------------------------- */
+  --target-min: 44px;
+
+  /* --- Grid · D7 §8 · margins and gutters fixed, columns flex -------------- */
+  --grid-margin-mobile:  var(--space-3); /* 16px @ 375 */
+  --grid-margin-tablet:  var(--space-4); /* 24px @ 768 */
+  --grid-margin-desktop: var(--space-5); /* 32px @ 1024 */
+  --grid-margin-hd:      var(--space-6); /* 40px @ 1440+ */
+  --grid-gutter-mobile:  var(--space-3);
+  --grid-gutter-tablet:  var(--space-4);
+  --grid-gutter-desktop: var(--space-4);
+  --grid-gutter-hd:      1.875rem;       /* 30px — grid gutter, not spacing   */
+  --content-max:         85rem;          /* 1360px, centred above 1440px      */
+}
+
+/* D7 §10.3 — reduced motion is honoured globally, in the base layer,
+   not per component. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

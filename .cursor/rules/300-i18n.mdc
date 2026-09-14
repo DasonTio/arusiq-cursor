@@ -1,0 +1,28 @@
+---
+description: Localisation — EN and ID at launch, any language as a locale pack
+globs: ["src/**/*.tsx", "src/lib/i18n/**"]
+alwaysApply: false
+---
+
+"Any further language **without a code change**" is only true if no user-facing
+string ever reaches a component.
+
+- Every string through `t('key')`. That includes `placeholder`, `aria-label`,
+  `title` and `alt` — assistive-technology strings are localised too.
+- Keys are namespaced by screen: `client.overview.heroTitle`, not `heroTitle`.
+- Locale files are **append-only across agents**. Add your keys to both
+  `en.json` and `id.json`; never edit another agent's. This is the single most
+  likely merge conflict in the project.
+- Numbers, currency, dates and temperature come from the locale — **never string
+  concatenation**. Indonesian renders `Rp 1.444,70`, separators inverted from
+  the English default.
+- **Design for the longer string.** Indonesian runs 20–30 % longer: "Needs
+  cleaning" → "Perlu dibersihkan". Never size a control to its English label. No
+  fixed `width` on anything containing text.
+- Logical properties everywhere, so adding Arabic is a `dir` attribute rather
+  than a rewrite. Mirror direction-indicating icons under RTL; do not mirror
+  icons that depict objects.
+- Voice input always has a text fallback and a visible transcript.
+
+Review every component in **both** locales before calling it done. No tool
+catches a truncation; you are the only check.

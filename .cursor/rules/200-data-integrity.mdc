@@ -1,0 +1,34 @@
+---
+description: Provenance, freshness and the claims the product must defend
+globs: ["src/features/**/*.tsx", "src/patterns/**/*.tsx", "src/lib/**/*.ts"]
+alwaysApply: false
+---
+
+**Every figure declares where it came from.** D6 requires 100 % of figures
+labelled. The label sits *with* the figure — a screenshot of one tile must carry
+its own provenance. It is typographic (a small bordered label in `gray-2`), never
+chromatic: colour is fully committed to severity.
+
+- Provenance is stamped **at the source**, in `src/lib/simulation/`, not applied
+  by the UI. Otherwise aggregates cannot compute their own.
+- An aggregate inherits the **weakest** provenance of its inputs —
+  `weakestProvenance()`. One simulated reading makes the whole total simulated.
+- **Never fabricate a value.** An absent sensor is *stated as absent*; a unit
+  that has not reported is **grey with a last-seen time**, not `0 kWh`.
+  Confusing `noData` with `empty` is how a dashboard comes to imply a unit
+  consumed nothing when it was simply offline.
+- The word **"credit"** requires Verified provenance. Phase 1A has none — say
+  *avoided emissions*.
+- A **carbon figure without its grid factor is unauditable.** The versioned
+  factor, its source and its effective date are displayed, not hidden.
+- The **savings chart is not permitted without a link to its method.** Every
+  savings figure is a comparison against a counterfactual, and the method is
+  what separates a claim from a measurement.
+- Indoor CO₂ **ppm** and **kgCO₂e** are different quantities in different units:
+  separate cards, distinct labels, distinct icons, never a shared axis, never
+  added.
+- **Never inline a reading into a component.** All data through
+  `src/lib/simulation/`. A hardcoded `28.5` survives the Phase 1B migration and
+  silently reports a measurement nobody meters.
+- **Mark the mock as a mock.** An unlabelled screen of a system that does not
+  exist yet will be mistaken for one that does.
