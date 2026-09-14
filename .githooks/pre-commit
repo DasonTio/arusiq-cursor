@@ -1,0 +1,22 @@
+#!/bin/sh
+# Tool-agnostic backstop. Claude Code hooks, Cursor hooks and editor lint all
+# have gaps — different tools, different versions, different settings. Git does
+# not: whatever wrote the code, it has to come through here.
+#
+# Skip deliberately with:  SKIP_VERIFY=1 git commit ...
+# (and say so in the PR — the exemptions are meant to be greppable)
+
+[ "$SKIP_VERIFY" = "1" ] && {
+  echo "pre-commit: SKIPPED via SKIP_VERIFY=1"
+  exit 0
+}
+
+echo "pre-commit: running npm run verify …"
+if ! npm run --silent verify; then
+  echo ""
+  echo "✗ commit blocked — the design-system gate failed."
+  echo "  Rules and their source documents: context/30-design-system.md"
+  echo "  If a check is wrong, fix the check in tools/ and say so in the PR."
+  echo "  Deliberate bypass: SKIP_VERIFY=1 git commit ..."
+  exit 1
+fi

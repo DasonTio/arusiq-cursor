@@ -11,7 +11,8 @@
  */
 import { readFileSync, globSync } from 'node:fs';
 
-const files = globSync('src/**/*.tsx');
+const ROOT = process.env.VERIFY_ROOT ?? 'src';
+const files = globSync(`${ROOT}/**/*.tsx`);
 const problems = [];
 const add = (file, line, rule, msg) => problems.push({ file, line, rule, msg });
 
@@ -42,8 +43,13 @@ for (const file of files) {
     }
 
     // --- A bare measured figure in JSX text, outside a metric component ------
+    // Stripping the tags leaves only JSX TEXT, so a properly-built
+    // `<Metric unit="kWh" />` contributes nothing here and needs no exemption.
+    // The previous file-level guard ("does this file mention a metric
+    // component?") meant one correct Metric switched the rule off for every
+    // other line in the file — the self-test caught it.
     const jsxText = raw.replace(/<[^>]*>/g, ' ');
-    if (UNIT.test(jsxText) && !METRIC_COMPONENTS.some((c) => src.includes(`<${c}`))) {
+    if (UNIT.test(jsxText)) {
       add(file, n, 'bare-figure',
         `a measured figure appears as literal text — render it through a metric component so it carries provenance and tabular figures`);
     }

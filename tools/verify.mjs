@@ -10,12 +10,16 @@
 import { spawnSync } from 'node:child_process';
 
 const steps = [
+  // Runs first: it validates the verifiers themselves, so a green run below
+  // means something.
+  ['self-test',    ['node', 'tools/verify-self-test.mjs']],
   ['contrast',     ['node', 'tools/verify-contrast.mjs']],
   ['tokens',       ['node', 'tools/verify-tokens.mjs']],
   ['provenance',   ['node', 'tools/verify-provenance.mjs']],
   ['i18n',         ['node', 'tools/verify-i18n.mjs']],
   ['types',        ['npx', 'tsc', '--noEmit', '-p', 'tsconfig.app.json']],
   ['lint',         ['npx', 'eslint', '.']],
+  ['test',         ['npx', 'vitest', 'run', '--silent']],
   ['traceability', ['node', 'tools/verify-traceability.mjs']],
 ];
 

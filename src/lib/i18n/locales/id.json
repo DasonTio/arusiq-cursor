@@ -1,0 +1,46 @@
+{
+  "severity": {
+    "critical": "Kritis",
+    "warning": "Peringatan",
+    "unknown": "Tidak ada data",
+    "normal": "Normal"
+  },
+  "severityAction": {
+    "critical": "Tindakan sekarang",
+    "warning": "Rencanakan tindakan",
+    "unknown": "Pulihkan visibilitas",
+    "normal": "Tidak ada tindakan"
+  },
+  "provenance": {
+    "simulated": "Simulasi",
+    "estimated": "Estimasi",
+    "provisional": "Sementara",
+    "verified": "Terverifikasi"
+  },
+  "command": {
+    "sent": "Terkirim",
+    "acknowledged": "Diterima",
+    "verified": "Terverifikasi",
+    "failed": "Gagal",
+    "queued": "Dalam antrean — perangkat tidak terjangkau"
+  },
+  "restriction": {
+    "reminder": "Pengingat",
+    "setpointRaised": "Suhu minimum dinaikkan",
+    "ecoLockLimitedHours": "Mode Eco dan jam terbatas",
+    "stop": "Layanan dihentikan"
+  },
+  "loadState": {
+    "loading": "Memuat",
+    "empty": "Belum ada apa pun di sini",
+    "error": "Tidak dapat memuat",
+    "retry": "Coba lagi",
+    "noData": "Tidak ada data",
+    "lastSeen": "Terakhir terlihat {{time}}"
+  },
+  "common": {
+    "save": "Simpan",
+    "cancel": "Batal",
+    "language": "Bahasa"
+  }
+}

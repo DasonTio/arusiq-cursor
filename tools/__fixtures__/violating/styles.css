@@ -1,0 +1,9 @@
+/* Raw values and a dark-mode block, all of which the token gate must reject. */
+.bad {
+  color: #6b6375;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 13px;
+  z-index: 42;
+  transition: width 500ms ease;
+}
+@media (prefers-color-scheme: dark) { .bad { color: #fff; } }

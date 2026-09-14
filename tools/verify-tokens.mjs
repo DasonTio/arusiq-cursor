@@ -12,9 +12,10 @@
 import { readFileSync } from 'node:fs';
 import { globSync } from 'node:fs';
 
-const SRC = 'src';
+const SRC = process.env.VERIFY_ROOT ?? 'src';
 const TOKENS_CSS = 'src/design-system/tokens.css';
 const TOKENS_TS  = 'src/design-system/tokens.ts';
+const DOMAIN_SEVERITY = 'src/lib/domain/severity.ts';
 
 const files = globSync(`${SRC}/**/*.{ts,tsx,css}`).filter((f) => !f.endsWith('tokens.css'));
 const problems = [];
@@ -70,8 +71,17 @@ for (const file of files) {
 // --- tokens.ts must not drift from tokens.css -------------------------------
 const css = readFileSync(TOKENS_CSS, 'utf8');
 const ts  = readFileSync(TOKENS_TS, 'utf8');
+const sev = readFileSync(DOMAIN_SEVERITY, 'utf8');
 const cssHas = (name) => new RegExp(`--${name}\\s*:`).test(css);
 
+// The eleven spacing levels must exist in the CSS *and* be mirrored by the
+// `space` tuple in tokens.ts, or `gap(12)` typechecks and emits a broken var().
+const cssLevels = [...css.matchAll(/--space-(\d+)\s*:/g)].map((m) => Number(m[1])).sort((a, b) => a - b);
+const tsLevels = (ts.match(/export const space = \[([^\]]+)\]/)?.[1] ?? '')
+  .split(',').map((n) => Number(n.trim())).filter(Number.isFinite).sort((a, b) => a - b);
+if (cssLevels.join() !== tsLevels.join())
+  add(TOKENS_TS, 0, 'token-sync',
+    `space scale drift — tokens.css has [${cssLevels}], tokens.ts has [${tsLevels}]`);
 for (const lvl of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
   if (!cssHas(`space-${lvl}`)) add(TOKENS_CSS, 0, 'token-sync', `--space-${lvl} missing`);
 for (const r of ['xs', 'sm', 'md', 'lg', 'xl', 'full'])
@@ -80,7 +90,7 @@ for (const z of ['base', 'sticky', 'dropdown', 'overlay', 'modal', 'toast'])
   if (!cssHas(`z-${z}`)) add(TOKENS_CSS, 0, 'token-sync', `--z-${z} missing`);
 for (const s of ['critical', 'warning', 'normal', 'unknown']) {
   if (!cssHas(`color-severity-${s}-mark`)) add(TOKENS_CSS, 0, 'token-sync', `severity ${s} mark missing`);
-  if (!ts.includes(`${s}:`)) add(TOKENS_TS, 0, 'token-sync', `SEVERITY.${s} missing from tokens.ts`);
+  if (!sev.includes(`${s}:`)) add(DOMAIN_SEVERITY, 0, 'token-sync', `SEVERITY.${s} missing from lib/domain/severity.ts`);
 }
 
 if (problems.length) {

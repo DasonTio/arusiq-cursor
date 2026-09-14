@@ -1,0 +1,46 @@
+{
+  "severity": {
+    "critical": "Critical",
+    "warning": "Warning",
+    "unknown": "No data",
+    "normal": "Normal"
+  },
+  "severityAction": {
+    "critical": "Act now",
+    "warning": "Plan action",
+    "unknown": "Restore visibility",
+    "normal": "Nothing to do"
+  },
+  "provenance": {
+    "simulated": "Simulated",
+    "estimated": "Estimated",
+    "provisional": "Provisional",
+    "verified": "Verified"
+  },
+  "command": {
+    "sent": "Sent",
+    "acknowledged": "Acknowledged",
+    "verified": "Verified",
+    "failed": "Failed",
+    "queued": "Queued — device unreachable"
+  },
+  "restriction": {
+    "reminder": "Reminder",
+    "setpointRaised": "Minimum temperature raised",
+    "ecoLockLimitedHours": "Eco mode and limited hours",
+    "stop": "Service stopped"
+  },
+  "loadState": {
+    "loading": "Loading",
+    "empty": "Nothing here yet",
+    "error": "Could not load",
+    "retry": "Try again",
+    "noData": "No data",
+    "lastSeen": "Last seen {{time}}"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "language": "Language"
+  }
+}

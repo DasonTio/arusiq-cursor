@@ -51,17 +51,35 @@
   --color-white-1: #FFFFFF; /* page background                                */
   --color-white-2: #F5F5F5; /* raised cards, inset panels, table headers      */
 
+  /* --- Inverse surface · ADR-0005 · the dark hero ONLY --------------------
+     FR-10 opens the Client overview on a dark hero (carbon reduced this
+     month). This is a dark SURFACE, not a dark MODE: it applies to one
+     component, and D7 §5.2's "light mode only" rule is otherwise unchanged.
+     Severity marks need no inverse variant — all four already clear 3:1 on
+     this surface. See ADR-0005 for the measured matrix.                     */
+  --color-on-inverse:        var(--color-white-1); /* 17.48:1                */
+  --color-on-inverse-muted:  #919191;              /*  5.55:1 · labels, meta */
+  --color-eco-on-inverse:    #00A0B1;              /*  5.55:1 · carbon value */
+  --color-border-on-inverse: #707070;              /*  3.53:1 · hairlines    */
+
   /* --- Surfaces · D7 §5.2 · the four legal backgrounds --------------------
      Every foreground token clears its bar against ALL FOUR, not white alone.
      Phase 1 is light mode only. Do not add a dark variant (D7 §5.2).         */
   --surface-page:   var(--color-white-1);
   --surface-raised: var(--color-white-2);
   --surface-sunken: var(--color-gray-5);
+  --surface-inverse: var(--color-brand-primary-deep); /* ADR-0005 · hero only */
   /* --surface-callout is {state|severity} at 10%, composed per component.    */
 
   /* --- Typography · D7 §6 ------------------------------------------------- */
-  --font-heading: 'Plus Jakarta Sans', ui-sans-serif, system-ui, sans-serif;
-  --font-body:    'Inter', ui-sans-serif, system-ui, sans-serif;
+  /* The @fontsource-variable packages register the family under a *Variable*
+     name; listing only 'Plus Jakarta Sans' falls back to system-ui silently and
+     nobody notices until a designer looks at it. Static names are kept as a
+     second choice for anyone loading from Google Fonts instead. */
+  --font-heading: 'Plus Jakarta Sans Variable', 'Plus Jakarta Sans',
+                  ui-sans-serif, system-ui, sans-serif;
+  --font-body:    'Inter Variable', 'Inter',
+                  ui-sans-serif, system-ui, sans-serif;
 
   --font-size-h1: 3.5rem;    --line-height-h1: 1.1;  /* 56px · Bold 700      */
   --font-size-h2: 3rem;      --line-height-h2: 1.1;  /* 48px · Bold 700      */

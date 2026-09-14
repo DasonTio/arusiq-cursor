@@ -1,0 +1,6 @@
+# src/patterns
+
+Owner: **design-system-guardian · read-only to feature work**
+
+See `context/40-architecture.md` for the full ownership table and the
+dependency direction (features → patterns → components → design-system).

@@ -51,13 +51,25 @@ const SURFACES = [
   ['sunken (gray-5)',  T('gray-5')],
 ];
 
+/** ADR-0005 — the dark hero is a fifth legal surface, scoped to one component.
+ *  Only the tokens that actually appear on it are checked against it; this is
+ *  a dark SURFACE, not a dark MODE, so the whole palette is not re-derived. */
+const INVERSE = ['inverse (brand-primary-deep)', T('brand-primary-deep')];
+
 const failures = [];
 const rows = [];
 
-/** @param {'text'|'ui'} kind */
-function check(label, fg, kind, extraSurfaces = []) {
+/**
+ * @param {'text'|'ui'} kind
+ * @param {Array} extraSurfaces  measured IN ADDITION to the three light surfaces
+ * @param {Array|null} onlySurfaces  measured INSTEAD of them — for tokens that
+ *   exist solely for one surface, such as the ADR-0005 hero. Checking an
+ *   inverse token against white is meaningless: it is never rendered there.
+ */
+function check(label, fg, kind, extraSurfaces = [], onlySurfaces = null) {
   const bar = kind === 'text' ? 4.5 : 3.0;
-  const results = [...SURFACES, ...extraSurfaces].map(([sName, sHex]) => {
+  const base = onlySurfaces ?? [...SURFACES, ...extraSurfaces];
+  const results = base.map(([sName, sHex]) => {
     const r = ratio(fg, sHex);
     if (r < bar) failures.push(`${label} (${fg}) is ${r.toFixed(2)}:1 on ${sName} — needs ${bar}:1`);
     return r;
@@ -81,6 +93,14 @@ for (const lvl of ['critical', 'warning', 'normal', 'unknown']) {
 for (const lvl of ['critical', 'warning', 'normal', 'unknown']) {
   check(`severity-${lvl}-mark`, T(`severity-${lvl}-mark`), 'ui');
 }
+
+// --- Inverse surface · ADR-0005 · only what appears on the hero ------------
+check('on-inverse (white-1)',  T('white-1'),           'text', [], [INVERSE]);
+check('on-inverse-muted',      T('on-inverse-muted'),  'text', [], [INVERSE]);
+check('eco-on-inverse',        T('eco-on-inverse'),    'text', [], [INVERSE]);
+check('border-on-inverse',     T('border-on-inverse'), 'ui',   [], [INVERSE]);
+for (const lvl of ['critical', 'warning', 'normal', 'unknown'])
+  check(`sev-${lvl}-mark on inv`, T(`severity-${lvl}-mark`), 'ui', [], [INVERSE]);
 
 // --- Body + meta text, control borders, focus ring -------------------------
 check('gray-1 (body text)',      T('gray-1'), 'text');

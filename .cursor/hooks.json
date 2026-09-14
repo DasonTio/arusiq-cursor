@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "hooks": {
+    "afterFileEdit": [
+      {
+        "type": "command",
+        "command": "./.cursor/hooks/verify-edit.sh"
+      }
+    ]
+  }
+}
