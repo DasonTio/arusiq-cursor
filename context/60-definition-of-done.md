@@ -4,6 +4,12 @@ A screen or component is done when **all three columns pass**. The first is
 mechanical and free; the second and third need judgement, which is exactly why
 they are listed rather than assumed.
 
+## 0 · Start the screen with the generator
+
+`npm run new:screen <id>` stamps the `@requirement` tags, all four data states
+and namespaced locale keys in both packs. Writing a screen from scratch means
+re-deciding three things that are already decided.
+
 ## 1 · Mechanical — `npm run verify`
 
 | Gate             | Proves                                                                                      |
@@ -52,6 +58,7 @@ Plus the four that get skipped most often, and cost the most:
 Phase 1A is demo-ready when:
 
 - `npm run trace:strict` passes — every **Must** requirement is claimed
+  (at the time of writing: **8 / 31**)
 - The eight stakeholder journeys run end to end in under 10 minutes
 - A new user answers _"what needs attention?"_ in under 60 seconds
 - Lighthouse accessibility ≥ 90 on each of the three dashboards
