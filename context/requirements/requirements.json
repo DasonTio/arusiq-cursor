@@ -19,7 +19,6 @@
       "HVAC"
     ]
   },
-
   "roles": [
     {
       "id": "client",
@@ -68,7 +67,6 @@
       "scope": "all"
     }
   ],
-
   "invariants": [
     {
       "id": "INV-PROVENANCE",
@@ -155,17 +153,28 @@
       "enforcedBy": "route guard tests"
     }
   ],
-
   "screens": [
-    { "id": "auth.sign-in", "role": ["all"], "satisfies": ["FR-01", "FR-04"] },
-    { "id": "auth.forgot-password", "role": ["all"], "satisfies": ["FR-03"] },
+    {
+      "id": "auth.sign-in",
+      "role": ["all"],
+      "satisfies": ["FR-01", "FR-04"]
+    },
+    {
+      "id": "auth.forgot-password",
+      "role": ["all"],
+      "satisfies": ["FR-03"]
+    },
     {
       "id": "client.overview",
       "role": ["client"],
       "satisfies": ["FR-10", "FR-15"],
       "note": "Dark hero: carbon reduced this month. Then comfort per room, then anything red or orange."
     },
-    { "id": "client.spaces", "role": ["client"], "satisfies": ["FR-13"] },
+    {
+      "id": "client.spaces",
+      "role": ["client"],
+      "satisfies": ["FR-13"]
+    },
     {
       "id": "client.unit-detail",
       "role": ["client"],
@@ -186,7 +195,11 @@
       "role": ["client"],
       "satisfies": ["FR-70", "FR-71", "FR-66"]
     },
-    { "id": "client.maintenance", "role": ["client"], "satisfies": ["FR-30", "FR-33"] },
+    {
+      "id": "client.maintenance",
+      "role": ["client"],
+      "satisfies": ["FR-30", "FR-33"]
+    },
     {
       "id": "client.billing",
       "role": ["client"],
@@ -213,31 +226,58 @@
       "satisfies": ["FR-12"],
       "note": "Opens on decisions needed and how many carry SLA risk."
     },
-    { "id": "admin.fleet", "role": ["admin"], "satisfies": ["FR-13"] },
+    {
+      "id": "admin.fleet",
+      "role": ["admin"],
+      "satisfies": ["FR-13"]
+    },
     {
       "id": "admin.alerts",
       "role": ["admin"],
       "satisfies": ["FR-21", "FR-22", "FR-27"]
     },
-    { "id": "admin.dispatch", "role": ["admin"], "satisfies": ["FR-31"] },
-    { "id": "admin.payments", "role": ["admin"], "satisfies": ["FR-50", "FR-52"] },
-    { "id": "admin.energy-portfolio", "role": ["admin"], "satisfies": ["FR-61"] },
+    {
+      "id": "admin.dispatch",
+      "role": ["admin"],
+      "satisfies": ["FR-31"]
+    },
+    {
+      "id": "admin.payments",
+      "role": ["admin"],
+      "satisfies": ["FR-50", "FR-52"]
+    },
+    {
+      "id": "admin.energy-portfolio",
+      "role": ["admin"],
+      "satisfies": ["FR-61"]
+    },
     {
       "id": "admin.mrv",
       "role": ["admin"],
       "satisfies": ["FR-70", "FR-71", "FR-73", "FR-74"]
     },
-    { "id": "admin.settings", "role": ["admin"], "satisfies": ["FR-100", "FR-101"] },
-    { "id": "admin.audit", "role": ["admin"], "satisfies": ["FR-102"] },
+    {
+      "id": "admin.settings",
+      "role": ["admin"],
+      "satisfies": ["FR-100", "FR-101"]
+    },
+    {
+      "id": "admin.audit",
+      "role": ["admin"],
+      "satisfies": ["FR-102"]
+    },
     {
       "id": "shared.assistant",
       "role": ["all"],
       "satisfies": ["FR-04"],
       "note": "Text and voice with visible transcript; text fallback always present."
     },
-    { "id": "shared.notifications", "role": ["all"], "satisfies": ["FR-22"] }
+    {
+      "id": "shared.notifications",
+      "role": ["all"],
+      "satisfies": ["FR-22"]
+    }
   ],
-
   "requirements": [
     {
       "id": "FR-01",
@@ -513,29 +553,63 @@
       "statement": "Append-only audit of sensitive actions, approvals, deliveries, commands and calculations; export."
     }
   ],
-
   "monitoredParts": {
     "$comment": "D6 FR-20. 'Monitor every aspect' is an enumerated list, not a slogan. Each part carries its own health, evidence and recommended action.",
     "indoor": [
-      { "id": "air-filter", "signals": ["pressure drop", "run hours"] },
-      { "id": "evaporator-coil", "signals": ["approach temp", "frost"] },
-      { "id": "blower-motor-fan", "signals": ["current", "vibration"] },
-      { "id": "condensate-drain-pan", "signals": ["level", "overflow"] },
-      { "id": "vents-louvers", "signals": ["airflow", "actuator"] }
+      {
+        "id": "air-filter",
+        "signals": ["pressure drop", "run hours"]
+      },
+      {
+        "id": "evaporator-coil",
+        "signals": ["approach temp", "frost"]
+      },
+      {
+        "id": "blower-motor-fan",
+        "signals": ["current", "vibration"]
+      },
+      {
+        "id": "condensate-drain-pan",
+        "signals": ["level", "overflow"]
+      },
+      {
+        "id": "vents-louvers",
+        "signals": ["airflow", "actuator"]
+      }
     ],
     "outdoor": [
-      { "id": "condenser-coil", "signals": ["discharge vs ambient"] },
-      { "id": "compressor", "signals": ["current", "cycling", "vibration"] },
-      { "id": "condenser-fan-blades", "signals": ["current", "imbalance"] },
-      { "id": "refrigerant-lines", "signals": ["superheat", "subcooling trend"] }
+      {
+        "id": "condenser-coil",
+        "signals": ["discharge vs ambient"]
+      },
+      {
+        "id": "compressor",
+        "signals": ["current", "cycling", "vibration"]
+      },
+      {
+        "id": "condenser-fan-blades",
+        "signals": ["current", "imbalance"]
+      },
+      {
+        "id": "refrigerant-lines",
+        "signals": ["superheat", "subcooling trend"]
+      }
     ],
     "electrical": [
-      { "id": "thermostat-sensors", "signals": ["drift", "disagreement"] },
-      { "id": "capacitor-contactor", "signals": ["start current", "chatter"] },
-      { "id": "electrical-wiring", "signals": ["voltage sag", "harmonics"] }
+      {
+        "id": "thermostat-sensors",
+        "signals": ["drift", "disagreement"]
+      },
+      {
+        "id": "capacitor-contactor",
+        "signals": ["start current", "chatter"]
+      },
+      {
+        "id": "electrical-wiring",
+        "signals": ["voltage sag", "harmonics"]
+      }
     ]
   },
-
   "openDecisions": [
     {
       "id": "OD-01",
@@ -549,6 +623,18 @@
       "question": "One or two approvers at each restriction step?",
       "blocks": ["FR-52"],
       "source": "D8 §6",
+      "status": "open"
+    },
+    {
+      "id": "OD-03",
+      "question": "Brand palette. The current logo in Figma (file g5e2UgJuHt7TX9QBdRdmjP) appears to be navy ~#0B1A47 with a BLUE accent ~#2F80ED — not the #1B2F6E / #D62027 that ADR-0001 adopted on the strength of D8 F-06. Confirm the logo's actual fill values, then decide: is the brand accent blue or red?",
+      "blocks": [
+        "every primary and secondary button",
+        "the client dark hero",
+        "the wordmark in the app shell"
+      ],
+      "source": "Figma logo page, sampled 2026-09-17 from a compressed thumbnail — approximate",
+      "consequence": "A blue accent at #2F80ED gives white text 3.87:1, so a 16px button label fails AA; D7 §3.1's own text threshold is #1B6FDB (4.84:1). It is also D7's state-info fill, so brand and state would share a hue.",
       "status": "open"
     }
   ]
