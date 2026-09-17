@@ -67,6 +67,122 @@
       "scope": "all"
     }
   ],
+  "navigation": {
+    "$comment": "The 'three rails' from the sitemap, read from its excerpt embedded in Figma (file g5e2UgJuHt7TX9QBdRdmjP, node 176:1722) on 2026-09-17. The full sitemap artifact, including its user flows, was NOT readable. Destination → screen mapping is an inference; confirm it against the full sitemap.",
+    "rules": [
+      "Identical on desktop (sidebar) and mobile (bottom tabs) — a person who learns the structure on one should not relearn it on the other.",
+      "Five destinations is the ceiling: what a 375 px tab bar holds without truncation (D7 §8.3).",
+      "Destinations carry visible labels, not icons alone (D7 §7.1).",
+      "Map is the technician's one promotion by frequency, to be checked in the prototype review."
+    ],
+    "client": {
+      "destinations": [
+        {
+          "id": "home",
+          "label": "Home",
+          "purpose": "what needs me",
+          "screens": ["client.overview"]
+        },
+        {
+          "id": "spaces",
+          "label": "Spaces",
+          "purpose": "comfort & air, by room",
+          "screens": ["client.spaces", "client.unit-detail", "client.air-quality"]
+        },
+        {
+          "id": "alerts",
+          "label": "Alerts",
+          "purpose": "the one attention queue",
+          "screens": ["shared.notifications"]
+        },
+        {
+          "id": "insights",
+          "label": "Insights",
+          "purpose": "energy · savings · carbon",
+          "screens": ["client.energy", "client.carbon"]
+        },
+        {
+          "id": "account",
+          "label": "Account",
+          "purpose": "bills, visits, contract",
+          "screens": ["client.billing", "client.maintenance"]
+        }
+      ],
+      "alwaysPresent": [
+        "search",
+        "assistant (shared.assistant)",
+        "language switch (FR-04)",
+        "profile"
+      ]
+    },
+    "technician": {
+      "destinations": [
+        {
+          "id": "work",
+          "label": "Work",
+          "purpose": "today · week · silent units",
+          "screens": ["tech.queue"]
+        },
+        {
+          "id": "map",
+          "label": "Map",
+          "purpose": "promoted by frequency",
+          "screens": ["tech.map"]
+        },
+        {
+          "id": "me",
+          "label": "Me",
+          "purpose": "shifts & preferences",
+          "screens": ["tech.me"]
+        }
+      ],
+      "openedFromAJob": ["tech.work-order", "tech.diagnostics"]
+    },
+    "admin": {
+      "destinations": [
+        {
+          "id": "overview",
+          "label": "Overview",
+          "purpose": "decisions needed first",
+          "screens": ["admin.overview", "admin.alerts"]
+        },
+        {
+          "id": "fleet",
+          "label": "Fleet",
+          "purpose": "estate, devices, activity",
+          "screens": ["admin.fleet"]
+        },
+        {
+          "id": "service",
+          "label": "Service",
+          "purpose": "dispatch & SLA",
+          "screens": ["admin.dispatch"]
+        },
+        {
+          "id": "accounts",
+          "label": "Accounts",
+          "purpose": "payments & cases",
+          "screens": ["admin.payments"]
+        },
+        {
+          "id": "reporting",
+          "label": "Reporting",
+          "purpose": "energy, Scope 2, MRV",
+          "screens": ["admin.energy-portfolio", "admin.mrv"]
+        }
+      ],
+      "behindAvatar": [
+        "rules",
+        "tariffs & grid factors",
+        "space flags",
+        "users",
+        "organisations",
+        "integrations",
+        "audit"
+      ],
+      "behindAvatarScreens": ["admin.settings", "admin.audit"]
+    }
+  },
   "invariants": [
     {
       "id": "INV-PROVENANCE",
@@ -276,6 +392,18 @@
       "id": "shared.notifications",
       "role": ["all"],
       "satisfies": ["FR-22"]
+    },
+    {
+      "id": "tech.map",
+      "role": ["technician-internal", "technician-thirdparty"],
+      "satisfies": ["FR-11"],
+      "note": "The route view of Work. Blocked by D7 §20 gap 3 (map treatment)."
+    },
+    {
+      "id": "tech.me",
+      "role": ["technician-internal", "technician-thirdparty"],
+      "satisfies": [],
+      "note": "Shifts & preferences. A sitemap destination with no functional requirement behind it yet."
     }
   ],
   "requirements": [
@@ -627,15 +755,23 @@
     },
     {
       "id": "OD-03",
-      "question": "Brand palette. The current logo in Figma (file g5e2UgJuHt7TX9QBdRdmjP) appears to be navy ~#0B1A47 with a BLUE accent ~#2F80ED — not the #1B2F6E / #D62027 that ADR-0001 adopted on the strength of D8 F-06. Confirm the logo's actual fill values, then decide: is the brand accent blue or red?",
+      "question": "Brand palette: adopt the values the Figma file actually paints — primary #0B1B48, secondary #2B407A, red #DB1217 — in place of ADR-0001's #1B2F6E / #D62027?",
       "blocks": [
         "every primary and secondary button",
         "the client dark hero",
         "the wordmark in the app shell"
       ],
-      "source": "Figma logo page, sampled 2026-09-17 from a compressed thumbnail — approximate",
+      "source": "Figma get_variable_defs + lossless screenshot of node 25:371, 2026-09-17",
       "consequence": "A blue accent at #2F80ED gives white text 3.87:1, so a 16px button label fails AA; D7 §3.1's own text threshold is #1B6FDB (4.84:1). It is also D7's state-info fill, so brand and state would share a hue.",
-      "status": "open"
+      "status": "open",
+      "evidence": [
+        "Figma Colors frame (node 25:371): the bound variables are accent/primary #0B1B48, accent/secondary #2B407A, accent/secondary2 #DB1217, state/warning #FDCE3E, bc/white-2 #F9F9F9, and those are the values painted.",
+        "The hex labels on that frame are wrong in 5 of 10 swatches (Primary labelled #022465; Secondary and Secondary2 both labelled #0B1933, though one is mid-blue and one is red).",
+        "The logo navy matches #0B1B48. The logo's blue accent is #2F80ED, the Info state colour — a logo element, not a UI brand colour.",
+        "#1B2F6E and #D62027 appear nowhere in the Figma file. #DB1217 is also D7 R2's documented brand red.",
+        "Every adopted value passes with white text (16.61 / 9.92 / 5.11 : 1), and all ADR-0005 dark-hero tokens still pass on #0B1B48."
+      ],
+      "recommendation": "Adopt #0B1B48 / #2B407A / #DB1217, keep #2F80ED logo-only, then run npm run figma:tokens and import the variables to replace the mislabelled Colors frame."
     }
   ]
 }

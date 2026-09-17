@@ -35,10 +35,11 @@ const Pascal = name
   .split('-')
   .map((p) => p[0].toUpperCase() + p.slice(1))
   .join('');
-const dir =
-  area === 'auth' || area === 'shared'
-    ? `src/features/${area}`
-    : `src/features/${area}`;
+// Screen ids use short prefixes; the owned feature directories use role names
+// (context/40-architecture.md). Without this map, technician screens would land
+// in src/features/tech/ — a directory no agent owns.
+const AREA_DIR = { tech: 'technician' };
+const dir = `src/features/${AREA_DIR[area] ?? area}`;
 const file = `${dir}/${Pascal}.tsx`;
 
 if (existsSync(file)) {
@@ -49,9 +50,15 @@ if (existsSync(file)) {
 const reqs = screen.satisfies
   .map((rid) => spec.requirements.find((r) => r.id === rid))
   .filter(Boolean);
-const reqComment = reqs
-  .map((r) => ` * - ${r.id} (${r.priority}): ${r.statement}`)
-  .join('\n');
+const reqComment = reqs.length
+  ? reqs.map((r) => ` * - ${r.id} (${r.priority}): ${r.statement}`).join('\n')
+  : ' * - nothing yet: the sitemap names this screen, but no functional\n *   requirement sits behind it. Keep it thin until one does.';
+
+// An empty `@requirement` tag reads as a claim with nothing behind it, so the
+// tag is omitted entirely when the screen satisfies no requirement.
+const requirementTag = screen.satisfies.length
+  ? ` *\n * @requirement ${screen.satisfies.join(' ')}\n`
+  : '';
 
 const body = `/**
  * ${screen.id} — ${screen.role.join(', ')}
@@ -61,9 +68,7 @@ ${reqComment}
  *
  * TODO(agent): replace the placeholder body. Keep all four data states — they
  * are why this file was generated rather than written from scratch.
- *
- * @requirement ${screen.satisfies.join(' ')}
- */
+${requirementTag} */
 import { useTranslation } from 'react-i18next';
 import type { LoadState } from '../../lib/domain/loadState.ts';
 

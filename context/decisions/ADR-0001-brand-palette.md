@@ -2,12 +2,13 @@
 
 **Status** Accepted · 2026-09-13 · **Reverse cost** one line in `tokens.css`
 
-> **Under review — OD-03.** The logo page in the current Figma file appears to
-> use navy ~`#0B1A47` with a **blue** accent ~`#2F80ED`, not the `#1B2F6E` /
-> `#D62027` this ADR adopted on the strength of D8 F-06. Values were sampled
-> from a compressed thumbnail, so treat them as approximate until the Figma fills
-> are read directly. The _principle_ below (the logo is canonical) still stands;
-> the _values_ may not. Do not build brand-coloured components until OD-03 closes.
+> **Under review — OD-03, with evidence.** The Figma file's bound colour
+> variables, which are also what it paints, are primary `#0B1B48`, secondary
+> `#2B407A` and red `#DB1217`. The logo navy matches `#0B1B48`. Neither of this
+> ADR's values (`#1B2F6E`, `#D62027`) appears anywhere in the file, so the D8
+> F-06 claim this ADR rests on is not supported by the design artefacts. The
+> _principle_ (the logo is canonical) stands and points at `#0B1B48`. Awaiting a
+> stakeholder decision; do not build brand-coloured components until OD-03 closes.
 
 ## Conflict
 
