@@ -28,6 +28,9 @@ Code-level context that is often the faster answer:
 | `src/lib/simulation/types.ts` | Anything touching data                                    |
 | `src/lib/domain/`             | Severity, provenance, commands, the restriction ladder    |
 
+`handoff/` holds dated notes passed between sessions. They are ephemeral: read
+the newest one if it exists, act on it, then delete it.
+
 ## Querying rather than reading
 
 `requirements.json` is structured so you can pull the slice you need:
