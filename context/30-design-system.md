@@ -49,6 +49,15 @@ carbon. The baseline is dashed as well as grey, because line style survives
 colour blindness and greyscale printing — and the 10–20 % savings comparison is
 the product's headline claim, so it must not depend on hue.
 
+For **two or more categories**, `chart-1 … chart-6` (ADR-0011). The ramp is
+**ordered**: 1-2-3 is the only triple guaranteed on colour alone, and the
+guarantee weakens at 4, 5 and 6. It contains no green, no orange and no teal,
+because severity and the eco channel already own those hues. Six series cannot
+be separated by colour for a deuteranope inside the 3:1 ceiling — measured, not
+assumed — so **index N carries colour N _and_ a dash pattern _and_ a point
+marker**, and the legend carries the label. A swatch with no word beside it is
+the bare-dot failure in another costume.
+
 Four legal surfaces: `page` (white-1), `raised` (white-2), `sunken` (gray-5),
 and `{state|severity} at 10 %`. Every foreground clears its bar against **all
 four** — `npm run verify:contrast` proves it.
@@ -92,8 +101,9 @@ Grid: margins and gutters fixed, columns flex. Content caps at 1360 px and
 centres above 1440. **Recompose, don't shrink** — what sits side by side on
 desktop stacks on mobile. No fixed pixel widths; layout survives 200 % zoom.
 
-Navigation shell, same model for all roles: bottom tabs at 375 (max five),
-icon rail at 768, persistent sidebar + breadcrumbs at 1024+.
+Navigation shell (ADR-0008, ADR-0010): labelled destinations at every
+breakpoint. Bottom tabs at 375 (max five; HQ has none). Labelled sidebar from 768. Breadcrumbs at 1024+ only when Figma draws them — it does not, as of
+19 Sep 2026.
 
 ## The six quiet tiers
 
@@ -156,6 +166,9 @@ half; these are the ones only a person or a reviewing agent can judge.
 - [ ] Every figure carries a provenance label; stale values are grey with a last-seen time
 - [ ] Headings use the responsive ramp; no unprefixed H1/H2; no skipped levels
 - [ ] Every interactive element has a visible focus state and a 44 × 44 target
+- [ ] Every chosen chip, picker or view tab carries `pressed` or `current`, not
+      only a navy fill — selection is colour **and** an announced state
+      (ADR-0014). Not yet applied to the 22 call sites the ADR lists.
 - [ ] Every input has a real label; helper text is distinct from error text
 - [ ] Every chart has a text alternative and caption-size axis labels in gray-2
 - [ ] Renders at 375 px, at 1536 px, and at 200 % zoom without horizontal scroll
@@ -166,19 +179,20 @@ half; these are the ones only a person or a reviewing agent can judge.
 
 ## Recognised gaps
 
-Two of D7 §20's five are now closed. The rest are scheduled, not open-ended —
-if your task needs one, resolve it in an ADR first rather than inventing values:
+Four of D7 §20's five are now closed. The one that is left is scheduled, not
+open-ended — if your task needs it, resolve it in an ADR first rather than
+inventing values:
 
-1. **Categorical chart ramp** (`chart/1..6`, tuned for adjacent-colour
-   discrimination and checked for deuteranopia) — blocks `admin.energy-portfolio`.
-   The palette supports three distinguishable series today.
+1. ~~Categorical chart ramp~~ — **closed by ADR-0011.** `chart-1 … chart-6`,
+   ordered by discriminability. Three series are guaranteed on colour alone; all
+   six need the dash-and-marker pairing. No green, no orange, no teal.
 2. ~~Icon library~~ — **closed by ADR-0006.** Lucide, outline, stroke locked at
    2 px, ISC licence. The stroke is set by the icon primitive and not exposed.
 3. **Map treatment** — style, markers, clustering, routes. Blocks `admin.fleet`
    and technician routing.
-4. **Part-level health diagram** for the twelve components — blocks
-   `tech.diagnostics`. Lucide has no compressor or evaporator-coil glyph, so
-   this is genuine illustration work.
+4. ~~Part-level health diagram~~ — **closed by ADR-0012.** Twelve hand-drawn
+   schematic glyphs in `PartIcon`, keyed by catalogue id, same grid and stroke as
+   Lucide. The glyph carries no severity meaning; the indicator beside it does.
 5. ~~Dark hero surface~~ — **closed by ADR-0005.** A scoped fifth _surface_, not
    a dark _mode_: `--surface-inverse` plus three foreground tokens, measured.
    Severity marks needed no inverse variant. Do not spread it to a second

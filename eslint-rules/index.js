@@ -17,6 +17,7 @@ const METRIC_COMPONENTS = new Set([
   'MetricValue',
   'ChartCard',
   'SavingsChart',
+  'CategoricalChart',
   'CarbonCard',
 ]);
 
@@ -191,11 +192,55 @@ const noRawValueInStyleProp = {
   },
 };
 
+/**
+ * ADR-0014 — a `<Button>` whose `variant` is a conditional is a selection
+ * control (a filter chip, a view tab, a mode picker): something on screen
+ * flips to `variant="primary"` because it is the chosen one. `pressed` /
+ * `current` is the non-visual half of that same fact, and the two must not
+ * drift apart — a new selection control that only sets `variant` reproduces
+ * the exact colour-only bug the ADR closed in the other 22.
+ */
+const requireSelectionStateOnButton = {
+  meta: {
+    type: 'problem',
+    docs: {
+      description:
+        'A conditional Button variant (a selection control) also carries `pressed` or `current` (ADR-0014)',
+    },
+    schema: [],
+    messages: {
+      missing:
+        '<Button variant={cond ? ... : ...}> with no `pressed` or `current` — this is a selection control, and the choice must reach assistive technology, not just the class list (ADR-0014, D7 "state is never colour alone").',
+    },
+  },
+  create(context) {
+    return {
+      JSXOpeningElement(node) {
+        if (node.name.type !== 'JSXIdentifier' || node.name.name !== 'Button') return;
+        const variant = node.attributes.find(
+          (a) => a.type === 'JSXAttribute' && a.name.name === 'variant',
+        );
+        if (!variant || variant.value?.type !== 'JSXExpressionContainer') return;
+        if (variant.value.expression.type !== 'ConditionalExpression') return;
+        const hasSelectionState = node.attributes.some(
+          (a) =>
+            a.type === 'JSXAttribute' &&
+            (a.name.name === 'pressed' || a.name.name === 'current'),
+        );
+        if (hasSelectionState) return;
+        if (hasExemption(context, node, 'selection-state-exempt')) return;
+        context.report({ node, messageId: 'missing' });
+      },
+    };
+  },
+};
+
 export default {
   meta: { name: 'arusiq', version: '1.0.0' },
   rules: {
     'require-provenance-prop': requireProvenanceProp,
     'no-hardcoded-jsx-text': noHardcodedJsxText,
     'no-raw-value-in-style-prop': noRawValueInStyleProp,
+    'require-selection-state-on-button': requireSelectionStateOnButton,
   },
 };

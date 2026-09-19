@@ -1,0 +1,42 @@
+/* QuickActions — a wrapping row of circular icon actions. The circle is the
+   minimum hit target (var(--target-min), D7 §10.6); the caption sits below it.
+   Four items fit the phone row without scrolling; flex-wrap takes any overflow
+   to a second line rather than a horizontal scroll. */
+
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.action {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 0;
+  border: 0;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.circle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--target-min);
+  block-size: var(--target-min);
+  border: 1px solid var(--color-gray-3);
+  border-radius: var(--radius-full);
+  color: var(--color-brand-primary);
+}
+
+.caption {
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-gray-2);
+}

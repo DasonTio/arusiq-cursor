@@ -1,0 +1,20 @@
+/* MetricGrid + MetricTile — the KPI summary grid and its tile shell.
+   `auto-fit` stretches however many tiles the row holds; the ten-rem minmax
+   floor is what fits two tracks inside the phone frame's margins, and four
+   from the tablet frame. `min(100%, …)` keeps a single tile from overflowing
+   its track on the narrowest frame. */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 10rem), 1fr));
+  gap: var(--space-2);
+  inline-size: 100%;
+}
+
+.tile {
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+}

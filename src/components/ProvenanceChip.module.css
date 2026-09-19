@@ -1,0 +1,24 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  padding-block: var(--space-1);
+  padding-inline: var(--space-2);
+  border: 1px solid var(--color-gray-2);
+  border-radius: var(--radius-xs);
+  color: var(--color-gray-2);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+/* ADR-0005 · the dark hero is a scoped fifth surface, not a dark mode. gray-2
+   measures 1.42:1 there; these two tokens are already measured against
+   --surface-inverse by tools/verify-contrast.mjs. `page`, `raised` and `sunken`
+   deliberately share the default treatment — gray-2 clears 4.5:1 on all three,
+   so splitting them would be three names for one decision. */
+.root[data-surface='inverse'] {
+  color: var(--color-on-inverse-muted);
+  border-color: var(--color-border-on-inverse);
+}

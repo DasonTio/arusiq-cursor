@@ -3,18 +3,18 @@
     "brand": {
       "primary": {
         "$type": "color",
-        "$value": "#1B2F6E",
-        "$description": "12.51:1 on white-1 · main action, selected/active"
+        "$value": "#0B1B48",
+        "$description": "16.61:1 on white-1 · main action, active · hero"
       },
       "primary-deep": {
         "$type": "color",
         "$value": "#0B1933",
-        "$description": "17.48:1 · dark hero, deepest brand surface"
+        "$description": "17.48:1 · focus ring, deepest brand tone"
       },
       "red": {
         "$type": "color",
-        "$value": "#D62027",
-        "$description": "5.13:1 · secondary button. NOT a problem signal."
+        "$value": "#DB1217",
+        "$description": "5.11:1 · secondary button. NOT a problem signal."
       }
     },
     "state": {
@@ -123,6 +123,39 @@
       },
       "$description": "Severity is a SEPARATE family from state (ADR-0002). Every use carries mark + shape + label — circle / triangle / square / dashed ring. A bare coloured dot is not acceptable anywhere, including charts. There is NO solid-filled severity badge: no foreground clears 4.5:1 across all four marks. Use a 10% tint with the -text foreground and a hairline border in the mark colour."
     },
+    "chart": {
+      "1": {
+        "$type": "color",
+        "$value": "#0168B2",
+        "$description": "azure · 5.79:1 on page · 4.39:1 on sunken"
+      },
+      "2": {
+        "$type": "color",
+        "$value": "#4F331A",
+        "$description": "brown · 11.53:1 · the only warm; carries CVD"
+      },
+      "3": {
+        "$type": "color",
+        "$value": "#D72175",
+        "$description": "magenta · 4.81:1 · 19.8 ΔE from critical mark"
+      },
+      "4": {
+        "$type": "color",
+        "$value": "#A745E2",
+        "$description": "violet · 4.57:1 · 3.46:1 on sunken, the floor"
+      },
+      "5": {
+        "$type": "color",
+        "$value": "#2F2A9E",
+        "$description": "indigo · 10.79:1"
+      },
+      "6": {
+        "$type": "color",
+        "$value": "#752766",
+        "$description": "plum · 9.38:1"
+      },
+      "$description": "Series IDENTITY, never status (ADR-0011). There is deliberately no green, no orange and no teal in this ramp: those hues belong to severity and to the eco channel, and a green line reads as \"healthy\" rather than as \"series 2\". The ramp is ORDERED — 1-2-3 is the only triple guaranteed on colour alone, and the guarantee weakens at 4, 5 and 6. Colour is never the only channel: pair index N with a dash pattern and a point marker, as the actual-vs-baseline chart already does. Never draw a severity in these colours, and never draw a series in the severity colours."
+    },
     "neutral": {
       "black-1": {
         "$type": "color",
@@ -175,22 +208,22 @@
       "default": {
         "$type": "color",
         "$value": "#FFFFFF",
-        "$description": "17.48:1"
+        "$description": "16.61:1"
       },
       "muted": {
         "$type": "color",
         "$value": "#919191",
-        "$description": "5.55:1 · labels, meta"
+        "$description": "5.27:1 · labels, meta"
       },
       "eco": {
         "$type": "color",
         "$value": "#00A0B1",
-        "$description": "5.55:1 · carbon value"
+        "$description": "5.27:1 · carbon value"
       },
       "border": {
         "$type": "color",
         "$value": "#707070",
-        "$description": "3.53:1 · hairlines"
+        "$description": "3.35:1 · hairlines"
       }
     }
   },
@@ -209,8 +242,8 @@
     },
     "inverse": {
       "$type": "color",
-      "$value": "#0B1933",
-      "$description": "ADR-0005 · hero only"
+      "$value": "#0B1B48",
+      "$description": "ADR-0005 · hero only · ADR-0009"
     }
   },
   "typography": {
@@ -404,8 +437,7 @@
   "layout": {
     "target-min": {
       "$type": "dimension",
-      "$value": "44px",
-      "$description": "--- Grid · D7 §8 · margins and gutters fixed, columns flex --------------"
+      "$value": "44px"
     },
     "grid-margin-mobile": {
       "$type": "dimension",
@@ -449,6 +481,21 @@
       "$value": "85rem",
       "$description": "1360px, centred above 1440px"
     }
+  },
+  "icon": {
+    "strokeWidth": {
+      "$type": "dimension",
+      "$value": "2px",
+      "$description": "Lucide AND the twelve part glyphs. Never a prop."
+    }
+  },
+  "chart": {
+    "strokeWidth": {
+      "$type": "number",
+      "$value": 0.6,
+      "$description": "series line + baseline + legend swatch"
+    },
+    "$description": "Chart geometry in USER UNITS of the shared 100 × 30 plot viewBox, not pixels (ADR-0013). Every series line in the product — the actual-vs-baseline pair and the six categorical slots — uses this one weight, and the dash patterns that carry series identity alongside colour are tuned against it."
   },
   "$description": "Generated from src/design-system/tokens.css by tools/export-figma-tokens.mjs. DO NOT EDIT IN FIGMA — edit the CSS and re-export, or the two drift and you recreate D8 finding F-06. Changing a token requires an ADR."
 }

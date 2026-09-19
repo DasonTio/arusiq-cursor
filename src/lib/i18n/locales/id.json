@@ -28,7 +28,499 @@
     "reminder": "Pengingat",
     "setpointRaised": "Suhu minimum dinaikkan",
     "ecoLockLimitedHours": "Mode Eco dan jam terbatas",
-    "stop": "Layanan dihentikan"
+    "stop": "Layanan dihentikan",
+    "reason": {
+      "overdue": "Ada tagihan yang jatuh tempo"
+    },
+    "healthSensitive": {
+      "evidence": {
+        "infant": "Seorang bayi berusia di bawah dua tahun tinggal di ruang ini; surat dokter anak tersimpan dalam berkas.",
+        "clinicalUse": "Ruang ini digunakan untuk pemeriksaan kesehatan kerja dan menyimpan persediaan berpendingin."
+      }
+    },
+    "request": {
+      "review": "Tinjau permintaan ini",
+      "evidence": {
+        "noticesDelivered": "Pemberitahuan telah terkirim dan dibuka; saldo tidak berubah.",
+        "graceElapsed": "Masa tenggang pada langkah di bawahnya telah habis.",
+        "ladderExhausted": "Semua langkah di bawahnya telah diterapkan dan saldo tidak berubah."
+      }
+    },
+    "decline": {
+      "reason": {
+        "paymentArranged": "Kesepakatan pembayaran dibuat sebelum langkah ini diterapkan.",
+        "balanceSettled": "Tagihan sudah dilunasi sejak itu.",
+        "evidenceInsufficient": "Bukti belum mendukung langkah ini.",
+        "healthRisk": "Ada risiko kesehatan penghuni yang perlu diperiksa lebih dulu."
+      }
+    },
+    "reject": {
+      "notInScope": "Permintaan ini bukan wewenang Anda untuk diputuskan.",
+      "alreadyDecided": "Permintaan ini sudah diputuskan.",
+      "healthSensitiveStop": "Pendinginan tidak dapat dihentikan di ruang peka kesehatan. Setujui langkah yang lebih rendah.",
+      "notNextRung": "Langkah diterapkan satu per satu. Setujui langkah tepat di atas langkah yang sedang berlaku.",
+      "signOffRequired": "Penghentian layanan memerlukan persetujuan manajemen atas nama tertentu, selain persetujuan Anda.",
+      "declineNeedsReason": "Sebutkan alasan penolakan, agar catatannya menjelaskan dirinya sendiri."
+    }
+  },
+  "restrictionReason": {
+    "invoiceOverdue": "Ada tagihan yang jatuh tempo"
+  },
+  "billing": {
+    "pay": "Bayar tagihan ini"
+  },
+  "partGroup": {
+    "indoor": "Dalam ruangan",
+    "outdoor": "Luar ruangan",
+    "electrical": "Kelistrikan"
+  },
+  "part": {
+    "air-filter": "Filter udara",
+    "evaporator-coil": "Koil evaporator",
+    "blower-motor-fan": "Motor blower dan kipas",
+    "condensate-drain-pan": "Saluran dan bak kondensat",
+    "vents-louvers": "Ventilasi dan kisi",
+    "condenser-coil": "Koil kondensor",
+    "compressor": "Kompresor",
+    "condenser-fan-blades": "Bilah kipas kondensor",
+    "refrigerant-lines": "Saluran refrigeran",
+    "thermostat-sensors": "Termostat dan sensor",
+    "capacitor-contactor": "Kapasitor dan kontaktor",
+    "electrical-wiring": "Pengkabelan listrik"
+  },
+  "floor": {
+    "ground": "Lantai dasar",
+    "first": "Lantai satu"
+  },
+  "sensor": {
+    "temperatureC": "Suhu",
+    "humidityPct": "Kelembapan",
+    "powerW": "Daya",
+    "energyTodayKWh": "Energi hari ini",
+    "co2Ppm": "CO₂ dalam ruangan",
+    "pm25": "PM2.5"
+  },
+  "weekday": {
+    "monday": "Senin",
+    "tuesday": "Selasa",
+    "wednesday": "Rabu",
+    "thursday": "Kamis",
+    "friday": "Jumat",
+    "saturday": "Sabtu",
+    "sunday": "Minggu"
+  },
+  "controlMode": {
+    "cool": "Dingin",
+    "fan": "Kipas",
+    "eco": "Eco",
+    "off": "Mati"
+  },
+  "fanSpeed": {
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "auto": "Otomatis"
+  },
+  "category": {
+    "home": "Rumah",
+    "office": "Kantor"
+  },
+  "comfort": {
+    "comfortable": "Nyaman",
+    "tooWarm": "Terlalu hangat",
+    "tooCool": "Terlalu dingin",
+    "tooHumid": "Terlalu lembap",
+    "tooDry": "Terlalu kering",
+    "unknown": "Kenyamanan tidak diketahui"
+  },
+  "severityRollUp": {
+    "contributing": "{{count}} dari {{total}} membutuhkan perhatian"
+  },
+  "alert": {
+    "filter": {
+      "title": "Filter udara kemungkinan perlu dibersihkan",
+      "cause": "Penurunan tekanan di filter meningkat",
+      "impact": "Unit akan memakai lebih banyak energi dan mendinginkan kurang merata",
+      "action": "Ajukan kunjungan filter"
+    },
+    "compressor": {
+      "title": "Arus kompresor terlalu tinggi",
+      "cause": "Beban listrik di atas envelope kerja",
+      "impact": "Kompresor dapat rusak jika ini berlanjut",
+      "action": "Buka peringatan dapur"
+    },
+    "tamper": {
+      "title": "Kemungkinan gangguan perangkat",
+      "cause": "Detak modul dalam ruangan terputus",
+      "impact": "Pembacaan unit ini tidak dapat dipercaya sebelum diperiksa",
+      "action": "Tinjau unit ruang kerja"
+    },
+    "offline": {
+      "title": "Unit kamar tidur belum melapor",
+      "cause": "Tidak ada detak dalam jendela kesegaran data",
+      "impact": "Kenyamanan ruangan ini tidak diketahui",
+      "action": "Lihat unit yang senyap"
+    },
+    "viewHistory": "Lihat pekerjaan yang selesai",
+    "dataQuality": {
+      "offline": {
+        "title": "Unit ini belum melapor",
+        "cause": "Tidak ada detak dalam jendela kesegaran data"
+      },
+      "stale": {
+        "title": "Unit ini terlambat melapor",
+        "cause": "Pembacaan terakhir lebih lama dari jendela kesegaran data"
+      },
+      "impact": "Kenyamanan dan status peralatan di sini tidak diketahui",
+      "action": "Buka unit yang senyap"
+    },
+    "payment": {
+      "title": "Ada tagihan yang jatuh tempo",
+      "cause": "Akun telah melewati tanggal jatuh tempo",
+      "impact": "Pembatasan dapat naik ke langkah berikutnya saat masa tenggang berakhir",
+      "action": "Buka penagihan"
+    },
+    "fault": {
+      "air-filter": {
+        "title": "Filter udara kemungkinan perlu dibersihkan",
+        "cause": "Penurunan tekanan di filter meningkat",
+        "impact": "Unit akan memakai lebih banyak energi dan mendinginkan kurang merata",
+        "action": "Ajukan kunjungan filter"
+      },
+      "evaporator-coil": {
+        "title": "Koil evaporator menyimpang",
+        "cause": "Suhu pendekatan meningkat",
+        "impact": "Pendinginan akan menjadi tidak merata",
+        "action": "Buka peringatan koil"
+      },
+      "blower-motor-fan": {
+        "title": "Arus blower dalam ruangan tinggi",
+        "cause": "Beban listrik blower di atas envelope kerja",
+        "impact": "Aliran udara dapat turun jika ini berlanjut",
+        "action": "Buka peringatan blower"
+      },
+      "condensate-drain-pan": {
+        "title": "Level bak kondensat tinggi",
+        "cause": "Air terkumpul lebih cepat daripada mengalir",
+        "impact": "Luapan dapat merusak ruangan",
+        "action": "Buka peringatan saluran"
+      },
+      "vents-louvers": {
+        "title": "Aliran udara pasokan rendah",
+        "cause": "Aliran udara terukur di bawah envelope kerja",
+        "impact": "Ruangan tidak akan menahan setpoint",
+        "action": "Buka peringatan aliran udara"
+      },
+      "condenser-coil": {
+        "title": "Koil luar ruangan terlalu panas",
+        "cause": "Suhu buang versus lingkungan meningkat",
+        "impact": "Efisiensi akan turun dan kompresor bekerja lebih keras",
+        "action": "Buka peringatan koil luar"
+      },
+      "compressor": {
+        "title": "Arus kompresor terlalu tinggi",
+        "cause": "Beban listrik di atas envelope kerja",
+        "impact": "Kompresor dapat rusak jika ini berlanjut",
+        "action": "Buka peringatan kompresor"
+      },
+      "condenser-fan-blades": {
+        "title": "Kipas luar tidak seimbang",
+        "cause": "Getaran kipas kondensor meningkat",
+        "impact": "Kipas dapat rusak dan pembuangan panas akan turun",
+        "action": "Buka peringatan kipas"
+      },
+      "refrigerant-lines": {
+        "title": "Muatan refrigeran tampak rendah",
+        "cause": "Superheat turun di bawah envelope kerja",
+        "impact": "Kompresor dapat rusak jika ini berlanjut",
+        "action": "Buka peringatan refrigeran"
+      },
+      "thermostat-sensors": {
+        "title": "Sensor ruangan tidak sependapat",
+        "cause": "Saluran termostat telah menyimpang",
+        "impact": "Kendali setpoint tidak akan andal",
+        "action": "Buka peringatan sensor"
+      },
+      "capacitor-contactor": {
+        "title": "Arus start tinggi",
+        "cause": "Kapasitor atau kontaktor di luar envelope",
+        "impact": "Unit mungkin gagal menyala",
+        "action": "Buka peringatan kelistrikan"
+      },
+      "electrical-wiring": {
+        "title": "Tegangan pasokan turun",
+        "cause": "Tegangan terukur di bawah envelope kerja",
+        "impact": "Kompresor dapat macet",
+        "action": "Buka peringatan pengkabelan"
+      }
+    }
+  },
+  "attention": {
+    "payment": {
+      "title": "Ada tagihan yang perlu dibayar",
+      "body": "Pembatasan dapat naik ke langkah berikutnya saat masa tenggang berakhir.",
+      "action": "Buka penagihan"
+    },
+    "restriction": {
+      "title": "Pendinginan dibatasi pada akun ini",
+      "body": "Ruang peka kesehatan tidak dapat dihentikan.",
+      "action": "Lihat pembatasan"
+    },
+    "visit": {
+      "title": "Kunjungan teknisi membutuhkan Anda",
+      "body": "Buka kunjungan untuk melihat temuan dan langkah berikutnya.",
+      "action": "Lihat kunjungan"
+    }
+  },
+  "maintenance": {
+    "filterService": {
+      "title": "Layanan filter"
+    },
+    "repair": {
+      "title": "Kunjungan perbaikan"
+    },
+    "preventiveVisit": {
+      "title": "Kunjungan pencegahan"
+    },
+    "inspection": {
+      "title": "Kunjungan inspeksi"
+    },
+    "contractRenewal": {
+      "title": "Perpanjangan kontrak"
+    },
+    "warrantyExpiry": {
+      "title": "Berakhirnya garansi"
+    },
+    "open": "Buka di Akun",
+    "completed": {
+      "action": "Lihat pekerjaan selesai"
+    },
+    "inProgress": {
+      "action": "Lihat pekerjaan berlangsung"
+    },
+    "scheduled": {
+      "action": "Lihat kunjungan"
+    },
+    "overdue": {
+      "action": "Lihat kunjungan terlambat"
+    },
+    "proposed": {
+      "action": "Tinjau usulan"
+    }
+  },
+  "workOrder": {
+    "state": {
+      "dispatched": "Dikirim",
+      "accepted": "Diterima",
+      "inProgress": "Sedang dikerjakan",
+      "awaitingVerification": "Menunggu verifikasi",
+      "closed": "Ditutup",
+      "reopened": "Dibuka kembali — bacaan tidak membaik",
+      "escalated": "Dieskalasi"
+    },
+    "priority": {
+      "urgent": "Mendesak",
+      "high": "Tinggi",
+      "routine": "Rutin"
+    },
+    "origin": {
+      "prediction": "Dari prediksi",
+      "clientRequest": "Diminta rumah tangga",
+      "preventiveSchedule": "Jadwal pencegahan",
+      "tamper": "Kemungkinan gangguan"
+    },
+    "brief": {
+      "prediction": "Prediksi kerusakan menjadi alasan kunjungan ini. Perlakukan sebagai diduga sampai Anda mencatat putusan.",
+      "clientRequest": "Rumah tangga meminta kunjungan ini.",
+      "preventiveSchedule": "Kunjungan pencegahan terjadwal. Mungkin tidak ada satu bagian yang gagal.",
+      "tamper": "Kemungkinan gangguan — bacaan tidak dapat dipercaya sampai enclosure diperiksa."
+    },
+    "result": {
+      "pending": "Belum dicatat",
+      "pass": "Lulus",
+      "fail": "Gagal",
+      "notApplicable": "Tidak berlaku"
+    },
+    "verdict": {
+      "confirmed": "Kerusakan dikonfirmasi",
+      "notConfirmed": "Tidak dikonfirmasi",
+      "sensorFault": "Sensor rusak",
+      "dataQualityIssue": "Masalah mutu data"
+    },
+    "outcome": {
+      "repaired": "Diperbaiki",
+      "noFaultFound": "Tidak ada kerusakan",
+      "escalated": "Eskalasi"
+    },
+    "clientConfirmation": {
+      "notRequested": "Konfirmasi klien tidak diminta",
+      "requested": "Menunggu rumah tangga mengonfirmasi perbaikan",
+      "confirmed": "Rumah tangga mengonfirmasi perbaikan",
+      "disputed": "Rumah tangga menyanggah perbaikan"
+    },
+    "verificationState": {
+      "scheduled": "Pemeriksaan dijadwalkan",
+      "passed": "Pemeriksaan lulus",
+      "failed": "Pemeriksaan gagal — perintah dibuka kembali",
+      "inconclusive": "Pemeriksaan tidak meyakinkan — unit tidak melapor"
+    },
+    "verification": {
+      "scheduled": {
+        "note": "Unit akan dibaca setelah jendela kunjungan.",
+        "reason": "Verifikasi masih jatuh tempo."
+      },
+      "passed": {
+        "note": "Unit kini membaca di dalam batasnya.",
+        "reason": "Pemeriksaan pasca-layanan lulus."
+      },
+      "failed": {
+        "note": "Unit masih membaca di luar batasnya.",
+        "reason": "Pemeriksaan pasca-layanan gagal; perintah dibuka kembali."
+      },
+      "inconclusive": {
+        "note": "Unit tidak melapor, jadi pemeriksaan tidak dapat lulus.",
+        "reason": "Pemeriksaan pasca-layanan tidak meyakinkan."
+      },
+      "notApplicable": {
+        "escalated": "Tidak ada pemeriksaan pasca-layanan — kunjungan dieskalasi.",
+        "site": "Tidak ada satu unit untuk diukur ulang pada kunjungan lokasi ini."
+      }
+    },
+    "dataQuality": {
+      "reporting": "Unit sedang melapor.",
+      "notReporting": "Unit tidak melapor. Abu-abu bukan lulus."
+    },
+    "access": {
+      "healthSensitive": "Ruang ini peka kesehatan.",
+      "restricted": "Pembatasan pendinginan berlaku pada unit ini."
+    },
+    "action": {
+      "track": "Lacak kunjungan ini",
+      "dispatch": "Buka di papan",
+      "view": "Buka catatan",
+      "perform": "Kerjakan kunjungan ini"
+    },
+    "finding": {
+      "confirmed": {
+        "note": "Bagian yang diduga dikonfirmasi di lokasi."
+      },
+      "notConfirmed": {
+        "note": "Kerusakan yang diprediksi tidak ditemukan."
+      },
+      "sensorFault": {
+        "note": "Pengukuran salah; bagiannya tidak rusak."
+      },
+      "dataQualityIssue": {
+        "note": "Unit tidak terlihat cukup jelas untuk menilai bagiannya."
+      }
+    },
+    "closure": {
+      "repaired": {
+        "summary": "Perbaikan dicatat. Unit masih harus membuktikan perbaikannya."
+      },
+      "noFaultFound": {
+        "summary": "Tidak ada kerusakan. Unit masih harus membuktikan bacaannya."
+      },
+      "escalated": {
+        "summary": "Dieskalasi ke spesialis."
+      }
+    },
+    "escalation": {
+      "specialistRequired": "Diperlukan spesialis.",
+      "unitUnreachable": "Unit tidak dapat dijangkau."
+    },
+    "reject": {
+      "notInScope": "Kunjungan ini bukan tugas Anda.",
+      "alreadyClosed": "Kunjungan ini sudah diselesaikan.",
+      "unknownItem": "Langkah daftar periksa itu tidak ada pada kunjungan ini.",
+      "checklistIncomplete": "Catat setiap langkah daftar periksa sebelum menutup.",
+      "itemFailed": "Langkah yang gagal tidak dapat ditutup; eskalasi atau ukur ulang.",
+      "findingRequired": "Catat temuan sebelum menutup.",
+      "notClosed": "Pemeriksaan pasca-layanan berjalan setelah penutupan dikirim."
+    },
+    "note": {
+      "unitNotReporting": "Tidak diukur — unit tidak melapor."
+    },
+    "photo": {
+      "afterService": "Foto setelah layanan",
+      "air-filter": "Foto filter udara",
+      "evaporator-coil": "Foto koil evaporator",
+      "blower-motor-fan": "Foto blower",
+      "condensate-drain-pan": "Foto bak drainase",
+      "vents-louvers": "Foto ventilasi",
+      "condenser-coil": "Foto koil kondensor",
+      "compressor": "Foto kompresor",
+      "condenser-fan-blades": "Foto kipas kondensor",
+      "refrigerant-lines": "Foto saluran refrigeran",
+      "thermostat-sensors": "Foto sensor",
+      "capacitor-contactor": "Foto kontaktor",
+      "electrical-wiring": "Foto pengkabelan"
+    },
+    "part": {
+      "FLT-A12": "Kartrid filter FLT-A12",
+      "COIL-CLN-05": "Kit pembersih koil COIL-CLN-05",
+      "SNS-RT-02": "Sensor SNS-RT-02"
+    }
+  },
+  "signal": {
+    "air-filter": {
+      "pressureDrop": "Penurunan tekanan filter",
+      "runHours": "Jam operasi filter"
+    },
+    "evaporator-coil": {
+      "approachTemp": "Suhu pendekatan koil",
+      "frost": "Menit beku"
+    },
+    "blower-motor-fan": {
+      "current": "Arus blower",
+      "vibration": "Getaran blower"
+    },
+    "condensate-drain-pan": {
+      "level": "Level bak",
+      "overflow": "Peristiwa luapan"
+    },
+    "vents-louvers": {
+      "airflow": "Aliran udara pasokan",
+      "actuator": "Gangguan kisi"
+    },
+    "condenser-coil": {
+      "dischargeVsAmbient": "Buang versus lingkungan"
+    },
+    "compressor": {
+      "current": "Arus kompresor",
+      "cycling": "Start kompresor",
+      "vibration": "Getaran kompresor"
+    },
+    "condenser-fan-blades": {
+      "current": "Arus kipas luar",
+      "imbalance": "Ketidakseimbangan kipas"
+    },
+    "refrigerant-lines": {
+      "superheat": "Superheat",
+      "subcooling": "Subcooling",
+      "subcoolingTrend": "Tren subcooling"
+    },
+    "thermostat-sensors": {
+      "drift": "Pergeseran sensor",
+      "disagreement": "Perbedaan sensor"
+    },
+    "capacitor-contactor": {
+      "startCurrent": "Arus start",
+      "chatter": "Getaran kontaktor"
+    },
+    "electrical-wiring": {
+      "voltageSag": "Tegangan pasokan",
+      "harmonics": "Harmonisa"
+    },
+    "device": {
+      "heartbeatGap": "Jeda detak",
+      "lastHeartbeat": "Detak terakhir",
+      "minutesSinceReport": "Menit sejak laporan terakhir",
+      "enclosureOpened": "Penutup dibuka"
+    },
+    "account": {
+      "balance": "Saldo tertunggak"
+    }
   },
   "loadState": {
     "loading": "Memuat",
@@ -42,5 +534,871 @@
     "save": "Simpan",
     "cancel": "Batal",
     "language": "Bahasa"
+  },
+  "language": {
+    "en": "English",
+    "id": "Bahasa Indonesia"
+  },
+  "roles": {
+    "client": "Rumah tangga",
+    "technician-internal": "Teknisi",
+    "technician-thirdparty": "Teknisi mitra",
+    "admin": "Kantor pusat"
+  },
+  "shell": {
+    "mock": "Prototipe simulasi — angka berlabel Simulasi. Ini bukan sistem hidup.",
+    "skip": "Lewati ke konten",
+    "primaryNav": "Utama",
+    "views": "Tampilan",
+    "search": "Cari",
+    "assistant": "Asisten",
+    "profile": "Profil",
+    "signOut": "Keluar",
+    "continueOnDesktop": "Tampilan ini hanya-baca di telepon. Lanjutkan di desktop.",
+    "notAvailable": {
+      "title": "Tidak tersedia untuk peran Anda",
+      "body": "Layar itu di luar akses Anda. Kembali ke dasbor Anda sendiri.",
+      "back": "Kembali ke dasbor saya"
+    }
+  },
+  "nav": {
+    "client": {
+      "home": "Beranda",
+      "spaces": "Ruang",
+      "alerts": "Peringatan",
+      "insights": "Wawasan",
+      "account": "Akun",
+      "energy": "Energi & biaya",
+      "carbon": "Karbon",
+      "billing": "Tagihan & pemberitahuan",
+      "service": "Layanan & kunjungan",
+      "profile": "Preferensi"
+    },
+    "tech": {
+      "work": "Kerja",
+      "map": "Peta",
+      "me": "Saya"
+    },
+    "admin": {
+      "overview": "Ringkasan",
+      "decisions": "Keputusan dibutuhkan",
+      "events": "Peristiwa",
+      "fleet": "Armada",
+      "explorer": "Penjelajah",
+      "service": "Layanan",
+      "board": "Papan",
+      "accounts": "Akun",
+      "payments": "Pembayaran",
+      "reporting": "Pelaporan",
+      "energy": "Portofolio energi",
+      "packages": "Paket & ekspor",
+      "settings": "Pengaturan",
+      "audit": "Log audit"
+    }
+  },
+  "auth": {
+    "sign-in": {
+      "title": "Masuk",
+      "lead": "Gunakan email atau telepon, atau buka akun demo yang sudah disiapkan.",
+      "identifier": "Email atau telepon",
+      "identifierHelp": "Kolom yang sama menerima keduanya.",
+      "password": "Kata sandi",
+      "submit": "Masuk",
+      "forgot": "Lupa kata sandi",
+      "invalid": "Data itu tidak cocok. Coba lagi.",
+      "locked": "Terlalu banyak percobaan. Coba lagi dalam {{minutes}} menit.",
+      "demoTitle": "Akun demo — satu ketukan",
+      "demo": {
+        "client": "Demo rumah tangga",
+        "technician-internal": "Demo teknisi",
+        "technician-thirdparty": "Demo teknisi mitra",
+        "admin": "Demo kantor pusat"
+      },
+      "empty": "Belum ada apa pun di sini",
+      "error": "Tidak dapat memuat"
+    },
+    "forgot-password": {
+      "title": "Lupa kata sandi",
+      "lead": "Pilih saluran. Kami mengirim kode berbatas waktu jika akun ada. Konfirmasinya sama dalam kedua kasus.",
+      "identifier": "Email atau telepon",
+      "channel": "Cara mengirimnya",
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "submit": "Kirim kode",
+      "confirm": "Jika ada akun yang cocok, kode sedang dikirim. Berlaku 15 menit.",
+      "policy": "Kata sandi baru minimal 8 karakter.",
+      "back": "Kembali ke masuk",
+      "mock": "Atur ulang kata sandi disimulasikan. Tidak ada pesan yang dikirim."
+    }
+  },
+  "shared": {
+    "profile": {
+      "title": "Profil",
+      "signOutThis": "Keluar dari perangkat ini",
+      "signOutAll": "Keluar dari semua perangkat",
+      "empty": "Belum ada apa pun di sini",
+      "error": "Tidak dapat memuat"
+    },
+    "search": {
+      "title": "Cari",
+      "purpose": "Unit, ruang, dan kunjungan dalam akses Anda. Ketik nama untuk melewati pohon.",
+      "empty": "Tidak ada yang cocok dalam akses Anda.",
+      "error": "Pencarian tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat pencarian",
+      "query": "Cari",
+      "units": "Unit",
+      "spaces": "Ruang",
+      "visits": "Kunjungan",
+      "noMatch": "Tidak ada yang cocok dengan nama itu."
+    },
+    "assistant": {
+      "title": "Asisten",
+      "purpose": "Tanya dengan teks. Suara dipratinjau sebagai transkrip. Tidak ada yang dijalankan sebelum Anda konfirmasi.",
+      "empty": "Belum ada apa pun di sini",
+      "error": "Tidak dapat memuat",
+      "prompt": "Pertanyaan Anda",
+      "send": "Kirim",
+      "voice": "Suara (simulasi)",
+      "voiceMock": "Rekaman suara disimulasikan. Ketik saja.",
+      "confirm": "Konfirmasi tindakan ini",
+      "cancel": "Jangan jalankan",
+      "mock": "Asisten disimulasikan. Ia tidak mengubah unit atau kunjungan.",
+      "reply": "Saya dapat membuka Peringatan atau Kerja setelah Anda konfirmasi. Saya tidak akan mengirim perintah sendiri."
+    },
+    "space": {
+      "back": "Semua ruang",
+      "location": "{{property}} · {{floor}}",
+      "comfortTitle": "Kenyamanan",
+      "airTitle": "Udara dalam ruangan",
+      "notFitted": "{{sensor}} tidak terpasang di ruang ini.",
+      "ventilation": "CO₂ dalam ruangan dalam ppm menjelaskan kesegaran udara. Ini bukan angka emisi.",
+      "healthTitle": "Ruang sensitif kesehatan",
+      "healthBody": "Penghentian layanan tidak tersedia di sini. Langkah pembatasan lain tetap mengikuti pemberitahuan, masa tenggang, dan persetujuan ganda.",
+      "equipmentTitle": "Peralatan",
+      "unitsTitle": "Unit yang melayani ruang ini",
+      "openUnit": "Buka unit"
+    },
+    "serviceRequest": {
+      "title": "Minta kunjungan layanan",
+      "purpose": "Peringatan sumber dan unit telah diisi. Pilih detail kunjungan sebelum mengirim simulasi ini.",
+      "loading": "Memuat permintaan",
+      "error": "Permintaan ini tidak dapat disiapkan.",
+      "back": "Kembali ke peringatan",
+      "visitType": "Jenis kunjungan",
+      "type": {
+        "inspection": "Inspeksi",
+        "repair": "Perbaikan",
+        "filter": "Servis filter"
+      },
+      "slot": "Waktu pilihan",
+      "slotValue": {
+        "morning": "Pagi",
+        "afternoon": "Siang",
+        "flexible": "Fleksibel"
+      },
+      "contact": "Kanal kontak",
+      "contactValue": {
+        "whatsapp": "WhatsApp",
+        "phone": "Telepon",
+        "email": "Email"
+      },
+      "photoMock": "Lampiran foto disimulasikan. Tidak ada berkas yang diunggah.",
+      "photoBody": "Anda dapat melihat pratinjau tempat foto pendukung akan dilampirkan.",
+      "submit": "Kirim permintaan tersimulasi",
+      "submitted": "Permintaan simulasi Anda siap dilacak.",
+      "track": "Lacak kunjungan"
+    },
+    "pay": {
+      "title": "Bayar tagihan ini",
+      "purpose": "Pilih metode pengalihan. Tidak ada pembayaran nyata yang akan ditagih.",
+      "back": "Kembali ke tagihan",
+      "amount": "Jumlah terutang",
+      "mock": "Penagihan pembayaran disimulasikan. Tidak ada pembayaran nyata yang akan ditagih.",
+      "method": "Metode pembayaran",
+      "methodValue": {
+        "card": "Kartu",
+        "virtualAccount": "Rekening virtual",
+        "ewallet": "Dompet digital"
+      },
+      "choose": "Pilih metode pembayaran untuk melanjutkan.",
+      "confirm": "Konfirmasi pembayaran simulasi",
+      "submitted": "Permintaan pemulihan dikirim — menunggu verifikasi perangkat.",
+      "pending": "Pembatasan tetap berlaku sampai verifikasi.",
+      "return": "Kembali ke tagihan"
+    },
+    "assign": {
+      "title": "Tugaskan kunjungan ini",
+      "purpose": "Pilih teknisi dalam cakupan dan jendela kedatangan. Penugasan ini hanya ada dalam sesi prototipe ini.",
+      "back": "Kembali ke papan layanan",
+      "unassigned": "Memerlukan penugasan",
+      "technician": "Teknisi",
+      "thirdParty": "Akses pihak ketiga akan dibatasi pada unit yang ditugaskan dan perintah kerja ini.",
+      "window": "Jendela kedatangan",
+      "windowValue": {
+        "morning": "Pagi",
+        "afternoon": "Siang"
+      },
+      "sla": "Penanganan SLA",
+      "slaValue": {
+        "keep": "Pertahankan SLA saat ini",
+        "expedite": "Percepat"
+      },
+      "notificationMock": "Notifikasi penugasan disimulasikan. Tidak ada pesan yang dikirim.",
+      "notificationBody": "Penerima tugas hanya akan melihat ringkasan, bukti, dan unit yang ditugaskan.",
+      "confirm": "Konfirmasi penugasan simulasi",
+      "submitted": "{{name}} ditugaskan dalam sesi prototipe ini.",
+      "return": "Kembali ke papan layanan"
+    },
+    "method": {
+      "title": "Cara angka ini dibuat",
+      "purpose": "Setiap angka penghematan dan emisi di Wawasan menaut ke sini. Metode, tarif, dan faktor jaringan ditampilkan, bukan disembunyikan.",
+      "model": "Garis dasar yang disesuaikan {{id}}",
+      "version": "Versi {{version}}",
+      "tariffTitle": "Tabel tarif",
+      "tariffLine": "{{value}} per kilowatt-jam · {{source}} · dari {{date}}",
+      "gridTitle": "Faktor jaringan",
+      "gridLine": "{{value}} kgCO₂e per kilowatt-jam · {{source}} · dari {{date}}",
+      "provenanceTitle": "Arti label",
+      "glossaryTitle": "CO₂ dalam ruangan dan emisi bukan kuantitas yang sama",
+      "glossaryPpm": "CO₂ dalam ruangan dalam ppm adalah kesegaran udara. Tempatnya di ruang, tidak pernah di halaman ini.",
+      "glossaryEmissions": "kgCO₂e adalah emisi listrik. Tempatnya di Wawasan → Karbon, tidak pernah di samping udara dalam ruangan.",
+      "back": "Kembali ke energi"
+    },
+    "unit": {
+      "title": "Unit",
+      "empty": "Unit itu di luar akses Anda.",
+      "emptyAction": "Kembali ke ruang",
+      "error": "Unit ini tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat unit",
+      "back": "Semua ruang",
+      "now": "Saat ini",
+      "health": "Kesehatan",
+      "control": "Kendali",
+      "schedule": "Jadwal",
+      "energy": "Energi",
+      "history": "Riwayat",
+      "brand": "Unit dalam ruangan",
+      "identity": "Unit dalam ruangan · {{brand}}",
+      "currentSummary": "{{mode}} · {{setpoint}} °C · {{fan}}",
+      "changeSummary": "{{mode}} · {{setpoint}} °C",
+      "commandLine": "Perintah terakhir: {{state}}",
+      "labelledValue": "{{label}}: {{value}}",
+      "restrictionApproval": "{{requester}} · {{approver}} · {{time}}",
+      "absentSensor": "{{status}} · {{sensor}}",
+      "online": "Sedang melapor",
+      "offline": "Tidak melapor",
+      "tamper": "Kemungkinan gangguan — pembacaan tidak dapat dipercaya sebelum diperiksa",
+      "maintenanceMode": "Teknisi sedang di lokasi. Peringatan dijeda; pembacaan tetap abu-abu.",
+      "restrictionTitle": "Pembatasan pendinginan berlaku",
+      "restrictionGrace": "Masa tenggang berakhir {{time}}",
+      "restrictionHealth": "Ruang ini peka kesehatan, jadi layanan tidak dapat dihentikan.",
+      "pay": "Buka penagihan",
+      "absent": "Tidak terpasang",
+      "airTitle": "Udara dalam ruangan",
+      "emissionsTitle": "Emisi yang dihindari",
+      "partsTitle": "Dua belas bagian yang dipantau",
+      "suspected": "Diduga sampai putusan teknisi",
+      "confirmed": "Dikonfirmasi oleh pengukuran",
+      "partAction": "Buka peringatan terkait",
+      "filterAction": "Ajukan kunjungan filter",
+      "noAlert": "Buka riwayat layanan",
+      "current": "Saat ini",
+      "target": "Diminta",
+      "confirm": "Kirim perintah",
+      "cancelChange": "Pertahankan yang sekarang",
+      "setpoint": "Setpoint",
+      "setpointHelper": "Derajat Celsius",
+      "mode": "Mode",
+      "fan": "Kipas",
+      "commandState": "Perintah terakhir",
+      "policyLimit": "Pembatasan membatasi kendali ini",
+      "scheduleLead": "Program yang berlaku minggu ini. Setiap hari memakai setpoint hidup; angka tidak ditulis dua kali.",
+      "offlineFallback": "Unit tidak terjangkau. Perintah terakhir ditahan dalam antrean dan tidak dihapus diam-diam.",
+      "sameProgramme": "{{mode}} pada {{value}} °C",
+      "energyAlt": "Aktual {{actual}} kilowatt-jam dibanding normal {{baseline}}.",
+      "methodLink": "Cara angka ini dihitung",
+      "completeness": "Kelengkapan {{value}} %",
+      "gridFactor": "Faktor jaringan {{value}} kgCO₂e/kWh · {{source}} · dari {{date}}",
+      "heroUnit": "kgCO₂e",
+      "noHistory": "Belum ada kunjungan di linimasa.",
+      "requestService": "Ajukan kunjungan",
+      "nowClimateCard": "Suhu & Kelembapan",
+      "nowControlsCard": "Kontrol",
+      "adjust": "Sesuaikan",
+      "viewEnergy": "Lihat energi",
+      "commandSteps": "Perkembangan perintah",
+      "commandFailed": "Perintah gagal — unit tidak bergerak, dan kontrol tetap pada posisinya sampai ada perintah terverifikasi.",
+      "commandQueued": "Antre — perangkat tidak dapat dijangkau. Ditahan sejak {{time}}; perintah menunggu, bukan dihapus."
+    },
+    "work-order": {
+      "title": "Perintah kerja",
+      "empty": "Kunjungan itu di luar akses Anda.",
+      "emptyAction": "Kembali ke daftar",
+      "error": "Kunjungan ini tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat kunjungan",
+      "back": "Semua kunjungan",
+      "brief": "Ringkasan",
+      "evidence": "Bukti",
+      "checklist": "Daftar periksa",
+      "findings": "Temuan",
+      "closure": "Penutupan",
+      "assigned": "Ditugaskan kepada {{name}}",
+      "unassigned": "Belum ditugaskan",
+      "sla": "Batas SLA {{time}}",
+      "suspectedBanner": "Prediksi ini tetap diduga sampai putusan teknisi.",
+      "healthSensitive": "Ruang peka kesehatan — henti layanan tidak tersedia.",
+      "openAlert": "Buka peringatan",
+      "openUnit": "Buka unit",
+      "checklistTally": "{{recorded}} dari {{total}} tercatat · {{failed}} gagal",
+      "noUnitChecklist": "Tidak ada unit pada kunjungan ini, jadi tidak ada yang diukur.",
+      "limit": "Batas",
+      "photoCaption": "Foto (tiruan): {{label}} · {{time}}",
+      "noFindings": "Belum ada temuan yang dicatat.",
+      "recordFinding": "Catat temuan",
+      "saveFinding": "Simpan temuan",
+      "downgraded": "Putusan ini menurunkan prediksi.",
+      "partUsed": "{{label}} × {{quantity}}",
+      "noClosure": "Kunjungan belum ditutup.",
+      "verification": "Pemeriksaan pasca-layanan",
+      "before": "Sebelum",
+      "after": "Sesudah",
+      "runCheck": "Baca unit sekarang",
+      "noPrediction": "Tidak ada yang memprediksi kunjungan ini.",
+      "confidence": "Keyakinan {{value}} %",
+      "projection": "Kegagalan diproyeksikan {{by}} ({{earliest}}–{{latest}})",
+      "confidenceDetail": "Keyakinan {{value}} % · berdasarkan {{signals}} sinyal selama {{days}} hari",
+      "confidenceSignals": "Keyakinan {{value}} % · berdasarkan {{signals}} sinyal",
+      "suspectedCard": "Dugaan kerusakan",
+      "ifIgnoredCard": "Jika diabaikan",
+      "startCard": "Mulai kunjungan ini",
+      "startAction": "Mulai checklist",
+      "deviceStateCard": "Status perangkat & data",
+      "reporting": "Sedang melapor",
+      "notReporting": "Tidak melapor"
+    }
+  },
+  "client": {
+    "overview": {
+      "title": "Beranda",
+      "purpose": "Kenyamanan, biaya, dan hal yang membutuhkan Anda sekarang.",
+      "heroLabel": "Emisi yang dihindari bulan ini",
+      "heroAction": "Lihat detail karbon",
+      "attentionTitle": "Membutuhkan perhatian Anda",
+      "summaryTitle": "Ringkasan hari ini",
+      "comfortableRooms": "Ruang nyaman",
+      "energyToday": "Energi hari ini",
+      "energyTodayCoverage": "{{reporting}} dari {{total}} unit melapor hari ini",
+      "savingVsNormal": "Penghematan dibanding normal",
+      "roomsTitle": "Kenyamanan per ruang",
+      "roomStatus": "{{count}} dari {{total}} unit membutuhkan perhatian",
+      "maintenanceTitle": "Linimasa layanan",
+      "openItem": "Buka",
+      "empty": "Belum ada ruang yang ditambahkan.",
+      "emptyAction": "Tambahkan ruang pertama Anda",
+      "error": "Beranda tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "noDataTitle": "Pembacaan saat ini tidak tersedia",
+      "noDataBody": "Nilai terakhir tetap terlihat bersama waktu terakhir terdeteksi.",
+      "loading": "Memuat Beranda",
+      "sparklineName": "Energi terpakai per hari bulan ini",
+      "sparklineAlt": "Aktual {{actual}} kilowatt-jam dibanding normal {{baseline}} bulan ini.",
+      "methodLink": "Cara angka ini dihitung",
+      "healthSensitive": "Ruang peka kesehatan",
+      "heroUnit": "kgCO₂e",
+      "alertsTitle": "Hal yang perlu dilihat",
+      "temperature": "Suhu",
+      "humidity": "Kelembapan",
+      "equipment": "Peralatan",
+      "absentSensors": "Tidak terpasang",
+      "comfortCount": "{{comfortable}} dari {{total}}",
+      "unknownRooms": "{{count}} ruang tanpa pembacaan saat ini",
+      "savingPercent": "{{value}} % dibanding normal",
+      "gridFactor": "Faktor jaringan {{value}} kgCO₂e/kWh · {{source}} · dari {{date}}",
+      "completeness": "Kelengkapan {{value}} %",
+      "actualSeries": "Aktual",
+      "baselineSeries": "Normal",
+      "greeting": {
+        "morning": "Selamat pagi, {{name}}",
+        "afternoon": "Selamat siang, {{name}}",
+        "evening": "Selamat malam, {{name}}"
+      },
+      "needsAttention": "Perlu perhatian",
+      "environmentNow": "Kondisi ruangan sekarang",
+      "quickActionsLabel": "Aksi cepat",
+      "quickActions": {
+        "request": "Ajukan permintaan",
+        "pay": "Bayar tagihan"
+      }
+    },
+    "spaces": {
+      "title": "Ruang",
+      "purpose": "Rumah dan kantor, digulung dari setiap unit di bawahnya.",
+      "empty": "Belum ada ruang yang ditambahkan.",
+      "emptyAction": "Kembali ke Beranda",
+      "error": "Ruang tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat ruang",
+      "open": "Buka"
+    },
+    "alerts": {
+      "title": "Peringatan",
+      "empty": "Tidak ada yang meminta perhatian Anda.",
+      "error": "Peringatan tidak dapat dimuat.",
+      "purpose": "Satu antrean untuk semua yang meminta perhatian Anda.",
+      "loading": "Memuat peringatan",
+      "retry": "Coba lagi",
+      "emptyAction": "Buka ruang saya",
+      "noDataTitle": "Kami tidak dapat melihat unit Anda",
+      "noDataBody": "Tidak ada perangkat di rumah ini yang melapor, sehingga kami tidak dapat memastikan ada masalah atau tidak.",
+      "noDataAction": "Buka ruang saya",
+      "filters": "Persempit antrean ini",
+      "spaceFilter": "Ruang",
+      "spaceAll": "Semua ruang",
+      "groupFilter": "Kelompok komponen",
+      "groupAll": "Semua komponen",
+      "clearFilters": "Hapus filter",
+      "noMatch": "Tidak ada peringatan yang cocok dengan filter ini.",
+      "state": {
+        "needsAction": "Perlu tindakan",
+        "watching": "Dalam pengawasan",
+        "resolved": "Selesai"
+      },
+      "stateEmpty": "Tidak ada apa pun di kelompok ini.",
+      "severityGroup": "{{severity}} · {{count}}",
+      "suspected": "Dugaan — menunggu penilaian teknisi",
+      "confirmed": "Terkonfirmasi oleh pengukuran",
+      "unitLine": "Unit · {{name}}",
+      "spaceLine": "Ruang · {{name}}",
+      "raised": "Dibuka {{time}}",
+      "since": "Berlanjut sejak {{time}}",
+      "duration": "Berlangsung selama {{value}}",
+      "confidence": "Keyakinan {{value}} %",
+      "limit": "Batas kerja",
+      "evidenceTitle": "Bukti",
+      "signalsTitle": "Sinyal di balik peringatan ini",
+      "causeTitle": "Kemungkinan penyebab",
+      "impactTitle": "Jika dibiarkan",
+      "actionTitle": "Tindakan yang disarankan",
+      "projection": "Kegagalan diproyeksikan {{by}} ({{earliest}}–{{latest}})",
+      "deliveryTitle": "Cara pemberitahuan ini sampai kepada Anda",
+      "deliveryLine": "{{channel}} · {{state}}",
+      "deliveryMock": "Pengiriman pemberitahuan disimulasikan. Tidak ada yang dikirim ke WhatsApp atau email dalam prototipe ini.",
+      "openDetail": "Buka peringatan ini",
+      "unitLink": "Buka unit",
+      "spaceLink": "Buka ruang",
+      "back": "Kembali ke semua peringatan",
+      "notFound": "Peringatan itu tidak ada dalam antrean ini."
+    },
+    "energy": {
+      "title": "Energi & biaya",
+      "purpose": "Daya saat ini, energi dan biaya pada tarif yang dipublikasikan, lalu penghematan terhadap garis dasar yang disesuaikan.",
+      "empty": "Tidak ada meter energi dalam akses Anda.",
+      "emptyAction": "Buka ruang saya",
+      "error": "Energi tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat energi",
+      "noDataTitle": "Kami tidak dapat melihat energi rumah ini",
+      "noDataBody": "Tidak ada laporan pada periode ini, sehingga total akan dibuat-buat.",
+      "noDataAction": "Buka ruang saya",
+      "powerNow": "Daya saat ini",
+      "energyToday": "Energi hari ini",
+      "energyMonth": "Energi periode ini",
+      "costToday": "Biaya hari ini",
+      "costMonth": "Biaya periode ini",
+      "tariff": "Tarif {{value}} per kWh · {{source}} · dari {{date}}",
+      "savingsTitle": "Penghematan versus normal",
+      "savingKwh": "Energi yang dihemat",
+      "savingIdr": "Biaya yang dihemat",
+      "savingPct": "Porsi yang dihemat",
+      "leversTitle": "Cara Anda menghemat",
+      "lever": {
+        "eco": "Mode Eco",
+        "setpoint": "Setpoint 23 °C atau lebih",
+        "schedule": "Jadwal",
+        "occupancy": "Hunian",
+        "filterCleaning": "Pembersihan filter"
+      },
+      "leverAction": {
+        "eco": "Tinjau Eco pada unit",
+        "setpoint": "Tinjau setpoint",
+        "schedule": "Buka program mingguan",
+        "occupancy": "Buka ruang",
+        "filterCleaning": "Lihat peringatan filter"
+      },
+      "byRoom": "Menurut ruang",
+      "byUnit": "Menurut unit",
+      "days7": "7 hari terakhir",
+      "days30": "30 hari terakhir",
+      "chartAlt": "Aktual {{actual}} kilowatt-jam terhadap normal {{baseline}}.",
+      "actualSeries": "Dengan ARUSIQ",
+      "baselineSeries": "Normal",
+      "methodLink": "Cara ini dihitung",
+      "completeness": "Kelengkapan {{value}} %",
+      "coverage": "{{reporting}} dari {{total}} unit melapor",
+      "unitLine": "{{name}} · {{value}} kWh"
+    },
+    "carbon": {
+      "title": "Karbon",
+      "purpose": "Emisi cakupan 2 dan emisi yang dihindari untuk periode yang sama dengan Energi. CO₂ dalam ruangan tidak ada di halaman ini.",
+      "empty": "Tidak ada angka emisi dalam akses Anda.",
+      "emptyAction": "Buka energi",
+      "error": "Karbon tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat karbon",
+      "noDataTitle": "Kami tidak dapat melihat emisi rumah ini",
+      "noDataBody": "Tanpa kilowatt-jam yang dilaporkan kami tidak akan membuat angka kilogram.",
+      "noDataAction": "Buka energi",
+      "scope2": "Cakupan 2 periode ini",
+      "avoided": "Emisi yang dihindari",
+      "gridFactor": "Faktor jaringan {{value}} kgCO₂e/kWh · {{source}} · dari {{date}}",
+      "heroUnit": "kgCO₂e",
+      "reportTitle": "Laporan sederhana",
+      "reportBody": "Periode ini memakai {{used}} kWh dan menghindari {{avoided}} kgCO₂e terhadap garis dasar yang disesuaikan.",
+      "offsetTitle": "Pratinjau offset",
+      "offsetMock": "Pensiun offset disimulasikan. Tidak ada yang dibeli atau dipensiunkan.",
+      "offsetBody": "Paket terverifikasi di masa depan dapat memensiunkan volume yang setara. Fase 1A tidak menerbitkannya.",
+      "methodLink": "Cara ini dihitung",
+      "days7": "7 hari terakhir",
+      "days30": "30 hari terakhir",
+      "completeness": "Kelengkapan {{value}} %"
+    },
+    "billing": {
+      "title": "Tagihan & pemberitahuan",
+      "purpose": "Saldo, cara membayar, pemberitahuan yang kami simulasi, dan tangga pembatasan jika sedang berlaku.",
+      "empty": "Tidak ada akun dalam akses Anda.",
+      "emptyAction": "Buka Beranda",
+      "error": "Tagihan tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat tagihan",
+      "balance": "Saldo jatuh tempo",
+      "due": "Jatuh tempo {{time}}",
+      "state": {
+        "current": "Lancar",
+        "dueSoon": "Segera jatuh tempo",
+        "overdue": "Terlambat"
+      },
+      "methodsTitle": "Cara membayar",
+      "methodVa": "Virtual account",
+      "methodQris": "QRIS",
+      "methodMock": "Penagihan disimulasikan. Tidak ada uang yang bergerak dalam prototipe ini.",
+      "instructions": "Gunakan tautan pembayaran pada pemberitahuan. Simpan nomor virtual account pada invoice.",
+      "noticesTitle": "Riwayat pemberitahuan",
+      "noticesEmpty": "Tidak ada pemberitahuan pembayaran pada akun ini.",
+      "noticesMock": "Pengiriman WhatsApp dan email disimulasikan.",
+      "restrictionTitle": "Pembatasan yang berlaku",
+      "restrictionNone": "Tidak ada pembatasan yang berlaku.",
+      "restrictionCurrent": "Langkah saat ini",
+      "restrictionChanges": "Yang berubah",
+      "restrictionRestores": "Yang memulihkan layanan",
+      "restrictionGrace": "Masa tenggang berakhir {{time}}",
+      "restrictionApprovers": "Diminta oleh {{requester}}, disetujui oleh {{approver}} pada {{time}}",
+      "restrictionBlocked": "Stop diblokir pada ruang yang sensitif kesehatan.",
+      "change": {
+        "reminder": "Pengingat ada pada akun. Pendinginan tidak berubah.",
+        "setpointRaised": "Setpoint minimum dinaikkan.",
+        "ecoLockLimitedHours": "Eco dikunci dan jam dibatasi.",
+        "stop": "Pendinginan dihentikan pada ruang yang tidak sensitif kesehatan."
+      },
+      "restore": {
+        "reminder": "Bayar invoice selama masa tenggang dan pengingat hilang.",
+        "setpointRaised": "Bayar invoice dan batas setpoint terangkat setelah verifikasi.",
+        "ecoLockLimitedHours": "Bayar invoice dan kunci Eco terangkat setelah verifikasi.",
+        "stop": "Bayar invoice dan persetujuan ganda diperlukan sebelum pendinginan kembali."
+      },
+      "ladderTitle": "Empat langkah",
+      "payMock": "Bayar disimulasikan dan tidak menyelesaikan invoice nyata."
+    },
+    "maintenance": {
+      "title": "Layanan & kunjungan",
+      "purpose": "Permintaan terbuka, kunjungan mendatang, dan temuan.",
+      "empty": "Belum ada kunjungan di linimasa Anda.",
+      "emptyAction": "Lihat peringatan yang dapat mengajukan kunjungan",
+      "error": "Kunjungan tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat kunjungan",
+      "assigned": "Teknisi {{name}}",
+      "when": "Dibuka {{time}}",
+      "listTitle": "Kunjungan Anda",
+      "timelineTitle": "Linimasa"
+    }
+  },
+  "tech": {
+    "queue": {
+      "title": "Kerja",
+      "purpose": "Kunjungan yang ditugaskan, diurutkan menurut kritis, lalu SLA, lalu usia.",
+      "empty": "Tidak ada kunjungan yang ditugaskan kepada Anda.",
+      "error": "Kerja tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat kerja",
+      "today": "Hari ini",
+      "week": "Minggu ini",
+      "silent": "Unit senyap",
+      "critical": "Kritis",
+      "columnEmpty": "Tidak ada di kolom ini.",
+      "sla": "Batas SLA {{time}}",
+      "checklist": "{{recorded}} dari {{total}} langkah tercatat",
+      "listTitle": "Kunjungan yang ditugaskan"
+    },
+    "map": {
+      "title": "Peta",
+      "purpose": "Situs yang ditugaskan dalam urutan perjalanan. Perlakuan peta tidak ada dalam prototipe ini, jadi daftar ini adalah rutenya.",
+      "empty": "Tidak ada situs yang ditugaskan kepada Anda.",
+      "emptyAction": "Buka antrean kerja",
+      "error": "Rute tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat rute",
+      "mapMock": "Peta geografis tidak digambar pada Fase 1A (celah desain). Urutan perjalanan adalah daftar ini.",
+      "window": "Tiba sebelum {{time}}",
+      "openVisit": "Buka kunjungan",
+      "routeTitle": "Urutan kunjungan",
+      "scheduleTitle": "Jadwal hari ini"
+    },
+    "me": {
+      "title": "Saya",
+      "purpose": "Kerja yang ditugaskan minggu ini, bahasa, dan keluar.",
+      "empty": "Tidak ada kunjungan yang ditugaskan kepada Anda minggu ini.",
+      "error": "Halaman ini tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat minggu Anda",
+      "weekTitle": "Minggu ini",
+      "closed": "Ditutup",
+      "open": "Terbuka"
+    }
+  },
+  "admin": {
+    "overview": {
+      "title": "Keputusan dibutuhkan",
+      "purpose": "Persetujuan, kerja kritis yang belum ditugaskan, akun terlambat, dan pembatasan. Portofolio di bawahnya.",
+      "empty": "Tidak ada yang membutuhkan keputusan.",
+      "error": "Ringkasan tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat keputusan",
+      "unassigned": "Kunjungan belum ditugaskan",
+      "critical": "Peristiwa kritis",
+      "overdue": "Akun terlambat",
+      "restrictions": "Pembatasan yang berlaku",
+      "openBoard": "Buka papan layanan",
+      "openEvents": "Buka peristiwa",
+      "openPayments": "Buka pembayaran",
+      "portfolio": "Sekilas portofolio",
+      "listTitle": "Berdasarkan kategori",
+      "kpi": {
+        "unassigned": "Kunjungan belum ditugaskan",
+        "unassignedCaption": "Menunggu penugasan",
+        "critical": "Peristiwa kritis",
+        "criticalCaption": "Butuh teknisi sekarang",
+        "overdue": "Akun terlambat",
+        "overdueCaption": "Melewati tanggal jatuh tempo",
+        "restricted": "Pembatasan yang berlaku",
+        "restrictedCaption": "Peringatan, masa tenggang, atau persetujuan ganda"
+      },
+      "deviceHealthAttention": "Tinjau kesehatan perangkat ({{count}} unit membutuhkan perhatian)",
+      "deviceHealthClear": "Tinjau kesehatan perangkat (semua unit melaporkan)"
+    },
+    "alerts": {
+      "title": "Peristiwa",
+      "purpose": "Antrean perhatian HQ. Bukti dan pengiriman sama seperti peran lain.",
+      "empty": "Tidak ada peristiwa di armada.",
+      "error": "Peristiwa tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat peristiwa",
+      "listTitle": "Semua peristiwa"
+    },
+    "fleet": {
+      "title": "Armada",
+      "purpose": "Pohon organisasi dengan roll-up status terburuk. Ruang peka kesehatan ditandai. Unit membuka objek bersama.",
+      "empty": "Tidak ada properti di armada.",
+      "error": "Armada tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat armada",
+      "healthSensitive": "Peka kesehatan",
+      "mapMock": "Peta armada tidak digambar pada Fase 1A.",
+      "openDeviceHealth": "Kesehatan perangkat",
+      "activityTitle": "Perintah terbaru",
+      "activityEmpty": "Belum ada perintah yang dikirim."
+    },
+    "dispatch": {
+      "title": "Papan layanan",
+      "purpose": "Setiap kunjungan menurut status dan SLA. Kerja yang belum ditugaskan tetap terlihat.",
+      "empty": "Tidak ada kunjungan di papan.",
+      "error": "Papan tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat papan",
+      "columnEmpty": "Tidak ada dalam status ini.",
+      "unassigned": "{{count}} belum ditugaskan",
+      "needsAssignee": "Memerlukan penugasan",
+      "assign": "Tugaskan",
+      "sla": "Batas SLA {{time}}",
+      "listTitle": "Setiap kunjungan"
+    },
+    "payments": {
+      "title": "Pembayaran",
+      "purpose": "Status akun, tangga pembatasan, dan pengiriman pemberitahuan tersimulasi per situs.",
+      "empty": "Tidak ada akun dalam cakupan.",
+      "error": "Pembayaran tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat pembayaran",
+      "mock": "Penagihan disimulasikan.",
+      "openCase": "Buka kasus"
+    },
+    "energy-portfolio": {
+      "title": "Portofolio energi",
+      "purpose": "Konsumsi dan penghematan per situs, dengan kelengkapan dan metode.",
+      "empty": "Tidak ada situs di portofolio.",
+      "error": "Portofolio tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat portofolio",
+      "chartMock": "Tangga grafik kategori tidak ada dalam prototipe ini. Angka dan kelengkapan tetap tampil.",
+      "chartAlt": "Penghematan dibanding baseline per situs",
+      "chartTooMany": "Terlalu banyak situs untuk satu grafik — angka setiap situs masih ada di bawah.",
+      "methodLink": "Cara ini dihitung",
+      "completeness": "Kelengkapan {{value}} %"
+    },
+    "mrv": {
+      "title": "Paket & ekspor",
+      "purpose": "Cakupan 2 dan emisi yang dihindari per situs. Koneksi registri adalah simulasi berlabel di balik persetujuan ganda.",
+      "empty": "Tidak ada paket untuk diekspor.",
+      "error": "Paket tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat paket",
+      "registryMock": "Koneksi registri disimulasikan. Persetujuan ganda diperlukan sebelum apa pun dikirim.",
+      "approve": "Setujui ekspor (simulasi)",
+      "second": "Penyetuju kedua (simulasi)",
+      "exported": "Tidak ada yang dikirim ke registri.",
+      "firstApproved": "Persetujuan pertama tercatat. Penyetuju kedua kini dapat mengonfirmasi."
+    },
+    "settings": {
+      "title": "Pengaturan",
+      "purpose": "Tabel yang dipublikasikan dan ambang tersimulasi. Mengubah nilai di sini hanya pratinjau.",
+      "empty": "Belum ada apa pun di sini",
+      "error": "Pengaturan tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat pengaturan",
+      "tariffs": "Tarif",
+      "grid": "Faktor jaringan",
+      "thresholds": "Ambang bagian (pratinjau)",
+      "preview": "Hanya pratinjau — ini tidak menulis aturan hidup.",
+      "users": "Pengguna dan peran"
+    },
+    "audit": {
+      "title": "Log audit",
+      "purpose": "Tindakan sensitif yang disusun ulang dari rekaman tersimulasi. Hanya tambah; ekspor disimulasikan.",
+      "empty": "Tidak ada baris audit pada irisan prototipe ini.",
+      "error": "Log audit tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "loading": "Memuat audit",
+      "export": "Ekspor (simulasi)",
+      "exportMock": "Ekspor disimulasikan. Tidak ada berkas yang meninggalkan perangkat ini.",
+      "rowRestriction": "{{step}} · {{requester}} / {{approver}}",
+      "rowCommand": "{{unit}} · {{state}}",
+      "rowVisit": "{{title}} · {{state}}"
+    },
+    "device": {
+      "title": "Kesehatan perangkat",
+      "purpose": "Setiap unit yang offline, dicurigai pembongkarannya, atau dalam mode pemeliharaan di seluruh portofolio. Buka unit untuk melihat buktinya.",
+      "loading": "Memuat kesehatan perangkat",
+      "empty": "Belum ada properti dalam portofolio.",
+      "noData": "Properti ada, tetapi belum ada unit yang terdaftar — tidak ada yang dapat dipantau.",
+      "error": "Kesehatan perangkat tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "allClear": "Semua unit melaporkan normal. Tidak ada yang membutuhkan perhatian.",
+      "group": {
+        "tamper": "Indikasi pembongkaran",
+        "offline": "Unit offline",
+        "maintenance": "Mode pemeliharaan"
+      },
+      "filterLabel": "Filter",
+      "filterKind": "Masalah",
+      "filterAll": "Semua",
+      "status": {
+        "maintenance": "Servis terencana"
+      }
+    },
+    "case": {
+      "title": "Kasus pembatasan",
+      "purpose": "Satu objek untuk seluruh tangga: anak tangga yang berlaku, penghitung waktunya, catatan keputusan, dan pemberitahuan bahwa persetujuan telah diberikan.",
+      "back": "Kembali ke akun",
+      "missing": "Tidak ada akun yang ditentukan — buka kasus dari Pembayaran.",
+      "notFound": "Akun ini tidak terlihat dalam cakupan Anda.",
+      "none": "Tidak ada pembatasan yang berlaku pada akun ini.",
+      "loading": "Memuat kasus pembatasan",
+      "error": "Kasus pembatasan tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "accountTitle": "Akun",
+      "ladderTitle": "Tangga yang berlaku",
+      "approvalsTitle": "Catatan keputusan",
+      "evidenceTitle": "Bukti dan persetujuan",
+      "rungPassed": "Terlewati",
+      "rungInForce": "Berlaku sekarang",
+      "rungAhead": "Belum tercapai"
+    },
+    "approve": {
+      "title": "Setujui langkah pembatasan",
+      "purpose": "Satu permintaan, buktinya, dan pemeriksaan yang harus dilihat sebelum diputuskan.",
+      "back": "Kembali ke keputusan",
+      "loading": "Memuat permintaan",
+      "error": "Permintaan tidak dapat dimuat.",
+      "retry": "Coba lagi",
+      "notFound": "Permintaan itu bukan wewenang Anda, atau sudah tidak ada.",
+      "queueTitle": "Menunggu keputusan",
+      "queueEmpty": "Tidak ada langkah pembatasan yang menunggu keputusan.",
+      "askTitle": "Yang diminta",
+      "askLine": "Naik dari {{from}} ke {{to}}",
+      "askFromNone": "Mulai tangga pada {{to}}",
+      "requestedBy": "Diminta oleh {{name}} pada {{time}}",
+      "expires": "Kedaluwarsa bila tidak diputuskan sebelum {{time}}",
+      "evidenceTitle": "Bukti",
+      "daysOverdue": "{{count}} hari melewati tanggal jatuh tempo",
+      "noticesTitle": "Pemberitahuan yang sudah dikirim",
+      "noticesEmpty": "Belum ada pemberitahuan terkirim — tidak ada bukti persetujuan.",
+      "healthTitle": "Pemeriksaan ruang sensitif kesehatan",
+      "healthDesignated": "Ruang ini ditetapkan sensitif kesehatan.",
+      "healthNotDesignated": "Tidak ada ruang pada permintaan ini yang ditetapkan sensitif kesehatan.",
+      "healthRequestedBy": "Diminta oleh {{name}} pada {{time}}",
+      "healthApprovedBy": "Disetujui oleh {{name}} pada {{time}}",
+      "healthReviewBy": "Jatuh tempo tinjauan {{time}}",
+      "refusedTitle": "Langkah ini tidak dapat disetujui",
+      "signOffTitle": "Persetujuan manajemen",
+      "signOffLabel": "Nama manajer yang menyetujui",
+      "signOffHelper": "Menghentikan layanan memerlukan nama manajer selain persetujuan Anda.",
+      "declineTitle": "Jika Anda menolak",
+      "declineReasonLabel": "Alasan",
+      "approve": "Setujui langkah ini",
+      "decline": "Tolak",
+      "decidedTitle": "Catatan keputusan",
+      "decidedApproved": "Disetujui oleh {{name}} pada {{time}}",
+      "decidedDeclined": "Ditolak oleh {{name}} pada {{time}}",
+      "decidedSignedOff": "Ditandatangani oleh {{name}} pada {{time}}"
+    }
+  },
+  "alertCategory": {
+    "fault": "Kerusakan peralatan",
+    "tamper": "Gangguan perangkat",
+    "dataQuality": "Kualitas data",
+    "payment": "Pembayaran"
+  },
+  "alertDelivery": {
+    "channel": {
+      "inApp": "Dalam aplikasi",
+      "push": "Notifikasi dorong",
+      "whatsapp": "WhatsApp",
+      "email": "Email"
+    },
+    "state": {
+      "queued": "Dalam antrean",
+      "sent": "Terkirim",
+      "delivered": "Sampai",
+      "read": "Dibaca",
+      "failed": "Gagal"
+    }
+  },
+  "chart": {
+    "legend": "Seri",
+    "dataTable": "Lihat datanya",
+    "time": "Waktu",
+    "method": "Cara perhitungannya"
   }
 }

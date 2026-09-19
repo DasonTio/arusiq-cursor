@@ -9,10 +9,10 @@
    ========================================================================== */
 
 :root {
-  /* --- Brand · D7 §2 · see ADR-0001 (logo values are canonical, D8 F-06) --- */
-  --color-brand-primary:      #1B2F6E; /* 12.51:1 on white-1 · main action, selected/active */
-  --color-brand-primary-deep: #0B1933; /* 17.48:1 · dark hero, deepest brand surface       */
-  --color-brand-red:          #D62027; /*  5.13:1 · secondary button. NOT a problem signal. */
+  /* --- Brand · D7 §2 · see ADR-0009 (the Figma variables; logo navy) ------ */
+  --color-brand-primary:      #0B1B48; /* 16.61:1 on white-1 · main action, active · hero   */
+  --color-brand-primary-deep: #0B1933; /* 17.48:1 · focus ring, deepest brand tone          */
+  --color-brand-red:          #DB1217; /*  5.11:1 · secondary button. NOT a problem signal. */
 
   /* --- State · D7 §3 · interface + form feedback ONLY, never severity ------
      Fills carry no text. Where a state colour becomes type, use *-text.      */
@@ -40,6 +40,27 @@
   --color-severity-unknown-mark:  #6B7A94; /* 4.34:1 · shape: dashed ring  */
   --color-severity-unknown-text:  #55627A; /* 6.15:1                       */
 
+  /* --- Categorical chart ramp · D7 §20 gap · see ADR-0011 -----------------
+     SIX SERIES IDENTITIES, NOT STATUSES. A series colour says WHICH property,
+     never HOW IT IS DOING. The ramp is therefore drawn only from hue bands the
+     severity family (red h33 · orange h63 · green h152) and the eco channel
+     (teal h213) have not already spoken for — there is deliberately no green,
+     no orange and no teal here, because a green line reads as "healthy".
+
+     COLOUR IS NEVER THE ONLY CHANNEL. Under the 3:1-on-light-surface ceiling
+     the legal hue space cannot separate six series for a dichromat: the
+     measured deuteranope floor is 10.2 ΔE (chart-1/chart-4). The chart wrapper
+     therefore binds series index N to colour N AND a dash pattern AND a point
+     marker, exactly as the actual-vs-baseline rule already does. Ordered by
+     discriminability: use 1-2-3 first (the Figma AC1/AC2/AC3 legend), and the
+     guarantee weakens as you add 4, 5 and 6.                                 */
+  --color-chart-1: #0168B2; /* azure   · 5.79:1 on page · 4.39:1 on sunken    */
+  --color-chart-2: #4F331A; /* brown   · 11.53:1 · the only warm; carries CVD */
+  --color-chart-3: #D72175; /* magenta · 4.81:1 · 19.8 ΔE from critical mark  */
+  --color-chart-4: #A745E2; /* violet  · 4.57:1 · 3.46:1 on sunken, the floor */
+  --color-chart-5: #2F2A9E; /* indigo  · 10.79:1                              */
+  --color-chart-6: #752766; /* plum    · 9.38:1                               */
+
   /* --- Neutrals · D7 §5 · every neutral has one role ---------------------- */
   --color-black-1: #1D1D1D; /* headings; text on warning/success/error fills  */
   --color-black-2: #282828; /* alternate heading tone; dark surfaces          */
@@ -56,11 +77,12 @@
      month). This is a dark SURFACE, not a dark MODE: it applies to one
      component, and D7 §5.2's "light mode only" rule is otherwise unchanged.
      Severity marks need no inverse variant — all four already clear 3:1 on
-     this surface. See ADR-0005 for the measured matrix.                     */
-  --color-on-inverse:        var(--color-white-1); /* 17.48:1                */
-  --color-on-inverse-muted:  #919191;              /*  5.55:1 · labels, meta */
-  --color-eco-on-inverse:    #00A0B1;              /*  5.55:1 · carbon value */
-  --color-border-on-inverse: #707070;              /*  3.53:1 · hairlines    */
+     this surface. Measured on #0B1B48: ADR-0009 (ADR-0005 has the matrix on
+     the previous #0B1933). Nothing brand-primary-filled sits on the hero.    */
+  --color-on-inverse:        var(--color-white-1); /* 16.61:1                */
+  --color-on-inverse-muted:  #919191;              /*  5.27:1 · labels, meta */
+  --color-eco-on-inverse:    #00A0B1;              /*  5.27:1 · carbon value */
+  --color-border-on-inverse: #707070;              /*  3.35:1 · hairlines    */
 
   /* --- Surfaces · D7 §5.2 · the four legal backgrounds --------------------
      Every foreground token clears its bar against ALL FOUR, not white alone.
@@ -68,7 +90,7 @@
   --surface-page:   var(--color-white-1);
   --surface-raised: var(--color-white-2);
   --surface-sunken: var(--color-gray-5);
-  --surface-inverse: var(--color-brand-primary-deep); /* ADR-0005 · hero only */
+  --surface-inverse: var(--color-brand-primary); /* ADR-0005 · hero only · ADR-0009 */
   /* --surface-callout is {state|severity} at 10%, composed per component.    */
 
   /* --- Typography · D7 §6 ------------------------------------------------- */
@@ -146,6 +168,23 @@
 
   /* --- Target · D7 §10.6, §17.4 ------------------------------------------- */
   --target-min: 44px;
+
+  /* --- Icon stroke · D7 §7 · ADR-0006, ADR-0012 ---------------------------
+     ONE value for both icon primitives. Lucide (ADR-0006) and the twelve
+     hand-drawn part glyphs (ADR-0012) are the same drawing at a glance only
+     if they share a stroke; two icons at 24px with 1.5px and 2px strokes look
+     mismatched and nobody can say why. Not exposed as a prop on either
+     primitive — changing it is an ADR, not a call site.                      */
+  --icon-stroke-width: 2px; /* Lucide AND the twelve part glyphs. Never a prop. */
+
+  /* --- Chart stroke · D7 §12 · ADR-0013 -----------------------------------
+     USER UNITS in the shared 100 × 30 chart viewBox, NOT pixels — the plot
+     scales with its container, so the stroke scales with it. One value for
+     every series line in the product: the actual-vs-baseline pair and the six
+     categorical slots are the same drawing at a glance only if they share a
+     weight, and the dash patterns are tuned against this number (a 1.6-unit
+     gap reads as a gap at 0.6 and as a smudge at 1.2). Not a prop.           */
+  --chart-stroke-width: 0.6; /* series line + baseline + legend swatch        */
 
   /* --- Grid · D7 §8 · margins and gutters fixed, columns flex -------------- */
   --grid-margin-mobile:  var(--space-3); /* 16px @ 375 */

@@ -1,0 +1,12 @@
+/* ADR-0012 — outline glyphs on Lucide's terms (ADR-0006). The stroke comes
+   from the token both icon primitives share, so the two sets cannot drift
+   apart in the same row. */
+.root {
+  flex: none;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: var(--icon-stroke-width);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

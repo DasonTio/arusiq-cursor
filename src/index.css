@@ -97,3 +97,24 @@ h6 {
   clip-path: inset(50%);
   white-space: nowrap;
 }
+
+/* The skip link is the only focusable .sr-only element in the product — the
+   first tab stop on every authenticated screen. Unclip it on focus so it is
+   actually visible, not just present in the tab order (D7 §10.5). */
+.sr-only:focus,
+.sr-only:focus-visible {
+  position: fixed;
+  inset-block-start: var(--space-2);
+  inset-inline-start: var(--space-2);
+  inline-size: auto;
+  block-size: auto;
+  padding: var(--space-2) var(--space-3);
+  margin: 0;
+  overflow: visible;
+  clip-path: none;
+  white-space: normal;
+  background: var(--surface-page);
+  color: var(--color-brand-primary);
+  border-radius: var(--radius-md);
+  z-index: var(--z-toast);
+}

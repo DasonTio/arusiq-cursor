@@ -1,0 +1,23 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--target-min);
+}
+
+.caption {
+  font-size: var(--font-size-sm);
+  color: var(--color-gray-2);
+  white-space: nowrap;
+}
+
+.select {
+  min-block-size: var(--target-min);
+  padding-inline: var(--space-2);
+  border: 1px solid var(--color-gray-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-page);
+  color: var(--color-gray-1);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+}

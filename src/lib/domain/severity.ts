@@ -40,3 +40,31 @@ export const countAtOrAbove = (
   children: readonly Severity[],
   level: Severity,
 ): number => children.filter((s) => SEVERITY[s].rank >= SEVERITY[level].rank).length;
+
+/** The shape every level of the hierarchy carries (D7 §4.2). */
+export interface RollUp {
+  severity: Severity;
+  contributing: number;
+  total: number;
+}
+
+/**
+ * The whole roll-up in one call, so no caller pairs `rollUp()` with a
+ * different contributing threshold than its neighbour did.
+ *
+ * `contributing` counts children at or above `unknown` — everything that is
+ * not plainly healthy. Grey is inside the count for the same reason it
+ * outranks green: an unreported child may be the broken one.
+ */
+export const rollUpWithCount = (children: readonly Severity[]): RollUp => ({
+  severity: rollUp(children),
+  contributing: countAtOrAbove(children, 'unknown'),
+  total: children.length,
+});
+
+/**
+ * Sort comparator, worst first, for `Array.prototype.sort`. Attention queues
+ * order by severity precedence and nothing else decides it locally.
+ */
+export const compareSeverity = (a: Severity, b: Severity): number =>
+  SEVERITY[b].rank - SEVERITY[a].rank;

@@ -13,12 +13,12 @@
  * OWNED BY THE DESIGN SYSTEM. Implementations live beside their component;
  * these signatures are changed only with an ADR.
  */
-import type { ReactNode } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 import type { Severity } from '../lib/domain/severity.ts';
 import type { Provenance } from '../lib/domain/provenance.ts';
 import type { CommandState } from '../lib/domain/command.ts';
 import type { RestrictionStep } from '../lib/domain/restriction.ts';
-import type { IconSize } from '../design-system/tokens.ts';
+import type { IconSize, Surface } from '../design-system/tokens.ts';
 
 /** An i18n key. Never display text — that is the whole point (D5 UR-LANG-01). */
 export type I18nKey = string;
@@ -28,9 +28,17 @@ export type I18nKey = string;
 /**
  * D7 §11 — provenance is typographic, not chromatic: a small bordered label in
  * gray-2. Colour is fully committed to severity and is not available to borrow.
+ *
+ * `surface` is which of the four legal backgrounds (D7 §5.2) the chip sits on,
+ * NOT a style choice: gray-2 measures 1.42:1 on the ADR-0005 hero, so a chip
+ * placed there without saying so is an unreadable provenance label — which
+ * D6's data-integrity NFR counts as no label at all. It stays optional because
+ * three of the four surfaces share one treatment and the fourth is one
+ * component.
  */
 export interface ProvenanceChipProps {
   provenance: Provenance;
+  surface?: Surface;
 }
 
 /**
@@ -200,6 +208,99 @@ export interface SavingsChartProps extends Omit<ChartCardProps, 'children'> {
   levers?: { labelKey: I18nKey; kWh: number }[];
 }
 
+/* ------------------------------------------------- categorical charts ---- */
+
+/**
+ * One line on a categorical chart: a property, a site or a unit.
+ *
+ * `name` is FREE TEXT, not an `I18nKey`. "AC 1", "Menara Selatan" and "Gudang"
+ * are proper nouns that arrive with the data and are not translated — the same
+ * documented exception as `PriorityItem.title` and `PageHeader.title`
+ * (D5 UR-LANG-01). Everything the CHART says for itself is still a key.
+ *
+ * `value` is `number | null` because missing is not zero (D7 §11.2). A null is
+ * rendered as a BREAK in the line, never interpolated across: a straight
+ * segment drawn over an unreported day asserts a reading nobody took.
+ */
+export interface ChartSeries {
+  name: string;
+  /** `t` is an ISO-8601 timestamp. The x domain is the sorted union of `t`
+   *  across all series, so ragged series align on TIME rather than on index. */
+  points: readonly { t: string; value: number | null }[];
+  /** D7 §11.2 — a series with nothing to plot is grey and says when it last
+   *  reported. Required in spirit for a silent series; optional in the type
+   *  because a fully-reporting series has nothing to say. */
+  lastSeen?: string | null;
+}
+
+/**
+ * ADR-0011 — the categorical ramp has SIX colours and the guarantee weakens
+ * after the third. The cap is a tuple union rather than an array plus a comment
+ * because a seventh series must not compile: it would wrap round to chart-1 and
+ * silently merge two properties into one identity, which is precisely the
+ * separation the ADR measured. If a screen needs seven categories it needs a
+ * different chart — small multiples, or "top 6 and the rest".
+ */
+export type CategoricalSeriesSet =
+  | readonly [ChartSeries]
+  | readonly [ChartSeries, ChartSeries]
+  | readonly [ChartSeries, ChartSeries, ChartSeries]
+  | readonly [ChartSeries, ChartSeries, ChartSeries, ChartSeries]
+  | readonly [ChartSeries, ChartSeries, ChartSeries, ChartSeries, ChartSeries]
+  | readonly [
+      ChartSeries,
+      ChartSeries,
+      ChartSeries,
+      ChartSeries,
+      ChartSeries,
+      ChartSeries,
+    ];
+
+/**
+ * D7 §12.2 — "a table, a summary sentence, or a toggle to a data view". A
+ * discriminated union rather than `ReactNode`, because `ReactNode` includes
+ * `null`: a required prop that accepts nothing is an optional prop with extra
+ * steps, and the legend alone is not an account of what the lines DO.
+ *
+ * `kind: 'table'` is the default worth reaching for — the chart builds the
+ * table itself from `series`, locale-formatted, so it cannot disagree with the
+ * lines. `summary` is free text (it interpolates series names and formatted
+ * figures, so the caller composes it with `t()`); a blank one throws.
+ */
+export type CategoricalTextAlternative =
+  { kind: 'table' } | { kind: 'summary'; summary: string };
+
+/**
+ * ADR-0011 / ADR-0013 — N properties, sites or units on one pair of axes:
+ * "saving vs baseline by site", "consumption by unit".
+ *
+ * This is NOT `SavingsChartProps` with more lines. That one is a single
+ * property measured against its own dashed grey baseline (D6 FR-61); this one
+ * compares peers, which is why it needs the ordered ramp, a mandatory legend
+ * and the six-slot cap.
+ *
+ * `provenance` is REQUIRED for the same reason it is on `MetricProps`: a chart
+ * is a figure, and D6's data-integrity NFR is "100 % of figures labelled". Pass
+ * `weakestProvenance([...inputs])` for a chart drawn from several sources.
+ *
+ * `unit` is required and is the SYMBOL itself — "kWh", "ppm", "IDR". Lines
+ * without units are unreadable, and the symbol is international while the
+ * numbers beside it are locale-formatted by the chart.
+ *
+ * `methodHref` is OPTIONAL here and required on `SavingsChartProps`: the method
+ * link is what separates the savings CLAIM from a marketing number, and a
+ * consumption-by-unit chart makes no such claim. A screen that does compare
+ * against a baseline still passes it.
+ */
+export interface CategoricalChartProps {
+  accessibleNameKey: I18nKey;
+  series: CategoricalSeriesSet;
+  unit: string;
+  provenance: Provenance;
+  textAlternative: CategoricalTextAlternative;
+  methodHref?: string;
+}
+
 /* ------------------------------------------------------------------ carbon */
 
 /**
@@ -260,3 +361,158 @@ export interface MockBoundaryProps {
   explanationKey: I18nKey;
   children: ReactNode;
 }
+
+/* ----------------------------------------------------------------- chrome */
+
+/**
+ * D7 §15 / §17 — one primary action per area (navy). Brand red is the
+ * secondary action colour; it is not a problem signal.
+ *
+ * Padding is font-relative (`em`) on purpose: D7 derives expressive-button
+ * padding from type size. Callers pass localised children; they never pass
+ * a colour.
+ *
+ * SELECTION IS NOT A VARIANT (ADR-0014). `variant="primary"` is how a chosen
+ * filter chip, mode picker or view tab LOOKS; it is not what it IS. Without a
+ * second channel a screen reader announces "Cooling, button" for the active
+ * mode and for every inactive one — selection carried by colour alone, which
+ * is the bare-dot failure of non-negotiable #2 wearing a different costume,
+ * and a WCAG 4.1.2 (Name, Role, Value) failure on top of it.
+ *
+ * The channel is TWO props, not one boolean, because the ARIA underneath them
+ * is genuinely different and collapsing it would make one of the two cases
+ * lie. Neither prop changes how the button looks: they sit alongside the
+ * existing `variant` treatment, they do not replace it.
+ *
+ * Deliberately NOT `role="tab"` + `aria-selected`. That role is a promise of
+ * the whole APG tablist widget — roving `tabindex`, arrow keys, Home/End, an
+ * owning `tablist` — and a half-built tablist is less usable than the plain
+ * links and buttons in a labelled `<nav>` these already are.
+ */
+interface ButtonBaseProps {
+  variant: 'primary' | 'secondary' | 'ghost';
+  disabled?: boolean;
+  onClick?: () => void;
+  children: ReactNode;
+}
+
+/** The `<button>` form: an action, a toggle, or a view tab that is not a route. */
+interface ButtonActionBase extends ButtonBaseProps {
+  type?: 'button' | 'submit';
+  to?: never;
+}
+
+/** A control that holds a state the user flipped. */
+interface ButtonToggleProps extends ButtonActionBase {
+  /**
+   * TOGGLE semantics — `aria-pressed`. A filter chip, a mode or fan choice, an
+   * approval that stays down once given: the control itself holds a state the
+   * user flipped.
+   *
+   * A boolean rather than a flag, because `false` MUST REACH THE DOM. ARIA
+   * gives a button with no `aria-pressed` a different role presentation from
+   * one carrying `aria-pressed="false"`, so a group where only the chosen
+   * member sets it announces one toggle button beside four plain buttons — and
+   * announces a different set every time the selection moves. Pass it to every
+   * member of a group, or to none of them.
+   */
+  pressed?: boolean;
+  /** One claim per control: a button that is both "pressed" and "the current
+   *  item" announces twice and means neither. Pick the case. */
+  current?: never;
+}
+
+/** One of a set is the one on screen — nothing was toggled to get there. */
+interface ButtonCurrentProps extends ButtonActionBase {
+  pressed?: never;
+  /**
+   * CURRENT-WITHIN-A-SET semantics — `aria-current`. The query-param view tabs
+   * (`?view=now` / `health` / `control`): nothing is toggled, one of several
+   * views is simply the one on screen.
+   *
+   * Unlike `pressed`, this is ABSENT on the others rather than `"false"` —
+   * `aria-current` marks the one, and a set of explicit falses is noise the
+   * spec does not ask for. So `current={x === active}` on every member is
+   * correct here, and so is passing it only to the active one.
+   *
+   * The ARIA VALUE is derived, not passed: the caller never writes `"page"` or
+   * `"true"`. See `Button.tsx` — the choice follows from whether the control
+   * navigates, which the component already knows and the caller would get
+   * wrong 22 times.
+   */
+  current?: boolean;
+}
+
+/** The `<Link>` form. `to` and `type="submit"` are now exclusive in the type. */
+interface ButtonLinkProps extends ButtonBaseProps {
+  to: string;
+  type?: never;
+  /**
+   * `aria-pressed` is a supported state of role `button` and of nothing else.
+   * A link is not pressable, so a "pressed link" does not compile rather than
+   * shipping ARIA an assistive technology is entitled to ignore. A link-shaped
+   * control that genuinely toggles something is a `<button>`, not a link.
+   */
+  pressed?: never;
+  current?: boolean;
+}
+
+export type ButtonProps = ButtonToggleProps | ButtonCurrentProps | ButtonLinkProps;
+
+/**
+ * D7 §15.3 — every input has a real label; helper text is distinct from
+ * error text. Padding is `em`-derived. The accessible name is the label,
+ * never a placeholder standing in for one.
+ */
+export interface TextfieldProps {
+  id: string;
+  labelKey: I18nKey;
+  value: string;
+  onChange: (value: string) => void;
+  type?: 'text' | 'email' | 'tel' | 'password';
+  autoComplete?: string;
+  helperKey?: I18nKey;
+  errorKey?: I18nKey | null;
+  disabled?: boolean;
+}
+
+/**
+ * ADR-0006 — Lucide, stroke locked at 2. Size locked to the icon token.
+ * Decorative icons are silent; icon-only controls pass `labelKey`.
+ */
+export interface IconProps {
+  icon: IconComponent;
+  size?: IconSize;
+  labelKey?: I18nKey;
+}
+
+/**
+ * ADR-0012 — the twelve monitored parts, drawn rather than sourced. Lucide has
+ * no compressor, evaporator-coil or condenser-fan glyph, so these are
+ * hand-drawn schematics on the same 24 px grid at the same stroke.
+ *
+ * `part` is the catalogue id, NOT a glyph name. A screen cannot ask for the
+ * wrong picture for a part, and a part with no glyph is a loud failure rather
+ * than an empty box — `partDefinition()` already sets that convention in
+ * `src/lib/simulation/catalogue.ts`.
+ *
+ * Decorative by default (ADR-0006): in a part row the name is already beside
+ * the glyph, so a second announcement is noise. `labelled` is for the one case
+ * the row is icon-only, and it reuses `part.<id>` — the icon never invents a
+ * string of its own.
+ */
+export interface PartIconProps {
+  part: string;
+  size?: IconSize;
+  labelled?: boolean;
+}
+
+/** Structural type so this file does not import `lucide-react`. */
+export type IconComponent = ComponentType<{
+  size?: number;
+  strokeWidth?: number;
+  className?: string;
+  'aria-hidden'?: boolean | 'true' | 'false';
+  'aria-label'?: string;
+  focusable?: 'false' | 'true' | boolean;
+}>;

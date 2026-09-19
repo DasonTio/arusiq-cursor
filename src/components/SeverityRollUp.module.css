@@ -1,0 +1,31 @@
+/* One anchor, one tab stop. The focus ring and the 44 px hit area come from
+   the base layer's `a[href]` rules, so they cannot be lost here.
+
+   gray-3 rather than gray-5: this is an interactive control, and gray-5 is a
+   surface tone that is never a control border (tokens.css §Neutrals). */
+.root {
+  display: inline-flex;
+  align-items: center;
+  /* Wraps rather than truncates — Indonesian runs 20–30 % longer and nothing
+     here is sized to its English label (D7 §19.2). */
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+  border: 1px solid var(--color-gray-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-raised);
+  color: var(--color-gray-1);
+  text-decoration: none;
+  transition: background-color var(--duration-fast) var(--easing-standard);
+}
+
+.root:hover {
+  background: var(--surface-sunken);
+}
+
+.count {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  color: var(--color-gray-2);
+}

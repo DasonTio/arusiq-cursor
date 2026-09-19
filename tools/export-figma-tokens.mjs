@@ -69,6 +69,10 @@ for (const { name, value, description } of decls) {
       path = ['color', 'severity', m[1], m[2]];
     else if ((m = rest.match(/^state-(\w+?)(-text)?$/)))
       path = ['color', 'state', m[1], m[2] ? 'text' : 'fill'];
+    // ADR-0011 — the categorical ramp is ORDERED. Grouping it under one node
+    // keeps the order visible in the Figma picker: a designer reaching for a
+    // fourth series should see that they are leaving the guaranteed triple.
+    else if ((m = rest.match(/^chart-([1-6])$/))) path = ['color', 'chart', m[1]];
     else if ((m = rest.match(/^(black|gray|white)-(\d+)$/)))
       path = ['color', 'neutral', `${m[1]}-${m[2]}`];
     else if ((m = rest.match(/^brand-(.+)$/))) path = ['color', 'brand', m[1]];
@@ -105,6 +109,17 @@ for (const { name, value, description } of decls) {
     type = 'color';
     if (!/^#[0-9A-Fa-f]{6}$/.test(v)) continue;
     path = ['surface', name.slice('surface-'.length)];
+  } else if (name === 'icon-stroke-width') {
+    // ADR-0006 / ADR-0012 — one stroke for Lucide and for the twelve part
+    // glyphs. A designer drawing a thirteenth part icon needs this value.
+    type = 'dimension';
+    path = ['icon', 'strokeWidth'];
+  } else if (name === 'chart-stroke-width') {
+    // ADR-0013 — user units in the 100 × 30 plot viewBox, not pixels. A number
+    // rather than a dimension for exactly that reason: a designer who reads it
+    // as "0.6 px" and draws a hairline has drawn the wrong chart.
+    type = 'number';
+    path = ['chart', 'strokeWidth'];
   } else if (
     name.startsWith('grid-') ||
     name === 'content-max' ||
@@ -141,6 +156,23 @@ tokens.color.severity.$description =
   'is not acceptable anywhere, including charts. There is NO solid-filled severity ' +
   'badge: no foreground clears 4.5:1 across all four marks. Use a 10% tint with the ' +
   '-text foreground and a hairline border in the mark colour.';
+
+tokens.color.chart.$description =
+  'Series IDENTITY, never status (ADR-0011). There is deliberately no green, no ' +
+  'orange and no teal in this ramp: those hues belong to severity and to the eco ' +
+  'channel, and a green line reads as "healthy" rather than as "series 2". ' +
+  'The ramp is ORDERED — 1-2-3 is the only triple guaranteed on colour alone, ' +
+  'and the guarantee weakens at 4, 5 and 6. Colour is never the only channel: ' +
+  'pair index N with a dash pattern and a point marker, as the actual-vs-baseline ' +
+  'chart already does. Never draw a severity in these colours, and never draw a ' +
+  'series in the severity colours.';
+
+if (tokens.chart)
+  tokens.chart.$description =
+    'Chart geometry in USER UNITS of the shared 100 × 30 plot viewBox, not pixels ' +
+    '(ADR-0013). Every series line in the product — the actual-vs-baseline pair and ' +
+    'the six categorical slots — uses this one weight, and the dash patterns that ' +
+    'carry series identity alongside colour are tuned against it.';
 
 tokens.color.state.$description =
   'Form and interface feedback ONLY — never severity. Fills never carry text; ' +

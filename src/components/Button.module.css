@@ -1,0 +1,41 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding-block: 0.75em;
+  padding-inline: 1.25em;
+  border-radius: var(--radius-md);
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-normal);
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    opacity var(--duration-fast) var(--easing-standard),
+    background-color var(--duration-fast) var(--easing-standard);
+}
+
+.root:disabled,
+.root[aria-disabled='true'] {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.primary {
+  background: var(--color-brand-primary);
+  color: var(--color-on-inverse);
+}
+
+.secondary {
+  background: var(--color-brand-red);
+  color: var(--color-on-inverse);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--color-gray-1);
+  border-color: var(--color-gray-3);
+}

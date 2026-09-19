@@ -28,7 +28,499 @@
     "reminder": "Reminder",
     "setpointRaised": "Minimum temperature raised",
     "ecoLockLimitedHours": "Eco mode and limited hours",
-    "stop": "Service stopped"
+    "stop": "Service stopped",
+    "reason": {
+      "overdue": "An invoice is overdue"
+    },
+    "healthSensitive": {
+      "evidence": {
+        "infant": "An infant under two lives in this room; a paediatrician's letter is on file.",
+        "clinicalUse": "The room is used for occupational health assessments and holds refrigerated supplies."
+      }
+    },
+    "request": {
+      "review": "Review this request",
+      "evidence": {
+        "noticesDelivered": "Notices were delivered and opened; the balance is unchanged.",
+        "graceElapsed": "The grace period on the step below has run out.",
+        "ladderExhausted": "Every step below has been applied and the balance is unchanged."
+      }
+    },
+    "decline": {
+      "reason": {
+        "paymentArranged": "A payment arrangement was agreed before the step was applied.",
+        "balanceSettled": "The balance has since been settled.",
+        "evidenceInsufficient": "The evidence does not yet support this step.",
+        "healthRisk": "An occupant health risk was raised that needs checking first."
+      }
+    },
+    "reject": {
+      "notInScope": "This request is not yours to decide.",
+      "alreadyDecided": "This request has already been decided.",
+      "healthSensitiveStop": "Cooling cannot be stopped in a health-sensitive space. Approve a lower step instead.",
+      "notNextRung": "Steps are applied one at a time. Approve the step directly above the one in force.",
+      "signOffRequired": "Stopping service needs a named management sign-off as well as your approval.",
+      "declineNeedsReason": "Say why the request is refused, so the record explains itself."
+    }
+  },
+  "restrictionReason": {
+    "invoiceOverdue": "An invoice is overdue"
+  },
+  "billing": {
+    "pay": "Pay this bill"
+  },
+  "partGroup": {
+    "indoor": "Indoor",
+    "outdoor": "Outdoor",
+    "electrical": "Electrical"
+  },
+  "part": {
+    "air-filter": "Air filter",
+    "evaporator-coil": "Evaporator coil",
+    "blower-motor-fan": "Blower motor and fan",
+    "condensate-drain-pan": "Condensate drain and pan",
+    "vents-louvers": "Vents and louvers",
+    "condenser-coil": "Condenser coil",
+    "compressor": "Compressor",
+    "condenser-fan-blades": "Condenser fan blades",
+    "refrigerant-lines": "Refrigerant lines",
+    "thermostat-sensors": "Thermostat and sensors",
+    "capacitor-contactor": "Capacitor and contactor",
+    "electrical-wiring": "Electrical wiring"
+  },
+  "floor": {
+    "ground": "Ground floor",
+    "first": "First floor"
+  },
+  "sensor": {
+    "temperatureC": "Temperature",
+    "humidityPct": "Humidity",
+    "powerW": "Power",
+    "energyTodayKWh": "Energy today",
+    "co2Ppm": "Indoor CO₂",
+    "pm25": "PM2.5"
+  },
+  "weekday": {
+    "monday": "Monday",
+    "tuesday": "Tuesday",
+    "wednesday": "Wednesday",
+    "thursday": "Thursday",
+    "friday": "Friday",
+    "saturday": "Saturday",
+    "sunday": "Sunday"
+  },
+  "controlMode": {
+    "cool": "Cool",
+    "fan": "Fan",
+    "eco": "Eco",
+    "off": "Off"
+  },
+  "fanSpeed": {
+    "1": "1",
+    "2": "2",
+    "3": "3",
+    "auto": "Auto"
+  },
+  "category": {
+    "home": "Home",
+    "office": "Office"
+  },
+  "comfort": {
+    "comfortable": "Comfortable",
+    "tooWarm": "Too warm",
+    "tooCool": "Too cool",
+    "tooHumid": "Too humid",
+    "tooDry": "Too dry",
+    "unknown": "Comfort unknown"
+  },
+  "severityRollUp": {
+    "contributing": "{{count}} of {{total}} need attention"
+  },
+  "alert": {
+    "filter": {
+      "title": "Air filter likely needs cleaning",
+      "cause": "Rising pressure drop across the filter",
+      "impact": "The unit will use more energy and cool less evenly",
+      "action": "Request a filter visit"
+    },
+    "compressor": {
+      "title": "Compressor current is too high",
+      "cause": "Electrical load above the working envelope",
+      "impact": "The compressor may fail if this continues",
+      "action": "Open the kitchen alert"
+    },
+    "tamper": {
+      "title": "Possible device tamper",
+      "cause": "The indoor module heartbeat was interrupted",
+      "impact": "Readings from this unit cannot be trusted until checked",
+      "action": "Review the study unit"
+    },
+    "offline": {
+      "title": "Bedroom unit has not reported",
+      "cause": "No heartbeat inside the freshness window",
+      "impact": "Comfort in this room is unknown",
+      "action": "See the silent unit"
+    },
+    "viewHistory": "See the resolved work",
+    "dataQuality": {
+      "offline": {
+        "title": "This unit has not reported",
+        "cause": "No heartbeat inside the freshness window"
+      },
+      "stale": {
+        "title": "This unit is reporting late",
+        "cause": "The last reading is older than the freshness window"
+      },
+      "impact": "Comfort and equipment status here are unknown",
+      "action": "Open the silent unit"
+    },
+    "payment": {
+      "title": "An invoice is overdue",
+      "cause": "The account has passed its due date",
+      "impact": "Restriction can move to the next step when grace ends",
+      "action": "Open billing"
+    },
+    "fault": {
+      "air-filter": {
+        "title": "Air filter likely needs cleaning",
+        "cause": "Rising pressure drop across the filter",
+        "impact": "The unit will use more energy and cool less evenly",
+        "action": "Request a filter visit"
+      },
+      "evaporator-coil": {
+        "title": "Evaporator coil is drifting",
+        "cause": "Approach temperature is rising",
+        "impact": "Cooling will become uneven",
+        "action": "Open the coil alert"
+      },
+      "blower-motor-fan": {
+        "title": "Indoor blower current is high",
+        "cause": "Electrical load on the blower is above the working envelope",
+        "impact": "Airflow may drop if this continues",
+        "action": "Open the blower alert"
+      },
+      "condensate-drain-pan": {
+        "title": "Condensate pan level is high",
+        "cause": "Water is collecting faster than it drains",
+        "impact": "An overflow can damage the space",
+        "action": "Open the drain alert"
+      },
+      "vents-louvers": {
+        "title": "Supply airflow is low",
+        "cause": "Measured airflow is below the working envelope",
+        "impact": "The room will not hold its setpoint",
+        "action": "Open the airflow alert"
+      },
+      "condenser-coil": {
+        "title": "Outdoor coil is running hot",
+        "cause": "Discharge temperature versus ambient is rising",
+        "impact": "Efficiency will fall and the compressor will work harder",
+        "action": "Open the outdoor coil alert"
+      },
+      "compressor": {
+        "title": "Compressor current is too high",
+        "cause": "Electrical load above the working envelope",
+        "impact": "The compressor may fail if this continues",
+        "action": "Open the compressor alert"
+      },
+      "condenser-fan-blades": {
+        "title": "Outdoor fan is unbalanced",
+        "cause": "Vibration on the condenser fan is rising",
+        "impact": "The fan may fail and outdoor heat rejection will drop",
+        "action": "Open the fan alert"
+      },
+      "refrigerant-lines": {
+        "title": "Refrigerant charge looks low",
+        "cause": "Superheat is falling below the working envelope",
+        "impact": "The compressor may be damaged if this continues",
+        "action": "Open the refrigerant alert"
+      },
+      "thermostat-sensors": {
+        "title": "Room sensors disagree",
+        "cause": "Thermostat channels have drifted apart",
+        "impact": "Setpoint control will be unreliable",
+        "action": "Open the sensor alert"
+      },
+      "capacitor-contactor": {
+        "title": "Start current is high",
+        "cause": "The capacitor or contactor is outside its envelope",
+        "impact": "The unit may fail to start",
+        "action": "Open the electrical alert"
+      },
+      "electrical-wiring": {
+        "title": "Supply voltage is sagging",
+        "cause": "Measured voltage is below the working envelope",
+        "impact": "The compressor may stall",
+        "action": "Open the wiring alert"
+      }
+    }
+  },
+  "attention": {
+    "payment": {
+      "title": "A bill needs paying",
+      "body": "Restriction can move to the next step when grace ends.",
+      "action": "Open billing"
+    },
+    "restriction": {
+      "title": "Cooling is restricted on this account",
+      "body": "Health-sensitive rooms cannot be stopped.",
+      "action": "See the restriction"
+    },
+    "visit": {
+      "title": "A technician visit needs you",
+      "body": "Open the visit to see what was found and what happens next.",
+      "action": "See the visit"
+    }
+  },
+  "maintenance": {
+    "filterService": {
+      "title": "Filter service"
+    },
+    "repair": {
+      "title": "Repair visit"
+    },
+    "preventiveVisit": {
+      "title": "Preventive visit"
+    },
+    "inspection": {
+      "title": "Inspection visit"
+    },
+    "contractRenewal": {
+      "title": "Contract renewal"
+    },
+    "warrantyExpiry": {
+      "title": "Warranty expiry"
+    },
+    "open": "Open in Account",
+    "completed": {
+      "action": "See completed work"
+    },
+    "inProgress": {
+      "action": "See work in progress"
+    },
+    "scheduled": {
+      "action": "See the visit"
+    },
+    "overdue": {
+      "action": "See the overdue visit"
+    },
+    "proposed": {
+      "action": "Review the proposal"
+    }
+  },
+  "workOrder": {
+    "state": {
+      "dispatched": "Dispatched",
+      "accepted": "Accepted",
+      "inProgress": "In progress",
+      "awaitingVerification": "Awaiting verification",
+      "closed": "Closed",
+      "reopened": "Reopened — readings did not improve",
+      "escalated": "Escalated"
+    },
+    "priority": {
+      "urgent": "Urgent",
+      "high": "High",
+      "routine": "Routine"
+    },
+    "origin": {
+      "prediction": "Raised from a prediction",
+      "clientRequest": "Raised by the household",
+      "preventiveSchedule": "Preventive schedule",
+      "tamper": "Possible tamper"
+    },
+    "brief": {
+      "prediction": "A predicted fault justified this visit. Treat it as suspected until you record a verdict.",
+      "clientRequest": "The household asked for this visit.",
+      "preventiveSchedule": "A scheduled preventive visit. There may be no single failed part.",
+      "tamper": "Possible tamper — readings cannot be trusted until the enclosure is checked."
+    },
+    "result": {
+      "pending": "Not recorded",
+      "pass": "Pass",
+      "fail": "Fail",
+      "notApplicable": "Not applicable"
+    },
+    "verdict": {
+      "confirmed": "Fault confirmed",
+      "notConfirmed": "Not confirmed",
+      "sensorFault": "Sensor fault",
+      "dataQualityIssue": "Data-quality issue"
+    },
+    "outcome": {
+      "repaired": "Repaired",
+      "noFaultFound": "No fault found",
+      "escalated": "Escalate"
+    },
+    "clientConfirmation": {
+      "notRequested": "Client confirmation was not requested",
+      "requested": "Waiting for the household to confirm the fix",
+      "confirmed": "Household confirmed the fix",
+      "disputed": "Household disputed the fix"
+    },
+    "verificationState": {
+      "scheduled": "Check scheduled",
+      "passed": "Check passed",
+      "failed": "Check failed — order reopened",
+      "inconclusive": "Check inconclusive — the unit is not reporting"
+    },
+    "verification": {
+      "scheduled": {
+        "note": "The unit will be read after the visit window.",
+        "reason": "Verification is still due."
+      },
+      "passed": {
+        "note": "The unit now reads inside its limit.",
+        "reason": "Post-service check passed."
+      },
+      "failed": {
+        "note": "The unit still reads outside its limit.",
+        "reason": "Post-service check failed; the order is reopened."
+      },
+      "inconclusive": {
+        "note": "The unit is not reporting, so the check cannot pass.",
+        "reason": "Post-service check was inconclusive."
+      },
+      "notApplicable": {
+        "escalated": "No post-service check — the visit was escalated.",
+        "site": "No single unit to re-measure on this site visit."
+      }
+    },
+    "dataQuality": {
+      "reporting": "The unit is reporting.",
+      "notReporting": "The unit is not reporting. Grey is not a pass."
+    },
+    "access": {
+      "healthSensitive": "This space is health-sensitive.",
+      "restricted": "A cooling restriction is in force on this unit."
+    },
+    "action": {
+      "track": "Track this visit",
+      "dispatch": "Open on the board",
+      "view": "Open the record",
+      "perform": "Do this visit"
+    },
+    "finding": {
+      "confirmed": {
+        "note": "The suspected part was confirmed on site."
+      },
+      "notConfirmed": {
+        "note": "The predicted fault was not found."
+      },
+      "sensorFault": {
+        "note": "The measurement was wrong; the part is not at fault."
+      },
+      "dataQualityIssue": {
+        "note": "The unit could not be seen clearly enough to judge the part."
+      }
+    },
+    "closure": {
+      "repaired": {
+        "summary": "Repair recorded. The unit must still prove the fix."
+      },
+      "noFaultFound": {
+        "summary": "No fault found. The unit must still prove the reading."
+      },
+      "escalated": {
+        "summary": "Escalated for a specialist."
+      }
+    },
+    "escalation": {
+      "specialistRequired": "A specialist is required.",
+      "unitUnreachable": "The unit could not be reached."
+    },
+    "reject": {
+      "notInScope": "This visit is not in your assignment.",
+      "alreadyClosed": "This visit is already settled.",
+      "unknownItem": "That checklist step is not on this visit.",
+      "checklistIncomplete": "Record every checklist step before closing.",
+      "itemFailed": "A failed step cannot be closed; escalate or re-measure.",
+      "findingRequired": "Record a finding before closing.",
+      "notClosed": "The post-service check runs after closure is submitted."
+    },
+    "note": {
+      "unitNotReporting": "Not measured — the unit was not reporting."
+    },
+    "photo": {
+      "afterService": "After-service photograph",
+      "air-filter": "Air filter photograph",
+      "evaporator-coil": "Evaporator coil photograph",
+      "blower-motor-fan": "Blower photograph",
+      "condensate-drain-pan": "Drain pan photograph",
+      "vents-louvers": "Vent photograph",
+      "condenser-coil": "Condenser coil photograph",
+      "compressor": "Compressor photograph",
+      "condenser-fan-blades": "Condenser fan photograph",
+      "refrigerant-lines": "Refrigerant line photograph",
+      "thermostat-sensors": "Sensor photograph",
+      "capacitor-contactor": "Contactor photograph",
+      "electrical-wiring": "Wiring photograph"
+    },
+    "part": {
+      "FLT-A12": "Filter cartridge FLT-A12",
+      "COIL-CLN-05": "Coil clean kit COIL-CLN-05",
+      "SNS-RT-02": "Sensor SNS-RT-02"
+    }
+  },
+  "signal": {
+    "air-filter": {
+      "pressureDrop": "Filter pressure drop",
+      "runHours": "Filter run hours"
+    },
+    "evaporator-coil": {
+      "approachTemp": "Coil approach temperature",
+      "frost": "Frost minutes"
+    },
+    "blower-motor-fan": {
+      "current": "Blower current",
+      "vibration": "Blower vibration"
+    },
+    "condensate-drain-pan": {
+      "level": "Pan level",
+      "overflow": "Overflow events"
+    },
+    "vents-louvers": {
+      "airflow": "Supply airflow",
+      "actuator": "Louver faults"
+    },
+    "condenser-coil": {
+      "dischargeVsAmbient": "Discharge versus ambient"
+    },
+    "compressor": {
+      "current": "Compressor current",
+      "cycling": "Compressor starts",
+      "vibration": "Compressor vibration"
+    },
+    "condenser-fan-blades": {
+      "current": "Outdoor fan current",
+      "imbalance": "Fan imbalance"
+    },
+    "refrigerant-lines": {
+      "superheat": "Superheat",
+      "subcooling": "Subcooling",
+      "subcoolingTrend": "Subcooling trend"
+    },
+    "thermostat-sensors": {
+      "drift": "Sensor drift",
+      "disagreement": "Sensor disagreement"
+    },
+    "capacitor-contactor": {
+      "startCurrent": "Start current",
+      "chatter": "Contactor chatter"
+    },
+    "electrical-wiring": {
+      "voltageSag": "Supply voltage",
+      "harmonics": "Harmonics"
+    },
+    "device": {
+      "heartbeatGap": "Heartbeat gap",
+      "lastHeartbeat": "Last heartbeat",
+      "minutesSinceReport": "Minutes since last report",
+      "enclosureOpened": "Enclosure opened"
+    },
+    "account": {
+      "balance": "Outstanding balance"
+    }
   },
   "loadState": {
     "loading": "Loading",
@@ -42,5 +534,871 @@
     "save": "Save",
     "cancel": "Cancel",
     "language": "Language"
+  },
+  "language": {
+    "en": "English",
+    "id": "Bahasa Indonesia"
+  },
+  "roles": {
+    "client": "Household",
+    "technician-internal": "Technician",
+    "technician-thirdparty": "Partner technician",
+    "admin": "HQ"
+  },
+  "shell": {
+    "mock": "Simulated prototype — figures are labelled Simulated. This is not a live system.",
+    "skip": "Skip to content",
+    "primaryNav": "Primary",
+    "views": "Views",
+    "search": "Search",
+    "assistant": "Assistant",
+    "profile": "Profile",
+    "signOut": "Sign out",
+    "continueOnDesktop": "This view is read-only on a phone. Continue on desktop.",
+    "notAvailable": {
+      "title": "Not available for your role",
+      "body": "That screen is outside your access. Go back to your own dashboard.",
+      "back": "Back to my dashboard"
+    }
+  },
+  "nav": {
+    "client": {
+      "home": "Home",
+      "spaces": "Spaces",
+      "alerts": "Alerts",
+      "insights": "Insights",
+      "account": "Account",
+      "energy": "Energy & cost",
+      "carbon": "Carbon",
+      "billing": "Bills & notices",
+      "service": "Service & visits",
+      "profile": "Preferences"
+    },
+    "tech": {
+      "work": "Work",
+      "map": "Map",
+      "me": "Me"
+    },
+    "admin": {
+      "overview": "Overview",
+      "decisions": "Decisions needed",
+      "events": "Events",
+      "fleet": "Fleet",
+      "explorer": "Explorer",
+      "service": "Service",
+      "board": "Board",
+      "accounts": "Accounts",
+      "payments": "Payments",
+      "reporting": "Reporting",
+      "energy": "Energy portfolio",
+      "packages": "Packages & exports",
+      "settings": "Settings",
+      "audit": "Audit log"
+    }
+  },
+  "auth": {
+    "sign-in": {
+      "title": "Sign in",
+      "lead": "Use your email or phone, or open a seeded demo account.",
+      "identifier": "Email or phone",
+      "identifierHelp": "The same field accepts either.",
+      "password": "Password",
+      "submit": "Sign in",
+      "forgot": "Forgot password",
+      "invalid": "Those details did not match. Try again.",
+      "locked": "Too many attempts. Try again in {{minutes}} minutes.",
+      "demoTitle": "Demo accounts — one tap",
+      "demo": {
+        "client": "Household demo",
+        "technician-internal": "Technician demo",
+        "technician-thirdparty": "Partner technician demo",
+        "admin": "HQ demo"
+      },
+      "empty": "Nothing here yet",
+      "error": "Could not load"
+    },
+    "forgot-password": {
+      "title": "Forgot password",
+      "lead": "Choose a channel. We send a time-limited code if the account exists. The confirmation is the same either way.",
+      "identifier": "Email or phone",
+      "channel": "How should we send it",
+      "email": "Email",
+      "whatsapp": "WhatsApp",
+      "submit": "Send a code",
+      "confirm": "If an account matches, a code is on its way. It expires in 15 minutes.",
+      "policy": "New passwords need at least 8 characters.",
+      "back": "Back to sign in",
+      "mock": "Password reset is mocked. No message was sent."
+    }
+  },
+  "shared": {
+    "profile": {
+      "title": "Profile",
+      "signOutThis": "Sign out on this device",
+      "signOutAll": "Sign out everywhere",
+      "empty": "Nothing here yet",
+      "error": "Could not load"
+    },
+    "search": {
+      "title": "Search",
+      "purpose": "Units, spaces and visits in your access. Type a name to skip the tree.",
+      "empty": "Nothing in your access matches.",
+      "error": "Search could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading search",
+      "query": "Search",
+      "units": "Units",
+      "spaces": "Spaces",
+      "visits": "Visits",
+      "noMatch": "No matches for that name."
+    },
+    "assistant": {
+      "title": "Assistant",
+      "purpose": "Ask in text. Voice is previewed as a transcript. Nothing runs until you confirm.",
+      "empty": "Nothing here yet",
+      "error": "Could not load",
+      "prompt": "Your question",
+      "send": "Send",
+      "voice": "Voice (mocked)",
+      "voiceMock": "Voice capture is mocked. Type instead.",
+      "confirm": "Confirm this action",
+      "cancel": "Do not run it",
+      "mock": "The assistant is mocked. It does not change units or visits.",
+      "reply": "I can open Alerts or Work from here after you confirm. I will not send a command myself."
+    },
+    "space": {
+      "back": "All spaces",
+      "location": "{{property}} · {{floor}}",
+      "comfortTitle": "Comfort",
+      "airTitle": "Indoor air",
+      "notFitted": "{{sensor}} is not fitted in this space.",
+      "ventilation": "Indoor CO₂ in ppm describes air freshness. It is not an emissions figure.",
+      "healthTitle": "Health-sensitive space",
+      "healthBody": "Service stop is unavailable here. Other restriction steps still follow notice, grace and dual approval.",
+      "equipmentTitle": "Equipment",
+      "unitsTitle": "Units serving this space",
+      "openUnit": "Open unit"
+    },
+    "serviceRequest": {
+      "title": "Request a service visit",
+      "purpose": "The source alert and unit are prefilled. Choose the visit details before submitting this simulation.",
+      "loading": "Loading request",
+      "error": "This request could not be prepared.",
+      "back": "Back to alerts",
+      "visitType": "Visit type",
+      "type": {
+        "inspection": "Inspection",
+        "repair": "Repair",
+        "filter": "Filter service"
+      },
+      "slot": "Preferred time",
+      "slotValue": {
+        "morning": "Morning",
+        "afternoon": "Afternoon",
+        "flexible": "Flexible"
+      },
+      "contact": "Contact channel",
+      "contactValue": {
+        "whatsapp": "WhatsApp",
+        "phone": "Phone",
+        "email": "Email"
+      },
+      "photoMock": "Photo attachment is mocked. No file is uploaded.",
+      "photoBody": "You can preview where supporting photos will be attached.",
+      "submit": "Submit simulated request",
+      "submitted": "Your simulated request is ready to track.",
+      "track": "Track visits"
+    },
+    "pay": {
+      "title": "Pay this bill",
+      "purpose": "Choose a hand-off method. No real payment will be collected.",
+      "back": "Back to bills",
+      "amount": "Amount due",
+      "mock": "Payment collection is mocked. No real payment will be collected.",
+      "method": "Payment method",
+      "methodValue": {
+        "card": "Card",
+        "virtualAccount": "Virtual account",
+        "ewallet": "E-wallet"
+      },
+      "choose": "Choose a payment method to continue.",
+      "confirm": "Confirm simulated payment",
+      "submitted": "Restore request sent — awaiting device verification.",
+      "pending": "Restriction remains in force until verification.",
+      "return": "Return to bills"
+    },
+    "assign": {
+      "title": "Assign this visit",
+      "purpose": "Choose a scoped technician and arrival window. This assignment exists only in this prototype session.",
+      "back": "Back to service board",
+      "unassigned": "Needs an assignee",
+      "technician": "Technician",
+      "thirdParty": "Third-party access will be limited to the assigned unit and this work order.",
+      "window": "Arrival window",
+      "windowValue": {
+        "morning": "Morning",
+        "afternoon": "Afternoon"
+      },
+      "sla": "SLA handling",
+      "slaValue": {
+        "keep": "Keep current SLA",
+        "expedite": "Expedite"
+      },
+      "notificationMock": "Assignment notification is mocked. No message is sent.",
+      "notificationBody": "The assignee will see the brief, evidence and assigned unit only.",
+      "confirm": "Confirm simulated assignment",
+      "submitted": "{{name}} is assigned in this prototype session.",
+      "return": "Return to service board"
+    },
+    "method": {
+      "title": "How these numbers are made",
+      "purpose": "Every savings and emissions figure on Insights links here. The method, tariff and grid factor are shown, not hidden.",
+      "model": "Adjusted baseline {{id}}",
+      "version": "Version {{version}}",
+      "tariffTitle": "Tariff table",
+      "tariffLine": "{{value}} per kilowatt-hour · {{source}} · from {{date}}",
+      "gridTitle": "Grid factor",
+      "gridLine": "{{value}} kgCO₂e per kilowatt-hour · {{source}} · from {{date}}",
+      "provenanceTitle": "What the labels mean",
+      "glossaryTitle": "Indoor CO₂ and emissions are not the same quantity",
+      "glossaryPpm": "Indoor CO₂ in ppm is air freshness. It lives on a space, never on this page.",
+      "glossaryEmissions": "kgCO₂e is electricity emissions. It lives on Insights → Carbon, never beside indoor air.",
+      "back": "Back to energy"
+    },
+    "unit": {
+      "title": "Unit",
+      "empty": "That unit is not in your access.",
+      "emptyAction": "Back to spaces",
+      "error": "This unit could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading unit",
+      "back": "All spaces",
+      "now": "Now",
+      "health": "Health",
+      "control": "Control",
+      "schedule": "Schedule",
+      "energy": "Energy",
+      "history": "History",
+      "brand": "Indoor unit",
+      "identity": "Indoor unit · {{brand}}",
+      "currentSummary": "{{mode}} · {{setpoint}} °C · {{fan}}",
+      "changeSummary": "{{mode}} · {{setpoint}} °C",
+      "commandLine": "Last command: {{state}}",
+      "labelledValue": "{{label}}: {{value}}",
+      "restrictionApproval": "{{requester}} · {{approver}} · {{time}}",
+      "absentSensor": "{{status}} · {{sensor}}",
+      "online": "Reporting now",
+      "offline": "Not reporting",
+      "tamper": "Possible tamper — readings cannot be trusted until checked",
+      "maintenanceMode": "A technician is on site. Alerts are paused; readings stay grey.",
+      "restrictionTitle": "Cooling restriction in force",
+      "restrictionGrace": "Grace ends {{time}}",
+      "restrictionHealth": "This space is health-sensitive, so service cannot be stopped.",
+      "pay": "Open billing",
+      "absent": "Not fitted",
+      "airTitle": "Indoor air",
+      "emissionsTitle": "Avoided emissions",
+      "partsTitle": "Twelve monitored parts",
+      "suspected": "Suspected until a technician verdict",
+      "confirmed": "Confirmed by measurement",
+      "partAction": "Open the related alert",
+      "filterAction": "Request a filter visit",
+      "noAlert": "Open service history",
+      "current": "Currently",
+      "target": "Requested",
+      "confirm": "Send command",
+      "cancelChange": "Keep current",
+      "setpoint": "Setpoint",
+      "setpointHelper": "Degrees Celsius",
+      "mode": "Mode",
+      "fan": "Fan",
+      "commandState": "Last command",
+      "policyLimit": "A restriction caps this control",
+      "scheduleLead": "The programme in force this week. Days share the live setpoint; they are not authored twice.",
+      "offlineFallback": "The unit is unreachable. The last command is held in the queue and is not silently dropped.",
+      "sameProgramme": "{{mode}} at {{value}} °C",
+      "energyAlt": "Actual {{actual}} kilowatt-hours against a normal of {{baseline}}.",
+      "methodLink": "How this was calculated",
+      "completeness": "Completeness {{value}} %",
+      "gridFactor": "Grid factor {{value}} kgCO₂e/kWh · {{source}} · from {{date}}",
+      "heroUnit": "kgCO₂e",
+      "noHistory": "No visits are on the timeline yet.",
+      "requestService": "Request a visit",
+      "nowClimateCard": "Temperature & Humidity",
+      "nowControlsCard": "Controls",
+      "adjust": "Adjust",
+      "viewEnergy": "View energy",
+      "commandSteps": "Command progress",
+      "commandFailed": "The command failed — the unit did not move, and the control stays where it was until a verified command.",
+      "commandQueued": "Queued — device unreachable. Held since {{time}}; the command waits instead of being dropped."
+    },
+    "work-order": {
+      "title": "Work order",
+      "empty": "That visit is not in your access.",
+      "emptyAction": "Back to the list",
+      "error": "This visit could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading visit",
+      "back": "All visits",
+      "brief": "Brief",
+      "evidence": "Evidence",
+      "checklist": "Checklist",
+      "findings": "Findings",
+      "closure": "Closure",
+      "assigned": "Assigned to {{name}}",
+      "unassigned": "Not yet assigned",
+      "sla": "SLA due {{time}}",
+      "suspectedBanner": "This prediction stays suspected until a technician verdict.",
+      "healthSensitive": "Health-sensitive space — stop is not available.",
+      "openAlert": "Open the alert",
+      "openUnit": "Open the unit",
+      "checklistTally": "{{recorded}} of {{total}} recorded · {{failed}} failed",
+      "noUnitChecklist": "No unit is on this visit, so there is nothing to measure.",
+      "limit": "Limit",
+      "photoCaption": "Photo (mock): {{label}} · {{time}}",
+      "noFindings": "No findings have been recorded yet.",
+      "recordFinding": "Record a finding",
+      "saveFinding": "Save finding",
+      "downgraded": "This verdict downgrades the prediction.",
+      "partUsed": "{{label}} × {{quantity}}",
+      "noClosure": "The visit has not been closed.",
+      "verification": "Post-service check",
+      "before": "Before",
+      "after": "After",
+      "runCheck": "Read the unit now",
+      "noPrediction": "Nothing predicted this visit.",
+      "confidence": "Confidence {{value}} %",
+      "projection": "Projected failure {{by}} ({{earliest}}–{{latest}})",
+      "confidenceDetail": "Confidence {{value}} % · based on {{signals}} signals over {{days}} days",
+      "confidenceSignals": "Confidence {{value}} % · based on {{signals}} signals",
+      "suspectedCard": "Suspected fault",
+      "ifIgnoredCard": "If ignored",
+      "startCard": "Start this job",
+      "startAction": "Start the checklist",
+      "deviceStateCard": "Device & data state",
+      "reporting": "Reporting now",
+      "notReporting": "Not reporting"
+    }
+  },
+  "client": {
+    "overview": {
+      "title": "Home",
+      "purpose": "Comfort, cost and anything that needs you now.",
+      "heroLabel": "Avoided emissions this month",
+      "heroAction": "See carbon details",
+      "attentionTitle": "Needs your attention",
+      "summaryTitle": "Today at a glance",
+      "comfortableRooms": "Comfortable rooms",
+      "energyToday": "Energy today",
+      "energyTodayCoverage": "{{reporting}} of {{total}} units reported today",
+      "savingVsNormal": "Saving vs normal",
+      "roomsTitle": "Comfort by room",
+      "roomStatus": "{{count}} of {{total}} units need attention",
+      "maintenanceTitle": "Service timeline",
+      "openItem": "Open",
+      "empty": "No spaces have been added yet.",
+      "emptyAction": "Add your first space",
+      "error": "Home could not be loaded.",
+      "retry": "Try again",
+      "noDataTitle": "Current readings are unavailable",
+      "noDataBody": "The last known values remain visible with their last-seen times.",
+      "loading": "Loading Home",
+      "sparklineName": "Energy used per day this month",
+      "sparklineAlt": "Actual {{actual}} kilowatt-hours against a normal of {{baseline}} this month.",
+      "methodLink": "How this was calculated",
+      "healthSensitive": "Health-sensitive space",
+      "heroUnit": "kgCO₂e",
+      "alertsTitle": "Anything that needs a look",
+      "temperature": "Temperature",
+      "humidity": "Humidity",
+      "equipment": "Equipment",
+      "absentSensors": "Not fitted",
+      "comfortCount": "{{comfortable}} of {{total}}",
+      "unknownRooms": "{{count}} rooms have no current reading",
+      "savingPercent": "{{value}} % versus normal",
+      "gridFactor": "Grid factor {{value}} kgCO₂e/kWh · {{source}} · from {{date}}",
+      "completeness": "Completeness {{value}} %",
+      "actualSeries": "Actual",
+      "baselineSeries": "Normal",
+      "greeting": {
+        "morning": "Good morning, {{name}}",
+        "afternoon": "Good afternoon, {{name}}",
+        "evening": "Good evening, {{name}}"
+      },
+      "needsAttention": "Need attention",
+      "environmentNow": "Environment now",
+      "quickActionsLabel": "Quick actions",
+      "quickActions": {
+        "request": "Raise a request",
+        "pay": "Pay a notice"
+      }
+    },
+    "spaces": {
+      "title": "Spaces",
+      "purpose": "Home and office, rolled up from every unit beneath.",
+      "empty": "No spaces have been added yet.",
+      "emptyAction": "Back to Home",
+      "error": "Spaces could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading spaces",
+      "open": "Open"
+    },
+    "alerts": {
+      "title": "Alerts",
+      "empty": "Nothing is asking for your attention.",
+      "error": "Alerts could not be loaded.",
+      "purpose": "One queue for everything asking for your attention.",
+      "loading": "Loading alerts",
+      "retry": "Try again",
+      "emptyAction": "Open my spaces",
+      "noDataTitle": "We cannot see your units",
+      "noDataBody": "Nothing in this home is reporting, so we cannot say whether anything is wrong.",
+      "noDataAction": "Open my spaces",
+      "filters": "Narrow this queue",
+      "spaceFilter": "Space",
+      "spaceAll": "All spaces",
+      "groupFilter": "Part group",
+      "groupAll": "All parts",
+      "clearFilters": "Clear filters",
+      "noMatch": "No alerts match these filters.",
+      "state": {
+        "needsAction": "Needs action",
+        "watching": "Watching",
+        "resolved": "Resolved"
+      },
+      "stateEmpty": "Nothing in this group.",
+      "severityGroup": "{{severity}} · {{count}}",
+      "suspected": "Suspected — waiting on a technician verdict",
+      "confirmed": "Confirmed by measurement",
+      "unitLine": "Unit · {{name}}",
+      "spaceLine": "Space · {{name}}",
+      "raised": "Raised {{time}}",
+      "since": "Continuing since {{time}}",
+      "duration": "Ongoing for {{value}}",
+      "confidence": "Confidence {{value}} %",
+      "limit": "Working limit",
+      "evidenceTitle": "Evidence",
+      "signalsTitle": "Signals behind this alert",
+      "causeTitle": "Likely cause",
+      "impactTitle": "If this is ignored",
+      "actionTitle": "Recommended action",
+      "projection": "Projected failure {{by}} ({{earliest}}–{{latest}})",
+      "deliveryTitle": "How this notice reached you",
+      "deliveryLine": "{{channel}} · {{state}}",
+      "deliveryMock": "Notice delivery is simulated. Nothing was sent to WhatsApp or email in this prototype.",
+      "openDetail": "Open this alert",
+      "unitLink": "Open the unit",
+      "spaceLink": "Open the space",
+      "back": "Back to all alerts",
+      "notFound": "That alert is not in this queue."
+    },
+    "energy": {
+      "title": "Energy & cost",
+      "purpose": "Power now, energy and cost at the published tariff, then saving versus the adjusted baseline.",
+      "empty": "No energy meters are in your access.",
+      "emptyAction": "Open my spaces",
+      "error": "Energy could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading energy",
+      "noDataTitle": "We cannot see energy for this home",
+      "noDataBody": "Nothing reported in this period, so a total would be invented.",
+      "noDataAction": "Open my spaces",
+      "powerNow": "Power now",
+      "energyToday": "Energy today",
+      "energyMonth": "Energy this period",
+      "costToday": "Cost today",
+      "costMonth": "Cost this period",
+      "tariff": "Tariff {{value}} per kWh · {{source}} · from {{date}}",
+      "savingsTitle": "Saving versus normal",
+      "savingKwh": "Saved energy",
+      "savingIdr": "Saved cost",
+      "savingPct": "Saved share",
+      "leversTitle": "How you save",
+      "lever": {
+        "eco": "Eco mode",
+        "setpoint": "Setpoint at 23 °C or above",
+        "schedule": "Schedule",
+        "occupancy": "Occupancy",
+        "filterCleaning": "Filter cleaning"
+      },
+      "leverAction": {
+        "eco": "Review Eco on the unit",
+        "setpoint": "Review the setpoint",
+        "schedule": "Open the weekly programme",
+        "occupancy": "Open the space",
+        "filterCleaning": "See filter alerts"
+      },
+      "byRoom": "By space",
+      "byUnit": "By unit",
+      "days7": "Last 7 days",
+      "days30": "Last 30 days",
+      "chartAlt": "Actual {{actual}} kilowatt-hours against a normal of {{baseline}}.",
+      "actualSeries": "With ARUSIQ",
+      "baselineSeries": "Normal",
+      "methodLink": "How this was calculated",
+      "completeness": "Completeness {{value}} %",
+      "coverage": "{{reporting}} of {{total}} units reported",
+      "unitLine": "{{name}} · {{value}} kWh"
+    },
+    "carbon": {
+      "title": "Carbon",
+      "purpose": "Scope 2 emissions and avoided emissions for the same period as Energy. Indoor CO₂ is not on this page.",
+      "empty": "No emissions figures are in your access.",
+      "emptyAction": "Open energy",
+      "error": "Carbon could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading carbon",
+      "noDataTitle": "We cannot see emissions for this home",
+      "noDataBody": "Without reported kilowatt-hours we will not invent a kilogram figure.",
+      "noDataAction": "Open energy",
+      "scope2": "Scope 2 this period",
+      "avoided": "Avoided emissions",
+      "gridFactor": "Grid factor {{value}} kgCO₂e/kWh · {{source}} · from {{date}}",
+      "heroUnit": "kgCO₂e",
+      "reportTitle": "Simple report",
+      "reportBody": "This period used {{used}} kWh and avoided {{avoided}} kgCO₂e against the adjusted baseline.",
+      "offsetTitle": "Offset preview",
+      "offsetMock": "Offset retirement is mocked. Nothing was purchased or retired.",
+      "offsetBody": "A future verified package could retire a matching volume. Phase 1A does not issue one.",
+      "methodLink": "How this was calculated",
+      "days7": "Last 7 days",
+      "days30": "Last 30 days",
+      "completeness": "Completeness {{value}} %"
+    },
+    "billing": {
+      "title": "Bills & notices",
+      "purpose": "Balance, how to pay, notices we simulated, and the restriction ladder if it is in force.",
+      "empty": "No account is in your access.",
+      "emptyAction": "Open Home",
+      "error": "Bills could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading bills",
+      "balance": "Balance due",
+      "due": "Due {{time}}",
+      "state": {
+        "current": "Current",
+        "dueSoon": "Due soon",
+        "overdue": "Overdue"
+      },
+      "methodsTitle": "How to pay",
+      "methodVa": "Virtual account",
+      "methodQris": "QRIS",
+      "methodMock": "Payment collection is simulated. No money moves in this prototype.",
+      "instructions": "Use the payment link on the notice. Keep the virtual-account number on the invoice.",
+      "noticesTitle": "Notice history",
+      "noticesEmpty": "No payment notices are on this account.",
+      "noticesMock": "WhatsApp and email delivery is mocked.",
+      "restrictionTitle": "Restriction in force",
+      "restrictionNone": "No restriction is in force.",
+      "restrictionCurrent": "Current step",
+      "restrictionChanges": "What this changes",
+      "restrictionRestores": "What restores service",
+      "restrictionGrace": "Grace ends {{time}}",
+      "restrictionApprovers": "Requested by {{requester}}, approved by {{approver}} on {{time}}",
+      "restrictionBlocked": "Stop is blocked on health-sensitive spaces.",
+      "change": {
+        "reminder": "A reminder is on the account. Cooling is unchanged.",
+        "setpointRaised": "The minimum setpoint is raised.",
+        "ecoLockLimitedHours": "Eco is locked and hours are limited.",
+        "stop": "Cooling is stopped on spaces that are not health-sensitive."
+      },
+      "restore": {
+        "reminder": "Pay the invoice during grace and the reminder clears.",
+        "setpointRaised": "Pay the invoice and the setpoint cap lifts after verification.",
+        "ecoLockLimitedHours": "Pay the invoice and Eco lock lifts after verification.",
+        "stop": "Pay the invoice and dual approval is required before cooling returns."
+      },
+      "ladderTitle": "The four steps",
+      "payMock": "Pay is simulated and does not settle a real invoice."
+    },
+    "maintenance": {
+      "title": "Service & visits",
+      "purpose": "Open requests, upcoming visits and what was found.",
+      "empty": "No visits are on your timeline yet.",
+      "emptyAction": "See alerts that can raise a visit",
+      "error": "Visits could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading visits",
+      "assigned": "Technician {{name}}",
+      "when": "Opened {{time}}",
+      "listTitle": "Your visits",
+      "timelineTitle": "Timeline"
+    }
+  },
+  "tech": {
+    "queue": {
+      "title": "Work",
+      "purpose": "Assigned visits, ordered by critical, then SLA, then age.",
+      "empty": "No visits are assigned to you.",
+      "error": "Work could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading work",
+      "today": "Today",
+      "week": "This week",
+      "silent": "Silent units",
+      "critical": "Critical",
+      "columnEmpty": "Nothing in this column.",
+      "sla": "SLA due {{time}}",
+      "checklist": "{{recorded}} of {{total}} steps recorded",
+      "listTitle": "Assigned visits"
+    },
+    "map": {
+      "title": "Map",
+      "purpose": "Assigned sites in travel order. A map treatment is not in this prototype, so the list is the route.",
+      "empty": "No sites are assigned to you.",
+      "emptyAction": "Open the work queue",
+      "error": "The route could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading the route",
+      "mapMock": "A geographic map is not drawn in Phase 1A (design gap). Travel order is this list.",
+      "window": "Arrive by {{time}}",
+      "openVisit": "Open the visit",
+      "routeTitle": "Visit order",
+      "scheduleTitle": "Today's schedule"
+    },
+    "me": {
+      "title": "Me",
+      "purpose": "This week's assigned work, language and sign out.",
+      "empty": "No visits are assigned to you this week.",
+      "error": "This page could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading your week",
+      "weekTitle": "This week",
+      "closed": "Closed",
+      "open": "Open"
+    }
+  },
+  "admin": {
+    "overview": {
+      "title": "Decisions needed",
+      "purpose": "Approvals, unassigned critical work, overdue accounts and restrictions. The portfolio sits below.",
+      "empty": "Nothing needs a decision.",
+      "error": "Overview could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading decisions",
+      "unassigned": "Unassigned visits",
+      "critical": "Critical events",
+      "overdue": "Overdue accounts",
+      "restrictions": "Restrictions in force",
+      "openBoard": "Open the service board",
+      "openEvents": "Open events",
+      "openPayments": "Open payments",
+      "portfolio": "Portfolio glance",
+      "listTitle": "By category",
+      "kpi": {
+        "unassigned": "Unassigned visits",
+        "unassignedCaption": "Awaiting an assignee",
+        "critical": "Critical events",
+        "criticalCaption": "Needs a technician now",
+        "overdue": "Overdue accounts",
+        "overdueCaption": "Past the due date",
+        "restricted": "Restrictions in force",
+        "restrictedCaption": "Notice, grace or dual approval"
+      },
+      "deviceHealthAttention": "Review device health ({{count}} units need attention)",
+      "deviceHealthClear": "Review device health (all units reporting)"
+    },
+    "alerts": {
+      "title": "Events",
+      "purpose": "HQ attention queue. Same evidence and delivery as every other role.",
+      "empty": "No events in the fleet.",
+      "error": "Events could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading events",
+      "listTitle": "All events"
+    },
+    "fleet": {
+      "title": "Fleet",
+      "purpose": "Organisation tree with worst-status roll-up. Health-sensitive spaces are marked. Units open the shared object.",
+      "empty": "No properties in the fleet.",
+      "error": "The fleet could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading fleet",
+      "healthSensitive": "Health-sensitive",
+      "mapMock": "A fleet map is not drawn in Phase 1A.",
+      "openDeviceHealth": "Device health",
+      "activityTitle": "Recent commands",
+      "activityEmpty": "No commands have been sent yet."
+    },
+    "dispatch": {
+      "title": "Service board",
+      "purpose": "Every visit by state and SLA. Unassigned work stays visible.",
+      "empty": "No visits are on the board.",
+      "error": "The board could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading the board",
+      "columnEmpty": "None in this state.",
+      "unassigned": "{{count}} unassigned",
+      "needsAssignee": "Needs an assignee",
+      "assign": "Assign",
+      "sla": "SLA due {{time}}",
+      "listTitle": "Every visit"
+    },
+    "payments": {
+      "title": "Payments",
+      "purpose": "Account standing, restriction rung and mocked notice delivery per site.",
+      "empty": "No accounts in scope.",
+      "error": "Payments could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading payments",
+      "mock": "Collections are simulated.",
+      "openCase": "Open case"
+    },
+    "energy-portfolio": {
+      "title": "Energy portfolio",
+      "purpose": "Consumption and saving by site, with completeness and the method.",
+      "empty": "No sites in the portfolio.",
+      "error": "The portfolio could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading portfolio",
+      "chartMock": "A categorical chart ramp is not in this prototype. Figures and completeness still appear.",
+      "chartAlt": "Saving vs baseline by site",
+      "chartTooMany": "Too many sites for one chart — figures for every site are still below.",
+      "methodLink": "How this was calculated",
+      "completeness": "Completeness {{value}} %"
+    },
+    "mrv": {
+      "title": "Packages & exports",
+      "purpose": "Scope 2 and avoided emissions by site. Registry connection is a labelled mock behind dual approval.",
+      "empty": "No packages to export.",
+      "error": "Packages could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading packages",
+      "registryMock": "Registry connection is mocked. Dual approval would be required before anything is sent.",
+      "approve": "Approve an export (mock)",
+      "second": "Second approver (mock)",
+      "exported": "Nothing was sent to a registry.",
+      "firstApproved": "First approval recorded. A second approver can now confirm."
+    },
+    "settings": {
+      "title": "Settings",
+      "purpose": "Published tables and simulated thresholds. Changing a value here is preview-only.",
+      "empty": "Nothing here yet",
+      "error": "Settings could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading settings",
+      "tariffs": "Tariffs",
+      "grid": "Grid factors",
+      "thresholds": "Part thresholds (preview)",
+      "preview": "Preview only — this does not write a live rule.",
+      "users": "Users and roles"
+    },
+    "audit": {
+      "title": "Audit log",
+      "purpose": "Sensitive actions reconstructed from the simulated record. Append-only; export is mocked.",
+      "empty": "No audit rows in this prototype slice.",
+      "error": "The audit log could not be loaded.",
+      "retry": "Try again",
+      "loading": "Loading audit",
+      "export": "Export (mock)",
+      "exportMock": "Export is mocked. No file left this device.",
+      "rowRestriction": "{{step}} · {{requester}} / {{approver}}",
+      "rowCommand": "{{unit}} · {{state}}",
+      "rowVisit": "{{title}} · {{state}}"
+    },
+    "device": {
+      "title": "Device health",
+      "purpose": "Every unit that is offline, tamper-suspected or in maintenance mode across the whole portfolio. Open a unit for its evidence.",
+      "loading": "Loading device health",
+      "empty": "No properties in the portfolio yet.",
+      "noData": "Properties exist, but no unit is registered yet — there is nothing to watch.",
+      "error": "Device health could not be loaded.",
+      "retry": "Try again",
+      "allClear": "Every unit is reporting normally. Nothing needs attention.",
+      "group": {
+        "tamper": "Tamper suspected",
+        "offline": "Offline units",
+        "maintenance": "Maintenance mode"
+      },
+      "filterLabel": "Filter",
+      "filterKind": "Problem",
+      "filterAll": "All",
+      "status": {
+        "maintenance": "Planned service"
+      }
+    },
+    "case": {
+      "title": "Restriction case",
+      "purpose": "One object for the whole ladder: the rung in force, its timer, the decision record and the notices that consent was given.",
+      "back": "Back to accounts",
+      "missing": "No account was specified — open a case from Payments.",
+      "notFound": "This account is not visible in your scope.",
+      "none": "No restriction is in force on this account.",
+      "loading": "Loading the restriction case",
+      "error": "The restriction case could not be loaded.",
+      "retry": "Try again",
+      "accountTitle": "Account",
+      "ladderTitle": "The ladder in force",
+      "approvalsTitle": "Decision record",
+      "evidenceTitle": "Evidence and consent",
+      "rungPassed": "Passed",
+      "rungInForce": "In force now",
+      "rungAhead": "Not reached"
+    },
+    "approve": {
+      "title": "Approve a restriction step",
+      "purpose": "One request, its evidence, and the check that must be seen before a decision.",
+      "back": "Back to decisions",
+      "loading": "Loading the request",
+      "error": "The request could not be loaded.",
+      "retry": "Try again",
+      "notFound": "That request is not yours to decide, or it no longer exists.",
+      "queueTitle": "Waiting on a decision",
+      "queueEmpty": "No restriction step is waiting on a decision.",
+      "askTitle": "What is being asked",
+      "askLine": "Move from {{from}} to {{to}}",
+      "askFromNone": "Start the ladder at {{to}}",
+      "requestedBy": "Requested by {{name}} on {{time}}",
+      "expires": "Lapses if undecided by {{time}}",
+      "evidenceTitle": "Evidence",
+      "daysOverdue": "{{count}} days past the due date",
+      "noticesTitle": "Notices already delivered",
+      "noticesEmpty": "No notice has been delivered — there is no evidence of consent.",
+      "healthTitle": "Health-sensitive check",
+      "healthDesignated": "This space is designated health-sensitive.",
+      "healthNotDesignated": "No space on this request is designated health-sensitive.",
+      "healthRequestedBy": "Requested by {{name}} on {{time}}",
+      "healthApprovedBy": "Approved by {{name}} on {{time}}",
+      "healthReviewBy": "Due for review {{time}}",
+      "refusedTitle": "This step cannot be approved",
+      "signOffTitle": "Management sign-off",
+      "signOffLabel": "Name of the manager signing off",
+      "signOffHelper": "Stopping service needs a named manager as well as your approval.",
+      "declineTitle": "If you refuse",
+      "declineReasonLabel": "Reason",
+      "approve": "Approve this step",
+      "decline": "Decline",
+      "decidedTitle": "Decision record",
+      "decidedApproved": "Approved by {{name}} on {{time}}",
+      "decidedDeclined": "Declined by {{name}} on {{time}}",
+      "decidedSignedOff": "Signed off by {{name}} on {{time}}"
+    }
+  },
+  "alertCategory": {
+    "fault": "Equipment fault",
+    "tamper": "Device tamper",
+    "dataQuality": "Data quality",
+    "payment": "Payment"
+  },
+  "alertDelivery": {
+    "channel": {
+      "inApp": "In-app",
+      "push": "Push",
+      "whatsapp": "WhatsApp",
+      "email": "Email"
+    },
+    "state": {
+      "queued": "Queued",
+      "sent": "Sent",
+      "delivered": "Delivered",
+      "read": "Read",
+      "failed": "Failed"
+    }
+  },
+  "chart": {
+    "legend": "Series",
+    "dataTable": "View the data",
+    "time": "Time",
+    "method": "How this is calculated"
   }
 }

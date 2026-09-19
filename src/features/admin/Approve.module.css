@@ -1,0 +1,27 @@
+/* P-APPROVE. A refusal on a safety gate has to be findable before the reader
+   reaches the buttons, so it is bordered rather than another paragraph — but
+   it is NOT painted in the critical colour: the request being unapprovable is
+   the policy working, not an emergency (same reasoning as the blocked rung in
+   RestrictionCase.module.css). */
+.refusal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-severity-warning-text);
+  border-radius: var(--radius-lg);
+  background: var(--surface-page);
+}
+
+/* The adapter's answer to an action the reader just took — that one IS an
+   error, because they asked for something and it did not happen. */
+.rejected {
+  margin: 0;
+  padding: var(--space-3);
+  width: 100%;
+  border: 1px solid var(--color-state-error);
+  border-radius: var(--radius-lg);
+  color: var(--color-state-error-text);
+}

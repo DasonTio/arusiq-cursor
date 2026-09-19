@@ -69,6 +69,40 @@ ruleTester.run('no-hardcoded-jsx-text', plugin.rules['no-hardcoded-jsx-text'], {
 });
 
 ruleTester.run(
+  'require-selection-state-on-button',
+  plugin.rules['require-selection-state-on-button'],
+  {
+    valid: [
+      // Toggle semantics.
+      {
+        code: `const a = <Button variant={x === y ? 'primary' : 'ghost'} pressed={x === y} />;`,
+      },
+      // Current-within-a-set semantics.
+      {
+        code: `const a = <Button variant={view === item ? 'primary' : 'ghost'} current={view === item} to={href} />;`,
+      },
+      // A fixed variant is not a selection control — nothing to flag.
+      { code: `const a = <Button variant="primary" onClick={fn} />;` },
+      // Not a Button component.
+      { code: `const a = <Chip variant={x ? 'primary' : 'ghost'} />;` },
+      {
+        code: `// selection-state-exempt\nconst a = <Button variant={x ? 'primary' : 'ghost'} />;`,
+      },
+    ],
+    invalid: [
+      {
+        code: `const a = <Button variant={x === y ? 'primary' : 'ghost'} onClick={fn} />;`,
+        errors: [{ messageId: 'missing' }],
+      },
+      {
+        code: `const a = <Button variant={active ? 'primary' : 'secondary'} to={href} />;`,
+        errors: [{ messageId: 'missing' }],
+      },
+    ],
+  },
+);
+
+ruleTester.run(
   'no-raw-value-in-style-prop',
   plugin.rules['no-raw-value-in-style-prop'],
   {

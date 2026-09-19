@@ -1,0 +1,55 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+}
+
+.label {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  color: var(--color-gray-2);
+}
+
+.valueRow {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1);
+}
+
+.value {
+  font-family: var(--font-heading);
+  font-size: var(--font-size-h4);
+  line-height: var(--line-height-h4);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-gray-1);
+}
+
+.unit {
+  font-size: var(--font-size-h6);
+  line-height: var(--line-height-h6);
+  color: var(--color-gray-1);
+}
+
+.trend,
+.seen {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  color: var(--color-gray-2);
+}
+
+.missing .value,
+.missing .label {
+  color: var(--color-severity-unknown-text);
+}
+
+@media (min-width: 768px) {
+  .value {
+    font-size: var(--font-size-h3);
+    line-height: var(--line-height-h3);
+  }
+}

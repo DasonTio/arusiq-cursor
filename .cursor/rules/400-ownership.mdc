@@ -14,6 +14,7 @@ Ownership is by **directory**, not by feature description.
 | `src/lib/domain/`, `src/lib/simulation/` | platform | read-only |
 | `src/lib/i18n/locales/*.json` | **append-only for everyone** | add keys, never edit another agent's |
 | `src/features/<role>/` | that role's agent | hands off |
+| `src/features/shared/` | shared-surfaces agent | compose, never copy (ADR-0008) |
 | `tools/`, `context/`, `eslint-rules/` | harness | propose, don't silently edit |
 
 **Locale files are the one shared write surface.** Namespace your keys by screen

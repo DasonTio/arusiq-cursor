@@ -22,6 +22,57 @@ const WORDS = /[A-Za-z]{2,}/;
 /** Tolerated: pure markup, entities, numbers, single letters, code-ish tokens. */
 const IGNORE = /^[\s\d\p{P}\p{S}]*$/u;
 
+/**
+ * Blank out `//` and `/* *\/` comments, preserving every newline so reported
+ * line numbers still point at the real line.
+ *
+ * The JSX text scan below reads the whole file at once, which is what lets it
+ * catch Prettier-wrapped text. The cost is that a comment sitting BETWEEN two
+ * JSX elements — e.g. between the entries of a `Record<string, ReactNode>` —
+ * looks exactly like a text node to it. A comment is never user-facing text, so
+ * it is removed before the scan rather than tolerated by a growing IGNORE list.
+ * String-aware, so a `//` inside a URL is not mistaken for a comment.
+ */
+/** True when every `(` is closed and none closes before it opened. */
+function isBalanced(text) {
+  let depth = 0;
+  for (const c of text) {
+    if (c === '(') depth += 1;
+    else if (c === ')' && (depth -= 1) < 0) return false;
+  }
+  return depth === 0;
+}
+
+function stripComments(src) {
+  let out = '';
+  let i = 0;
+  const blank = (s) => s.replace(/[^\n]/g, ' ');
+  while (i < src.length) {
+    const c = src[i];
+    const next = src[i + 1];
+    if (c === '/' && next === '/') {
+      const end = src.indexOf('\n', i);
+      const stop = end === -1 ? src.length : end;
+      out += blank(src.slice(i, stop));
+      i = stop;
+    } else if (c === '/' && next === '*') {
+      const end = src.indexOf('*/', i + 2);
+      const stop = end === -1 ? src.length : end + 2;
+      out += blank(src.slice(i, stop));
+      i = stop;
+    } else if (c === '"' || c === "'" || c === '`') {
+      let j = i + 1;
+      while (j < src.length && src[j] !== c) j += src[j] === '\\' ? 2 : 1;
+      out += src.slice(i, Math.min(j + 1, src.length));
+      i = j + 1;
+    } else {
+      out += c;
+      i += 1;
+    }
+  }
+  return out;
+}
+
 for (const file of files) {
   const src = readFileSync(file, 'utf8');
   const lines = src.split('\n');
@@ -90,9 +141,26 @@ for (const file of files) {
   // common formatting in React — a hole exactly where agents write most text.
   // The character class excludes < > { } so a match cannot span a tag or an
   // expression; it is strictly the text node between two elements.
-  for (const m of src.matchAll(/>([^<>{}]{2,}?)</gs)) {
+  const scanned = stripComments(src);
+  for (const m of scanned.matchAll(/>([^<>{}]{2,}?)</gs)) {
     const text = m[1].trim();
     if (IGNORE.test(text) || !WORDS.test(text)) continue;
+    // Not every `>` closes a tag and not every `<` opens one. An arrow
+    // function whose body starts on the next line with a comparison —
+    //   const xOf = (i) =>
+    //     domain.length <= 1 ? … : …
+    // looks exactly like a text node to a regex, and reporting it teaches the
+    // next agent that this rule cries wolf. JSX never closes a tag with `=>`,
+    // and a tag never opens with `<=`: the name, `/`, `!` or `>` follows the
+    // bracket immediately. Both checks are shape, not vocabulary, so nothing
+    // that is really user-facing text escapes through them.
+    if (scanned[m.index - 1] === '=') continue;
+    if (!/[A-Za-z/!>]/.test(scanned[m.index + m[0].length] ?? '')) continue;
+    // Two sibling JSX EXPRESSIONS — `<A />` then `foo: (<B />)`, or a second
+    // `render(<C />)` in a test — leave ordinary code in the span, and code is
+    // not a text node. Prose has balanced parentheses ("Needs cleaning (soon)"
+    // is still caught); a slice of code between two elements almost never does.
+    if (!isBalanced(text)) continue;
     const n = src.slice(0, m.index).split('\n').length;
     const here = lines[n - 1] ?? '';
     const before = lines[n - 2] ?? '';

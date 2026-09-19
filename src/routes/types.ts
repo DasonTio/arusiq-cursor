@@ -12,14 +12,9 @@
  * @requirement FR-34
  */
 import type { ComponentType } from 'react';
+import { ROLES, type Role } from '../lib/domain/role.ts';
 
-export const ROLES = [
-  'client',
-  'technician-internal',
-  'technician-thirdparty',
-  'admin',
-] as const;
-export type Role = (typeof ROLES)[number];
+export { ROLES, type Role };
 
 export interface RouteEntry {
   /** Matches a `screens[].id` in context/requirements/requirements.json. */

@@ -1,0 +1,97 @@
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: 1.5rem;
+  block-size: 1.5rem;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
+}
+
+.suspected .mark {
+  border-style: dashed;
+}
+
+.glyph {
+  inline-size: 1rem;
+  block-size: 1rem;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+.label {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.critical {
+  color: var(--color-severity-critical-mark);
+}
+.critical .label {
+  color: var(--color-severity-critical-text);
+}
+.critical .mark {
+  background: color-mix(
+    in srgb,
+    var(--color-severity-critical-mark) 10%,
+    var(--color-white-1)
+  );
+}
+
+.warning {
+  color: var(--color-severity-warning-mark);
+}
+.warning .label {
+  color: var(--color-severity-warning-text);
+}
+.warning .mark {
+  background: color-mix(
+    in srgb,
+    var(--color-severity-warning-mark) 10%,
+    var(--color-white-1)
+  );
+}
+
+.normal {
+  color: var(--color-severity-normal-mark);
+}
+.normal .label {
+  color: var(--color-severity-normal-text);
+}
+.normal .mark {
+  background: color-mix(
+    in srgb,
+    var(--color-severity-normal-mark) 10%,
+    var(--color-white-1)
+  );
+}
+
+.unknown {
+  color: var(--color-severity-unknown-mark);
+}
+.unknown .label {
+  color: var(--color-severity-unknown-text);
+}
+.unknown .mark {
+  background: color-mix(
+    in srgb,
+    var(--color-severity-unknown-mark) 10%,
+    var(--color-white-1)
+  );
+}
+
+.root[data-size='16'] .mark {
+  inline-size: 1rem;
+  block-size: 1rem;
+}
+.root[data-size='20'] .mark {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+}

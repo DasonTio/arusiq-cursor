@@ -19,7 +19,7 @@ sprint. React 19 + TypeScript + Vite.
 | Working alongside other agents                         | `context/50-agent-protocol.md`           |
 | Is this finished?                                      | `context/60-definition-of-done.md`       |
 | Exact requirement text, screen→FR map, invariants      | `context/requirements/requirements.json` |
-| Why a contested call was made the way it was           | `context/decisions/` (7 ADRs)            |
+| Why a contested call was made the way it was           | `context/decisions/` (10 ADRs)           |
 | Prop contracts for every primitive                     | `src/components/contracts.ts`            |
 | Source of truth, when the above disagree               | `docs/*.pdf`, `docs/*.docx`              |
 
@@ -90,8 +90,8 @@ the screen looks right.
 - **Simulated data lives behind `src/lib/simulation/`.** Never inline a fake
   reading into a component. Phase 1B swaps the adapter, not the screens.
 - **When docs disagree, stop and write an ADR.** Do not silently pick. D5, D6,
-  D7 and D8 genuinely conflict in two places — both are recorded in
-  `context/decisions/`.
+  D7 and D8 genuinely conflict in two places, and D2's sitemap and D7 in a
+  third — all three are recorded in `context/decisions/`.
 - **State what you did not do.** A half-built screen reported as done is worse
   than an unbuilt one, because nobody checks it again.
 

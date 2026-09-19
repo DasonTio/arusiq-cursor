@@ -13,6 +13,13 @@ const steps = [
   // Runs first: it validates the verifiers themselves, so a green run below
   // means something.
   ['self-test', ['node', 'tools/verify-self-test.mjs']],
+  // Formatting runs BEFORE the text-scanning gates on purpose. Prettier
+  // rewraps JSX, and `verify-i18n`'s exemption is positional — it reads the
+  // line a marker sits on and the one after. A reformat can therefore move an
+  // exempted expression out from under its own `i18n-exempt` comment, which is
+  // exactly how this drifted into 86 unformatted files: the check existed as
+  // `npm run format:check` and was never part of the gate, so nobody ran it.
+  ['format', ['npx', 'prettier', '--check', '.']],
   ['contrast', ['node', 'tools/verify-contrast.mjs']],
   ['tokens', ['node', 'tools/verify-tokens.mjs']],
   ['provenance', ['node', 'tools/verify-provenance.mjs']],

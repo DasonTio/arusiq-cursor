@@ -36,6 +36,7 @@ export default defineConfig([
       'arusiq/require-provenance-prop': 'error',
       'arusiq/no-hardcoded-jsx-text': 'error',
       'arusiq/no-raw-value-in-style-prop': 'error',
+      'arusiq/require-selection-state-on-button': 'error',
 
       // D7 §12 / ADR-0007 — charts go through the wrappers in src/patterns,
       // which hard-code the dashed baseline, the text alternative and the

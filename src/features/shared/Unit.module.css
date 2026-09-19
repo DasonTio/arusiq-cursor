@@ -1,0 +1,206 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.section,
+.banner,
+.card,
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+}
+
+.sectionTitle,
+.bannerTitle,
+.cardTitle,
+.partName,
+.dayName,
+.stateTitle,
+.stateBody,
+.meta {
+  margin: 0;
+}
+
+.meta,
+.stateBody {
+  color: var(--color-gray-2);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-h6);
+  line-height: var(--line-height-h6);
+}
+
+.views {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.banner,
+.card,
+.part,
+.day {
+  width: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-page);
+  box-shadow: var(--shadow-sm);
+}
+
+.banner {
+  border-color: var(--color-severity-warning-text);
+}
+
+.metrics,
+.nowGrid {
+  display: grid;
+  gap: var(--space-3);
+  width: 100%;
+}
+
+.parts,
+.days,
+.timeline {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  width: 100%;
+}
+
+.partTop,
+.dayTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.partIdentity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-gray-2);
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.sparkline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.chart {
+  block-size: var(--space-9);
+  inline-size: 100%;
+}
+
+.chartActual {
+  fill: none;
+  stroke: var(--color-brand-primary);
+  stroke-width: 0.6;
+}
+
+.chartBaseline {
+  fill: none;
+  stroke: var(--color-gray-4);
+  stroke-width: 0.6;
+  stroke-dasharray: 1.5 1;
+}
+
+.state {
+  padding-block: var(--space-5);
+}
+
+.stateTitle {
+  font-size: var(--font-size-h5);
+  line-height: var(--line-height-h5);
+}
+
+.skeleton {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.skeletonBlock {
+  min-block-size: var(--space-9);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  border: 1px solid var(--color-gray-5);
+}
+
+@media (min-width: 768px) {
+  .metrics,
+  .nowGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* FR-40 — the command pipeline. Reached rungs fill; the broken rung carries
+   the error colour (label included), never a bare recoloured dot. */
+.commandLifecycle {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.commandSteps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.commandStep {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--color-gray-2);
+}
+
+.commandStep::before {
+  content: '';
+  inline-size: var(--space-2);
+  block-size: var(--space-2);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-gray-5);
+  background: transparent;
+}
+
+.commandStep.done {
+  color: var(--color-black-1);
+}
+
+.commandStep.done::before {
+  background: var(--color-state-success);
+  border-color: var(--color-state-success);
+}
+
+.commandStep.current {
+  color: var(--color-black-1);
+}
+
+.commandStep.broken {
+  color: var(--color-state-error-text);
+}
+
+.commandStep.broken::before {
+  background: var(--color-state-error);
+  border-color: var(--color-state-error);
+}

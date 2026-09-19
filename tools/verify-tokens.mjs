@@ -45,13 +45,25 @@ for (const file of files) {
         `raw colour ${hex[0]} — use a token from tokens.css`,
       );
     const fn = line.match(/\b(rgba?|hsla?|color-mix)\(/);
-    if (fn && !/var\(--/.test(line))
-      add(
-        file,
-        n,
-        'no-raw-color',
-        `raw ${fn[1]}() — compose from a token, e.g. color-mix(in srgb, var(--color-…) 10%, …)`,
-      );
+    if (fn && !/var\(--/.test(line)) {
+      // Prettier wraps long `color-mix()` calls, so the token lives on the
+      // next line. Join until the call closes; a tint composed from tokens
+      // is the documented legal form, not a raw colour.
+      let window = line;
+      if (!line.includes(')')) {
+        for (let j = i + 1; j < Math.min(lines.length, i + 8); j += 1) {
+          window += ` ${lines[j].split(/\/\/|\/\*/)[0]}`;
+          if (lines[j].includes(')')) break;
+        }
+      }
+      if (!/var\(--/.test(window))
+        add(
+          file,
+          n,
+          'no-raw-color',
+          `raw ${fn[1]}() — compose from a token, e.g. color-mix(in srgb, var(--color-…) 10%, …)`,
+        );
+    }
 
     // --- Raw pixel values (D7 §9) ------------------------------------------
     // 0 and 1px hairlines are allowed; everything else comes from the scale.

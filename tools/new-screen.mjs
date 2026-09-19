@@ -77,7 +77,7 @@ export default function ${Pascal}() {
 
   // D7 §18.3 — four treatments that are NOT interchangeable. Wire these to the
   // adapter in src/lib/simulation. Do not collapse noData into empty: that is
-  // how a dashboard comes to imply a unit consumed 0 kWh when it was offline.
+  // how a dashboard comes to imply a unit consumed nothing when it was offline.
   // The assertion is deliberate: without it TypeScript narrows the const to
   // the literal 'ready' and reports the four branches below as dead code.
   // Replace the whole line with the adapter call from src/lib/simulation.

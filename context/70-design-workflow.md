@@ -38,7 +38,7 @@ silent is fine.
 `tokens.css`. Import it into Figma as Variables.
 
 Code is upstream because it holds work Figma cannot reproduce: a contrast matrix
-measured against every legal surface, seven ADRs, and the finding that D7 §4.1's
+measured against every legal surface, eight ADRs, and the finding that D7 §4.1's
 own severity fills miss D7 §19.1's 3:1 bar. Build the palette in Figma first and
 that evidence is gone.
 
@@ -55,16 +55,22 @@ palettes in three artefacts; this is how that does not happen twice.
 Pick screens that between them exercise every pattern. Everything else is
 recomposition, and recomposition belongs in code where the tokens are enforced.
 
-| Archetype            | Why this one                  | Covers                                                       |
-| -------------------- | ----------------------------- | ------------------------------------------------------------ |
-| `client.overview`    | The hardest and the most seen | Dark hero, KPI tiles, severity roll-up, sparkline, timeline  |
-| `client.unit-detail` | Densest data screen           | Part health, command lifecycle, charts, the two carbon cards |
-| `tech.work-order`    | The only heavy input screen   | Checklist, evidence, forms, photo capture                    |
-| `admin.overview`     | Fleet scale                   | Dense tables, approval queue, map, portfolio chart           |
+| Archetype           | Why this one                  | Covers                                                               |
+| ------------------- | ----------------------------- | -------------------------------------------------------------------- |
+| `client.overview`   | The hardest and the most seen | Dark hero, KPI tiles, severity roll-up, sparkline, timeline          |
+| `shared.unit`       | Densest data screen           | Part health, command lifecycle, charts, the emissions card           |
+| `shared.work-order` | The only heavy input screen   | Checklist, evidence, forms, photo capture — one-handed at 375        |
+| `admin.overview`    | Fleet scale                   | Decisions first, approval queue, dense tables, map, portfolio glance |
 
-Draw each **at 375 and at 1024**, and **in both locales**. Indonesian runs
-20–30 % longer; that is the single highest-value thing Figma gives you here,
-because no verifier will ever catch a truncation.
+The unit and the work order are D2 **objects**: one design with role variants,
+not one per role (ADR-0008). Indoor CO₂ is not on the unit. It sits on the
+space, one destination away from emissions.
+
+Draw each **at 375 and at 1024**, and **in both locales**. The exception is
+`admin.overview`: draw it at 1440, plus A-1.1 _Decisions needed_ at 375, because
+HQ has no phone console (ADR-0008). Indonesian runs 20–30 % longer; seeing it
+is the most valuable thing Figma gives you here, because no verifier will ever
+catch a truncation.
 
 ## Code Connect is the bridge
 
@@ -85,7 +91,8 @@ The three open D7 §20 gaps are real design work and the tokens cannot decide th
 
 1. **Part-level health diagram** — twelve components across indoor, outdoor and
    electrical. Lucide has no compressor or evaporator-coil glyph. This is
-   illustration, it blocks `tech.diagnostics`, and it has the longest lead time.
+   illustration, it blocks the Health view of `shared.unit`, and it has the
+   longest lead time.
    **Start it first.**
 2. **Categorical chart ramp** — six series, tuned for adjacent-colour
    discrimination and checked for deuteranopia. Blocks `admin.energy-portfolio`.

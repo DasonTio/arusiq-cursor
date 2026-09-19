@@ -23,6 +23,7 @@ const METRIC_COMPONENTS = [
   'MetricValue',
   'ChartCard',
   'SavingsChart',
+  'CategoricalChart',
   'CarbonCard',
 ];
 /** Units that mark a value as measured rather than decorative. */

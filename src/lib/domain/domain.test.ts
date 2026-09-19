@@ -5,9 +5,21 @@
  * its inputs was.
  */
 import { describe, it, expect } from 'vitest';
-import { rollUp, countAtOrAbove, SEVERITY, type Severity } from './severity.ts';
+import {
+  rollUp,
+  countAtOrAbove,
+  rollUpWithCount,
+  compareSeverity,
+  SEVERITY,
+  type Severity,
+} from './severity.ts';
 import { weakestProvenance, mayUseWordCredit, type Provenance } from './provenance.ts';
-import { isStepPermitted, nextStep, RESTRICTION_STEP } from './restriction.ts';
+import {
+  isStepPermitted,
+  nextStep,
+  restrictionSeverity,
+  RESTRICTION_STEP,
+} from './restriction.ts';
 import { isSettled, isPending } from './command.ts';
 
 describe('rollUp — D7 §4.2 precedence: critical > warning > unknown > normal', () => {
@@ -59,6 +71,49 @@ describe('countAtOrAbove — a roll-up is inspectable, not a bare colour', () =>
   });
 });
 
+describe('rollUpWithCount — one call, so two neighbours cannot disagree', () => {
+  it('counts everything that is not plainly healthy, grey included', () => {
+    const kids: Severity[] = ['normal', 'unknown', 'warning', 'normal'];
+    expect(rollUpWithCount(kids)).toEqual({
+      severity: 'warning',
+      contributing: 2,
+      total: 4,
+    });
+  });
+
+  it('reports nothing contributing when every child is normal', () => {
+    expect(rollUpWithCount(['normal', 'normal'])).toEqual({
+      severity: 'normal',
+      contributing: 0,
+      total: 2,
+    });
+  });
+
+  it('reports an empty subtree as normal with a total of zero', () => {
+    expect(rollUpWithCount([])).toEqual({
+      severity: 'normal',
+      contributing: 0,
+      total: 0,
+    });
+  });
+});
+
+describe('compareSeverity — attention queues order worst first', () => {
+  it('sorts by precedence, not by insertion order', () => {
+    const queue: Severity[] = ['normal', 'unknown', 'critical', 'warning'];
+    expect([...queue].sort(compareSeverity)).toEqual([
+      'critical',
+      'warning',
+      'unknown',
+      'normal',
+    ]);
+  });
+
+  it('treats equal severities as equal', () => {
+    expect(compareSeverity('warning', 'warning')).toBe(0);
+  });
+});
+
 describe('weakestProvenance — an aggregate inherits the weakest input', () => {
   it('lets one simulated reading make the whole total simulated', () => {
     expect(weakestProvenance(['verified', 'verified', 'simulated'])).toBe('simulated');
@@ -102,6 +157,24 @@ describe('isStepPermitted — D6 FR-53 SAFE CONTROL', () => {
   it('permits every step, including stop, for an ordinary space', () => {
     for (const step of RESTRICTION_STEP) {
       expect(isStepPermitted(step, { healthSensitive: false })).toBe(true);
+    }
+  });
+});
+
+describe('restrictionSeverity — a stopped unit is not a reminder', () => {
+  it('reports the rung that has actually stopped the cooling as critical', () => {
+    expect(restrictionSeverity('stop')).toBe('critical');
+  });
+
+  it('reports every rung that still cools as warning', () => {
+    for (const step of RESTRICTION_STEP.filter((s) => s !== 'stop')) {
+      expect(restrictionSeverity(step)).toBe('warning');
+    }
+  });
+
+  it('never reports a restriction as normal — silence is how a client finds out from the temperature', () => {
+    for (const step of RESTRICTION_STEP) {
+      expect(restrictionSeverity(step)).not.toBe('normal');
     }
   });
 });

@@ -8,3 +8,6 @@ export * from './provenance.ts';
 export * from './command.ts';
 export * from './restriction.ts';
 export * from './loadState.ts';
+export * from './role.ts';
+export * from './freshness.ts';
+export * from './comfort.ts';

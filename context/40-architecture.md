@@ -11,6 +11,9 @@ src/
                      RestrictionBanner, CommandControl, SavingsChart, …)
   features/
     auth/  client/  technician/  admin/            ← one owner each, see below
+    shared/          D2 objects used by several roles (unit, space, alert, work
+                     order, device), every action panel, and the shell surfaces
+                     all roles open. One component set, role variants (ADR-0008)
   lib/
     domain/          severity · provenance · command · restriction · loadState
                      Pure functions + their tests. Imports nothing but types.
@@ -60,7 +63,10 @@ work, and each unblocks several agents at once:
 1. ~~**i18n runtime**~~ — **done.** i18next + react-i18next, `en.json` /
    `id.json`, and `<html lang>`/`dir` synced to the active locale. Key parity
    between packs is gated by `npm run verify:i18n`.
-2. **Router** + role guards + the four role shells (bottom tabs / rail / sidebar).
+2. **Router** + role guards + the role shells, built from
+   `requirements.json → navigation`. The client gets five tabs, identical on
+   desktop. The technician gets tabs on the phone and a sidebar at a desk. HQ
+   gets a two-level sidebar and **no phone tab bar** (ADR-0008).
 3. ~~**`lib/domain`**~~ — **done.** severity, `rollUp`, provenance, restriction
    ladder, command lifecycle, load states. 20 unit tests covering the boundaries
    that matter: grey outranking green, one simulated input weakening a whole
@@ -86,6 +92,7 @@ ownership is by **directory, not by feature description**:
 | `src/lib/domain/`, `src/lib/simulation/` | platform agent                | read-only                           |
 | `src/lib/i18n/*.json`                    | **append-only for everyone**  | add keys, never edit others'        |
 | `src/features/<role>/`                   | that role's feature agent     | hands off                           |
+| `src/features/shared/`                   | shared-surfaces agent         | compose, never copy (ADR-0008)      |
 | `src/routes/`                            | platform agent                | every route declares `allowedRoles` |
 | `tools/`, `context/`, `eslint-rules/`    | whoever is doing harness work | propose, don't silently edit        |
 

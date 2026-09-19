@@ -5,6 +5,7 @@
     "phase": "1A",
     "phaseDescription": "Clickable UI/UX prototype for split units on labelled simulated data. Two-week sprint.",
     "sources": [
+      "D2 UI/UX Flow & Screen Design v2.1 (sitemap and user flows)",
       "D5 URS R2",
       "D6 PRD R2",
       "D7 UI Design Guideline R2",
@@ -68,117 +69,166 @@
     }
   ],
   "navigation": {
-    "$comment": "The 'three rails' from the sitemap, read from its excerpt embedded in Figma (file g5e2UgJuHt7TX9QBdRdmjP, node 176:1722) on 2026-09-17. The full sitemap artifact, including its user flows, was NOT readable. Destination → screen mapping is an inference; confirm it against the full sitemap.",
+    "$comment": "From D2 v2.1 (16 Sep 2026, docs/ARUSIQ_D2_UI_UX_Flow_Sitemap_v2.1.html): its Navigation rails, Device strategy and Sitemap sections. Surface IDs (C-1, O-UNIT, P-CONTROL …) are D2's; screen ids are ours, and each screen lists its surfaces. D2 decides the information architecture, D7 decides presentation (ADR-0008). Look a surface up with: grep -o \"id: '<ID>'[^}]*\" docs/ARUSIQ_D2_UI_UX_Flow_Sitemap_v2.1.html",
     "rules": [
-      "Identical on desktop (sidebar) and mobile (bottom tabs) — a person who learns the structure on one should not relearn it on the other.",
-      "Five destinations is the ceiling: what a 375 px tab bar holds without truncation (D7 §8.3).",
-      "Destinations carry visible labels, not icons alone (D7 §7.1).",
-      "Map is the technician's one promotion by frequency, to be checked in the prototype review."
+      "Five destinations per role is the ceiling: what a 375 px tab bar holds without truncation (D7 §8.3).",
+      "Destinations carry visible labels, not icons alone (D7 §7.1), at every breakpoint including 768 (ADR-0010).",
+      "Only destinations sit in a rail. Objects (O-*) are reached from lists, search and notice deep links; panels (P-*) open as sheets over the screen that prompted them and close back onto it; settings (X-*) sit behind the avatar.",
+      "An object or panel has one address and one component set, with role variants — never a copy per role. Multi-role objects and every panel live in src/features/shared/ (ADR-0008).",
+      "Every surface renders at 375 px without horizontal scroll (D5 UR-SYS-03). Each screen's at375 says whether it is fully usable there or read-only; a read-only view says so and names the desktop.",
+      "The router, not the screen, resolves scope: an unauthorised deep link lands on 'not available for your role', never on an empty copy of someone else's page (D2 UF-01).",
+      "Insights shares one period selector across energy, savings and carbon, so the three cannot disagree (D2 UF-03)."
     ],
     "client": {
+      "designedFor": "phone (375). Desktop is the same five destinations with more room for trends.",
       "destinations": [
         {
           "id": "home",
           "label": "Home",
+          "surface": "C-1",
           "purpose": "what needs me",
           "screens": ["client.overview"]
         },
         {
           "id": "spaces",
           "label": "Spaces",
+          "surface": "C-2",
           "purpose": "comfort & air, by room",
-          "screens": ["client.spaces", "client.unit-detail", "client.air-quality"]
+          "views": ["C-2.1 Properties", "C-2.2 Floor or area"],
+          "screens": ["client.spaces"],
+          "opens": ["shared.space", "shared.unit"]
         },
         {
           "id": "alerts",
           "label": "Alerts",
+          "surface": "C-3",
           "purpose": "the one attention queue",
-          "screens": ["shared.notifications"]
+          "screens": ["client.alerts"],
+          "opens": ["shared.alert"]
         },
         {
           "id": "insights",
           "label": "Insights",
+          "surface": "C-4",
           "purpose": "energy · savings · carbon",
-          "screens": ["client.energy", "client.carbon"]
+          "views": ["C-4.1 Energy & cost", "C-4.2 Savings vs normal", "C-4.3 Carbon"],
+          "screens": ["client.energy", "client.carbon"],
+          "opens": ["shared.method", "shared.control"]
         },
         {
           "id": "account",
           "label": "Account",
+          "surface": "C-5",
           "purpose": "bills, visits, contract",
-          "screens": ["client.billing", "client.maintenance"]
+          "views": [
+            "C-5.1 Billing & notices",
+            "C-5.2 Service & visits",
+            "C-5.3 Contract & documents",
+            "C-5.4 Preferences"
+          ],
+          "screens": ["client.billing", "client.maintenance", "shared.profile"],
+          "opens": ["shared.work-order", "shared.pay"]
         }
       ],
       "alwaysPresent": [
-        "search",
+        "search (shared.search)",
         "assistant (shared.assistant)",
         "language switch (FR-04)",
-        "profile"
-      ]
+        "profile (shared.profile)"
+      ],
+      "watch": "Billing has three entrances — the notice deep link, a Home attention banner and Account — and no tab. D2 calls this its riskiest call; check it in the first prototype review."
     },
     "technician": {
+      "designedFor": "desktop or tablet for the queue at the branch; phone (375) at the unit.",
       "destinations": [
         {
           "id": "work",
           "label": "Work",
+          "surface": "T-1",
           "purpose": "today · week · silent units",
-          "screens": ["tech.queue"]
+          "views": ["T-1.1 Today", "T-1.2 Week", "T-1.3 Silent units"],
+          "screens": ["tech.queue"],
+          "opens": ["shared.work-order", "shared.device"]
         },
         {
           "id": "map",
           "label": "Map",
-          "purpose": "promoted by frequency",
+          "surface": "T-2",
+          "purpose": "promoted by frequency — a toggle inside Work on desktop, a tab on the phone",
           "screens": ["tech.map"]
         },
         {
           "id": "me",
           "label": "Me",
+          "surface": "T-3",
           "purpose": "shifts & preferences",
-          "screens": ["tech.me"]
+          "screens": ["tech.me", "shared.profile"]
         }
       ],
-      "openedFromAJob": ["tech.work-order", "tech.diagnostics"]
+      "atTheUnit": "The work order's views — brief, evidence, checklist, findings, closure — are designed one-handed at 375 px (shared.work-order). Third-party technicians get the same shell, scoped to assigned work on the object itself."
     },
     "admin": {
+      "designedFor": "desktop (1440), two-level sidebar: each section with its views always visible.",
+      "phone": "No rail (ADR-0008). A notice deep-links to A-1.1 Decisions needed, one object, and one of three panels — approve, acknowledge, dispatch. Everything else opens read-only and says 'continue on desktop' (D2 UF-10).",
       "destinations": [
         {
           "id": "overview",
           "label": "Overview",
-          "purpose": "decisions needed first",
-          "screens": ["admin.overview", "admin.alerts"]
+          "surface": "A-1",
+          "purpose": "decisions · events · portfolio",
+          "views": ["A-1.1 Decisions needed", "A-1.2 Events", "A-1.3 Portfolio glance"],
+          "screens": ["admin.overview", "admin.alerts"],
+          "opens": ["shared.alert", "shared.approve", "shared.assign"]
         },
         {
           "id": "fleet",
           "label": "Fleet",
-          "purpose": "estate, devices, activity",
-          "screens": ["admin.fleet"]
+          "surface": "A-2",
+          "purpose": "explorer · map · devices · activity",
+          "views": ["A-2.1 Explorer", "A-2.2 Map", "A-2.3 Devices", "A-2.4 Activity"],
+          "screens": ["admin.fleet"],
+          "opens": ["shared.space", "shared.unit", "shared.device", "shared.control"]
         },
         {
           "id": "service",
           "label": "Service",
-          "purpose": "dispatch & SLA",
-          "screens": ["admin.dispatch"]
+          "surface": "A-3",
+          "purpose": "board · technicians · preventive",
+          "views": ["A-3.1 Board", "A-3.2 Technicians", "A-3.3 Preventive schedule"],
+          "screens": ["admin.dispatch"],
+          "opens": ["shared.work-order", "shared.assign"]
         },
         {
           "id": "accounts",
           "label": "Accounts",
-          "purpose": "payments & cases",
-          "screens": ["admin.payments"]
+          "surface": "A-4",
+          "purpose": "customers · payments · cases",
+          "views": ["A-4.1 Customers", "A-4.2 Payments", "A-4.3 Restriction cases"],
+          "screens": ["admin.payments", "admin.restriction-case"],
+          "opens": ["shared.approve"]
         },
         {
           "id": "reporting",
           "label": "Reporting",
-          "purpose": "energy, Scope 2, MRV",
-          "screens": ["admin.energy-portfolio", "admin.mrv"]
+          "surface": "A-5",
+          "purpose": "energy · Scope 2 · packages",
+          "views": [
+            "A-5.1 Energy portfolio",
+            "A-5.2 Scope 2 & carbon",
+            "A-5.3 Packages & exports"
+          ],
+          "screens": ["admin.energy-portfolio", "admin.mrv"],
+          "opens": ["shared.method"]
         }
       ],
       "behindAvatar": [
-        "rules",
-        "tariffs & grid factors",
-        "space flags",
-        "users",
-        "organisations",
-        "integrations",
-        "audit"
+        "X-1 rules & thresholds",
+        "X-2 tariffs & grid factors",
+        "X-3 spaces & flags",
+        "X-4 users & roles",
+        "X-5 organisations",
+        "X-6 integrations (later)",
+        "X-7 audit log"
       ],
       "behindAvatarScreens": ["admin.settings", "admin.audit"]
     }
@@ -273,137 +323,299 @@
     {
       "id": "auth.sign-in",
       "role": ["all"],
-      "satisfies": ["FR-01", "FR-04"]
+      "surfaces": ["S-1", "S-2"],
+      "satisfies": ["FR-01", "FR-04"],
+      "at375": "full",
+      "note": "Email or phone, password, language switch, seeded demo accounts one tap apart. Lockout after five failures (D2: 15 minutes, same neutral wording). The role router (S-2) picks the landing rail."
     },
     {
       "id": "auth.forgot-password",
       "role": ["all"],
-      "satisfies": ["FR-03"]
+      "surfaces": ["S-1.1", "S-1.2"],
+      "satisfies": ["FR-03"],
+      "at375": "full",
+      "note": "Channel choice (email or WhatsApp), a neutral confirmation that never reveals whether the account exists, code entry, password policy, expiry."
     },
     {
-      "id": "client.overview",
-      "role": ["client"],
-      "satisfies": ["FR-10", "FR-15"],
-      "note": "Dark hero: carbon reduced this month. Then comfort per room, then anything red or orange."
-    },
-    {
-      "id": "client.spaces",
-      "role": ["client"],
-      "satisfies": ["FR-13"]
-    },
-    {
-      "id": "client.unit-detail",
-      "role": ["client"],
-      "satisfies": ["FR-14", "FR-20", "FR-40", "FR-41"]
-    },
-    {
-      "id": "client.energy",
-      "role": ["client"],
-      "satisfies": ["FR-60", "FR-61", "FR-62"]
-    },
-    {
-      "id": "client.air-quality",
-      "role": ["client"],
-      "satisfies": ["FR-63", "FR-65", "FR-66"]
-    },
-    {
-      "id": "client.carbon",
-      "role": ["client"],
-      "satisfies": ["FR-70", "FR-71", "FR-66"]
-    },
-    {
-      "id": "client.maintenance",
-      "role": ["client"],
-      "satisfies": ["FR-30", "FR-33"]
-    },
-    {
-      "id": "client.billing",
-      "role": ["client"],
-      "satisfies": ["FR-50", "FR-51", "FR-52"]
-    },
-    {
-      "id": "tech.queue",
-      "role": ["technician-internal", "technician-thirdparty"],
-      "satisfies": ["FR-11", "FR-34"]
-    },
-    {
-      "id": "tech.work-order",
-      "role": ["technician-internal", "technician-thirdparty"],
-      "satisfies": ["FR-32", "FR-25"]
-    },
-    {
-      "id": "tech.diagnostics",
-      "role": ["technician-internal"],
-      "satisfies": ["FR-20", "FR-21", "FR-83"]
-    },
-    {
-      "id": "admin.overview",
-      "role": ["admin"],
-      "satisfies": ["FR-12"],
-      "note": "Opens on decisions needed and how many carry SLA risk."
-    },
-    {
-      "id": "admin.fleet",
-      "role": ["admin"],
-      "satisfies": ["FR-13"]
-    },
-    {
-      "id": "admin.alerts",
-      "role": ["admin"],
-      "satisfies": ["FR-21", "FR-22", "FR-27"]
-    },
-    {
-      "id": "admin.dispatch",
-      "role": ["admin"],
-      "satisfies": ["FR-31"]
-    },
-    {
-      "id": "admin.payments",
-      "role": ["admin"],
-      "satisfies": ["FR-50", "FR-52"]
-    },
-    {
-      "id": "admin.energy-portfolio",
-      "role": ["admin"],
-      "satisfies": ["FR-61"]
-    },
-    {
-      "id": "admin.mrv",
-      "role": ["admin"],
-      "satisfies": ["FR-70", "FR-71", "FR-73", "FR-74"]
-    },
-    {
-      "id": "admin.settings",
-      "role": ["admin"],
-      "satisfies": ["FR-100", "FR-101"]
-    },
-    {
-      "id": "admin.audit",
-      "role": ["admin"],
-      "satisfies": ["FR-102"]
+      "id": "shared.profile",
+      "role": ["all"],
+      "surfaces": ["S-6", "C-5.4"],
+      "satisfies": ["FR-02", "FR-04"],
+      "at375": "full",
+      "note": "Language, notification channels per severity, consents for voice and location, sessions, and sign out here or everywhere. Sits inside Account for clients, inside Me for technicians, behind the avatar for HQ."
     },
     {
       "id": "shared.assistant",
       "role": ["all"],
+      "surfaces": ["S-3"],
       "satisfies": ["FR-04"],
-      "note": "Text and voice with visible transcript; text fallback always present."
+      "at375": "full",
+      "note": "Text and voice with visible transcript; text fallback always present; confirmation before any action it performs."
     },
     {
-      "id": "shared.notifications",
+      "id": "shared.search",
       "role": ["all"],
-      "satisfies": ["FR-22"]
+      "surfaces": ["S-4"],
+      "satisfies": ["FR-13"],
+      "at375": "full",
+      "note": "Units, spaces, work orders, cases and devices, scoped by role; recent and saved. Skips the hierarchy when the name is known."
+    },
+    {
+      "id": "shared.method",
+      "role": ["all"],
+      "surfaces": ["S-5"],
+      "satisfies": ["FR-61", "FR-66", "FR-70", "FR-71"],
+      "at375": "full",
+      "note": "One reference room where every number defends itself: baseline model and version, tariff table, grid factor with source and effective date, what each provenance label means, and the ppm-versus-kgCO₂e glossary. Every savings and emissions figure links here — FR-61 does not permit the chart without it."
+    },
+    {
+      "id": "client.overview",
+      "role": ["client"],
+      "surfaces": ["C-1"],
+      "satisfies": ["FR-10", "FR-15"],
+      "at375": "full",
+      "note": "Dark hero: carbon reduced this month. Then comfort per room, then anything red or orange. KPI tiles for comfort, energy today and saving vs normal; an attention banner when payment or a visit needs the client; maintenance timeline."
+    },
+    {
+      "id": "client.spaces",
+      "role": ["client"],
+      "surfaces": ["C-2", "C-2.1", "C-2.2"],
+      "satisfies": ["FR-13"],
+      "at375": "full",
+      "note": "Home or Office → property → floor or area → room → unit, every level showing the worst status of its children. Opens on the Home/Office switch. Rooms open shared.space; units open shared.unit."
+    },
+    {
+      "id": "client.alerts",
+      "role": ["client"],
+      "surfaces": ["C-3"],
+      "satisfies": ["FR-22"],
+      "at375": "full",
+      "note": "Needs action · watching · resolved, grouped by severity including grey; filter by space and part group; delivery state of the WhatsApp or email notice that carried each alert. Replaces the separate notification centre — one attention queue per role."
+    },
+    {
+      "id": "client.energy",
+      "role": ["client"],
+      "surfaces": ["C-4.1", "C-4.2"],
+      "satisfies": ["FR-60", "FR-61", "FR-62"],
+      "at375": "full",
+      "note": "Two views of Insights. Energy & cost: power now, kWh today and this month, cost at tariff, by unit and room. Savings vs normal: actual vs adjusted baseline, saving in kWh, rupiah and percent, attribution by lever with the next action for each, and a permanent link to shared.method."
+    },
+    {
+      "id": "client.carbon",
+      "role": ["client"],
+      "surfaces": ["C-4.3"],
+      "satisfies": ["FR-70", "FR-71", "FR-66"],
+      "at375": "full",
+      "note": "Scope 2 this period, avoided emissions, grid factor and effective date, provenance label, simple report, offset preview (MOCK). Same period selector as Energy. Indoor CO₂ never appears here — it lives in shared.space."
+    },
+    {
+      "id": "client.billing",
+      "role": ["client"],
+      "surfaces": ["C-5.1"],
+      "satisfies": ["FR-50", "FR-51", "FR-52"],
+      "at375": "full",
+      "note": "Balance, due date, methods, payment instructions, notice history, the active restriction step, what changes, what restores it, grace remaining. Reached from a notice deep link, the Home banner and Account."
+    },
+    {
+      "id": "client.maintenance",
+      "role": ["client"],
+      "surfaces": ["C-5.2", "C-5.3"],
+      "satisfies": ["FR-30", "FR-33"],
+      "at375": "full",
+      "note": "Service & visits: open requests with status and SLA, upcoming visits, assigned technician, closure evidence and confirm-the-fix. Contract & documents: terms, consent for payment-linked control, warranty dates, parts, exports. Requests are raised from an alert or a unit (shared.service-request), not from a menu."
+    },
+    {
+      "id": "shared.unit",
+      "role": ["all"],
+      "surfaces": ["O-UNIT", "O-UNIT.1", "O-UNIT.2", "O-UNIT.3"],
+      "satisfies": ["FR-14", "FR-15", "FR-20", "FR-41", "FR-65"],
+      "at375": "full",
+      "note": "Views: Now (values with freshness) · Health (12 parts in 3 groups, each with severity, evidence, confidence, suspected or confirmed, and one recommended action) · Control (opens shared.control) · Schedule · Energy · History. HQ sees dispatch and restriction actions; the client does not. Unit › Health › Air filter is where the filter journey lands (D2 UF-04)."
+    },
+    {
+      "id": "shared.space",
+      "role": ["client", "admin"],
+      "surfaces": ["O-SPACE"],
+      "satisfies": ["FR-63", "FR-66", "FR-15"],
+      "at375": "full",
+      "note": "One node page for property, floor and room. Comfort verdict; temperature, humidity, CO₂ and dust in plain-language bands; which sensors are missing (grey, never green); the units serving it; health-sensitive flag; roll-up status. Air quality lives here, one destination away from kgCO₂e. A split unit recirculates air — where no ventilation device exists, show the manual action, never a fresh-air control."
+    },
+    {
+      "id": "shared.alert",
+      "role": ["all"],
+      "surfaces": ["O-ALERT"],
+      "satisfies": ["FR-21", "FR-25"],
+      "at375": "full",
+      "note": "Signals, threshold, duration, confidence, likely cause, impact if ignored, exactly one recommended action, and links to the unit and the space. A notice deep-links here. A prediction stays suspected (dashed) until a technician verdict."
+    },
+    {
+      "id": "shared.work-order",
+      "role": ["all"],
+      "surfaces": ["O-WO", "O-WO.1", "O-WO.2", "O-WO.3", "O-WO.4"],
+      "satisfies": ["FR-25", "FR-32", "FR-34"],
+      "at375": "full",
+      "note": "One record, three views: the client tracks it (C-5.2), the technician performs it, HQ dispatches it (A-3.1). Brief · Evidence · Checklist (indoor, outdoor, electrical — measurements, pass or fail, photos) · Findings · Closure with the post-service check that reopens the order if readings do not improve. Designed one-handed at 375. Third-party scope is enforced on the object."
+    },
+    {
+      "id": "shared.device",
+      "role": ["technician-internal", "technician-thirdparty", "admin"],
+      "surfaces": ["O-DEVICE"],
+      "satisfies": ["FR-83"],
+      "at375": "full",
+      "note": "CUT FROM PHASE 1A (2026-09-19, product owner). The data model does not carry most of what this screen promises: Unit.device holds only online, lastHeartbeat, tamperSuspected and maintenanceMode — firmware, buffered data, power-loss detail and install evidence do not exist. The four fields that DO exist are already shown on shared.unit's header and on shared.work-order's 'Device & data state' card, so a dedicated screen would mostly repeat them. FR-83's own Must-level statement (tamper detected, raised with its own icon, never dissolved into the maintenance queue) is already satisfied by the tamper alert and the banner on shared.unit. If a device surface is wanted later, the genuinely missing one is a fleet-wide silent/tampered/maintenance list for HQ, which is buildable from data that exists today. Original scope: Heartbeat, last seen, buffered data, firmware, power loss, possible tamper (its own icon and filter), maintenance mode, install evidence. Reached from Fleet › Devices and Work › Silent units.",
+      "status": "cut-1a"
+    },
+    {
+      "id": "shared.control",
+      "role": ["all"],
+      "surfaces": ["P-CONTROL"],
+      "satisfies": ["FR-40"],
+      "at375": "full",
+      "note": "Power, mode, setpoint, fan. Confirmation shows target vs current and any policy limit, then Sent → Acknowledged → Verified with an honest failure state; the demo data carries one deliberate failure. Opened from a unit, an Insights lever or a group command in Fleet › Activity; policy differs by role."
+    },
+    {
+      "id": "shared.service-request",
+      "role": ["client"],
+      "surfaces": ["P-REQUEST"],
+      "satisfies": ["FR-30"],
+      "at375": "full",
+      "note": "Prefilled from the alert or unit that raised it: unit, alert, type (regular, reactive, preventive), photos, preferred slots, contact channel."
+    },
+    {
+      "id": "shared.pay",
+      "role": ["client"],
+      "surfaces": ["P-PAY"],
+      "satisfies": ["FR-50"],
+      "at375": "full",
+      "note": "Card, virtual account or e-wallet hand-off, confirmation, automatic restore request. A labelled MOCK."
+    },
+    {
+      "id": "shared.assign",
+      "role": ["admin"],
+      "surfaces": ["P-ASSIGN"],
+      "satisfies": ["FR-31", "FR-34"],
+      "at375": "full",
+      "note": "Technician, window, SLA, scope check for third parties, notification preview. Works on a phone — dispatch cannot wait for a desk (D2 UF-10)."
+    },
+    {
+      "id": "shared.approve",
+      "role": ["admin"],
+      "surfaces": ["P-APPROVE"],
+      "satisfies": ["FR-52"],
+      "at375": "full",
+      "note": "Requester, reason, step requested, evidence summary, health-sensitive check, second approver identity, expiry, decision record. Works on a phone (D2 UF-10). Unblocked by ADR-0015 (2026-09-19): two-person control on rungs 1-3, a named management sign-off on rung 4, and a request-and-review record for the health-sensitive flag."
+    },
+    {
+      "id": "shared.maintenance-mode",
+      "role": ["technician-internal", "technician-thirdparty", "admin"],
+      "surfaces": ["P-MAINT"],
+      "satisfies": ["FR-83"],
+      "at375": "full",
+      "note": "CUT FROM PHASE 1A (2026-09-19, product owner). Setting maintenance mode needs an adapter method that does not exist (Unit.device.maintenanceMode is read-only in the simulator), so the panel could only be a fake toggle. The flag is DISPLAYED honestly today on shared.unit ('A technician is on site. Alerts are paused; readings stay grey.'). Building the setter is Phase 1B work alongside the real device seam. Original scope: Duration, work-order link, which alerts are suppressed, automatic expiry — so a technician opening a unit does not look like a customer removing the gadget.",
+      "status": "cut-1a"
+    },
+    {
+      "id": "tech.queue",
+      "role": ["technician-internal", "technician-thirdparty"],
+      "surfaces": ["T-1", "T-1.1", "T-1.2", "T-1.3"],
+      "satisfies": ["FR-11", "FR-34", "FR-83"],
+      "at375": "full",
+      "note": "Assigned work orders ordered by critical, then SLA risk, then age. On a desk, Today · Week · Silent units sit side by side; on a phone it is a dense list."
     },
     {
       "id": "tech.map",
       "role": ["technician-internal", "technician-thirdparty"],
+      "surfaces": ["T-2"],
       "satisfies": ["FR-11"],
-      "note": "The route view of Work. Blocked by D7 §20 gap 3 (map treatment)."
+      "at375": "full",
+      "note": "The route view of Work: assigned sites, travel order, arrival windows, one-tap navigation hand-off. Blocked by D7 §20 gap 3 (map treatment)."
     },
     {
       "id": "tech.me",
       "role": ["technician-internal", "technician-thirdparty"],
+      "surfaces": ["T-3"],
       "satisfies": [],
-      "note": "Shifts & preferences. A sitemap destination with no functional requirement behind it yet."
+      "at375": "full",
+      "note": "Shifts, assigned sites, completed work this week, plus shared.profile for language and channels. No functional requirement of its own."
+    },
+    {
+      "id": "admin.overview",
+      "role": ["admin"],
+      "surfaces": ["A-1", "A-1.1", "A-1.3"],
+      "satisfies": ["FR-12", "FR-52"],
+      "at375": "A-1.1 full (from a notice); the rest read-only",
+      "note": "Opens on decisions needed and how many carry SLA risk — approvals waiting, restrictions pending a second approver, unassigned critical work, SLA breaches imminent, each opening its own panel. The portfolio glance sits under the decisions, never above them."
+    },
+    {
+      "id": "admin.alerts",
+      "role": ["admin"],
+      "surfaces": ["A-1.2"],
+      "satisfies": ["FR-21", "FR-22"],
+      "at375": "read",
+      "note": "Events, a view of Overview: all alerts by severity including grey, age, SLA, acknowledge, group, suppress with a reason, notice delivery state. HQ's single attention queue."
+    },
+    {
+      "id": "admin.fleet",
+      "role": ["admin"],
+      "surfaces": ["A-2", "A-2.1", "A-2.2", "A-2.3", "A-2.4"],
+      "satisfies": ["FR-12", "FR-13", "FR-40", "FR-83"],
+      "at375": "read",
+      "note": "Organisation → property → floor → room → unit with roll-up and health-sensitive flags; map (blocked by D7 §20 gap 3); devices; and Activity — the Sent → Acknowledged → Verified log with group commands and per-unit results."
+    },
+    {
+      "id": "admin.dispatch",
+      "role": ["admin"],
+      "surfaces": ["A-3", "A-3.1", "A-3.2", "A-3.3"],
+      "satisfies": ["FR-31", "FR-34"],
+      "at375": "read",
+      "note": "Board by state and SLA risk with the unassigned queue; technicians (internal and third-party) with scope and load; preventive schedule with auto-created work orders."
+    },
+    {
+      "id": "admin.payments",
+      "role": ["admin"],
+      "surfaces": ["A-4", "A-4.1", "A-4.2"],
+      "satisfies": ["FR-51", "FR-52"],
+      "at375": "read",
+      "note": "Customers with contract type, balance state and any active case; payments overdue, in grace, restricted and disputed, with notice history and delivery status."
+    },
+    {
+      "id": "admin.restriction-case",
+      "role": ["admin"],
+      "surfaces": ["O-CASE", "A-4.3"],
+      "satisfies": ["FR-52"],
+      "at375": "full",
+      "note": "One object for the whole ladder: evidence & consent · ladder state and timers · approvals · audit. The health-sensitive flag disables the stop step on the object itself. A labelled simulation that stays disabled until the per-market legal review signs off. Unblocked by ADR-0015 (2026-09-19): two-person control on rungs 1-3, a named management sign-off on rung 4, and a request-and-review record for the health-sensitive flag."
+    },
+    {
+      "id": "admin.energy-portfolio",
+      "role": ["admin"],
+      "surfaces": ["A-5.1"],
+      "satisfies": ["FR-61"],
+      "at375": "read",
+      "note": "Consumption and saving by site, floor and period, baseline completeness, outliers. Blocked by D7 §20 gap 1 (categorical chart ramp)."
+    },
+    {
+      "id": "admin.mrv",
+      "role": ["admin"],
+      "surfaces": ["A-5.2", "A-5.3", "O-PACK", "P-OFFSET", "P-EXPORT"],
+      "satisfies": ["FR-70", "FR-71", "FR-73", "FR-74"],
+      "at375": "read",
+      "note": "Location- and market-based Scope 2, avoided emissions, grid factor version, verification status; packages and exports by tenant, floor, site and period, with gaps named rather than averaged. The platform connection is a labelled MOCK behind dual approval."
+    },
+    {
+      "id": "admin.settings",
+      "role": ["admin"],
+      "surfaces": ["X-1", "X-2", "X-3", "X-4", "X-5", "X-6"],
+      "satisfies": ["FR-27", "FR-100", "FR-101"],
+      "at375": "desktop only; read-only elsewhere",
+      "note": "Behind the avatar: rules and thresholds with an affected-units preview, versioned tariffs and grid factors, spaces and the health-sensitive flag (OD-01), users and roles, organisations. Integrations (X-6) is later."
+    },
+    {
+      "id": "admin.audit",
+      "role": ["admin"],
+      "surfaces": ["X-7"],
+      "satisfies": ["FR-102"],
+      "at375": "read"
     }
   ],
   "requirements": [
@@ -426,7 +638,7 @@
       "priority": "Must",
       "epic": "EP-01",
       "satisfies": ["UR-AUTH-03"],
-      "statement": "Forgot password with neutral confirmation and time-limited link. MOCKED in 1A."
+      "statement": "Forgot password with neutral confirmation, a time-limited link or code by email or WhatsApp, and password policy. MOCKED in 1A."
     },
     {
       "id": "FR-04",
@@ -744,14 +956,22 @@
       "question": "Who may flag a space as health-sensitive? It blocks the stop step of the ladder.",
       "blocks": ["FR-52", "FR-53"],
       "source": "D8 §6",
-      "status": "open"
+      "status": "decided",
+      "evidence": [
+        "D2 v2.1 gives the flag an owner and a record — X-3 Spaces & flags holds the health-sensitive designation with requester, evidence and review date — but still lists who may set it as undecided."
+      ],
+      "resolution": "Decided by ADR-0015 (2026-09-19), confirmed by the product owner: a request-and-review record. The client or an on-site technician REQUESTS the health-sensitive designation with evidence; HQ approves it; the record carries a review date so it cannot be set once and forgotten. Rejected self-declaration (fails open — anyone facing restriction opts out of rung 4) and HQ-only (fails closed — a genuine medical need has no route in). D2 v2.1's X-3 already held requester, evidence and review date, which is this shape."
     },
     {
       "id": "OD-02",
       "question": "One or two approvers at each restriction step?",
       "blocks": ["FR-52"],
       "source": "D8 §6",
-      "status": "open"
+      "status": "decided",
+      "evidence": [
+        "D2 v2.1 UF-06 draws 'notice, grace, two approvals' before steps 1–3 and 'management sign-off' before step 4, and P-APPROVE shows a second approver — yet D2's own open questions list one-or-two approvers as undecided."
+      ],
+      "resolution": "Decided by ADR-0015 (2026-09-19), confirmed by the product owner: two-person control on rungs 1-3 (requester + one independent approver, which is what UnitRestriction.approval already encodes), plus a named management sign-off on rung 4 (stop) per D2 v2.1 UF-06. 'Dual approval' in CLAUDE.md #7 and restriction.ts reads as two-person control, not three. approval gains an optional signedOff record, populated only on stop."
     },
     {
       "id": "OD-03",
@@ -763,15 +983,33 @@
       ],
       "source": "Figma get_variable_defs + lossless screenshot of node 25:371, 2026-09-17",
       "consequence": "A blue accent at #2F80ED gives white text 3.87:1, so a 16px button label fails AA; D7 §3.1's own text threshold is #1B6FDB (4.84:1). It is also D7's state-info fill, so brand and state would share a hue.",
-      "status": "open",
+      "status": "decided",
+      "resolution": "Decided by ADR-0009 (2026-09-18), confirmed by the product owner 2026-09-19 ('follow what is on Figma'): brand primary #0B1B48 and brand red #DB1217 are in tokens.css. #2B407A was explicitly NOT adopted — it had no legal job (ADR-0009 §6), which departs from this entry's recommendation. ADR-0001's hex values are superseded; its logo-canonical principle stands.",
       "evidence": [
         "Figma Colors frame (node 25:371): the bound variables are accent/primary #0B1B48, accent/secondary #2B407A, accent/secondary2 #DB1217, state/warning #FDCE3E, bc/white-2 #F9F9F9, and those are the values painted.",
         "The hex labels on that frame are wrong in 5 of 10 swatches (Primary labelled #022465; Secondary and Secondary2 both labelled #0B1933, though one is mid-blue and one is red).",
         "The logo navy matches #0B1B48. The logo's blue accent is #2F80ED, the Info state colour — a logo element, not a UI brand colour.",
         "#1B2F6E and #D62027 appear nowhere in the Figma file. #DB1217 is also D7 R2's documented brand red.",
-        "Every adopted value passes with white text (16.61 / 9.92 / 5.11 : 1), and all ADR-0005 dark-hero tokens still pass on #0B1B48."
+        "Every adopted value passes with white text (16.61 / 9.92 / 5.11 : 1), and all ADR-0005 dark-hero tokens still pass on #0B1B48.",
+        "Re-checked 2026-09-18 on Login (5:203) and Profile (195:1207): both bind accent/primary and accent/secondary2, yet the sign-in panel and several buttons render #172751 and #DD1E23. Those are the same variables at 95 % layer opacity (all three channels solve to α ≈ 0.95). The variables are right; the opacity is drift that code will not reproduce.",
+        "The Buttons frame (25:607) paints Primary #0B1B48 and Secondary #DB1217, matching the variables. Its hover (#061F35) and active (#526B81) fills are unbound."
       ],
       "recommendation": "Adopt #0B1B48 / #2B407A / #DB1217, keep #2F80ED logo-only, then run npm run figma:tokens and import the variables to replace the mislabelled Colors frame."
+    },
+    {
+      "id": "OD-04",
+      "question": "Which D5/D6 revision is authoritative, and is the client dispute path in Phase 1A?",
+      "blocks": ["FR-52", "FR-73"],
+      "source": "docs/ARUSIQ_D2_UI_UX_Flow_Sitemap_v2.1.html (UF-06, P-DISPUTE, O-PACK) vs docs/ARUSIQ_D5_…_R1.pdf and docs/ARUSIQ_D6_…_r1.pdf",
+      "status": "decided",
+      "evidence": [
+        "The D5 and D6 files in docs/ are both v1.0 (8 Sep 2026). This file and D2 both cite R2.",
+        "D2 draws P-DISPUTE — raising a dispute pauses escalation until a person answers — and cites UR-PAY-06 · FR-57. D6 v1.0 defines FR-50…56 only, and the word 'dispute' appears in neither D5 nor D6 v1.0.",
+        "D2 cites FR-72 for the MRV package (O-PACK); D6 v1.0 lists FR-70, 71, 73 and 74 only.",
+        "Every other FR that D2 cites beyond this file (FR-26, 42–45, 47, 53–56, 64) exists in D6 v1.0 as Phase 1B or 1C, which is why it is absent here."
+      ],
+      "recommendation": "Put the R2 PDFs in docs/. If FR-57 exists, add it and build P-DISPUTE as a labelled simulation, because a ladder whose only exit is payment is a safety gap (INV-SAFE-CONTROL). If it does not, leave the dispute branch out of the demo rather than invent the rule.",
+      "resolution": "Decided by ADR-0015 (2026-09-19): build to D5/D6 v1.0, the revisions actually in docs/. R2 was never supplied. The client dispute path (P-DISPUTE, FR-57) is OUT of Phase 1A and is not built — FR-57 is defined in no requirements document in the repository, so it could only be invented, not implemented. The resulting gap (the ladder's only exit in 1A is payment) is recorded in context/80-stakeholder-journeys.md rather than papered over with a simulated path whose rules we made up. Revisit if R2 lands."
     }
   ]
 }

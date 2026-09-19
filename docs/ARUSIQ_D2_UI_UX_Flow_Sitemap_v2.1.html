@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ARUSIQ · Information Architecture — Sitemap & User Flows</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B2F6E; --navy-d:#0F1B45; --navy-l:#2C3D6E; --red:#D62027;
+  --crit:#D32F2F; --crit-t:#B3151A; --warn:#C2680A; --warn-t:#8A5A00;
+  --ok:#1E9E5A; --ok-t:#12703F; --grey:#6B7A94;
+  --bg:#F4F6FB; --card:#FFFFFF; --card-2:#FBFCFE; --ink:#16203A; --muted:#55627A;
+  --line:#DCE2EF; --tint:#EEF2FB; --tint-2:#E4EAF8;
+  --crit-bg:#FDEDED; --warn-bg:#FDF4E5; --ok-bg:#EAF7F0; --grey-bg:#EEF1F6;
+  --accent:#1B2F6E; --sh:0 1px 2px rgba(16,28,60,.06),0 8px 24px rgba(16,28,60,.06);
+  --s1:8px; --s2:16px; --s3:24px; --s4:32px; --s5:40px; --s6:56px; --s7:72px; --s8:80px; --s9:96px; --s10:120px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#080D18; --card:#101A2C; --card-2:#0C1424; --ink:#E9EDF7; --muted:#9AA8C4;
+    --line:#233048; --tint:#152037; --tint-2:#1B2840;
+    --navy:#7FA5FF; --navy-d:#0B1933; --navy-l:#9DB8FF; --red:#FF6B6F;
+    --crit:#FF6B6F; --crit-t:#FF9D9D; --warn:#E0A245; --warn-t:#F5CE5E;
+    --ok:#5FD69A; --ok-t:#6FDCA4; --grey:#8E9CBC;
+    --crit-bg:#2A1418; --warn-bg:#2A2013; --ok-bg:#0F2A1E; --grey-bg:#161F31;
+    --accent:#7FA5FF; --sh:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#080D18; --card:#101A2C; --card-2:#0C1424; --ink:#E9EDF7; --muted:#9AA8C4;
+  --line:#233048; --tint:#152037; --tint-2:#1B2840;
+  --navy:#7FA5FF; --navy-d:#0B1933; --navy-l:#9DB8FF; --red:#FF6B6F;
+  --crit:#FF6B6F; --crit-t:#FF9D9D; --warn:#E0A245; --warn-t:#F5CE5E;
+  --ok:#5FD69A; --ok-t:#6FDCA4; --grey:#8E9CBC;
+  --crit-bg:#2A1418; --warn-bg:#2A2013; --ok-bg:#0F2A1E; --grey-bg:#161F31;
+  --accent:#7FA5FF; --sh:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:Inter,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  font-size:16px;line-height:1.4;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5{font-family:"Plus Jakarta Sans",Inter,sans-serif;font-weight:800;line-height:1.1;margin:0}
+p{margin:0 0 var(--s2)}
+a{color:var(--accent)}
+.wrap{max-width:1180px;margin:0 auto;padding:0 var(--s3)}
+.mono{font-family:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+
+/* hero */
+.hero{background:linear-gradient(160deg,#0F1B45 0%,#1B2F6E 55%,#22356F 100%);color:#fff;padding:var(--s7) 0 var(--s6)}
+.hero .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:#9DB8FF;font-weight:600;margin-bottom:var(--s2)}
+.hero h1{font-size:clamp(30px,5.2vw,52px);max-width:17ch}
+.hero .lede{color:#C7D3EE;font-size:clamp(16px,2vw,19px);max-width:62ch;margin-top:var(--s3)}
+.metagrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:var(--s2);margin-top:var(--s5)}
+.metagrid div{border-top:2px solid rgba(255,255,255,.22);padding-top:10px}
+.metagrid b{display:block;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#9DB8FF;font-weight:600;margin-bottom:4px}
+.metagrid span{font-size:14px;color:#EAF0FF}
+
+/* sticky nav */
+nav.toc{position:sticky;top:0;z-index:20;background:var(--bg);background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav.toc .scrollrow{display:flex;gap:var(--s2);overflow-x:auto;padding:12px var(--s3);max-width:1180px;margin:0 auto}
+nav.toc a{font-size:13px;font-weight:600;color:var(--muted);text-decoration:none;white-space:nowrap;padding:6px 10px;border-radius:8px}
+nav.toc a:hover{background:var(--tint);color:var(--ink)}
+
+section{padding:var(--s7) 0}
+section+section{border-top:1px solid var(--line)}
+.sec-head{display:flex;flex-wrap:wrap;gap:var(--s2);align-items:baseline;justify-content:space-between;margin-bottom:var(--s3)}
+.sec-head h2{font-size:clamp(23px,3.4vw,34px)}
+.tag{font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--accent);
+  border:1px solid var(--line);border-radius:999px;padding:5px 11px;background:var(--card)}
+.lede{color:var(--muted);max-width:72ch;font-size:17px}
+
+.grid{display:grid;gap:var(--s2)}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:var(--s3);box-shadow:var(--sh)}
+.card h4{font-size:17px;margin-bottom:8px}
+.card p{font-size:14.5px;color:var(--muted);margin:0}
+.card .num{font-family:"Plus Jakarta Sans";font-size:12px;font-weight:800;color:var(--accent);letter-spacing:.1em;display:block;margin-bottom:6px}
+
+/* severity strip */
+.sev{display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:var(--s2)}
+.sev .s{border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--card)}
+.sev .s .dot{width:12px;height:12px;border-radius:3px;display:inline-block;margin-right:8px;vertical-align:-1px}
+.sev .s b{font-size:14px}
+.sev .s p{font-size:13px;margin-top:6px;color:var(--muted)}
+
+/* diagrams */
+.scroller{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card-2);
+  padding:var(--s2);margin:var(--s3) 0}
+.scroller:focus{outline:2px solid var(--accent);outline-offset:2px}
+svg.flow{display:block}
+svg.flow text{font-family:Inter,sans-serif}
+.t-lbl,.t-sub,.t-tag{text-anchor:middle}
+.t-lbl{font-size:12.5px;font-weight:600;fill:var(--ink)}
+.t-sub{font-size:10.5px;font-weight:400;fill:var(--muted)}
+.t-tag{font-size:9px;font-weight:700;letter-spacing:.09em;fill:var(--accent)}
+.t-ed{font-size:10.5px;font-weight:600;fill:var(--muted)}
+.ed-lb{fill:var(--card-2)}
+.nd rect,.nd polygon{fill:var(--card);stroke:var(--line);stroke-width:1.2}
+.nd-screen rect{stroke:var(--navy);stroke-width:1.6}
+.nd-action rect{fill:var(--tint);stroke:var(--tint-2)}
+.nd-system rect{fill:none;stroke:var(--muted);stroke-dasharray:5 4}
+.nd-decision polygon{fill:var(--warn-bg);stroke:var(--warn);stroke-width:1.4}
+.nd-decision .t-lbl{fill:var(--warn-t)}
+.nd-gate polygon{fill:var(--crit-bg);stroke:var(--crit);stroke-width:1.4}
+.nd-gate .t-lbl{fill:var(--crit-t)}
+.nd-state rect{fill:var(--ok-bg);stroke:var(--ok);stroke-width:1.3}
+.nd-state .t-lbl{fill:var(--ok-t)}
+.nd-start rect,.nd-end rect{fill:var(--navy-d);stroke:var(--navy-d)}
+.nd-start .t-lbl,.nd-end .t-lbl{fill:#fff}
+.nd-start .t-sub,.nd-end .t-sub{fill:#B3BFD8}
+.nd-start .t-tag,.nd-end .t-tag{fill:#9DB8FF}
+.nd-note rect{fill:none;stroke:var(--line);stroke-dasharray:2 4}
+.nd-note .t-lbl{fill:var(--muted);font-weight:700;font-size:11.5px}
+.nd-note .t-sub{fill:var(--muted)}
+.ed{fill:none;stroke:var(--grey);stroke-width:1.4}
+.ed-ok{stroke:var(--ok)} .ed-no{stroke:var(--crit)} .ed-warn{stroke:var(--warn)}
+.ed-dash{stroke:var(--line);stroke-dasharray:3 4}
+.mk-n path{fill:var(--grey)} .mk-ok path{fill:var(--ok)} .mk-no path{fill:var(--crit)} .mk-warn path{fill:var(--warn)}
+:root[data-theme="dark"] .nd-start rect,:root[data-theme="dark"] .nd-end rect{fill:#1B2F6E;stroke:#31457E}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .nd-start rect,:root:not([data-theme="light"]) .nd-end rect{fill:#1B2F6E;stroke:#31457E}}
+
+/* flow blocks */
+.flowblk{margin-top:var(--s6)}
+.flowblk:first-of-type{margin-top:var(--s3)}
+.fh{display:flex;flex-wrap:wrap;align-items:baseline;gap:12px}
+.fh .fid{font-family:"JetBrains Mono";font-size:13px;font-weight:600;color:var(--red);letter-spacing:.04em}
+.fh h3{font-size:clamp(20px,2.6vw,26px)}
+.fh .who{font-size:12px;font-weight:600;color:var(--muted);border:1px solid var(--line);
+  border-radius:999px;padding:4px 10px;background:var(--card)}
+.goal{margin-top:10px;font-size:16px;color:var(--ink);max-width:78ch}
+.why{margin-top:12px;border-left:3px solid var(--accent);padding:2px 0 2px 16px;color:var(--muted);font-size:14.5px;max-width:78ch}
+.why b{color:var(--ink);font-weight:700}
+.covers{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.covers span{font-family:"JetBrains Mono";font-size:11px;color:var(--muted);background:var(--tint);
+  border-radius:6px;padding:4px 8px}
+.fnote{font-size:14px;color:var(--muted);max-width:80ch;margin-top:var(--s1)}
+
+/* sitemap tree */
+.appblk{margin-top:var(--s5)}
+.appblk>header{display:flex;flex-wrap:wrap;gap:10px;align-items:baseline}
+.appblk>header .k{font-family:"Plus Jakarta Sans";font-weight:800;font-size:13px;color:#fff;background:var(--navy-d);
+  border-radius:8px;padding:5px 10px;letter-spacing:.06em}
+.appblk>header h3{font-size:22px}
+.appblk>header .who{font-size:13px;color:var(--muted)}
+.appblk>.blurb{color:var(--muted);font-size:15px;max-width:76ch;margin-top:10px}
+ul.tr{list-style:none;margin:0;padding:0}
+ul.tr-0{margin-top:var(--s3);display:grid;gap:10px}
+ul.tr-1,ul.tr-2{margin:8px 0 8px 22px;padding-left:18px;border-left:1px solid var(--line);display:grid;gap:8px}
+ul.tr li{position:relative}
+ul.tr-1>li::before,ul.tr-2>li::before{content:"";position:absolute;left:-18px;top:22px;width:14px;height:1px;background:var(--line)}
+.pg{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+ul.tr-0>li>.pg{border-left:3px solid var(--navy)}
+ul.tr-1>li>.pg,ul.tr-2>li>.pg{background:var(--card-2);padding:10px 12px}
+.pg-h{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.pg-id{font-family:"JetBrains Mono";font-size:11.5px;font-weight:600;color:var(--accent)}
+.pg-n{font-weight:700;font-size:15px}
+ul.tr-1 .pg-n,ul.tr-2 .pg-n{font-size:14px}
+.pg-w{font-size:13.5px;color:var(--muted);margin-top:4px}
+.ph{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:3px 7px;
+  background:var(--grey-bg);color:var(--muted);border:1px solid var(--line)}
+.ph-1A{background:var(--ok-bg);color:var(--ok-t);border-color:transparent}
+.ph-1A-sim{background:var(--warn-bg);color:var(--warn-t);border-color:transparent}
+.ph-mock{background:var(--tint);color:var(--accent);border-color:transparent}
+.ph-later{background:var(--grey-bg);color:var(--muted)}
+
+/* tables */
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th{text-align:left;background:var(--navy-d);color:#fff;font-weight:600;font-size:12px;
+  letter-spacing:.04em;padding:10px 12px;position:sticky;top:0}
+td{padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink)}
+td.sm{font-size:11.5px;color:var(--muted);white-space:nowrap}
+tr.d1 td:first-child,tr.d2 td:first-child{padding-left:26px}
+tr.d1 td,tr.d2 td{background:var(--card-2)}
+table.inv{min-width:900px;background:var(--card)}
+table.mx{min-width:760px;background:var(--card)}
+table.mx td.y{color:var(--ok-t);font-weight:700;text-align:center}
+table.mx td.c{text-align:center;color:var(--muted)}
+details{margin-top:var(--s2);border:1px solid var(--line);border-radius:12px;background:var(--card);overflow:hidden}
+details>summary{cursor:pointer;padding:14px var(--s3);font-weight:600;font-size:14.5px;list-style:none;
+  display:flex;justify-content:space-between;gap:12px;align-items:center}
+details>summary::after{content:"▾";color:var(--muted);font-size:12px}
+details[open]>summary{border-bottom:1px solid var(--line)}
+details .inner{padding:0 var(--s3) var(--s3)}
+details .scroller{margin-top:var(--s2)}
+
+.foot{padding:var(--s6) 0 var(--s8);color:var(--muted);font-size:13.5px}
+.foot b{color:var(--ink)}
+.hint{font-size:12.5px;color:var(--muted);margin-top:-12px;margin-bottom:var(--s3)}
+.pill{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 9px;border-radius:999px;background:var(--tint);color:var(--accent);margin-right:6px}
+ol.steps{counter-reset:s;list-style:none;padding:0;margin:var(--s3) 0 0;display:grid;gap:10px}
+ol.steps li{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px 14px 52px;position:relative;font-size:14.5px}
+ol.steps li::before{counter-increment:s;content:counter(s);position:absolute;left:16px;top:13px;width:24px;height:24px;
+  border-radius:50%;background:var(--navy-d);color:#fff;font-size:12px;font-weight:700;display:grid;place-items:center;font-family:"Plus Jakarta Sans"}
+ol.steps li b{font-weight:700}
+@media (max-width:640px){
+  section{padding:var(--s5) 0}
+  .wrap{padding:0 var(--s2)}
+  ul.tr-1,ul.tr-2{margin-left:10px;padding-left:12px}
+  ul.tr-1>li::before,ul.tr-2>li::before{left:-12px;width:9px}
+}
+
+/* v2 additions */
+.kd{font-size:9.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;border-radius:5px;padding:3px 6px;
+  background:var(--tint);color:var(--accent)}
+.kd-obj{background:#EDE7FB;color:#5B3FA8}
+.kd-panel{background:#E2F3F4;color:#0A6D77}
+.kd-view{background:var(--grey-bg);color:var(--muted)}
+.kd-set,.kd-sys,.kd-pat,.kd-ref{background:transparent;color:var(--muted);border:1px solid var(--line)}
+:root[data-theme="dark"] .kd-obj{background:#241A3D;color:#C4AEFF}
+:root[data-theme="dark"] .kd-panel{background:#0E2A2D;color:#7FD9E0}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .kd-obj{background:#241A3D;color:#C4AEFF}
+:root:not([data-theme="light"]) .kd-panel{background:#0E2A2D;color:#7FD9E0}}
+.mb{font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;border-radius:5px;padding:3px 6px;
+  background:var(--warn-bg);color:var(--warn-t)}
+.rails{display:grid;gap:var(--s2);grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:var(--s3)}
+.rail{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:var(--s3);box-shadow:var(--sh)}
+.rail h4{font-size:16px;margin-bottom:4px}
+.rail .cnt{font-size:12px;color:var(--muted);margin-bottom:14px;display:block}
+.rail ol{list-style:none;counter-reset:r;margin:0;padding:0;display:grid;gap:6px}
+.rail ol li{counter-increment:r;display:flex;gap:10px;align-items:baseline;font-size:14.5px;font-weight:600;
+  background:var(--tint);border-radius:9px;padding:9px 12px}
+.rail ol li span{font-size:12px;font-weight:500;color:var(--muted)}
+.rail .avatar{margin-top:12px;border-top:1px dashed var(--line);padding-top:12px;font-size:13px;color:var(--muted)}
+.rail .avatar b{color:var(--ink);display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:5px}
+.ba{display:grid;grid-template-columns:1fr auto 1fr;gap:var(--s2);align-items:center;margin-top:var(--s3)}
+.ba .b,.ba .a{border-radius:14px;padding:var(--s3);border:1px solid var(--line)}
+.ba .b{background:var(--crit-bg)}
+.ba .a{background:var(--ok-bg)}
+.ba .arw{font-size:22px;color:var(--muted)}
+.ba h5{font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;font-family:"Plus Jakarta Sans"}
+.ba .b h5{color:var(--crit-t)} .ba .a h5{color:var(--ok-t)}
+.dev{font-size:13px;color:var(--muted);margin-top:6px;background:var(--tint);border-radius:9px;padding:9px 12px;display:inline-block}
+.dev b{color:var(--ink);font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-right:8px}
+.ba .big{font-family:"Plus Jakarta Sans";font-size:34px;font-weight:800;line-height:1}
+.ba ul{margin:10px 0 0;padding-left:18px;font-size:13.5px;color:var(--muted)}
+@media (max-width:700px){.ba{grid-template-columns:1fr}.ba .arw{display:none}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <marker id="ah-n" class="mk-n" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z"/></marker>
+  <marker id="ah-ok" class="mk-ok" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z"/></marker>
+  <marker id="ah-no" class="mk-no" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z"/></marker>
+  <marker id="ah-warn" class="mk-warn" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,1 L9,5 L0,9 z"/></marker>
+</defs></svg>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="eyebrow">D2 · UI/UX Flow &amp; Screen Design — v2.1</div>
+    <h1>Surfaces, not pages: the sitemap and the ten flows</h1>
+    <p class="lede">Version 1.0 turned every requirement family into a menu item and produced a fourteen-item sidebar.
+      This revision separates what the product must <i>hold</i> from what a person must <i>navigate</i>: thirteen rail
+      slots across three roles, everything else reached as an object, a view or a panel. Revised again in 2.1: the rail is a
+      desktop sidebar for HQ and the technician queue, and HQ has no mobile rail at all.</p>
+    <div class="metagrid">
+      <div><b>Product</b><span>ARUSIQ Smart AC Intelligence Platform</span></div>
+      <div><b>Scope</b><span>Phase 1A · clickable prototype · split units</span></div>
+      <div><b>Contains</b><span id="counts">Surface model, sitemap and ten user flows</span></div>
+      <div><b>Version</b><span>2.1 · 16 September 2026 · supersedes 1.0</span></div>
+    </div>
+  </div>
+</header>
+
+<nav class="toc"><div class="scrollrow">
+  <a href="#changed">What changed</a>
+  <a href="#surfaces">Surface model</a>
+  <a href="#rails">Navigation rails</a>
+  <a href="#responsive">Device strategy</a>
+  <a href="#sitemap">Sitemap</a>
+  <a href="#inventory">Inventory</a>
+  <a href="#flows">User flows</a>
+  <a href="#coverage">Coverage</a>
+  <a href="#build">Build order</a>
+  <a href="#open">Open questions</a>
+</div></nav>
+
+<section id="changed"><div class="wrap">
+  <div class="sec-head"><h2>What changed, and why it was wrong</h2><span class="tag">Revision</span></div>
+  <p class="lede">Version 1.0 was built by walking the requirement families in D5. UR-AIR exists, so “Air quality” became a page;
+    UR-CAR exists, so “Carbon” became a page. That is traceability wearing an IA costume. Requirements describe what the
+    system must <b>know</b>. Navigation describes where a person <b>goes</b>. They are not the same list.</p>
+
+  <div class="ba">
+    <div class="b"><h5>Version 1.0</h5><div class="big">33</div>
+      <p style="margin-top:6px;font-size:14px">rail items across three roles</p>
+      <ul><li>Client 10 · Technician 9 · Admin 14</li>
+        <li>Four page types flattened into one list</li>
+        <li>Mobile treated as the desktop rail, shrunk</li></ul></div>
+    <div class="arw">→</div>
+    <div class="a"><h5>Version 2.0</h5><div class="big">13</div>
+      <p style="margin-top:6px;font-size:14px">rail items across three roles</p>
+      <ul><li>Client 5 · Technician 3 · Admin 5, plus a configuration room</li>
+        <li>Destinations, objects, views and panels separated</li>
+        <li>Each surface states what it does at 375 px</li></ul></div>
+  </div>
+
+  <p style="margin-top:var(--s4)" class="lede">Nothing was deleted. Everything that left the rail is still in the product,
+    reached from where it is actually encountered.</p>
+  <div class="scroller"><table class="mx"><thead><tr><th>Was a menu item in v1.0</th><th>Now</th><th>Reached from</th><th>Why it moved</th></tr></thead><tbody>
+    <tr><td>C-04 Air quality</td><td class="mono">O-SPACE view</td><td>Spaces → room, or an alert</td><td>Freshness is a property of a room, asked about while standing in it — not a reporting topic.</td></tr>
+    <tr><td>C-05 Energy &amp; savings</td><td class="mono">C-4.1, C-4.2</td><td>Insights</td><td>Energy, savings and carbon are one measurement — kWh — times a tariff or a grid factor.</td></tr>
+    <tr><td>C-06 Carbon</td><td class="mono">C-4.3</td><td>Insights</td><td>Same period selector as energy, so the three figures cannot disagree.</td></tr>
+    <tr><td>C-08 Maintenance</td><td class="mono">C-5.2 + P-REQUEST</td><td>Account, and the alert that caused it</td><td>Requests are raised from evidence, prefilled (FR-30). Only tracking needed a home.</td></tr>
+    <tr><td>C-09 Billing</td><td class="mono">C-5.1</td><td>Account, notice deep link, Home banner</td><td>Money belongs to the relationship, not to the building. Three entrances, no rail slot.</td></tr>
+    <tr><td>T-02…T-07 (six items)</td><td class="mono">O-WO views</td><td>A job in the queue</td><td>Evidence, checklist, findings and closure are four moments of one job, not four places.</td></tr>
+    <tr><td>T-08 Devices</td><td class="mono">T-1.3</td><td>Work → Silent units</td><td>A silent unit is work, not a parallel estate.</td></tr>
+    <tr><td>A-03 Events console</td><td class="mono">A-1.2</td><td>Overview</td><td>One attention queue per role. Two inboxes mean people check neither.</td></tr>
+    <tr><td>A-07 Command activity · A-13 Devices</td><td class="mono">A-2.3, A-2.4</td><td>Fleet</td><td>The estate and everything that has happened to it is one destination.</td></tr>
+    <tr><td>A-08 Energy · A-09 Carbon &amp; MRV</td><td class="mono">A-5.1…A-5.3</td><td>Reporting</td><td>Everything that leaves the building as a claim needs the same scope, period and provenance.</td></tr>
+    <tr><td>A-05 Payments · A-06 Restriction</td><td class="mono">A-4.2, A-4.3</td><td>Accounts</td><td>A payment and a restriction belong to a customer, not to a unit.</td></tr>
+    <tr><td>A-10 Config · A-11 Users · A-12 Audit</td><td class="mono">X-1…X-7</td><td>The avatar, desktop only</td><td>Fleet-wide blast radius. Removing them from the rail costs nothing operationally.</td></tr>
+    <tr><td>SCR-G04 Notification centre</td><td class="mono">C-3 / A-1.2</td><td>Each role’s attention queue</td><td>A notification and an alert were the same thing wearing two hats.</td></tr>
+  </tbody></table></div>
+</div></section>
+
+<section id="surfaces"><div class="wrap">
+  <div class="sec-head"><h2>The surface model</h2><span class="tag">The core idea</span></div>
+  <p class="lede">A page existing is not the same as a page being navigable. Four different kinds of surface were sitting in one
+    list in v1.0. Separating them is what emptied the sidebars without removing anything.</p>
+  <div id="surface-out"></div>
+  <div class="scroller"><table class="mx"><thead><tr><th>Kind</th><th>How you reach it</th><th>Rule</th><th>Examples here</th></tr></thead><tbody>
+    <tr><td><span class="kd kd-dest">destination</span></td><td>The navigation rail or tab bar</td>
+      <td>A place you go with an intent. Five slots per role; each slot must earn itself against the others.</td><td class="mono sm">C-1 Home · A-4 Accounts · T-2 Map</td></tr>
+    <tr><td><span class="kd kd-obj">object</span></td><td>A list, a search result, a deep link in a notice</td>
+      <td>Has one address and one component set, with role variants rather than a copy per application. Never in the rail.</td><td class="mono sm">O-UNIT · O-ALERT · O-WO · O-CASE</td></tr>
+    <tr><td><span class="kd kd-view">view</span></td><td>A tab or segmented control inside a destination or object</td>
+      <td>Shares the parent’s scope and period selector, so two views can never disagree about the same thing.</td><td class="mono sm">C-4.2 Savings · O-WO.2 Checklist</td></tr>
+    <tr><td><span class="kd kd-panel">panel</span></td><td>A sheet over the screen that prompted it</td>
+      <td>Every transaction. You never lose your place to perform one, and one panel serves all three roles under different policy.</td><td class="mono sm">P-CONTROL · P-APPROVE · P-REQUEST</td></tr>
+    <tr><td><span class="kd kd-set">setting</span></td><td>The configuration room, behind the avatar</td>
+      <td>Changes behaviour beyond the current screen. Versioned, audited, desktop only.</td><td class="mono sm">X-1 Thresholds · X-2 Tariffs</td></tr>
+  </tbody></table></div>
+
+  <h3 style="margin-top:var(--s5);font-size:19px">The two grouping tests</h3>
+  <div class="grid g2" style="margin-top:var(--s2)">
+    <div class="card"><span class="num">Join</span><h4>Same question, same moment</h4>
+      <p>Two surfaces belong together when a person asks about them in one breath. “What did it use, what did it save, what did
+        it emit” is one question with three answers — so Insights is one destination with three views and one period selector.</p></div>
+    <div class="card"><span class="num">Split</span><h4>A false comparison would be invited</h4>
+      <p>Two surfaces must stay apart when adjacency implies arithmetic. Indoor CO₂ in ppm and emissions in kgCO₂e now sit a
+        destination apart — ppm in the space, kgCO₂e in Insights. The separation is structural, not a warning label.</p></div>
+  </div>
+
+  <h3 style="margin-top:var(--s5);font-size:19px">The four-tier language the flows assume</h3>
+  <p class="lede" style="margin:10px 0 var(--s2)">Severity is the product’s core vocabulary, so it is the vocabulary of these diagrams too.</p>
+  <div class="sev">
+    <div class="s"><b><span class="dot" style="background:#D32F2F"></span>Critical · act now</b>
+      <p>Failing now or about to. Every roll-up takes the worst status of its children.</p></div>
+    <div class="s"><b><span class="dot" style="background:#C2680A"></span>Warning · plan action</b>
+      <p>Degrading. It still works, but it will not keep working.</p></div>
+    <div class="s"><b><span class="dot" style="background:#1E9E5A"></span>Normal · nothing</b>
+      <p>Within the expected envelope for this unit, this room, these conditions.</p></div>
+    <div class="s"><b><span class="dot" style="background:#6B7A94"></span>No data · restore visibility</b>
+      <p>Offline, no sensor fitted, or too stale to trust. Never rendered as healthy.</p></div>
+  </div>
+</div></section>
+
+<section id="rails"><div class="wrap">
+  <div class="sec-head"><h2>The rails, expressed per device</h2><span class="tag">Navigation</span></div>
+  <p class="lede">The grouping is one structure; how it is expressed is not. A bottom tab bar holds five flat items and no
+    hierarchy. A desktop sidebar holds sections <i>and</i> their views, which is why HQ can see about nine items at 1440 px
+    without going back to the flat fourteen-item list that started this revision.</p>
+
+  <div class="rails">
+    <div class="rail"><h4>Client · phone first</h4><span class="cnt">5 tabs · identical on desktop</span>
+      <ol>
+        <li>Home <span>what needs me</span></li>
+        <li>Spaces <span>comfort &amp; air, by room</span></li>
+        <li>Alerts <span>the one attention queue</span></li>
+        <li>Insights <span>energy · savings · carbon</span></li>
+        <li>Account <span>bills, visits, contract</span></li>
+      </ol>
+      <div class="avatar"><b>Always present</b>Search · Assistant · language switch · profile</div></div>
+
+    <div class="rail"><h4>Technician · split by task</h4><span class="cnt">desktop queue · phone job</span>
+      <ol>
+        <li>Work <span>desktop: today · week · silent units, side by side</span></li>
+        <li>Map <span>a toggle on desktop, a tab on the phone</span></li>
+        <li>Me <span>shifts &amp; preferences</span></li>
+      </ol>
+      <div class="avatar"><b>At the unit</b>The work order and its four views — brief, evidence, checklist, findings — are
+        designed for one hand at 375 px. That is where photos and measurements are captured, and it cannot move to a desk.</div></div>
+
+    <div class="rail"><h4>Admin / HQ · desktop</h4><span class="cnt">5 sections, two levels · no mobile rail</span>
+      <ol>
+        <li>Overview <span>decisions · events · portfolio</span></li>
+        <li>Fleet <span>explorer · map · devices · activity</span></li>
+        <li>Service <span>board · technicians · preventive</span></li>
+        <li>Accounts <span>customers · payments · cases</span></li>
+        <li>Reporting <span>energy · Scope 2 · packages</span></li>
+      </ol>
+      <div class="avatar"><b>Behind the avatar</b>Rules · tariffs &amp; grid factors · space flags · users · organisations ·
+        integrations · audit</div></div>
+  </div>
+
+  <div class="grid g2" style="margin-top:var(--s3)">
+    <div class="card"><span class="num">2.1</span><h4>Which merges survive at any width</h4>
+      <p>Only the semantic ones, and they are not up for review when the screen gets wider: Insights as one measurement;
+        air quality as a property of a space; one attention queue per role; the work order’s four views; payments and cases
+        belonging to a customer; configuration separated from operations.</p></div>
+    <div class="card"><span class="num">2.1</span><h4>Which were slot-driven, and relax on desktop</h4>
+      <p>Devices and Activity inside Fleet, Map inside Work, Preventive inside Service. They were folded to fit five tabs, so
+        on a wide screen they stop being tabs you enter and become second-level items always visible under their section —
+        the same IA, one less click.</p></div>
+  </div>
+</div></section>
+
+<section id="responsive"><div class="wrap">
+  <div class="sec-head"><h2>Device strategy</h2><span class="tag">Revised in 2.1</span></div>
+  <p class="lede">Version 2.0 gave every role a mobile rail. That was wrong for HQ, who work at a desk with two monitors, and
+    only half right for technicians. The split is not by role — it is by <b>task and place</b>. Where the work happens decides
+    which width it is designed for.</p>
+
+  <div class="grid g3" style="margin-top:var(--s3)">
+    <div class="card"><span class="num">Client</span><h4>Phone is the product</h4>
+      <p>Full parity at 375 px, because the client checks comfort from a sofa and pays from a WhatsApp notice. Desktop is the
+        same five destinations with more room for trends — nothing lives there that a phone cannot do.</p></div>
+    <div class="card"><span class="num">Technician</span><h4>Desk for the queue, phone at the unit</h4>
+      <p>Planning — today, the week, SLA, load, route — is read at a branch desk or on a tablet before leaving. Execution is
+        one-handed at the machine: checklist, measurements, photos, closure. Both are designed, neither is a reflow.</p></div>
+    <div class="card"><span class="num">Admin / HQ</span><h4>Desktop, with a deep link for the urgent</h4>
+      <p>No bottom tab bar, no mobile console. The phone is reached from a notice and carries three actions — approve,
+        acknowledge, dispatch — as panels over a single object. Everything else opens read-only and names the desktop.</p></div>
+  </div>
+
+  <div class="scroller"><table class="mx"><thead><tr><th>Surface</th><th>Designed for</th><th>1440 desktop</th><th>768 tablet</th><th>375 phone</th></tr></thead><tbody>
+    <tr><td>Client — all five destinations</td><td>Phone</td><td>Full</td><td>Full</td><td class="y">Full</td></tr>
+    <tr><td>T-1 Work queue · T-1.2 Week · A-3.2 load</td><td>Desktop / tablet</td><td>Full</td><td>Full</td><td>Full, list-dense</td></tr>
+    <tr><td>O-WO views — brief, evidence, checklist, findings</td><td>Phone at the unit</td><td>Full</td><td>Full</td><td class="y">Full, one-handed</td></tr>
+    <tr><td>P-APPROVE · P-ASSIGN · P-MAINT · P-CONTROL</td><td>Every width</td><td>Full</td><td>Full</td><td class="y">Full</td></tr>
+    <tr><td>A-1 Overview · A-1.2 Events</td><td>Desktop</td><td>Full</td><td>Full</td><td>Decisions list only, from a notice</td></tr>
+    <tr><td>A-2 Fleet · A-3 Service · A-4 Accounts</td><td>Desktop</td><td>Full</td><td>Read and act</td><td>Read-only</td></tr>
+    <tr><td>A-5 Reporting · O-PACK</td><td>Desktop</td><td>Full</td><td>Read and share</td><td>Read and share an existing report</td></tr>
+    <tr><td>X-1…X-7 Configuration room</td><td>Desktop</td><td>Full</td><td>Read-only</td><td>Read-only · “continue on desktop”</td></tr>
+  </tbody></table></div>
+  <p class="fnote">Every surface still renders at 375 px without horizontal scroll, which UR-SYS-03 and the responsiveness
+    target require. What changed is the difference between <b>rendering</b> at a width and being <b>designed</b> for it — and
+    saying which is which, rather than letting a versioned tariff table reflow into something editable on a train.</p>
+  <p class="fnote"><b>What this saves.</b> One fully designed mobile layout instead of three: the client application, the
+    work-order views, and the four action panels. The HQ console is drawn once, for a wide screen.</p>
+</div></section>
+
+<section id="sitemap"><div class="wrap">
+  <div class="sec-head"><h2>Sitemap</h2><span class="tag">Information architecture</span></div>
+  <p class="lede">Six maps: the shared shell, the three role rails, the object library every role shares, the panel library, and the
+    configuration room. Each surface carries its kind, how it behaves on a phone, and how it exists in Phase 1A.</p>
+  <p style="margin-top:var(--s2)">
+    <span class="ph ph-1A">1A</span> built and interactive &nbsp;
+    <span class="ph ph-1A-sim">1A sim</span> built on simulated data, labelled &nbsp;
+    <span class="ph ph-mock">mock</span> a non-functional, labelled preview &nbsp;
+    <span class="ph ph-later">later</span> reserved in the map, not in the sprint
+  </p>
+  <div id="sitemap-out"></div>
+</div></section>
+
+<section id="inventory"><div class="wrap">
+  <div class="sec-head"><h2>Surface inventory</h2><span class="tag">Build reference</span></div>
+  <p class="lede">The same map as a table a developer can work through: what each surface is for, what it must carry, the
+    requirement it answers to, and what it does at 375 px. Generated from the sitemap above, so the two cannot drift apart.</p>
+  <div id="inventory-out"></div>
+</div></section>
+
+<section id="flows"><div class="wrap">
+  <div class="sec-head"><h2>User flows</h2><span class="tag">Ten journeys</span></div>
+  <p class="lede">The acceptance criterion is eight journeys demonstrated in under ten minutes. These are those eight, plus device
+    trust — which the conformance review found had no flow at all — plus the mobile triage that tests whether the new admin rail
+    actually works on a phone.</p>
+  <div id="legend-out"></div>
+  <p class="hint">Diagrams scroll sideways on small screens.</p>
+  <div id="flows-out"></div>
+</div></section>
+
+<section id="coverage"><div class="wrap">
+  <div class="sec-head"><h2>Coverage check</h2><span class="tag">Traceability</span></div>
+  <p class="lede">Fewer rail items must not mean fewer requirements met. Every Must family in D5 still reaches at least one flow
+    and one surface — this is the check that makes the reorganisation safe rather than merely tidy.</p>
+  <div class="scroller"><table class="mx"><thead><tr>
+    <th>Requirement family</th><th>Flow</th><th>Surfaces</th><th>Phase 1A state</th></tr></thead><tbody>
+    <tr><td>UR-AUTH · UR-LANG · UR-VOICE</td><td class="mono">UF-01</td><td class="mono sm">S-1…S-6</td><td>Built; voice as transcript mock</td></tr>
+    <tr><td>UR-ASSET · UR-CLI</td><td class="mono">UF-02, 03, 04</td><td class="mono sm">C-1…C-5, O-SPACE, O-UNIT</td><td>Built on simulated telemetry</td></tr>
+    <tr><td>UR-MNT (signals &amp; parts)</td><td class="mono">UF-02, 05</td><td class="mono sm">O-UNIT.1, O-ALERT, O-WO.1</td><td>Rule outcomes simulated per part</td></tr>
+    <tr><td>UR-TEC</td><td class="mono">UF-05, 09</td><td class="mono sm">T-1…T-3, O-WO.1…4</td><td>Built; 3rd-party scope on the object</td></tr>
+    <tr><td>UR-ADM</td><td class="mono">UF-06…10</td><td class="mono sm">A-1…A-5, X-1…X-7</td><td>Built; approvals simulated</td></tr>
+    <tr><td>UR-PAY</td><td class="mono">UF-06, 10</td><td class="mono sm">A-4.2, A-4.3, O-CASE, P-APPROVE, C-5.1</td><td>Labelled simulation only</td></tr>
+    <tr><td>UR-ENE</td><td class="mono">UF-03, 07</td><td class="mono sm">C-4.1, C-4.2, O-UNIT.2, A-5.1</td><td>Baseline comparison simulated</td></tr>
+    <tr><td>UR-AIR</td><td class="mono">UF-04</td><td class="mono sm">O-SPACE, O-UNIT.1</td><td>Simulated; missing sensors shown grey</td></tr>
+    <tr><td>UR-CAR</td><td class="mono">UF-03, 08</td><td class="mono sm">C-4.3, A-5.2, A-5.3, O-PACK, S-5</td><td>Scope 2 estimated; platform mocked</td></tr>
+    <tr><td>UR-DEV</td><td class="mono">UF-09</td><td class="mono sm">O-DEVICE, A-2.3, T-1.3, P-MAINT</td><td>Tamper and offline simulated</td></tr>
+    <tr><td>UR-COM</td><td class="mono">UF-02, 06</td><td class="mono sm">C-3, A-1.2, C-5.1</td><td>Delivery log simulated</td></tr>
+    <tr><td>UR-SYS · UR-NFR</td><td class="mono">all</td><td class="mono sm">S-7 pattern set</td><td>States built into every component</td></tr>
+    <tr><td>UR-HVAC</td><td class="mono c">—</td><td class="mono sm">A-2 hierarchy reserved</td><td>Phase 2; the map does not block it</td></tr>
+  </tbody></table></div>
+</div></section>
+
+<section id="build"><div class="wrap">
+  <div class="sec-head"><h2>What this means for the ten-day sprint</h2><span class="tag">Build order</span></div>
+  <p class="lede">The surface model changes the order. Objects and panels are built once and reused by three roles, so they come
+    before the dashboards that link to them — which is also why the estimate did not grow when the map got denser.</p>
+  <ol class="steps">
+    <li><b>Days 1–2 · Shell and spine.</b> Sign in, router, rails, language switch, the asset hierarchy with status roll-up, and
+      the system states from S-7. Nothing role-specific yet.</li>
+    <li><b>Days 3–4 · The objects.</b> O-UNIT, O-SPACE, O-ALERT and O-WO with their views. Three applications consume these, so
+      every hour here is spent three times.</li>
+    <li><b>Day 5 · The panels.</b> P-CONTROL, P-REQUEST, P-ASSIGN, P-APPROVE. Building them as sheets now is what keeps the
+      dashboards thin afterwards.</li>
+    <li><b>Day 6 · Client rail.</b> C-1, C-2, C-3, C-4 with the provenance library. The 60-second comprehension test runs here first.</li>
+    <li><b>Day 7 · Technician.</b> The queue at desktop width, the work-order views at 375 px. Two viewports, one day, because
+      they are genuinely two products of one object.</li>
+    <li><b>Day 8 · HQ console.</b> A-1 with decisions first, A-2, A-3 — drawn once for 1440 with the two-level sidebar. The phone
+      cut is UF-10 only: a notice, an object, a panel.</li>
+    <li><b>Day 9 · The sensitive features.</b> The ladder (A-4, O-CASE, C-5.1), carbon and MRV (A-5, O-PACK), device trust
+      (O-DEVICE). Built last because they are the ones most likely to be cut down rather than cut out.</li>
+    <li><b>Day 10 · The demonstration.</b> Seeded data for the ten journeys, one deliberate failure in each of the command,
+      payment and device paths, and a run-through against the ten-minute target.</li>
+  </ol>
+</div></section>
+
+<section id="open"><div class="wrap">
+  <div class="sec-head"><h2>Open questions and assumptions</h2><span class="tag">Honest limits</span></div>
+  <div class="grid g2" style="margin-top:var(--s2)">
+    <div class="card"><h4>Billing under Account is the riskiest call here</h4>
+      <p>It is commercially the most important screen in the rent-to-own model, and I have given it three entrances rather
+        than a rail slot: the notice deep link, the Home banner, and Account. Clean in a diagram, and exactly the sort of thing
+        that tests badly. Watch it in the first prototype review; promoting it to a fifth client destination is a one-line change.</p></div>
+    <div class="card"><h4>Two decisions still block UF-06</h4>
+      <p>Who may flag a space health-sensitive — the flag now has an owner and a record in X-3 — and whether one or two
+        approvers are required at each step. Both change the gate nodes and the P-APPROVE panel.</p></div>
+    <div class="card"><h4>Which technician surfaces are truly field surfaces</h4>
+      <p>I have put the queue on a desk and the job on a phone. If technicians in this market are dispatched by WhatsApp and
+        never see a branch desk, the queue is a phone surface too and Work needs a denser mobile list. One question to a
+        service supervisor settles it, and it is cheaper to ask than to build both.</p></div>
+    <div class="card"><h4>Search may outrank the hierarchy at scale</h4>
+      <p>For an office with hundreds of units, S-4 is likely the primary way in and Spaces the secondary one. If the prototype
+        review confirms that, search gets a permanent field in the header rather than an icon.</p></div>
+    <div class="card"><h4>The Figma file could not be read</h4>
+      <p>The existing wireframes were not reachable from this session, so the map comes from D5, D6, D7 and the D8 review alone.
+        Where the built prototype already names a screen differently, keep its name and map the ID onto it — the structure, not
+        the label, is what this document fixes.</p></div>
+    <div class="card"><h4>Insights assumes one period selector</h4>
+      <p>Energy, savings and carbon share it. If a stakeholder wants carbon reported on a financial year while energy runs on a
+        billing month, the three views stop being one destination and the grouping has to be revisited.</p></div>
+  </div>
+  <p class="foot"><b>Sources.</b> D5 R2 User Requirements Specification, D6 R2 Product Requirements Document, D7 R2 UI Design
+    Guideline and the Phase 1 design-set infographic (D8 conformance review). Notation follows ordinary UX flowchart convention —
+    entry and exit, screens, actions, system steps and decisions — with the severity and provenance language taken from D7 R2 so
+    the diagrams and the interface speak the same way. <b>Supersedes v1.0</b>, which remains valid only as the coverage record.</p>
+</div></section>
+
+<script>
+/* ---------- tiny SVG flow engine ---------- */
+var T = { NW: 216, COL: 292, ROW: 122, PAD: 26 };
+
+function esc(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function wrapText(text, max, maxLines) {
+  var words = String(text).split(' '), lines = [], cur = '';
+  for (var i = 0; i < words.length; i++) {
+    var t = cur ? cur + ' ' + words[i] : words[i];
+    if (t.length <= max) { cur = t; }
+    else { if (cur) lines.push(cur); cur = words[i]; }
+  }
+  if (cur) lines.push(cur);
+  if (lines.length > maxLines) {
+    lines = lines.slice(0, maxLines);
+    lines[maxLines - 1] = lines[maxLines - 1].slice(0, max - 1) + '\u2026';
+  }
+  return lines;
+}
+
+function layoutNodes(spec) {
+  var nodes = {}, list = [], maxX = 0, maxY = 0;
+  var COL = spec.col || T.COL, ROW = spec.row || T.ROW, NW = spec.nw || T.NW;
+  spec.nodes.forEach(function (n) {
+    var hex = (n.t === 'decision' || n.t === 'gate');
+    var w = NW * (n.w || 1) + (n.w && n.w > 1 ? (n.w - 1) * (COL - NW) : 0);
+    var lmax = Math.floor((w - (hex ? 46 : 26)) / 6.6);
+    var smax = Math.floor((w - (hex ? 46 : 26)) / 5.4);
+    var L = wrapText(n.label, lmax, 3);
+    var S = n.sub ? wrapText(n.sub, smax, 2) : [];
+    var h = 18 + (n.id ? 14 : 0) + L.length * 16 + (S.length ? 3 + S.length * 13 : 0) + 10;
+    if (h < 50) h = 50;
+    var o = {
+      id: n.id_ || n.key, key: n.key, t: n.t, tag: n.id, L: L, S: S,
+      x: T.PAD + n.c * COL, y: T.PAD + n.r * ROW, w: w, h: h, c: n.c, r: n.r
+    };
+    nodes[n.key] = o; list.push(o);
+    if (o.x + o.w > maxX) maxX = o.x + o.w;
+    if (o.y + o.h > maxY) maxY = o.y + o.h;
+  });
+  return { nodes: nodes, list: list, W: maxX + T.PAD + 8, H: maxY + T.PAD + 8 };
+}
+
+function nodeSVG(n) {
+  var x = n.x, y = n.y, w = n.w, h = n.h, cls = 'nd nd-' + n.t, shape;
+  if (n.t === 'start' || n.t === 'end' || n.t === 'state') {
+    shape = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + Math.min(h / 2, 26) + '"/>';
+  } else if (n.t === 'decision' || n.t === 'gate') {
+    var p = [
+      [x + 16, y], [x + w - 16, y], [x + w, y + h / 2],
+      [x + w - 16, y + h], [x + 16, y + h], [x, y + h / 2]
+    ].map(function (q) { return q[0].toFixed(1) + ',' + q[1].toFixed(1); }).join(' ');
+    shape = '<polygon points="' + p + '"/>';
+  } else {
+    shape = '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="10"/>';
+  }
+  var cx = x + w / 2, cur = y + 18, txt = '';
+  if (n.tag) {
+    txt += '<text class="t-tag" x="' + cx + '" y="' + cur + '">' + esc(n.tag) + '</text>';
+    cur += 14;
+  }
+  n.L.forEach(function (line) {
+    txt += '<text class="t-lbl" x="' + cx + '" y="' + (cur + 12) + '">' + esc(line) + '</text>';
+    cur += 16;
+  });
+  if (n.S.length) {
+    cur += 3;
+    n.S.forEach(function (line) {
+      txt += '<text class="t-sub" x="' + cx + '" y="' + (cur + 10) + '">' + esc(line) + '</text>';
+      cur += 13;
+    });
+  }
+  return '<g class="' + cls + '">' + shape + txt + '</g>';
+}
+
+function anchors(n) {
+  return {
+    t: [n.x + n.w / 2, n.y], b: [n.x + n.w / 2, n.y + n.h],
+    l: [n.x, n.y + n.h / 2], r: [n.x + n.w, n.y + n.h / 2],
+    cx: n.x + n.w / 2, cy: n.y + n.h / 2
+  };
+}
+
+function edgeSVG(e, nodes, bounds) {
+  var a = nodes[e.f], b = nodes[e.t];
+  if (!a || !b) { throw new Error('missing node in edge ' + e.f + '->' + e.t); }
+  var A = anchors(a), B = anchors(b), route = e.r;
+  if (!route) {
+    if (a.c === b.c) route = (b.r > a.r) ? 'v' : 'vu';
+    else if (a.r === b.r) route = (b.c > a.c) ? 'h' : 'hl';
+    else route = 'hv';
+  }
+  var d, lp;
+  if (route === 'v') { d = 'M' + A.b[0] + ',' + A.b[1] + ' L' + B.t[0] + ',' + B.t[1]; lp = [A.b[0] + 8, (A.b[1] + B.t[1]) / 2, 'start']; }
+  else if (route === 'vu') { d = 'M' + A.t[0] + ',' + A.t[1] + ' L' + B.b[0] + ',' + B.b[1]; lp = [A.t[0] + 8, (A.t[1] + B.b[1]) / 2, 'start']; }
+  else if (route === 'h') { d = 'M' + A.r[0] + ',' + A.r[1] + ' L' + B.l[0] + ',' + B.l[1]; lp = [(A.r[0] + B.l[0]) / 2, A.r[1] - 9, 'middle']; }
+  else if (route === 'hl') { d = 'M' + A.l[0] + ',' + A.l[1] + ' L' + B.r[0] + ',' + B.r[1]; lp = [(A.l[0] + B.r[0]) / 2, A.l[1] - 9, 'middle']; }
+  else if (route === 'hv') { d = 'M' + A.r[0] + ',' + A.r[1] + ' H' + B.t[0] + ' V' + B.t[1]; lp = [A.r[0] + 10, A.r[1] - 9, 'start']; }
+  else if (route === 'hu') { d = 'M' + A.r[0] + ',' + A.r[1] + ' H' + B.b[0] + ' V' + B.b[1]; lp = [A.r[0] + 10, A.r[1] - 9, 'start']; }
+  else if (route === 'hlv') { d = 'M' + A.l[0] + ',' + A.l[1] + ' H' + B.t[0] + ' V' + B.t[1]; lp = [A.l[0] - 10, A.l[1] - 9, 'end']; }
+  else if (route === 'hlu') { d = 'M' + A.l[0] + ',' + A.l[1] + ' H' + B.b[0] + ' V' + B.b[1]; lp = [A.l[0] - 10, A.l[1] - 9, 'end']; }
+  else if (route === 'vh') { d = 'M' + A.b[0] + ',' + A.b[1] + ' V' + B.l[1] + ' H' + B.l[0]; lp = [A.b[0] + 8, A.b[1] + 16, 'start']; }
+  else if (route === 'vhl') { d = 'M' + A.b[0] + ',' + A.b[1] + ' V' + B.r[1] + ' H' + B.r[0]; lp = [A.b[0] + 8, A.b[1] + 16, 'start']; }
+  else if (route === 'uh') { d = 'M' + A.t[0] + ',' + A.t[1] + ' V' + B.l[1] + ' H' + B.l[0]; lp = [A.t[0] + 8, A.t[1] - 12, 'start']; }
+  else if (route === 'uhl') { d = 'M' + A.t[0] + ',' + A.t[1] + ' V' + B.r[1] + ' H' + B.r[0]; lp = [A.t[0] + 8, A.t[1] - 12, 'start']; }
+  else if (route === 'back') {
+    var lx = Math.min(a.x, b.x) - 34 - (e.off || 0);
+    d = 'M' + A.l[0] + ',' + A.l[1] + ' H' + lx + ' V' + B.l[1] + ' H' + B.l[0];
+    lp = [lx + 8, (A.l[1] + B.l[1]) / 2, 'start'];
+  }
+  else if (route === 'over') {
+    var ty = Math.min(a.y, b.y) - 30 - (e.off || 0);
+    d = 'M' + A.t[0] + ',' + A.t[1] + ' V' + ty + ' H' + B.t[0] + ' V' + B.t[1];
+    lp = [(A.t[0] + B.t[0]) / 2, ty - 7, 'middle'];
+  }
+  else if (route === 'under') {
+    var by = Math.max(a.y + a.h, b.y + b.h) + 32 + (e.off || 0);
+    d = 'M' + A.b[0] + ',' + A.b[1] + ' V' + by + ' H' + B.b[0] + ' V' + B.b[1];
+    lp = [(A.b[0] + B.b[0]) / 2, by + 15, 'middle'];
+  }
+  else { throw new Error('unknown route ' + route); }
+  var cls = 'ed ed-' + (e.tone || 'n');
+  var head = e.tone === 'dash' ? '' : ' marker-end="url(#ah-' + (e.tone || 'n') + ')"';
+  var out = '<path class="' + cls + '" d="' + d + '"' + head + '/>';
+  if (e.l) {
+    var lw = e.l.length * 5.6 + 12, lx0 = lp[2] === 'middle' ? lp[0] - lw / 2 : (lp[2] === 'end' ? lp[0] - lw : lp[0]);
+    out += '<rect class="ed-lb" x="' + lx0.toFixed(1) + '" y="' + (lp[1] - 10).toFixed(1) + '" width="' + lw.toFixed(1) + '" height="15" rx="7"/>';
+    out += '<text class="t-ed" x="' + lp[0].toFixed(1) + '" y="' + (lp[1] + 1).toFixed(1) + '" text-anchor="' + lp[2] + '">' + esc(e.l) + '</text>';
+  }
+  return out;
+}
+
+function renderDiagram(spec) {
+  var lay = layoutNodes(spec);
+  var routes = (spec.edges || []).map(function (e) { return e.r || ''; });
+  var dx = routes.indexOf('back') >= 0 ? 50 : 0;
+  var dy = routes.indexOf('over') >= 0 ? 44 : 0;
+  var extraH = routes.indexOf('under') >= 0 ? 78 : 0;
+  var body = '';
+  (spec.edges || []).forEach(function (e) { body += edgeSVG(e, lay.nodes); });
+  lay.list.forEach(function (n) { body += nodeSVG(n); });
+  var W = Math.round(lay.W + dx), H = Math.round(lay.H + dy + extraH);
+  return '<div class="scroller" tabindex="0"><svg class="flow" width="' + W + '" height="' + H +
+    '" viewBox="0 0 ' + W + ' ' + H + '" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="' +
+    esc(spec.alt || spec.title || 'diagram') + '"><g transform="translate(' + dx + ',' + dy + ')">' + body + '</g></svg></div>';
+}
+
+/* ---------- v2.0 flow specifications ---------- */
+function N(key, t, c, r, label, sub, id, w) {
+  return { key: key, t: t, c: c, r: r, label: label, sub: sub, id: id, w: w };
+}
+function E(f, t, l, r, tone, off) { return { f: f, t: t, l: l, r: r, tone: tone, off: off }; }
+
+var LEGEND = {
+  title: 'Notation', col: 246, row: 96,
+  nodes: [
+    N('a', 'start', 0, 0, 'Entry / exit', 'where a flow begins or ends'),
+    N('b', 'screen', 1, 0, 'Destination / object', 'carries its surface ID', 'O-UNIT'),
+    N('c', 'action', 2, 0, 'Panel or user action', 'a transaction over context'),
+    N('d', 'system', 3, 0, 'System step', 'no one is looking at it'),
+    N('e', 'decision', 0, 1, 'Decision', 'branches, always labelled'),
+    N('f', 'gate', 1, 1, 'Governed gate', 'notice · approval · audit'),
+    N('g', 'state', 2, 1, 'State or label', 'Sent · Simulated · Grey'),
+    N('h', 'note', 3, 1, 'Rule', 'a constraint the design must keep')
+  ],
+  edges: []
+};
+
+var SURFACE = {
+  title: 'Surface model', col: 262, row: 118,
+  nodes: [
+    N('rail', 'start', 0, 0, 'Navigation rail', 'five slots, and they are expensive'),
+    N('dest', 'screen', 1, 0, 'Destination', 'a place you go with an intent'),
+    N('view', 'screen', 2, 0, 'View', 'a tab inside the destination'),
+    N('obj', 'screen', 3, 0, 'Object', 'unit · space · alert · work order · case · device'),
+    N('panel', 'action', 4, 0, 'Panel', 'the transaction, over context'),
+    N('set', 'note', 1, 1, 'Configuration room', 'reached from the avatar — fleet-wide blast radius'),
+    N('deep', 'note', 3, 1, 'Objects are addressed, not navigated', 'a WhatsApp notice deep-links straight here'),
+    N('back', 'note', 4, 1, 'You never lose your place', 'a panel closes back onto the screen that opened it')
+  ],
+  edges: [
+    E('rail', 'dest'), E('dest', 'view'), E('view', 'obj'), E('obj', 'panel'),
+    E('set', 'dest', null, 'vu', 'dash'),
+    E('deep', 'obj', null, 'vu', 'dash'),
+    E('back', 'panel', null, 'vu', 'dash')
+  ]
+};
+
+var FLOWS = [
+  {
+    id: 'UF-01',
+    title: 'Access, language and role routing',
+    role: 'All roles',
+    goal: 'A person reaches the rail that belongs to their role — or recovers access without contacting support.',
+    covers: ['UR-AUTH-01…04', 'UR-LANG-01, 02', 'FR-01…04', 'UC-A01…A05'],
+    decisions: 'Three applications are three rails inside one shell. The router — not the screen — resolves scope, so an unauthorised deep link lands on “not available for your role”, never on an empty version of someone else’s page.',
+    spec: {
+      col: 280,
+      nodes: [
+        N('s', 'start', 0, 0, 'Entry point', 'app launch · link inside a WhatsApp or email notice'),
+        N('login', 'screen', 1, 0, 'Sign in', 'email or phone · password · language switch', 'S-1'),
+        N('valid', 'decision', 2, 0, 'Credentials valid?'),
+        N('router', 'system', 3, 0, 'Role router', 'role and scope resolved: own · assigned · all', 'S-2'),
+        N('c1', 'end', 4, 0, 'Client rail', 'Home · Spaces · Alerts · Insights · Account', 'C-1'),
+        N('t1', 'end', 4, 1, 'Technician rail', 'Work · Map · Me', 'T-1'),
+        N('a1', 'end', 4, 2, 'HQ rail', 'Overview · Fleet · Service · Accounts · Reporting', 'A-1'),
+        N('lang', 'note', 0, 1, 'Language switch on every screen', 'strings, dates, currency, templates from the locale pack'),
+        N('fail', 'decision', 2, 1, 'Fifth consecutive failure?'),
+        N('lock', 'end', 2, 2, 'Locked for 15 minutes', 'same neutral wording either way'),
+        N('fp', 'screen', 1, 3, 'Forgot password', 'code by email or WhatsApp', 'S-1.1'),
+        N('neutral', 'system', 2, 3, 'Neutral confirmation', 'never reveals whether the account exists'),
+        N('reset', 'screen', 3, 3, 'Set a new password', 'code expires · policy shown', 'S-1.2'),
+        N('done', 'end', 4, 3, 'Signed in — the router resolves the landing rail')
+      ],
+      edges: [
+        E('s', 'login'), E('login', 'valid'),
+        E('valid', 'router', 'yes', 'h', 'ok'),
+        E('router', 'c1', 'Client', 'h'),
+        E('router', 't1', 'Technician', 'vh'),
+        E('router', 'a1', 'Admin / HQ', 'vh'),
+        E('valid', 'fail', 'no', 'v', 'no'),
+        E('fail', 'lock', 'yes', 'v', 'no'),
+        E('fail', 'login', 'no — error and retry', 'back'),
+        E('login', 'fp', 'forgot password', 'v'),
+        E('fp', 'neutral', null, 'h'),
+        E('neutral', 'reset', 'valid code', 'h'),
+        E('reset', 'done', null, 'h'),
+        E('lang', 'login', null, 'hu', 'dash')
+      ]
+    },
+    note: 'Sign out lives in each rail’s account area (S-6): this device, or all devices. The ten-journey demo starts here, so the seeded role accounts are one tap apart, not one typed password apart.'
+  },
+
+  {
+    id: 'UF-02',
+    title: 'Alert to action — the client path',
+    role: 'Client',
+    goal: 'Something is wrong with a unit. The client finds out, understands the evidence, and leaves having done something about it.',
+    covers: ['UR-MNT-01', 'UR-CLI-08, 09', 'UR-COM-01, 02', 'FR-21, 22, 30'],
+    decisions: 'Alerts and the notification inbox were merged into one destination, because two attention queues mean people check neither. The alert is an object with its own address, so a WhatsApp notice lands on it directly. Raising service is a panel over that evidence — which is why “Maintenance” no longer needs a rail slot.',
+    spec: {
+      nodes: [
+        N('s', 'start', 0, 0, 'Notice arrives', 'push · WhatsApp · email — same title as in-app'),
+        N('home', 'screen', 0, 1, 'Home', 'a red or orange tile is the same entry', 'C-1'),
+        N('alerts', 'screen', 1, 0, 'Alerts', 'needs action · watching · resolved, plus delivery state', 'C-3'),
+        N('detail', 'screen', 2, 0, 'Alert', 'signals · threshold · duration · confidence · impact', 'O-ALERT'),
+        N('what', 'decision', 3, 0, 'What does it need?'),
+        N('self', 'action', 4, 0, 'Guided self-service', 'clean the filter · raise the setpoint · close a window'),
+        N('recheck', 'system', 5, 0, 'Re-check after the stated window'),
+        N('closed', 'end', 6, 0, 'Clears — or returns, now confirmed'),
+        N('req', 'action', 4, 1, 'Raise a service request', 'panel, prefilled from this alert', 'P-REQUEST'),
+        N('wo', 'system', 5, 1, 'Work order with SLA', 'the same record the technician opens → UF-05', 'O-WO'),
+        N('track', 'end', 6, 1, 'Tracked in Account › Service & visits', 'C-5.2'),
+        N('grey', 'screen', 4, 2, 'Unit › Now', 'last seen · what is missing · what it affects', 'O-UNIT'),
+        N('tamper', 'decision', 5, 2, 'Offline, or possible tamper?'),
+        N('esc', 'end', 6, 2, 'Raised to HQ as a device case', '→ UF-09'),
+        N('rule', 'note', 2, 3, 'No dead ends', 'every alert carries exactly one recommended action')
+      ],
+      edges: [
+        E('s', 'alerts'),
+        E('home', 'alerts', 'tap a red tile', 'hu'),
+        E('alerts', 'detail'), E('detail', 'what'),
+        E('what', 'self', 'the client can fix it', 'h'),
+        E('self', 'recheck'), E('recheck', 'closed'),
+        E('what', 'req', 'a technician is needed', 'vh'),
+        E('req', 'wo'), E('wo', 'track'),
+        E('what', 'grey', 'severity is grey', 'vh'),
+        E('grey', 'tamper'), E('tamper', 'esc', 'either', 'h'),
+        E('rule', 'detail', null, 'vu', 'dash')
+      ]
+    },
+    note: 'In Phase 1A the WhatsApp and email notices are a simulated delivery log with status, so the journey demonstrates end to end without a live Business API account.'
+  },
+
+  {
+    id: 'UF-03',
+    title: 'The savings claim and its provenance',
+    role: 'Client · Admin',
+    goal: 'The client sees what the solution saved against what the bill would otherwise have been — and reaches the method behind that number in one tap.',
+    covers: ['UR-ENE-07', 'UR-CLI-05, 06', 'UR-CAR-01, 02, 08', 'FR-61, 62, 70, 71'],
+    decisions: 'Energy, savings and carbon are three views of one destination because they are one measurement — kWh — times a tariff or a grid factor. The period selector is shared, so the three cannot disagree. The method is a shared reference room rather than a tooltip: one page to maintain, one version to cite in a report.',
+    spec: {
+      col: 274,
+      nodes: [
+        N('s', 'start', 0, 0, 'Hero on Home', 'carbon reduced this month', 'C-1'),
+        N('energy', 'screen', 1, 0, 'Insights › Energy & cost', 'power now, kWh today and this month, cost at tariff', 'C-4.1'),
+        N('calc', 'system', 2, 0, 'Adjusted baseline vs metered use', 'weather- and occupancy-adjusted'),
+        N('comp', 'decision', 3, 0, 'Completeness and verification'),
+        N('ver', 'state', 4, 0, 'Verified', 'accepted method, independent verifier'),
+        N('est', 'state', 4, 1, 'Estimated', 'complete data, not yet verified'),
+        N('prov', 'state', 4, 2, 'Provisional', 'completeness under 90 % — the gap is named'),
+        N('sim', 'note', 4, 3, 'Simulated', 'the Phase 1A default on every figure on every screen'),
+        N('method', 'screen', 5, 1, 'Method & provenance', 'baseline model, version, effective date, tariff, grid factor', 'S-5'),
+        N('levers', 'screen', 6, 1, 'Insights › Savings vs normal', 'attribution by lever, with the next action for each', 'C-4.2'),
+        N('apply', 'action', 7, 1, 'Apply a lever', '→ UF-07 command lifecycle', 'P-CONTROL'),
+        N('carbon', 'screen', 6, 2, 'Insights › Carbon', 'Scope 2 and avoided emissions, same period, same labels', 'C-4.3'),
+        N('rule', 'note', 7, 2, 'Never the word “credit”', 'avoided emissions are not credits until independently verified')
+      ],
+      edges: [
+        E('s', 'energy'), E('energy', 'calc'), E('calc', 'comp'),
+        E('comp', 'ver', null, 'h'),
+        E('comp', 'est', null, 'vh'),
+        E('comp', 'prov', null, 'vh'),
+        E('ver', 'method', null, 'hv'),
+        E('est', 'method', null, 'h'),
+        E('prov', 'method', null, 'hu'),
+        E('sim', 'prov', null, 'vu', 'dash'),
+        E('method', 'levers'), E('levers', 'apply'),
+        E('method', 'carbon', 'same period selector', 'vh'),
+        E('rule', 'carbon', null, 'hl', 'dash')
+      ]
+    },
+    note: 'Indoor CO₂ is deliberately absent from this flow. It lives in the space object, one destination away, which is the structural way to keep ppm and kgCO₂e from ever being compared.'
+  },
+
+  {
+    id: 'UF-04',
+    title: 'Comfort, air quality and the filter',
+    role: 'Client',
+    goal: 'Stale air and a dirty filter are caught early, and the interface stays honest about what a split unit can and cannot do about either.',
+    covers: ['UR-AIR-01, 02, 04, 06', 'UR-CLI-03, 04', 'FR-63…66'],
+    decisions: 'Air quality was a rail item in v1.0 and is now part of the space object, because freshness is a property of a room that people ask about while standing in it — not a reporting topic. Where no ventilation device exists the product says so and offers the manual action instead of implying a control it does not have.',
+    spec: {
+      nodes: [
+        N('s', 'start', 0, 0, 'CO₂ above its band for 15 minutes'),
+        N('aq', 'screen', 1, 0, 'Space › Now', 'CO₂ · humidity · PM2.5 · TVOC in plain-language bands', 'O-SPACE'),
+        N('vent', 'decision', 2, 0, 'Ventilation device connected?'),
+        N('trig', 'action', 3, 0, 'Trigger fan, fresh-air unit or damper', 'Phase 1B / Phase 2 capability'),
+        N('rech', 'system', 4, 0, 'Re-measure after 20 minutes'),
+        N('ok', 'end', 5, 0, 'Band returns to fresh'),
+        N('manual', 'screen', 3, 1, 'Manual action card', '“a split unit recirculates air — open a window”'),
+        N('hold', 'end', 4, 1, 'Alert stays until CO₂ falls'),
+        N('nosens', 'state', 3, 2, 'Grey: no CO₂ module fitted', 'never green — it says what is missing'),
+        N('sep', 'note', 1, 2, 'ppm is not kgCO₂e', 'one destination away from Insights, by design'),
+        N('s2', 'start', 0, 3, 'Filter pressure drop and run hours'),
+        N('filt', 'system', 1, 3, 'Filter health rule fires — orange'),
+        N('part', 'screen', 2, 3, 'Unit › Health › Air filter', 'evidence · effect on the bill · recommended action', 'O-UNIT.1'),
+        N('act', 'decision', 3, 3, 'Wash, replace, or book a visit?'),
+        N('join', 'end', 4, 3, 'Self-service or service request', '→ UF-02')
+      ],
+      edges: [
+        E('s', 'aq'), E('aq', 'vent'),
+        E('vent', 'trig', 'yes', 'h', 'ok'),
+        E('trig', 'rech'), E('rech', 'ok'),
+        E('vent', 'manual', 'no device', 'vh', 'warn'),
+        E('manual', 'hold'),
+        E('vent', 'nosens', 'no sensor', 'vh'),
+        E('sep', 'aq', null, 'vu', 'dash'),
+        E('s2', 'filt'), E('filt', 'part'), E('part', 'act'), E('act', 'join')
+      ]
+    },
+    note: 'Filter health is the only air-quality requirement that is a Must in Phase 1A, and it is also the cheapest saving in the product — which is why it appears both here and in the energy story.'
+  },
+
+  {
+    id: 'UF-05',
+    title: 'Technician: from queue to closure',
+    role: 'Technician — internal and 3rd party',
+    goal: 'The technician knows the likely fault before arriving, proves or disproves it with evidence, and closes with a check that the fix worked.',
+    covers: ['UR-TEC-01…09', 'UR-MNT-07, 08', 'FR-25, 31…34'],
+    decisions: 'This is where the sidebar emptied. Evidence, checklist, findings and closure were four rail items in v1.0; they are four views of one work order, which is also how a technician thinks about them — one job, four moments. Scope for third parties is enforced on the object, so there is no menu to hide.',
+    spec: {
+      col: 262,
+      nodes: [
+        N('s', 'start', 0, 0, 'Assigned and notified'),
+        N('q', 'screen', 1, 0, 'Work › Today', 'critical first, then SLA risk, then age', 'T-1.1'),
+        N('wo', 'screen', 2, 0, 'Work order › Brief', 'suspected fault · confidence · unit history', 'O-WO'),
+        N('ev', 'screen', 3, 0, 'Evidence', 'signals at trigger time, trends, part group', 'O-WO.1'),
+        N('chk', 'screen', 4, 0, 'Checklist', 'indoor · outdoor · electrical, measurements and photos', 'O-WO.2'),
+        N('verd', 'decision', 5, 0, 'Verdict'),
+        N('fix', 'action', 6, 0, 'Findings: repair, parts, notes', 'O-WO.3'),
+        N('post', 'system', 7, 0, 'Closure › post-service check', 'readings compared with the alert window', 'O-WO.4'),
+        N('imp', 'decision', 8, 0, 'Readings improved?'),
+        N('close', 'end', 9, 0, 'Closed · the client confirms'),
+        N('sens', 'action', 6, 1, 'Recorded as a sensor or data-quality issue', 'O-WO.3'),
+        N('thr', 'system', 7, 1, 'Prediction downgraded · threshold review', 'X-1'),
+        N('esc', 'action', 6, 2, 'Escalate with evidence', 'parts, access or scope'),
+        N('disp', 'system', 7, 2, 'HQ re-dispatches', 'A-3.1'),
+        N('scope', 'note', 1, 2, '3rd-party scope', 'assigned work orders only — enforced on the object')
+      ],
+      edges: [
+        E('s', 'q'), E('q', 'wo'), E('wo', 'ev'), E('ev', 'chk'), E('chk', 'verd'),
+        E('verd', 'fix', 'confirmed', 'h', 'ok'),
+        E('fix', 'post'), E('post', 'imp'),
+        E('imp', 'close', 'yes', 'h', 'ok'),
+        E('imp', 'wo', 'no — the work order reopens', 'under', 'no'),
+        E('verd', 'sens', 'not confirmed', 'vh', 'warn'),
+        E('sens', 'thr'),
+        E('verd', 'esc', 'cannot complete', 'vh', 'warn'),
+        E('esc', 'disp'),
+        E('scope', 'q', null, 'vu', 'dash')
+      ]
+    },
+    note: 'The same object is the client’s tracking item (C-5.2), the technician’s job and HQ’s dispatch record (A-3.1). One record, three views — the reason three applications share one shell.'
+  },
+
+  {
+    id: 'UF-06',
+    title: 'Payment-linked restriction — the governed ladder',
+    role: 'Admin / HQ',
+    goal: 'A rent-to-own customer stops paying. Service is stepped down proportionately, reversibly, and with a record of who decided what.',
+    covers: ['UR-PAY-01…06', 'UR-ADM-05, 06, 13', 'FR-50…57'],
+    decisions: 'Read literally, the stakeholder asked for a switch. Specified responsibly it is a ladder with a gate before every step and a route back at every step. The whole ladder is one object rather than a sequence of pages, so its state, its timers, its approvals and its audit are never out of sync — and the approval itself is a panel, which is what lets HQ approve from a phone.',
+    spec: {
+      col: 300, row: 114,
+      nodes: [
+        N('s', 'start', 0, 0, 'Invoice overdue beyond the contract terms'),
+        N('list', 'screen', 0, 1, 'Accounts › Payments', 'overdue · in grace · restricted · disputed', 'A-4.2'),
+        N('case', 'screen', 0, 2, 'Restriction case', 'contract, consent, notice history, unit, space flags', 'O-CASE'),
+        N('audit', 'note', 1, 2, 'Every step is audited', 'request → approval → execution → verification (X-7)'),
+        N('g1', 'gate', 0, 3, 'Gate · notice, grace, two approvals', 'P-APPROVE'),
+        N('s1', 'action', 0, 4, 'Step 1 — Reminder', 'no change to service'),
+        N('d1', 'decision', 1, 4, 'Paid, or dispute raised?'),
+        N('exit', 'end', 2, 5, 'Restored and verified at the unit', 'a dispute instead pauses escalation until it is answered'),
+        N('g2', 'gate', 0, 5, 'Gate · notice, grace, two approvals', 'P-APPROVE'),
+        N('s2', 'action', 0, 6, 'Step 2 — Warmer minimum', 'setpoint floor 26 °C'),
+        N('d2', 'decision', 1, 6, 'Paid, or dispute raised?'),
+        N('g3', 'gate', 0, 7, 'Gate · notice, grace, two approvals', 'P-APPROVE'),
+        N('s3', 'action', 0, 8, 'Step 3 — Eco lock and limited hours'),
+        N('d3', 'decision', 1, 8, 'Paid, or dispute raised?'),
+        N('g4', 'gate', 0, 9, 'Gate · last resort, management sign-off'),
+        N('sim', 'note', 2, 9, 'Phase 1A', 'a labelled simulation only — the ladder stays disabled until the per-market legal review signs off'),
+        N('hs', 'decision', 0, 10, 'Space flagged health-sensitive?', 'flag owned in X-3'),
+        N('never', 'end', 1, 10, 'Stop is never applied', 'the case returns to management'),
+        N('s4', 'action', 0, 11, 'Step 4 — Stop'),
+        N('local', 'system', 1, 11, 'The device holds the policy locally', 'until a signed release arrives (FR-56)')
+      ],
+      edges: [
+        E('s', 'list'), E('list', 'case'), E('case', 'g1'), E('g1', 's1'),
+        E('s1', 'd1', null, 'h'),
+        E('s1', 'g2', 'still overdue after the notice period', 'v', 'warn'),
+        E('g2', 's2'), E('s2', 'd2', null, 'h'),
+        E('s2', 'g3', 'still overdue', 'v', 'warn'),
+        E('g3', 's3'), E('s3', 'd3', null, 'h'),
+        E('s3', 'g4', 'still overdue', 'v', 'warn'),
+        E('d1', 'exit', 'either', 'hv', 'ok'),
+        E('d2', 'exit', 'either', 'hu', 'ok'),
+        E('d3', 'exit', 'either', 'hu', 'ok'),
+        E('g4', 'hs'), E('hs', 'never', 'yes', 'h', 'no'),
+        E('hs', 's4', 'no', 'v', 'no'),
+        E('s4', 'local', null, 'h'),
+        E('audit', 'case', null, 'hl', 'dash'),
+        E('sim', 'g4', null, 'hl', 'dash')
+      ]
+    },
+    note: 'Restore is the half the first revision of the documents was missing: payment confirmed → release command → verified at the unit, with the same state change visible to the client in C-5.1. A ladder drawn without a way down is not acceptable to demonstrate to a stakeholder.'
+  },
+
+  {
+    id: 'UF-07',
+    title: 'Remote command lifecycle',
+    role: 'Client · Admin',
+    goal: 'A tap on a control becomes a change at the machine — or an honest statement that it did not.',
+    covers: ['UR-CLI-07', 'UR-ADM-07', 'UR-SYS-02', 'FR-40, 47'],
+    decisions: 'One control panel serves all three roles under different policy, which is why control never needed to be a page. Sent is not Applied: three states exist because an air conditioner that ignored a command, paired with an interface claiming it obeyed, is the fastest way to lose trust in every other number on the screen.',
+    spec: {
+      col: 258,
+      nodes: [
+        N('s', 'start', 0, 0, 'Control tapped', 'from a unit, a lever in Insights, or a group command in Fleet › Activity'),
+        N('pol', 'decision', 1, 0, 'Within role scope and policy limits?'),
+        N('blocked', 'end', 1, 1, 'Blocked, with the reason', 'restriction in force · outside your scope'),
+        N('conf', 'action', 2, 0, 'Confirmation sheet', 'target vs current value, and any policy limit', 'P-CONTROL'),
+        N('sent', 'state', 3, 0, 'Sent'),
+        N('ack', 'decision', 4, 0, 'Device acknowledged within 30 s?'),
+        N('queue', 'system', 4, 1, 'Queued — shown as not applied', 'offline buffer and retry; never rendered as done'),
+        N('ackd', 'state', 5, 0, 'Acknowledged'),
+        N('read', 'system', 6, 0, 'Read back from the unit'),
+        N('ver', 'decision', 7, 0, 'Value matches?'),
+        N('done', 'end', 8, 0, 'Verified · written to Unit › History', 'O-UNIT.3'),
+        N('warn', 'end', 7, 1, 'Retried once, then raised as an alert', 'a control fault, not a comfort complaint')
+      ],
+      edges: [
+        E('s', 'pol'), E('pol', 'blocked', 'no', 'v', 'no'),
+        E('pol', 'conf', 'yes', 'h', 'ok'),
+        E('conf', 'sent'), E('sent', 'ack'),
+        E('ack', 'queue', 'no', 'v', 'warn'),
+        E('ack', 'ackd', 'yes', 'h', 'ok'),
+        E('ackd', 'read'), E('read', 'ver'),
+        E('ver', 'done', 'yes', 'h', 'ok'),
+        E('ver', 'warn', 'no', 'v', 'no')
+      ]
+    },
+    note: 'In Phase 1A the three states run on a timer and the demo data contains one deliberate failure, so a reviewer sees what a rejected command looks like rather than only the happy path.'
+  },
+
+  {
+    id: 'UF-08',
+    title: 'Carbon: Scope 2, MRV and the platform',
+    role: 'Admin / HQ · Client',
+    goal: 'Metered energy becomes a defensible emissions figure, then an audit-ready package, and only then anything tradable.',
+    covers: ['UR-CAR-01…08', 'UR-ADM-10…12', 'FR-70…74'],
+    decisions: 'Reporting is one destination because everything in it leaves the building as a claim, and a claim needs the same period, scope and provenance labelling wherever it is assembled. Scope 2 reporting is what can be sold now; tokenized offsets sit behind a dual approval and a mock label.',
+    spec: {
+      col: 276,
+      nodes: [
+        N('s', 'start', 0, 0, 'Reporting period closes'),
+        N('scope', 'system', 1, 0, 'Scope 2 = kWh × versioned grid factor', 'location- and market-based, source and effective date shown'),
+        N('avoid', 'system', 1, 1, 'Avoided = saved kWh × grid factor', 'measured against the adjusted baseline'),
+        N('dq', 'decision', 2, 0, 'Completeness and method status'),
+        N('gap', 'end', 3, 1, 'Provisional, with the gap named', 'never silently averaged over missing days'),
+        N('pack', 'screen', 3, 0, 'MRV package', 'coverage, gaps, provenance per series, signatures', 'O-PACK'),
+        N('rep', 'screen', 4, 0, 'Reporting › Packages & exports', 'by tenant, floor, site and period — PDF, CSV, API', 'A-5.3'),
+        N('client', 'end', 5, 0, 'The client sees the same figures and labels', 'C-4.3'),
+        N('rule', 'note', 2, 2, 'UR-CAR-08', 'nothing is presented as an issued credit until an independent verifier says so'),
+        N('plat', 'action', 4, 2, 'Offset or exchange', 'provider-neutral adapter — a mock in Phase 1A', 'P-OFFSET'),
+        N('gate', 'gate', 5, 2, 'Dual approval and explicit user confirmation'),
+        N('cert', 'end', 6, 2, 'Certificate and token ID stored', 'labelled verified savings, never “credit”')
+      ],
+      edges: [
+        E('s', 'scope'), E('s', 'avoid', null, 'vh'),
+        E('scope', 'dq'), E('avoid', 'dq', null, 'hu'),
+        E('dq', 'gap', 'under 90 %', 'vh', 'warn'),
+        E('dq', 'pack', 'complete', 'h', 'ok'),
+        E('pack', 'rep'), E('rep', 'client'),
+        E('rep', 'plat', 'verified reductions only', 'v'),
+        E('plat', 'gate'), E('gate', 'cert'),
+        E('rule', 'plat', null, 'h', 'dash')
+      ]
+    },
+    note: 'The grid factor and the tariff are versioned tables in the configuration room (X-2) with effective dates, so a report issued last quarter reproduces exactly this quarter.'
+  },
+
+  {
+    id: 'UF-09',
+    title: 'Device trust: offline, power loss and tamper',
+    role: 'Admin · Technician · Client',
+    goal: 'The hidden gadget stops reporting. Everyone who depends on it learns the truth quickly, and nothing is painted green for a machine nobody can see.',
+    covers: ['UR-DEV-04, 05', 'UR-TEC-09', 'UR-SYS-02', 'FR-83'],
+    decisions: 'Devices stopped being a destination and became a filter of the estate plus an object, because “which units are silent” is a question about the fleet, not a separate fleet. Grey propagates upward: unknown never masks critical, and a roll-up counts both separately.',
+    spec: {
+      col: 272,
+      nodes: [
+        N('s', 'start', 0, 0, 'Heartbeat missed · enclosure opened · last-gasp power loss'),
+        N('mm', 'decision', 1, 0, 'Maintenance mode active?', 'set from P-MAINT during planned work'),
+        N('supp', 'end', 1, 1, 'Suppressed and logged on the work order'),
+        N('cls', 'system', 2, 0, 'Classified: offline · power loss · possible tamper'),
+        N('grey', 'state', 3, 0, 'Grey propagates up the hierarchy', 'room → floor → property → portfolio'),
+        N('cli', 'screen', 3, 1, 'Client unit reads “no data since …”', 'and states what that makes unavailable', 'O-UNIT'),
+        N('dev', 'screen', 4, 0, 'Device', 'Fleet › Devices for HQ · Work › Silent units for the technician', 'O-DEVICE'),
+        N('rec', 'decision', 5, 0, 'Recovered within 2 hours?'),
+        N('back', 'end', 6, 0, 'Auto-clears · buffered data backfilled', 'up to 72 hours of local buffer'),
+        N('disp', 'action', 5, 1, 'Dispatch a check', 'tamper is also a contract event', 'P-ASSIGN')
+      ],
+      edges: [
+        E('s', 'mm'), E('mm', 'supp', 'yes', 'v'),
+        E('mm', 'cls', 'no', 'h'),
+        E('cls', 'grey'), E('grey', 'dev'), E('dev', 'rec'),
+        E('rec', 'back', 'yes', 'h', 'ok'),
+        E('rec', 'disp', 'no', 'v', 'no'),
+        E('grey', 'cli', null, 'v', 'dash')
+      ]
+    },
+    note: 'This flow is why a fourth alert colour exists. Three colours cannot express “the sensor is silent”, and painting silence green is the one failure that would discredit every other figure in the product.'
+  },
+
+  {
+    id: 'UF-10',
+    title: 'The deep-linked approval — HQ away from a desk',
+    role: 'Admin / HQ · phone',
+    goal: 'The one thing HQ genuinely cannot postpone gets done from a phone. Everything else waits for a desk, and says so plainly.',
+    covers: ['UR-ADM-03, 06', 'UR-SYS-03', 'UR-NFR-01', 'FR-31, 52'],
+    decisions: 'HQ has no mobile rail. There is no bottom tab bar for the admin console, because nobody browses a fleet from a phone — the entry point is a notice, not navigation. What a phone carries is a deep link into one object and one panel: approve, acknowledge, dispatch. Everything else opens read-only and names the desktop as where the work is finished, which is more honest than reflowing a versioned tariff table onto a 375 px screen.',
+    spec: {
+      col: 276,
+      nodes: [
+        N('s', 'start', 0, 0, 'Notice on a phone', 'WhatsApp or push — not a visit to a dashboard'),
+        N('ov', 'screen', 1, 0, 'Decisions needed', 'the only HQ list that exists at 375 px, opened from the notice', 'A-1.1'),
+        N('kind', 'decision', 2, 0, 'What arrived?'),
+        N('case', 'screen', 3, 0, 'Restriction case', 'evidence, consent, notice history, health-sensitive check', 'O-CASE'),
+        N('appr', 'action', 4, 0, 'Approve or refuse, with a reason', 'second approver and expiry shown', 'P-APPROVE'),
+        N('exec', 'system', 5, 0, 'Step executes · verified at the unit'),
+        N('audit', 'end', 6, 0, 'Audit written · customer notified in their language', 'X-7'),
+        N('alert', 'screen', 3, 1, 'Critical event', 'evidence and the affected space', 'O-ALERT'),
+        N('assign', 'action', 4, 1, 'Dispatch', 'technician, window, SLA', 'P-ASSIGN'),
+        N('sent', 'end', 5, 1, 'Technician notified · queue updated'),
+        N('cfg', 'state', 3, 2, 'Anything else', 'fleet browsing · reports · configuration'),
+        N('desk', 'end', 4, 2, 'Opens read-only: “continue on desktop”', 'kept as a task with a deep link, not reflowed into an editor')
+      ],
+      edges: [
+        E('s', 'ov'), E('ov', 'kind'),
+        E('kind', 'case', 'approval requested', 'h'),
+        E('case', 'appr'), E('appr', 'exec'), E('exec', 'audit'),
+        E('kind', 'alert', 'critical event', 'vh', 'warn'),
+        E('alert', 'assign'), E('assign', 'sent'),
+        E('kind', 'cfg', 'anything else', 'vh'),
+        E('cfg', 'desk', null, 'h')
+      ]
+    },
+    note: 'Three actions, two taps each. If an approval needs more than the case summary a phone can show, that is a signal the approval panel is carrying too little evidence — not that HQ needs a mobile console.'
+  }
+];
+
+/* ---------- v2.0 sitemap: surfaces, classified by kind ---------- */
+/* n=name, k=kind, m=mobile policy, why, has=what must be on it, req, p=phase, kids */
+
+var KIND = {
+  dest: 'destination', view: 'view', obj: 'object', panel: 'panel',
+  set: 'setting', sys: 'system', ref: 'reference', pat: 'pattern'
+};
+
+var SITEMAP = [
+  {
+    key: 'S', name: 'Shared shell', who: 'every role', device: 'Every width — it is the part that must not differ',
+    blurb: 'Built once, before any role application. Authentication, the router, the assistant, search and the provenance ' +
+      'library are not owned by a dashboard — they wrap all three.',
+    nodes: [
+      { id: 'S-1', n: 'Sign in', k: 'dest', m: 'full', why: 'The only public surface.', has: 'Email or phone, password, language switch, seeded demo accounts, lockout after five failures.', req: 'UR-AUTH-01 · FR-01', p: '1A', kids: [
+        { id: 'S-1.1', n: 'Forgot password', k: 'panel', m: 'full', why: 'Recover access without contacting support.', has: 'Channel choice (email or WhatsApp), neutral confirmation, expiry.', req: 'UR-AUTH-03 · FR-03', p: '1A' },
+        { id: 'S-1.2', n: 'Set a new password', k: 'view', m: 'full', why: 'Close the recovery loop.', has: 'Code entry, password policy, one-time expiry, return to the router.', req: 'UR-AUTH-03', p: '1A' }
+      ]},
+      { id: 'S-2', n: 'Role router', k: 'sys', m: 'full', why: 'A step, not a page.', has: 'Resolves role and scope (own / assigned / all), picks the landing destination, refuses unauthorised deep links by role rather than by URL.', req: 'UR-AUTH-04 · UR-SYS-05', p: '1A' },
+      { id: 'S-3', n: 'Assistant', k: 'panel', m: 'full', why: 'The “any language, any input” promise, available everywhere.', has: 'Text field, voice capture with visible transcript, confirmation before any action it performs, permanent text fallback.', req: 'UR-VOICE · EP-13', p: '1A sim' },
+      { id: 'S-4', n: 'Search', k: 'panel', m: 'full', why: 'Skips the hierarchy when the name is known.', has: 'Units, spaces, work orders, cases and devices, scoped by role; recent and saved.', req: 'FR-13', p: '1A' },
+      { id: 'S-5', n: 'Method & provenance', k: 'ref', m: 'full', why: 'One room where every number defends itself.', has: 'Baseline model and version, tariff table, grid emission factor with effective dates, what each provenance label means, ppm vs kgCO₂e glossary.', req: 'UR-CAR-01 · UR-AIR-06 · FR-61, 66, 70', p: '1A' },
+      { id: 'S-6', n: 'Profile & preferences', k: 'view', m: 'full', why: 'Personal settings, surfaced inside each role’s own account area.', has: 'Language, notification channels per severity, consent for voice and location, units, sessions, sign out here or everywhere.', req: 'UR-LANG-01, 02 · UR-AUTH-02 · FR-02, 04', p: '1A' },
+      { id: 'S-7', n: 'System states', k: 'pat', m: 'full', why: 'A pattern set every data component inherits.', has: 'Loading, empty, error, offline, stale reading, “no sensor fitted”, “not available for your role”.', req: 'UR-SYS-02, 04 · FR-15', p: '1A' }
+    ]
+  },
+
+  {
+    key: 'C', name: 'Client application', who: 'home owner · tenant · office occupant', device: 'Phone first · desktop is the same five destinations with more room',
+    blurb: 'Five destinations, unchanged across desktop and mobile. Home and Spaces answer “how is it right now”; Insights answers ' +
+      '“what did it cost and save”; Account holds the relationship with the company.',
+    nodes: [
+      { id: 'C-1', n: 'Home', k: 'dest', m: 'full', why: 'Answer “is anything wrong, and what is this costing me” in under a minute.', has: 'Dark hero with carbon reduced this month; KPI tiles for comfort, energy today and saving vs normal; room rows with a comfort verdict; an attention banner when payment or a visit needs the client; maintenance timeline.', req: 'UR-CLI-01 · FR-10', p: '1A' },
+      { id: 'C-2', n: 'Spaces', k: 'dest', m: 'full', why: 'Navigate property the way people describe it — and where air quality lives, because freshness is a property of a room.', has: 'Home or Office → property → floor or area → room → unit, each level showing the worst status of its children.', req: 'UR-ASSET-01 · FR-13', p: '1A', kids: [
+        { id: 'C-2.1', n: 'Properties', k: 'view', m: 'full', why: 'The first fork in the hierarchy.', has: 'Home / Office switch, property cards with roll-up status, unit counts, open alerts.', req: 'UR-ASSET-01', p: '1A' },
+        { id: 'C-2.2', n: 'Floor or area', k: 'view', m: 'full', why: 'Mid-level orientation, mostly for offices.', has: 'Floors with roll-up status, alerts, share of energy.', req: 'UR-ASSET-01', p: '1A' }
+      ]},
+      { id: 'C-3', n: 'Alerts', k: 'dest', m: 'full', why: 'One attention queue per role — the notification inbox was merged into it, because two inboxes make people check neither.', has: 'Needs action / watching / resolved, grouped by severity including grey; filter by space and part group; delivery state of the WhatsApp or email notice that carried it.', req: 'UR-MNT-01 · UR-CLI-08 · UR-COM-01, 02', p: '1A' },
+      { id: 'C-4', n: 'Insights', k: 'dest', m: 'full', why: 'Energy, savings and carbon are one number — kWh — times a tariff or a grid factor. Three rail items implied three independent truths.', has: 'Period switch shared by every view; provenance label on every figure; a permanent link to the method.', req: 'UR-ENE-01, 07 · UR-CAR-01, 02', p: '1A', kids: [
+        { id: 'C-4.1', n: 'Energy & cost', k: 'view', m: 'full', why: 'What the machine used and what it cost.', has: 'Real-time power, kWh today and this month, cost at the applicable tariff, by unit and by room.', req: 'UR-ENE-01 · FR-60', p: '1A sim' },
+        { id: 'C-4.2', n: 'Savings vs normal', k: 'view', m: 'full', why: 'The commercial claim, with its counterfactual attached.', has: 'Actual vs adjusted baseline, saving in kWh, rupiah and percent, attribution by lever (Eco, setpoint ≥ 23 °C, schedule, occupancy, clean filter) and the next action for each.', req: 'UR-ENE-07 · FR-61, 62', p: '1A' },
+        { id: 'C-4.3', n: 'Carbon', k: 'view', m: 'full', why: 'Emissions, kept a room away from indoor CO₂.', has: 'Scope 2 this period, avoided emissions, grid factor and effective date, provenance label, simple report, offset preview.', req: 'UR-CLI-06 · UR-CAR-01, 02, 08 · FR-70, 71', p: '1A' }
+      ]},
+      { id: 'C-5', n: 'Account', k: 'dest', m: 'full', why: 'Everything about the relationship with the company, as opposed to the building.', has: 'Attention badge when money or a visit needs the client.', req: 'UR-CLI-09…11', p: '1A', kids: [
+        { id: 'C-5.1', n: 'Billing & notices', k: 'view', m: 'full', why: 'No reduction of service is ever a surprise.', has: 'Balance, due date, methods, payment instructions, notice history, the active restriction step, what changes, what restores it, grace remaining.', req: 'UR-CLI-11 · UR-PAY-03 · FR-50, 52', p: '1A sim' },
+        { id: 'C-5.2', n: 'Service & visits', k: 'view', m: 'full', why: 'Track what was raised elsewhere — requests are created from the alert, not from a menu.', has: 'Open requests with status and SLA, upcoming visits, assigned technician, closure evidence and the confirm-the-fix action.', req: 'UR-CLI-09 · UR-TEC-08', p: '1A' },
+        { id: 'C-5.3', n: 'Contract & documents', k: 'view', m: 'full', why: 'The record that supports a claim or a dispute.', has: 'Contract type and terms, consent given for payment-linked control, warranty dates, past visits, parts, exports.', req: 'UR-CLI-10 · FR-33', p: '1A' },
+        { id: 'C-5.4', n: 'Preferences', k: 'view', m: 'full', why: 'The shared S-6 inside the client shell.', has: 'Language, channels, consents, sessions.', req: 'UR-LANG-01', p: '1A' }
+      ]}
+    ]
+  },
+
+  {
+    key: 'T', name: 'Technician application', who: 'internal engineer · 3rd-party contractor', device: 'Desktop or tablet for the queue at the branch · phone at the unit',
+    blurb: 'Three rail items, because a technician holds a phone in a plant room with one hand free. Everything else is the work ' +
+      'order object or a step inside it. Third-party contractors get the identical shell, scoped to assigned work only.',
+    nodes: [
+      { id: 'T-1', n: 'Work', k: 'dest', m: 'full', why: 'Answer “what do I fix first”.', has: 'Assigned work orders ordered by critical, then SLA risk, then age.', req: 'UR-TEC-01, 02 · FR-11, 34', p: '1A', kids: [
+        { id: 'T-1.1', n: 'Today', k: 'view', m: 'full', why: 'The round as it stands now.', has: 'Jobs with arrival windows, priority, travel order, unread evidence.', req: 'UR-TEC-01', p: '1A' },
+        { id: 'T-1.2', n: 'Week', k: 'view', m: 'full', why: 'Preventive work that can be pulled forward.', has: 'Scheduled visits by contract cadence, capacity, SLA horizon.', req: 'UR-MNT-07', p: '1A' },
+        { id: 'T-1.3', n: 'Silent units', k: 'view', m: 'full', why: 'A device that stopped reporting is work, not a gap in a list.', has: 'Assigned units offline, on last-gasp power loss or flagged possible tamper, with maintenance mode.', req: 'UR-TEC-09 · FR-83', p: '1A sim' }
+      ]},
+      { id: 'T-2', n: 'Map', k: 'dest', m: 'full', why: 'Promoted from a view to a destination purely by frequency — it is consulted between every job.', has: 'Assigned sites, travel order, arrival windows, one-tap navigation hand-off.', req: 'FR-11', p: '1A' },
+      { id: 'T-3', n: 'Me', k: 'dest', m: 'full', why: 'Availability and personal settings.', has: 'Shifts, assigned sites, completed work this week, language, notification channels (S-6).', req: 'UR-LANG-01', p: '1A' }
+    ]
+  },
+
+  {
+    key: 'A', name: 'Admin / HQ application', who: 'operations · service · finance · sustainability', device: 'Desktop 1440, two-level sidebar · no mobile rail — the phone is a deep link only',
+    blurb: 'Five destinations and a settings room. Overview is the only one that opens on decisions; the other four are the ' +
+      'four things HQ runs — the estate, the service operation, the commercial relationship, and the evidence.',
+    nodes: [
+      { id: 'A-1', n: 'Overview', k: 'dest', m: 'read', why: 'Answer “what needs me today”, not “here is your fleet”. It is also HQ’s single attention queue — the separate events console and notification centre were folded into it.', has: 'Decisions needed and how many carry SLA risk; the approval queue; critical events; connectivity; service funnel; payment attention.', req: 'UR-ADM-01, 03 · FR-12', p: '1A', kids: [
+        { id: 'A-1.1', n: 'Decisions needed', k: 'view', m: 'full', why: 'The only thing mobile HQ shows, and the default everywhere.', has: 'Approvals waiting, restrictions pending a second approver, unassigned critical work, SLA breaches imminent — each opening its own panel.', req: 'UR-ADM-03, 06 · FR-52', p: '1A' },
+        { id: 'A-1.2', n: 'Events', k: 'view', m: 'read', why: 'Triage at fleet scale — one attention queue per role, not two inboxes.', has: 'All alerts by severity including grey, age, SLA, acknowledge, group, suppress with a reason, notice delivery state.', req: 'UR-ADM-03 · UR-COM-01 · FR-21, 22', p: '1A' },
+        { id: 'A-1.3', n: 'Portfolio glance', k: 'view', m: 'read', why: 'Context under the decisions, never above them.', has: 'Connectivity, energy and savings trend, service funnel, payment attention, MRV readiness — each linking into Reporting.', req: 'UR-ADM-01 · FR-12', p: '1A' }
+      ]},
+      { id: 'A-2', n: 'Fleet', k: 'dest', m: 'read', why: 'The estate and everything that has happened to it — this absorbed the separate Devices and Command activity pages.', has: 'Organisation → property → floor → room → unit with roll-up.', req: 'UR-ADM-02 · FR-13', p: '1A', kids: [
+        { id: 'A-2.1', n: 'Explorer', k: 'view', m: 'read', why: 'The shared hierarchy at admin scope.', has: 'Search, add, bulk select, worst-status roll-up, health-sensitive flags visible.', req: 'UR-ADM-02', p: '1A' },
+        { id: 'A-2.2', n: 'Map', k: 'view', m: 'read', why: 'Geography for dispatch and connectivity.', has: 'Sites by status, offline clusters, technician positions.', req: 'FR-12', p: '1A' },
+        { id: 'A-2.3', n: 'Devices', k: 'view', m: 'read', why: 'A filter of the estate, not a parallel tree.', has: 'Heartbeat, firmware version, offline, power loss, possible tamper, maintenance mode.', req: 'UR-DEV-04, 05 · FR-83', p: '1A sim' },
+        { id: 'A-2.4', n: 'Activity', k: 'view', m: 'read', why: 'Every command and device event, in one log.', has: 'Sent → Acknowledged → Verified lifecycle, failures, group commands with per-unit results, device events.', req: 'UR-ADM-07 · FR-40, 47', p: '1A sim' }
+      ]},
+      { id: 'A-3', n: 'Service', k: 'dest', m: 'read', why: 'Turning alerts into scheduled, accountable work.', has: 'Dispatch and SLA at fleet scale.', req: 'UR-ADM-08 · UR-MNT-07 · FR-31', p: '1A', kids: [
+        { id: 'A-3.1', n: 'Board', k: 'view', m: 'read', why: 'The operational picture of the day.', has: 'Work orders by state and SLA risk, unassigned queue, technician load.', req: 'UR-ADM-08', p: '1A' },
+        { id: 'A-3.2', n: 'Technicians', k: 'view', m: 'read', why: 'Who is available, and what they are carrying.', has: 'Internal and third-party, scope, load, completion and reopen rates.', req: 'UR-TEC-02 · FR-34', p: '1A' },
+        { id: 'A-3.3', n: 'Preventive schedule', k: 'view', m: 'read', why: 'Contract cadence becomes work automatically.', has: 'Cadence by contract, runtime triggers, auto-created work orders, coverage gaps.', req: 'UR-MNT-07 · FR-31', p: '1A' }
+      ]},
+      { id: 'A-4', n: 'Accounts', k: 'dest', m: 'read', why: 'The commercial relationship, customer by customer — payments and restriction cases belong to a customer, not to a unit.', has: 'Customer list with contract type, balance state and any active case.', req: 'UR-ADM-05 · UR-PAY-01', p: '1A sim', kids: [
+        { id: 'A-4.1', n: 'Customers', k: 'view', m: 'read', why: 'The commercial record.', has: 'Contract type, sites, units, consent status for payment-linked control, history.', req: 'UR-PAY-01', p: '1A' },
+        { id: 'A-4.2', n: 'Payments', k: 'view', m: 'read', why: 'See the risk before acting on it.', has: 'Overdue, in grace, restricted and disputed, with notice history and delivery status.', req: 'UR-ADM-05 · FR-51', p: '1A sim' },
+        { id: 'A-4.3', n: 'Restriction cases', k: 'view', m: 'full', why: 'The most sensitive feature in the product, given its own queue.', has: 'Ladder step, timers, approvals outstanding, health-sensitive blocks, disputes pausing escalation.', req: 'UR-PAY-01…06 · FR-52…57', p: '1A sim' }
+      ]},
+      { id: 'A-5', n: 'Reporting', k: 'dest', m: 'read', why: 'Where energy becomes evidence — one destination for everything that leaves the building as a claim.', has: 'Period and scope selector shared by every view; provenance labelling throughout.', req: 'UR-ADM-11 · UR-CAR-01…08', p: '1A', kids: [
+        { id: 'A-5.1', n: 'Energy portfolio', k: 'view', m: 'read', why: 'Savings at portfolio scale.', has: 'Consumption and saving by site, floor and period, baseline completeness, outliers, cooling-load anomalies.', req: 'UR-ENE-07 · FR-26, 61', p: '1A' },
+        { id: 'A-5.2', n: 'Scope 2 & carbon', k: 'view', m: 'read', why: 'The figure that gets audited.', has: 'Location- and market-based Scope 2, avoided emissions, grid factor version, verification status.', req: 'UR-CAR-01, 02 · FR-70, 71', p: '1A' },
+        { id: 'A-5.3', n: 'Packages & exports', k: 'view', m: 'read', why: 'What a verifier and a tenant each receive.', has: 'MRV packages, sustainability reports by tenant, floor, site and period, PDF, CSV, API, and the carbon-platform connection.', req: 'UR-CAR-04…06 · FR-73, 74', p: '1A sim' }
+      ]}
+    ]
+  },
+
+  {
+    key: 'O', name: 'Shared objects', who: 'reached from lists, notices and search — never from the rail', device: 'Every width — a deep link from a notice lands here on any device',
+    blurb: 'The records the whole product is about. Each has one address, one component set and role variants rather than a copy ' +
+      'per application. This is what emptied the sidebars: nine former “pages” are views of an object.',
+    nodes: [
+      { id: 'O-UNIT', n: 'Unit', k: 'obj', m: 'full', why: 'Everything known about one machine.', has: 'Views: Now (values with freshness) · Health (12 parts in 3 groups) · Control · Schedule · Energy · History. Admin sees dispatch and restriction actions; the client does not.', req: 'UR-CLI-02, 07 · UR-MNT-02…04 · FR-14, 20, 40', p: '1A sim', kids: [
+        { id: 'O-UNIT.1', n: 'Health', k: 'view', m: 'full', why: '“Monitor every aspect” made navigable.', has: 'Air filter, evaporator coil, blower, condensate, vents; condenser coil, compressor, condenser fan, refrigerant lines; thermostat, capacitor and contactor, wiring — each with severity, evidence, confidence, suspected or confirmed, and one recommended action.', req: 'UR-MNT-02…04 · FR-20', p: '1A sim' },
+        { id: 'O-UNIT.2', n: 'Schedule', k: 'view', m: 'full', why: 'Stop cooling an empty room.', has: 'Weekly schedule, occupancy auto-off, geofencing with consent, automated comfort — mocked where Phase 1B.', req: 'UR-ENE-02, 03, 06 · FR-41…45', p: '1A sim' },
+        { id: 'O-UNIT.3', n: 'History', k: 'view', m: 'full', why: 'The audit the client can read.', has: 'Commands, alerts, services, readings and restriction events on one timeline.', req: 'UR-ADM-13', p: '1A' }
+      ]},
+      { id: 'O-SPACE', n: 'Space', k: 'obj', m: 'full', why: 'One node page for property, floor and room — the depth changes, the questions do not. This is where air quality lives.', has: 'Comfort verdict, temperature, humidity, CO₂ and dust with plain-language bands, which sensors are missing, the units serving the space, health-sensitive flag, roll-up status.', req: 'UR-CLI-03, 04 · UR-AIR-01, 02, 06 · FR-63, 64, 66', p: '1A sim' },
+      { id: 'O-ALERT', n: 'Alert', k: 'obj', m: 'full', why: 'A notice arrives about an alert, so an alert needs a stable address.', has: 'Signals, threshold, duration, confidence, likely cause, impact if ignored, exactly one recommended action, link to the unit and to the space.', req: 'UR-MNT-01 · FR-21', p: '1A' },
+      { id: 'O-WO', n: 'Work order', k: 'obj', m: 'full', why: 'One record, three views: the client tracks it, the technician performs it, HQ dispatches it.', has: 'Views: Brief · Evidence · Checklist · Findings · Closure. Third-party scope is enforced on the object, not on the menu.', req: 'UR-TEC-03…08 · FR-32, 34', p: '1A', kids: [
+        { id: 'O-WO.1', n: 'Evidence', k: 'view', m: 'full', why: 'Prediction has to show its working before a technician is sent.', has: 'Signals at trigger time, trend windows, thresholds crossed, part group implicated, data quality.', req: 'UR-TEC-03, 04', p: '1A sim' },
+        { id: 'O-WO.2', n: 'Checklist', k: 'view', m: 'full', why: 'Consistent work, comparable records.', has: 'Checklist per part group — indoor, outdoor, electrical — with measurements, pass or fail, and photos.', req: 'UR-TEC-06 · FR-32', p: '1A' },
+        { id: 'O-WO.3', n: 'Findings', k: 'view', m: 'full', why: 'A human decides what the model suspected.', has: 'Confirmed · not confirmed · sensor fault · data-quality issue, parts used, notes, photos; disproving downgrades the prediction.', req: 'UR-TEC-05, 07 · UR-MNT-08 · FR-25', p: '1A' },
+        { id: 'O-WO.4', n: 'Closure', k: 'view', m: 'full', why: 'Prove the fix, do not assume it.', has: 'Closure summary, client confirmation request, escalation with reason, and the post-service check that reopens the order if readings do not improve.', req: 'UR-TEC-08 · FR-25', p: '1A sim' }
+      ]},
+      { id: 'O-CASE', n: 'Restriction case', k: 'obj', m: 'full', why: 'A governed process needs one record, not a sequence of screens.', has: 'Views: Evidence & consent · Ladder state and timers · Approvals · Audit. Health-sensitive flag disables the stop step on the object itself.', req: 'UR-PAY-01…06 · UR-ADM-06 · FR-52…57', p: '1A sim' },
+      { id: 'O-DEVICE', n: 'Device', k: 'obj', m: 'full', why: 'The hidden gadget is an asset with its own state.', has: 'Heartbeat, last seen, buffered data, firmware, power loss, possible tamper, maintenance mode, install evidence.', req: 'UR-DEV-04, 05 · UR-TEC-09 · FR-83', p: '1A sim' },
+      { id: 'O-PACK', n: 'MRV package & report', k: 'obj', m: 'read', why: 'The thing a verifier or a tenant actually receives.', has: 'Coverage and completeness per series, gaps named rather than averaged, method version, tariff and grid factor used, signatures, export.', req: 'UR-CAR-03, 06 · FR-72, 73', p: '1A sim' }
+    ]
+  },
+
+  {
+    key: 'P', name: 'Action panels', who: 'opened over context, never navigated to', device: 'Every width — this is what makes the phone useful without a rail',
+    blurb: 'Every transaction in the product is a sheet over the screen that prompted it, so nobody loses their place to perform ' +
+      'one. They are also the reuse layer: one control panel serves the client, the technician and HQ under different policy.',
+    nodes: [
+      { id: 'P-CONTROL', n: 'Control & confirm', k: 'panel', m: 'full', why: 'Sent is not Applied.', has: 'Power, mode, setpoint, fan; confirmation showing target vs current and any policy limit; Sent → Acknowledged → Verified with an honest failure state.', req: 'UR-CLI-07 · UR-ADM-07 · FR-40', p: '1A sim' },
+      { id: 'P-REQUEST', n: 'Raise a service request', k: 'panel', m: 'full', why: 'Raised from the evidence that caused it, not from a blank form in a menu.', has: 'Prefilled unit, alert and type (regular, reactive, preventive), photos, preferred slots, contact channel.', req: 'UR-CLI-09 · FR-30', p: '1A' },
+      { id: 'P-ASSIGN', n: 'Dispatch & assign', k: 'panel', m: 'full', why: 'Dispatch is urgent, so it works on a phone.', has: 'Technician, window, SLA, scope check for third parties, notification preview.', req: 'UR-ADM-08 · FR-31', p: '1A' },
+      { id: 'P-APPROVE', n: 'Approve or refuse', k: 'panel', m: 'full', why: 'No single person may restrict a customer.', has: 'Requester, reason, step requested, evidence summary, health-sensitive check, second approver identity, expiry, decision record.', req: 'UR-ADM-06 · FR-52', p: '1A sim' },
+      { id: 'P-DISPUTE', n: 'Raise a dispute', k: 'panel', m: 'full', why: 'A way to argue, not only a way to pay.', has: 'Reason, evidence, contact; raising it pauses escalation until a person answers.', req: 'UR-PAY-06 · FR-57', p: '1A sim' },
+      { id: 'P-PAY', n: 'Pay', k: 'panel', m: 'full', why: 'Closes the loop the notice opened.', has: 'Card, virtual account or e-wallet hand-off, confirmation, automatic restore request — mocked in the prototype.', req: 'UR-CLI-11 · FR-50, 54', p: 'mock' },
+      { id: 'P-MAINT', n: 'Maintenance mode', k: 'panel', m: 'full', why: 'A technician opening a unit must not look like a customer removing the gadget.', has: 'Duration, work order link, which alerts are suppressed, automatic expiry.', req: 'FR-83', p: '1A sim' },
+      { id: 'P-OFFSET', n: 'Offset or exchange', k: 'panel', m: 'read', why: 'Kept behind a mock and a dual approval on purpose.', has: 'Explicit confirmation, dual approval, certificate and token ID, wording that never says “credit”.', req: 'UR-CAR-04, 05 · FR-74', p: 'mock' },
+      { id: 'P-EXPORT', n: 'Export & share', k: 'panel', m: 'full', why: 'Reports leave the product constantly; building one does not.', has: 'Format, period, scope, recipient, provenance statement attached to the file.', req: 'UR-CAR-06 · FR-73', p: '1A' }
+    ]
+  },
+
+  {
+    key: 'X', name: 'Configuration room', who: 'Admin / HQ', device: 'Desktop for editing · read-only at every smaller width',
+    blurb: 'Reached from the avatar, not the rail. These change behaviour across the whole fleet, which is exactly why they do not ' +
+      'belong one thumb away on a phone — and why removing them from the sidebar costs nothing operationally.',
+    nodes: [
+      { id: 'X-1', n: 'Rules & thresholds', k: 'set', m: 'desktop', why: 'The rules the product runs on.', has: 'Thresholds, hysteresis, durations, escalation, with a preview of how many units the change would affect, versioned and audited.', req: 'UR-ADM-09 · FR-27', p: '1A' },
+      { id: 'X-2', n: 'Tariffs & grid factors', k: 'set', m: 'desktop', why: 'Old reports must reproduce exactly.', has: 'Versioned tables with effective dates, source, region, and which reports used each version.', req: 'UR-ADM-10 · FR-101', p: '1A' },
+      { id: 'X-3', n: 'Spaces & flags', k: 'set', m: 'desktop', why: 'The flag that blocks the stop step needs an owner and a record.', has: 'Health-sensitive designation with requester, evidence and review date; space metadata; SLA policy.', req: 'UR-PAY-03 · FR-53', p: '1A' },
+      { id: 'X-4', n: 'Users & roles', k: 'set', m: 'desktop', why: 'Who may see and do what.', has: 'Users, roles, scope assignment, third-party contractor limits, invitations in the user’s language.', req: 'UR-ADM-04 · FR-100', p: '1A' },
+      { id: 'X-5', n: 'Organisations', k: 'set', m: 'desktop', why: 'Multi-tenant separation, visible.', has: 'Organisations, properties, contracts, branding, locale defaults.', req: 'UR-NFR-02', p: '1A' },
+      { id: 'X-6', n: 'Integrations', k: 'set', m: 'desktop', why: 'Where the adapters are configured and tested.', has: 'WhatsApp templates, email, payment gateway, carbon platform, public API and webhooks, with connection status.', req: 'FR-74 · EP-22', p: 'later' },
+      { id: 'X-7', n: 'Audit log', k: 'set', m: 'read', why: 'The evidence trail for every sensitive action.', has: 'Append-only record of restrictions, approvals, commands, configuration changes, carbon transactions and calculations; filter, export.', req: 'UR-ADM-13 · FR-102', p: '1A' }
+    ]
+  }
+];
+
+/* ---------- renderers ---------- */
+function treeHTML(nodes, level) {
+  var out = '<ul class="tr tr-' + level + '">';
+  nodes.forEach(function (n) {
+    out += '<li><div class="pg">' +
+      '<div class="pg-h"><span class="pg-id">' + n.id + '</span><span class="pg-n">' + n.n + '</span>' +
+      '<span class="kd kd-' + n.k + '">' + KIND[n.k] + '</span>' +
+      (n.p ? '<span class="ph ph-' + n.p.replace(/\s/g, '-') + '">' + n.p + '</span>' : '') +
+      (n.m === 'desktop' ? '<span class="mb">edit on desktop</span>' : (n.m === 'read' ? '<span class="mb">phone: read-only</span>' : '')) +
+      '</div>' + (n.why ? '<div class="pg-w">' + n.why + '</div>' : '') + '</div>';
+    if (n.kids && n.kids.length) out += treeHTML(n.kids, level + 1);
+    out += '</li>';
+  });
+  return out + '</ul>';
+}
+
+function flat(nodes, depth, acc) {
+  nodes.forEach(function (n) {
+    acc.push({ d: depth, n: n });
+    if (n.kids) flat(n.kids, depth + 1, acc);
+  });
+  return acc;
+}
+
+function inventoryHTML(app) {
+  var rows = flat(app.nodes, 0, []);
+  var out = '<div class="scroller"><table class="inv"><thead><tr><th>ID</th><th>Surface</th><th>Kind</th><th>Why it exists</th><th>What has to be on it</th><th>Requirements</th><th>At 375 px</th></tr></thead><tbody>';
+  rows.forEach(function (r) {
+    var n = r.n, mob = n.m === 'desktop' ? 'read-only · edit on desktop' : (n.m === 'read' ? 'read-only' : 'designed for phone');
+    out += '<tr class="d' + r.d + '"><td class="mono">' + n.id + '</td><td><b>' + n.n + '</b>' +
+      (n.p ? ' <span class="ph ph-' + n.p.replace(/\s/g, '-') + '">' + n.p + '</span>' : '') + '</td>' +
+      '<td><span class="kd kd-' + n.k + '">' + KIND[n.k] + '</span></td>' +
+      '<td>' + (n.why || '') + '</td><td>' + (n.has || '') + '</td>' +
+      '<td class="mono sm">' + (n.req || '') + '</td><td class="sm">' + mob + '</td></tr>';
+  });
+  return out + '</tbody></table></div>';
+}
+
+/* ---------- render ---------- */
+(function () {
+  var legend = document.getElementById('legend-out');
+  if (legend) legend.innerHTML = renderDiagram(LEGEND);
+  var surf = document.getElementById('surface-out');
+  if (surf) surf.innerHTML = renderDiagram(SURFACE);
+
+  var fo = document.getElementById('flows-out'), h = '';
+  FLOWS.forEach(function (f) {
+    h += '<article class="flowblk" id="' + f.id + '">';
+    h += '<div class="fh"><span class="fid">' + f.id + '</span><h3>' + f.title + '</h3><span class="who">' + f.role + '</span></div>';
+    h += '<p class="goal">' + f.goal + '</p>';
+    h += '<div class="covers">' + f.covers.map(function (c) { return '<span>' + c + '</span>'; }).join('') + '</div>';
+    f.spec.alt = f.id + ' ' + f.title;
+    h += renderDiagram(f.spec);
+    h += '<p class="why"><b>Why it is drawn this way.</b> ' + f.decisions + '</p>';
+    if (f.note) h += '<p class="fnote">' + f.note + '</p>';
+    h += '</article>';
+  });
+  if (fo) fo.innerHTML = h;
+
+  var so = document.getElementById('sitemap-out'), io = document.getElementById('inventory-out'), s = '', iv = '', total = 0;
+  SITEMAP.forEach(function (app) {
+    var rows = flat(app.nodes, 0, []);
+    total += rows.length;
+    s += '<div class="appblk"><header><span class="k">' + app.key + '</span><h3>' + app.name + '</h3>' +
+      '<span class="who">' + rows.length + ' surfaces · ' + app.who + '</span></header>' +
+      '<p class="dev"><b>Device</b> ' + (app.device || '') + '</p>' +
+      '<p class="blurb">' + app.blurb + '</p>' + treeHTML(app.nodes, 0) + '</div>';
+    iv += '<details><summary>' + app.name + ' — ' + rows.length + ' screens</summary><div class="inner">' +
+      inventoryHTML(app) + '</div></details>';
+  });
+  if (so) so.innerHTML = s;
+  if (io) io.innerHTML = iv;
+
+  var counts = document.getElementById('counts');
+  if (counts) counts.textContent = total + ' surfaces · 13 rail slots · ' + FLOWS.length + ' user flows';
+})();
+
+</script>
+</body>
+</html>

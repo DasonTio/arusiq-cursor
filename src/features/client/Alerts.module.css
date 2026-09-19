@@ -1,0 +1,182 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.cardTitle,
+.groupTitle,
+.sectionTitle,
+.filterLabel,
+.meta,
+.stateTitle,
+.stateBody {
+  margin: 0;
+}
+
+.meta,
+.stateBody,
+.filterLabel {
+  color: var(--color-gray-2);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-h5);
+  line-height: var(--line-height-h5);
+}
+
+.groupTitle,
+.cardTitle {
+  font-size: var(--font-size-h6);
+  line-height: var(--line-height-h6);
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+}
+
+.filterRow {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Recompose, don't shrink — the three queues sit side by side once there is
+   room for them and stack on a phone. */
+.queues {
+  display: grid;
+  gap: var(--space-4);
+}
+
+@media (min-width: 1024px) {
+  .queues {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+.queue {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.band {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* A shadow is never the only boundary (D7 §10.2). */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-page);
+  box-shadow: var(--shadow-sm);
+}
+
+.cardTop {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+}
+
+.evidence {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-block-end: var(--space-2);
+}
+
+.delivery {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.deliveryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-lg);
+  background: var(--surface-page);
+}
+
+.state {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding-block: var(--space-5);
+}
+
+.stateTitle {
+  font-size: var(--font-size-h5);
+  line-height: var(--line-height-h5);
+}
+
+.skeleton {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.skeletonBlock {
+  min-block-size: var(--space-9);
+  border-radius: var(--radius-lg);
+  background: var(--surface-raised);
+  border: 1px solid var(--color-gray-5);
+}

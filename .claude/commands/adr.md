@@ -23,3 +23,7 @@ file it changes.
 
 Document precedence when nothing else decides it:
 **D8 review > D7 (visual) > D6 (behavioural) > D5 (intent) > inference.**
+
+For information architecture — which surfaces exist, how each role reaches
+them, and which width each is designed for — **D2 v2.1** decides, and D7 still
+decides how those surfaces look (ADR-0008). D2 postdates D8 and builds on it.

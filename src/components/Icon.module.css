@@ -1,0 +1,9 @@
+/* ADR-0006 locks the stroke at 2 and does not expose it. The token makes that
+   lock shared with the hand-drawn part glyphs (ADR-0012) rather than restated:
+   CSS beats Lucide's presentational stroke-width attribute, so one edit to
+   --icon-stroke-width moves both sets or neither. */
+.root {
+  flex: none;
+  display: block;
+  stroke-width: var(--icon-stroke-width);
+}

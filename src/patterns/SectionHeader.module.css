@@ -1,0 +1,20 @@
+/* SectionHeader — one row: heading left, screen-supplied meta right. */
+
+.root {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.title {
+  font-size: var(--font-size-h6);
+  line-height: var(--line-height-h6);
+}
+
+.trailing {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
