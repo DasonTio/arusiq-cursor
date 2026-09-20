@@ -22,6 +22,7 @@ import { useSession } from '../auth/session.ts';
 import Space from '../shared/Space.tsx';
 import Unit from '../shared/Unit.tsx';
 import styles from '../shared/Screen.module.css';
+import tree from './Fleet.module.css';
 
 const href = (id: string) => `/fleet?node=${encodeURIComponent(id)}`;
 
@@ -139,10 +140,10 @@ export default function Fleet() {
     <div className={styles.root}>
       <PageHeader titleKey="admin.fleet.title" contextKey="admin.fleet.purpose" />
       <MockBoundary explanationKey="admin.fleet.mapMock">
-        <ul className={styles.tree}>
+        <ul className={tree.tree}>
           {properties.map((property) => {
             return (
-              <li key={property.id} className={styles.node}>
+              <li key={property.id}>
                 <PropertyBranch property={property} />
               </li>
             );
@@ -183,10 +184,10 @@ function PropertyBranch({ property }: { property: Property }) {
   const { t } = useTranslation();
   return (
     <>
-      <div className={styles.nodeTop}>
-        <div>
-          <p className={styles.nodeName}>{property.name}</p>
-          <p className={styles.nodeMeta}>{t(`category.${property.category}`)}</p>
+      <div className={`${tree.row} ${tree.site}`}>
+        <div className={tree.rowText}>
+          <p className={tree.name}>{property.name}</p>
+          <p className={tree.meta}>{t(`category.${property.category}`)}</p>
         </div>
         <SeverityRollUp
           severity={property.rollUp.severity}
@@ -195,10 +196,10 @@ function PropertyBranch({ property }: { property: Property }) {
           href={href(property.id)}
         />
       </div>
-      <ul className={styles.childList}>
+      <ul className={tree.branch}>
         {property.floors.map((floor) => {
           return (
-            <li key={floor.id} className={styles.node}>
+            <li key={floor.id}>
               <FloorBranch floor={floor} />
             </li>
           );
@@ -212,10 +213,8 @@ function FloorBranch({ floor }: { floor: Floor }) {
   const { t } = useTranslation();
   return (
     <>
-      <div className={styles.nodeTop}>
-        <p className={styles.nodeName}>
-          {floor.nameKey ? t(floor.nameKey) : floor.name}
-        </p>
+      <div className={tree.row}>
+        <p className={tree.name}>{floor.nameKey ? t(floor.nameKey) : floor.name}</p>
         <SeverityRollUp
           severity={floor.rollUp.severity}
           contributing={floor.rollUp.contributing}
@@ -223,10 +222,10 @@ function FloorBranch({ floor }: { floor: Floor }) {
           href={href(floor.id)}
         />
       </div>
-      <ul className={styles.childList}>
+      <ul className={tree.branch}>
         {floor.rooms.map((room) => {
           return (
-            <li key={room.id} className={styles.node}>
+            <li key={room.id}>
               <RoomBranch room={room} />
             </li>
           );
@@ -240,11 +239,11 @@ function RoomBranch({ room }: { room: Room }) {
   const { t } = useTranslation();
   return (
     <>
-      <div className={styles.nodeTop}>
-        <div>
-          <p className={styles.nodeName}>{room.name}</p>
+      <div className={tree.row}>
+        <div className={tree.rowText}>
+          <p className={tree.name}>{room.name}</p>
           {room.healthSensitive ? (
-            <p className={styles.nodeMeta}>{t('admin.fleet.healthSensitive')}</p>
+            <p className={tree.sensitive}>{t('admin.fleet.healthSensitive')}</p>
           ) : null}
         </div>
         <SeverityRollUp
@@ -254,22 +253,24 @@ function RoomBranch({ room }: { room: Room }) {
           href={href(room.id)}
         />
       </div>
-      <ul className={styles.childList}>
+      <ul className={tree.branch}>
         {room.units.map((unit) => {
           return (
-            <li key={unit.id} className={styles.node}>
-              <div className={styles.nodeTop}>
-                <p className={styles.nodeName}>{unit.name}</p>
-                <Button variant="ghost" to={href(unit.id)}>
-                  {unit.name}
-                </Button>
+            <li key={unit.id}>
+              {/* The leaf. It used to print the unit name TWICE — once as
+                  text and again as the label of a ghost button beside it —
+                  and carried two links to the same place. `SeverityRollUp` is
+                  documented as "one anchor, not a row of controls", so it is
+                  the single tab stop here and the name is plain text. */}
+              <div className={tree.row}>
+                <p className={tree.name}>{unit.name}</p>
+                <SeverityRollUp
+                  severity={unit.rollUp.severity}
+                  contributing={unit.rollUp.contributing}
+                  total={unit.rollUp.total}
+                  href={href(unit.id)}
+                />
               </div>
-              <SeverityRollUp
-                severity={unit.rollUp.severity}
-                contributing={unit.rollUp.contributing}
-                total={unit.rollUp.total}
-                href={href(unit.id)}
-              />
             </li>
           );
         })}

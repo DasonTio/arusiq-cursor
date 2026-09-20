@@ -1,0 +1,95 @@
+/* admin.fleet — the organisation tree.
+ *
+ * It used to be drawn as cards inside cards inside cards: every level of the
+ * hierarchy added a border, a radius and a shadow, so a unit sat four boxes
+ * deep and the page read as packaging rather than as structure. Depth is
+ * indentation and a connector line. There is exactly ONE panel here — the
+ * tree — and everything inside it is a row.
+ *
+ * See `context/35-dashboard-composition.md` §3: a hierarchy is a tree. */
+
+.tree {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+  inline-size: 100%;
+}
+
+.branch {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  /* The connector. One hairline per level, which is the whole of the depth
+     cue — no box required. */
+  margin-inline-start: var(--space-3);
+  padding-inline-start: var(--space-3);
+  border-inline-start: 1px solid var(--color-gray-5);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+  min-block-size: var(--target-min);
+  padding-block: var(--space-1);
+}
+
+.rowText {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+
+/* The top of the tree is the site. It carries the weight; a floor and a room
+   are structure, and a unit is the thing you actually open. */
+.site .name {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-brand-primary);
+}
+
+.name {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-1);
+}
+
+.meta {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  color: var(--color-gray-2);
+}
+
+/* D6 FR-53 — a designated space is marked wherever it appears, because rung 4
+   is unreachable there and an approver must see it before deciding. */
+.sensitive {
+  padding-block: var(--space-1);
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-full);
+  background: color-mix(
+    in srgb,
+    var(--color-state-eco-text) 12%,
+    var(--surface-raised)
+  );
+  color: var(--color-state-eco-text);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}
+
+@media (min-width: 1024px) {
+  .tree {
+    padding-block: var(--space-3);
+    padding-inline: var(--space-4);
+  }
+}
