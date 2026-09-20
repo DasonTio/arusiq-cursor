@@ -82,7 +82,7 @@ describe('client insights and account — FR-50 FR-60 FR-61 FR-70', () => {
       screen.getAllByText(/No real payment will be collected/).length,
     ).toBeGreaterThan(0);
     await user.click(screen.getByRole('button', { name: 'Virtual account' }));
-    await user.click(screen.getByRole('button', { name: 'Confirm simulated payment' }));
+    await user.click(screen.getByRole('button', { name: 'Confirm payment' }));
     expect(
       screen.getByText('Restore request sent — awaiting device verification.'),
     ).toBeInTheDocument();

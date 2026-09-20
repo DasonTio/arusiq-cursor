@@ -14,8 +14,28 @@ import { PROVENANCE } from '../lib/domain/provenance.ts';
 import { useTranslation } from 'react-i18next';
 import styles from './ProvenanceChip.module.css';
 
+/**
+ * ADR-0020 — THE CHIP DOES NOT RENDER.
+ *
+ * The stakeholder decision is that provenance is disclosed once, verbally, at
+ * the presentation, and that repeating it beside every figure is redundant:
+ * `client.energy` alone carried eighteen of these marks.
+ *
+ * This is ONE SWITCH on purpose. Every call site, every `provenance` prop and
+ * the whole domain model are untouched, so INV-AGGREGATE still computes the
+ * weakest provenance of an aggregate, and the provenance gate still fails any
+ * metric component that declares none. Restoring the labels is deleting the
+ * two lines below — not re-threading twenty-one call sites.
+ *
+ * Read ADR-0020 before removing anything further: this suppresses the
+ * DISPLAY of a guarantee, it does not remove the guarantee.
+ */
+const RENDER_PROVENANCE = false;
+
 export function ProvenanceChip({ provenance, surface = 'page' }: ProvenanceChipProps) {
   const { t } = useTranslation();
+
+  if (!RENDER_PROVENANCE) return null;
 
   return (
     <span className={styles.root} data-surface={surface}>

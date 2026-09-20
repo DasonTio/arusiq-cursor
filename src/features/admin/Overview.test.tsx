@@ -16,6 +16,7 @@ import {
   trailingPeriod,
 } from '../../lib/simulation/index.ts';
 import i18n from '../../lib/i18n/index.ts';
+import { portfolioCompleteness } from './portfolioCompleteness.ts';
 import Overview from './Overview.tsx';
 
 const hq = {
@@ -158,11 +159,21 @@ describe('admin.overview — the portfolio glance is the portfolio · FR-71', ()
     expect(screen.queryByText(/is the lowest at/)).toBeNull();
   });
 
-  it('carries provenance beside the aggregate, as every figure must', async () => {
-    renderOverview();
-    const heading = await screen.findByRole('heading', { name: 'Portfolio glance' });
-    const section = heading.closest('section') as HTMLElement;
-    expect(within(section).getByText('Simulated')).toBeInTheDocument();
+  it('still derives the aggregate provenance, though ADR-0020 hides the label', () => {
+    // INV-AGGREGATE is a DATA rule: one simulated input makes the whole
+    // portfolio figure simulated. Suppressing the chip must not quietly
+    // disable that, so it is asserted where it lives.
+    const rows = [
+      {
+        property: { id: 'a', name: 'A' },
+        series: { completeness: 1, provenance: 'verified' },
+      },
+      {
+        property: { id: 'b', name: 'B' },
+        series: { completeness: 1, provenance: 'simulated' },
+      },
+    ] as unknown as Parameters<typeof portfolioCompleteness>[0];
+    expect(portfolioCompleteness(rows)?.provenance).toBe('simulated');
   });
 });
 

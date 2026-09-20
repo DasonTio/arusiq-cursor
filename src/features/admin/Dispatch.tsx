@@ -11,6 +11,7 @@ import { Button } from '../../components/Button.tsx';
 import { LOAD_STATE, type LoadState } from '../../lib/domain/loadState.ts';
 import {
   simulatedTelemetry,
+  REFERENCE_NOW,
   type WorkOrderAssignee,
   type WorkOrderState,
   type WorkOrderSummary,
@@ -35,6 +36,8 @@ const STATES: readonly WorkOrderState[] = [
 
 const PRIORITY_RANK = { urgent: 0, high: 1, routine: 2 } as const;
 
+const HOUR_MS = 60 * 60 * 1000;
+
 const sortOrders = (orders: WorkOrderSummary[]): WorkOrderSummary[] => {
   return [...orders].sort((a, b) => {
     const byPriority = PRIORITY_RANK[a.priority] - PRIORITY_RANK[b.priority];
@@ -44,7 +47,7 @@ const sortOrders = (orders: WorkOrderSummary[]): WorkOrderSummary[] => {
 };
 
 export default function Dispatch() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { session } = useSession();
   const [params] = useSearchParams();
   const orderId = params.get('order');
@@ -146,6 +149,22 @@ export default function Dispatch() {
     return order.assignedTo === null;
   });
 
+  // Dates and ages render against the simulation's fixed reference instant,
+  // not the wall clock — the dataset is seeded relative to REFERENCE_NOW, so
+  // a real clock would drift the figures every day the prototype is open.
+  const formatDateTime = (iso: string) =>
+    new Intl.DateTimeFormat(i18n.language, {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    }).format(new Date(iso));
+  const formatAge = (openedAt: string) => {
+    const elapsedHours = (Date.parse(REFERENCE_NOW) - Date.parse(openedAt)) / HOUR_MS;
+    const relative = new Intl.RelativeTimeFormat(i18n.language, { numeric: 'auto' });
+    return elapsedHours < 48
+      ? relative.format(-Math.round(elapsedHours), 'hour')
+      : relative.format(-Math.round(elapsedHours / 24), 'day');
+  };
+
   const groups: PriorityGroup[] = STATES.filter((bucket) => {
     return orders.some((order) => order.state === bucket);
   }).map((bucket) => ({
@@ -159,8 +178,17 @@ export default function Dispatch() {
         detail: order.unitName ?? undefined,
         severity: order.severity,
         suspected: order.suspected,
-        statusKey:
-          order.assignedTo === null ? 'admin.dispatch.needsAssignee' : undefined,
+        meta: [
+          { labelKey: 'admin.dispatch.metaSla', value: formatDateTime(order.slaDueAt) },
+          { labelKey: 'admin.dispatch.metaOpened', value: formatAge(order.openedAt) },
+          {
+            labelKey: 'admin.dispatch.metaAssignee',
+            // §4.4 — an unassigned visit states its absence; it never renders
+            // a fabricated name or a bare dash.
+            value: order.assignedTo?.name ?? null,
+            absentKey: 'shared.work-order.unassigned',
+          },
+        ],
         to:
           order.assignedTo === null
             ? `/service?assign=${encodeURIComponent(order.id)}`

@@ -58,10 +58,10 @@ describe('admin.settings — the published thresholds · FR-27', () => {
     });
   });
 
-  it('marks the thresholds as preview, not a live rule', () => {
+  it('shows the thresholds section itself', () => {
+    // The "preview only" note rode on the mock banner, which ADR-0020
+    // suppresses. The table it wrapped is the thing that matters here.
     renderSettings();
-    expect(
-      screen.getByText('Preview only — this does not write a live rule.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Part thresholds (preview)')).toBeInTheDocument();
   });
 });

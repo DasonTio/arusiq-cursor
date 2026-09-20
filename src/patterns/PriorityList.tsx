@@ -1,8 +1,9 @@
 /**
  * PriorityList — the severity-grouped work queue (technician Work, HQ
  * decisions): one section per group with a labelled header, and row cards
- * carrying a severity rail, title, optional detail, optional trailing status
- * and a chevron. A row is one link when the screen gives it a `to` path.
+ * carrying a severity rail, title, optional detail, optional meta columns,
+ * optional trailing status and a chevron. A row is one link when the screen
+ * gives it a `to` path.
  *
  * The rail is colour alone, and colour never travels alone in this product
  * (D5 UR-MNT-01) — so every row also composes the SeverityIndicator, which
@@ -25,6 +26,22 @@ import styles from './PriorityList.module.css';
 /** Interpolation values for a locale string. */
 type Values = Record<string, unknown>;
 
+export interface PriorityMetaItem {
+  /** Caption label above the value — always a locale key. */
+  labelKey: I18nKey;
+  labelValues?: Values;
+  /**
+   * Pre-formatted, locale-correct value (dates and numbers are formatted by
+   * the screen, which owns the locale). `null` means the value is absent:
+   * the absentKey sentence is rendered instead — missing is stated, never
+   * faked (§4.4).
+   */
+  value: string | null;
+  /** Stated-absence sentence, rendered when `value` is null. */
+  absentKey?: I18nKey;
+  absentValues?: Values;
+}
+
 export interface PriorityItem {
   id: string;
   titleKey?: I18nKey;
@@ -42,6 +59,13 @@ export interface PriorityItem {
   /** D6 FR-25 — a prediction stays suspected until a technician verdict;
    *  SeverityIndicator renders it as a dashed border, never a fifth colour. */
   suspected?: boolean;
+  /**
+   * Optional meta columns (SLA due, age, assignee): small labelled figures
+   * that repeat on every row of a queue. The columns sit on their own line
+   * inside the card; `align-items: start` keeps a short column from
+   * stretching to match a taller neighbour.
+   */
+  meta?: readonly PriorityMetaItem[];
   statusKey?: I18nKey;
   statusValues?: Values;
   to?: string;
@@ -92,6 +116,27 @@ export function PriorityList({ groups, ariaLabelKey }: PriorityListProps) {
             <span className={styles.detail}>{detailNode(item)}</span>
           ) : null}
         </span>
+        {item.meta && item.meta.length > 0 ? (
+          <span className={styles.meta}>
+            {item.meta.map((meta) => {
+              const value =
+                meta.value ??
+                (meta.absentKey ? t(meta.absentKey, meta.absentValues) : null);
+              // A null value with no absentKey sentence means the screen never
+              // decided what "missing" looks like here — render nothing rather
+              // than a dangling label.
+              if (value === null) return null;
+              return (
+                <span key={meta.labelKey} className={styles.metaItem}>
+                  <span className={styles.metaLabel}>
+                    {t(meta.labelKey, meta.labelValues)}
+                  </span>
+                  <span className={styles.metaValue}>{value}</span>
+                </span>
+              );
+            })}
+          </span>
+        ) : null}
         {item.statusKey ? (
           <span className={styles.status}>{t(item.statusKey, item.statusValues)}</span>
         ) : null}

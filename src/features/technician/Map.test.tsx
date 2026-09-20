@@ -34,12 +34,12 @@ describe('tech.map — FR-11', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders assigned sites in travel order as a PriorityList inside the mock boundary', async () => {
+  it('renders assigned sites in travel order as a PriorityList', async () => {
+    // The "a geographic map is not drawn" note rode on the mock banner, which
+    // ADR-0020 suppresses. The travel-ordered list IS the map treatment here
+    // (D7 §20 gap 3), so that is what this asserts.
     renderMap();
-    expect(await screen.findByRole('status')).toHaveTextContent(
-      'A geographic map is not drawn',
-    );
-    expect(screen.getByRole('group', { name: 'Map' })).toBeInTheDocument();
+    expect(await screen.findByRole('group', { name: 'Map' })).toBeInTheDocument();
     expect(screen.getAllByText(/^Arrive by /).length).toBeGreaterThan(0);
   });
 });

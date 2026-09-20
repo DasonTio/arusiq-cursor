@@ -30,9 +30,7 @@ describe('HQ assignment — FR-31 FR-34', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Needs an assignee')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Budi Pratama' }));
-    await user.click(
-      screen.getByRole('button', { name: 'Confirm simulated assignment' }),
-    );
+    await user.click(screen.getByRole('button', { name: 'Confirm assignment' }));
     expect(
       screen.getByText('Budi Pratama is assigned in this prototype session.'),
     ).toBeInTheDocument();
@@ -73,5 +71,16 @@ describe('admin.dispatch — board · FR-31 FR-32', () => {
       link.getAttribute('href')?.startsWith('/service?order='),
     );
     expect(orderLinks.length).toBeGreaterThan(0);
+  });
+
+  it('carries SLA due, age and assignee on every row, stating absence instead of inventing it', async () => {
+    renderDispatch();
+    const list = await screen.findByRole('group', { name: 'Service board' });
+    // Labels repeat per row; every seeded row has all three meta columns.
+    expect(within(list).getAllByText('SLA due').length).toBeGreaterThan(1);
+    expect(within(list).getAllByText('Opened').length).toBeGreaterThan(1);
+    expect(within(list).getAllByText('Assignee').length).toBeGreaterThan(1);
+    // The seeded unassigned visit states its absence (§4.4).
+    expect(within(list).getByText('Not yet assigned')).toBeInTheDocument();
   });
 });

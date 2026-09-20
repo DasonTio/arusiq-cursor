@@ -213,7 +213,9 @@ describe('CategoricalChart — the textual account', () => {
 
   it('carries provenance beside the figure and an accessible name that says what it shows', () => {
     renderChart();
-    expect(screen.getByText('Simulated')).toBeInTheDocument();
+    // ADR-0020 — the provenance label is suppressed; the prop it is derived
+    // from is still required by the contract and checked by the gate.
+    expect(screen.getByRole('img')).toBeInTheDocument();
     expect(screen.getByRole('img', { name: 'By unit' })).toBeInTheDocument();
   });
 

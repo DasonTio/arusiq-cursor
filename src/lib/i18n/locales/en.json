@@ -707,8 +707,8 @@
       },
       "photoMock": "Photo attachment is mocked. No file is uploaded.",
       "photoBody": "You can preview where supporting photos will be attached.",
-      "submit": "Submit simulated request",
-      "submitted": "Your simulated request is ready to track.",
+      "submit": "Submit request",
+      "submitted": "Your request is ready to track.",
       "track": "Track visits"
     },
     "pay": {
@@ -724,7 +724,7 @@
         "ewallet": "E-wallet"
       },
       "choose": "Choose a payment method to continue.",
-      "confirm": "Confirm simulated payment",
+      "confirm": "Confirm payment",
       "submitted": "Restore request sent — awaiting device verification.",
       "pending": "Restriction remains in force until verification.",
       "return": "Return to bills"
@@ -748,7 +748,7 @@
       },
       "notificationMock": "Assignment notification is mocked. No message is sent.",
       "notificationBody": "The assignee will see the brief, evidence and assigned unit only.",
-      "confirm": "Confirm simulated assignment",
+      "confirm": "Confirm assignment",
       "submitted": "{{name}} is assigned in this prototype session.",
       "return": "Return to service board"
     },
@@ -1236,9 +1236,11 @@
       "loading": "Loading the board",
       "columnEmpty": "None in this state.",
       "unassigned": "{{count}} unassigned",
-      "needsAssignee": "Needs an assignee",
       "assign": "Assign",
       "sla": "SLA due {{time}}",
+      "metaSla": "SLA due",
+      "metaOpened": "Opened",
+      "metaAssignee": "Assignee",
       "listTitle": "Every visit"
     },
     "payments": {

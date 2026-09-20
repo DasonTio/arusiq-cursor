@@ -707,8 +707,8 @@
       },
       "photoMock": "Lampiran foto disimulasikan. Tidak ada berkas yang diunggah.",
       "photoBody": "Anda dapat melihat pratinjau tempat foto pendukung akan dilampirkan.",
-      "submit": "Kirim permintaan tersimulasi",
-      "submitted": "Permintaan simulasi Anda siap dilacak.",
+      "submit": "Kirim permintaan",
+      "submitted": "Permintaan Anda siap dilacak.",
       "track": "Lacak kunjungan"
     },
     "pay": {
@@ -724,7 +724,7 @@
         "ewallet": "Dompet digital"
       },
       "choose": "Pilih metode pembayaran untuk melanjutkan.",
-      "confirm": "Konfirmasi pembayaran simulasi",
+      "confirm": "Konfirmasi pembayaran",
       "submitted": "Permintaan pemulihan dikirim — menunggu verifikasi perangkat.",
       "pending": "Pembatasan tetap berlaku sampai verifikasi.",
       "return": "Kembali ke tagihan"
@@ -748,7 +748,7 @@
       },
       "notificationMock": "Notifikasi penugasan disimulasikan. Tidak ada pesan yang dikirim.",
       "notificationBody": "Penerima tugas hanya akan melihat ringkasan, bukti, dan unit yang ditugaskan.",
-      "confirm": "Konfirmasi penugasan simulasi",
+      "confirm": "Konfirmasi penugasan",
       "submitted": "{{name}} ditugaskan dalam sesi prototipe ini.",
       "return": "Kembali ke papan layanan"
     },
@@ -1236,9 +1236,11 @@
       "loading": "Memuat papan",
       "columnEmpty": "Tidak ada dalam status ini.",
       "unassigned": "{{count}} belum ditugaskan",
-      "needsAssignee": "Memerlukan penugasan",
       "assign": "Tugaskan",
       "sla": "Batas SLA {{time}}",
+      "metaSla": "Batas SLA",
+      "metaOpened": "Dibuka",
+      "metaAssignee": "Penanggung jawab",
       "listTitle": "Setiap kunjungan"
     },
     "payments": {

@@ -213,4 +213,92 @@ describe('PriorityList', () => {
     );
     expect(screen.getByText('Rumah Bintaro')).toBeInTheDocument();
   });
+
+  it('renders meta columns with caption labels beside their pre-formatted values', () => {
+    render(
+      <MemoryRouter>
+        <PriorityList
+          groups={[
+            {
+              id: 'board',
+              labelKey: 'tech.queue.today',
+              items: [
+                {
+                  id: 'w1',
+                  titleKey: 'maintenance.filterService.title',
+                  severity: 'warning',
+                  to: '/work/w1',
+                  meta: [
+                    { labelKey: 'admin.dispatch.metaSla', value: '18 Sep 2026, 09.00' },
+                    { labelKey: 'admin.dispatch.metaAssignee', value: 'Budi Pratama' },
+                  ],
+                },
+              ],
+            },
+          ]}
+          ariaLabelKey="shell.search"
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.getByText('SLA due')).toBeInTheDocument();
+    expect(screen.getByText('18 Sep 2026, 09.00')).toBeInTheDocument();
+    expect(screen.getByText('Assignee')).toBeInTheDocument();
+    expect(screen.getByText('Budi Pratama')).toBeInTheDocument();
+  });
+
+  it('states an absent meta value via absentKey rather than rendering nothing', () => {
+    render(
+      <MemoryRouter>
+        <PriorityList
+          groups={[
+            {
+              id: 'board',
+              labelKey: 'tech.queue.today',
+              items: [
+                {
+                  id: 'w2',
+                  titleKey: 'maintenance.filterService.title',
+                  severity: 'warning',
+                  meta: [
+                    {
+                      labelKey: 'admin.dispatch.metaAssignee',
+                      value: null,
+                      absentKey: 'shared.work-order.unassigned',
+                    },
+                  ],
+                },
+              ],
+            },
+          ]}
+          ariaLabelKey="shell.search"
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.getByText('Not yet assigned')).toBeInTheDocument();
+  });
+
+  it('renders no meta column at all when the value is null and no absentKey is given', () => {
+    render(
+      <MemoryRouter>
+        <PriorityList
+          groups={[
+            {
+              id: 'board',
+              labelKey: 'tech.queue.today',
+              items: [
+                {
+                  id: 'w3',
+                  titleKey: 'maintenance.filterService.title',
+                  severity: 'warning',
+                  meta: [{ labelKey: 'admin.dispatch.metaAssignee', value: null }],
+                },
+              ],
+            },
+          ]}
+          ariaLabelKey="shell.search"
+        />
+      </MemoryRouter>,
+    );
+    expect(screen.queryByText('Assignee')).not.toBeInTheDocument();
+  });
 });

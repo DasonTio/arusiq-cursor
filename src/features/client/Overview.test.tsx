@@ -32,10 +32,11 @@ describe('client Home — FR-10 FR-15', () => {
     expect(screen.getByText('Rumah Bintaro')).toBeInTheDocument();
   });
 
-  it('shows avoided emissions with provenance, not a fabricated zero', async () => {
+  it('shows avoided emissions as a real figure, not a fabricated zero', async () => {
+    // ADR-0020 suppressed the provenance LABEL; the figure itself, and the
+    // rule that a missing one renders grey rather than 0, are unchanged.
     renderHome();
     expect(await screen.findByText('Avoided emissions this month')).toBeInTheDocument();
-    expect(screen.getAllByText('Simulated').length).toBeGreaterThan(0);
     expect(screen.getByText('Attic Store')).toBeInTheDocument();
     expect(screen.getAllByText('Comfort unknown').length).toBeGreaterThan(0);
   });

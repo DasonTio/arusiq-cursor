@@ -49,9 +49,7 @@ describe('Client service visits — FR-32 FR-33', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('Compressor current is too high')).toBeInTheDocument();
     expect(screen.getByText('Dining')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Submit simulated request' }));
-    expect(
-      screen.getByText('Your simulated request is ready to track.'),
-    ).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'Submit request' }));
+    expect(screen.getByText('Your request is ready to track.')).toBeInTheDocument();
   });
 });

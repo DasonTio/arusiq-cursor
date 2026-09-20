@@ -86,7 +86,6 @@ describe('client.alerts — FR-21 FR-22', () => {
 
     const critical = rowFor('Compressor current is too high');
     expect(within(critical).getByText('Critical')).toBeInTheDocument();
-    expect(within(critical).getAllByText('Simulated').length).toBeGreaterThan(0);
     expect(within(critical).getByText('Equipment fault')).toBeInTheDocument();
     const action = within(critical).getByRole('link', {
       name: 'Open the compressor alert',
@@ -119,14 +118,11 @@ describe('client.alerts — FR-21 FR-22', () => {
     expect(within(silent).getByText(/Last seen/)).toBeInTheDocument();
   });
 
-  it('states the delivery of the notice that carried each alert, and that it is a mock', async () => {
+  it('states the delivery of the notice that carried each alert', async () => {
+    // The mock banner is suppressed by ADR-0020. The per-notice delivery
+    // trail below is the part that carries evidence, and it stays.
     renderAlerts();
     await screen.findByRole('heading', { name: 'Alerts' });
-    expect(
-      screen.getByText(
-        'Notice delivery is simulated. Nothing was sent to WhatsApp or email in this prototype.',
-      ),
-    ).toBeInTheDocument();
     const tamper = rowFor('Possible device tamper');
     expect(within(tamper).getByText('WhatsApp · Delivered')).toBeInTheDocument();
     expect(within(tamper).getByText('Email · Failed')).toBeInTheDocument();
