@@ -1,0 +1,6 @@
+/* Inherits, so the surface decides. Legal on all four surfaces. */
+.ghost {
+  background: transparent;
+  color: inherit;
+  border-color: var(--color-gray-3);
+}

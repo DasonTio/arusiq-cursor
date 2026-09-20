@@ -1,0 +1,7 @@
+/* A primitive that paints no surface but names its own foreground — the shape
+   that put invisible text on the ADR-0005 hero. */
+.ghost {
+  background: transparent;
+  color: var(--color-gray-1);
+  border-color: var(--color-gray-3);
+}

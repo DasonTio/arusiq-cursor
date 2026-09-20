@@ -34,8 +34,21 @@
   color: var(--color-on-inverse);
 }
 
+/* The only variant with no fill of its own, so it is the only one whose
+ * legibility depends on the surface underneath it. It therefore takes that
+ * surface's declared foreground rather than naming one.
+ *
+ * `--color-gray-1` was hardcoded here, which is right on the three light
+ * surfaces (12.63:1 on page) and wrong on the fourth: on the ADR-0005 hero it
+ * put body grey on brand navy at 1.31:1 — invisible — for "See carbon
+ * details" on the household landing screen. Every other element on that hero
+ * already inherits `--color-on-inverse` from `.hero`; this one opted out.
+ *
+ * Inheriting keeps the light surfaces identical (body text IS gray-1) and
+ * makes any future surface a one-line declaration on the surface, not a new
+ * branch here. */
 .ghost {
   background: transparent;
-  color: var(--color-gray-1);
+  color: inherit;
   border-color: var(--color-gray-3);
 }

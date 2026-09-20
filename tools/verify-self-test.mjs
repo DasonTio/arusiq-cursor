@@ -34,6 +34,7 @@ const EXPECTED = {
     'motion-layout',
     'light-mode-only',
     'unknown-breakpoint',
+    'surface-dependent-foreground',
   ],
   'tools/verify-provenance.mjs': [
     'metric-needs-provenance',

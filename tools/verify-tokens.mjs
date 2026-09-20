@@ -184,6 +184,48 @@ for (const s of ['critical', 'warning', 'normal', 'unknown']) {
     );
 }
 
+// --- A primitive with no fill must not name its own foreground -------------
+// A component that paints no background sits on whatever surface a screen puts
+// it on, so a hardcoded `color` is a guess about a surface it cannot see. The
+// ghost Button guessed `--color-gray-1`: right on the three light surfaces,
+// and 1.31:1 on the ADR-0005 hero, where it rendered "See carbon details" as
+// near-invisible on the household landing screen.
+//
+// verify-contrast could not catch it — that checks tokens against the legal
+// surfaces, and every token here was legal. What was wrong was the PAIRING,
+// which is only knowable at the point of use. So the rule is structural: a
+// transparent primitive inherits (`inherit` / `currentColor`), and the surface
+// declares the foreground, as `.hero` already does.
+//
+// Scoped to `components/` and `patterns/`, because those are the pieces that
+// can land on any surface. A feature's own class is placed by the screen that
+// owns it and does know what it is sitting on.
+for (const file of files.filter((f) => /\.css$/.test(f))) {
+  const path = file.replace(/\\/g, '/');
+  if (!/\/(components|patterns)\//.test(path)) continue;
+  const source = readFileSync(file, 'utf8');
+  // Crude block split is enough: these files are flat rule lists, and a
+  // declaration cannot span a `}`.
+  let offset = 0;
+  for (const block of source.split('}')) {
+    const startLine = source.slice(0, offset).split('\n').length;
+    offset += block.length + 1;
+    const body = block.slice(block.indexOf('{') + 1);
+    if (!/background(-color)?\s*:\s*transparent/.test(body)) continue;
+    const colour = body.match(
+      /(?:^|[;{\s])color\s*:\s*(var\(--color-[a-z0-9-]+\)|#[0-9a-fA-F]{3,8})/,
+    );
+    if (!colour) continue;
+    add(
+      file,
+      startLine + body.slice(0, colour.index).split('\n').length,
+      'surface-dependent-foreground',
+      `no background, but names its own colour (${colour[1]}) — a primitive ` +
+        `that paints no surface must use \`inherit\` and let the surface decide`,
+    );
+  }
+}
+
 // --- The Figma export must not go stale ------------------------------------
 // Figma is a CONSUMER of tokens.css (tools/export-figma-tokens.mjs). If someone
 // changes a token and forgets to re-export, the design file and the build
