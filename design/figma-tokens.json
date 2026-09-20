@@ -485,8 +485,8 @@
     },
     "content-max": {
       "$type": "dimension",
-      "$value": "85rem",
-      "$description": "1360px, centred above 1440px"
+      "$value": "96rem",
+      "$description": "1536px, centred above 1440px"
     }
   },
   "icon": {

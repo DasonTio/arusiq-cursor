@@ -165,6 +165,23 @@
     justify-content: flex-end;
   }
 
+  /* ADR-0021 — the header belongs to the CONTENT column, not to the whole
+     frame. Spanning both columns centred it against a different container
+     than `main`, so the search and account controls sat well to the right of the
+     content they head. The rail then runs full height beside it, which is
+     also what the benchmark does with its own logo — and without the span
+     below, column 1 row 1 is an empty grey notch above the rail. */
+  @media (min-width: 1024px) {
+    .header {
+      grid-column: 2;
+    }
+
+    .sideNav {
+      grid-column: 1;
+      grid-row: 1 / -1;
+    }
+  }
+
   .headerBrand {
     display: none;
   }
@@ -250,8 +267,27 @@
     padding-inline: var(--grid-margin-hd);
   }
 
+  /* ADR-0021 — cap AND centre, and cap the header's contents to the same
+     column.
+     The cap existed; the centring did not, so on a wide frame the content sat
+     hard against the sidebar with a dead strip down its right, while the
+     header ran the full width and its controls floated well beyond the right
+     edge of everything they belong to. A capped column that is not centred
+     does not read as a measure; it reads as a broken layout. */
   .main {
+    /* `inline-size: 100%` is load-bearing: `margin-inline: auto` on a GRID
+       ITEM turns off the stretch, so without it the column collapses to its
+       content width instead of filling up to the cap. */
+    inline-size: 100%;
     max-inline-size: var(--content-max);
+    margin-inline: auto;
+  }
+
+  /* The BAR spans its track; its CONTENTS align to the capped column. Capping
+     the bar itself left it floating with canvas either side of a white
+     header, which looks like a rendering fault rather than a measure. */
+  .header {
+    padding-inline: max(var(--grid-margin-hd), calc((100% - var(--content-max)) / 2));
   }
 }
 
