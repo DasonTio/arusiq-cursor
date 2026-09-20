@@ -374,42 +374,49 @@ export default function Energy() {
       </p>
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>{t('client.energy.savingsTitle')}</h2>
-        {series.actual.length > 1 ? (
-          <Sparkline series={series} />
-        ) : (
-          <p>{t('loadState.noData')}</p>
-        )}
-        <ProvenanceChip provenance={series.provenance} />
-        <p className={styles.meta}>
-          {t('client.energy.completeness', {
-            value: format(series.completeness * 100),
-          })}
-        </p>
-        <Button variant="ghost" to={series.method.href}>
-          {t('client.energy.methodLink')}
-        </Button>
-        <div className={styles.metrics}>
-          <Metric
-            labelKey="client.energy.savingKwh"
-            value={saving.kWh.value}
-            unit="kWh"
-            provenance={saving.kWh.provenance}
-            lastSeen={saving.kWh.lastSeen}
-          />
-          <Metric
-            labelKey="client.energy.savingIdr"
-            value={saving.idr.value}
-            unit="IDR"
-            provenance={saving.idr.provenance}
-            lastSeen={saving.idr.lastSeen}
-          />
-          <Metric
-            labelKey="client.energy.savingPct"
-            value={saving.pct.value}
-            unit="%"
-            provenance={saving.pct.provenance}
-            lastSeen={saving.pct.lastSeen}
-          />
+        {/* One idea, one panel: the chart carries the shape of the period and
+            the figures beside it carry the totals. They were loose on the
+            canvas while every lesser block on the screen was carded. */}
+        <div className={styles.panel}>
+          <div className={styles.panelChart}>
+            {series.actual.length > 1 ? (
+              <Sparkline series={series} />
+            ) : (
+              <p>{t('loadState.noData')}</p>
+            )}
+            <ProvenanceChip provenance={series.provenance} />
+            <p className={styles.meta}>
+              {t('client.energy.completeness', {
+                value: format(series.completeness * 100),
+              })}
+            </p>
+            <Button variant="ghost" to={series.method.href}>
+              {t('client.energy.methodLink')}
+            </Button>
+          </div>
+          <div className={styles.metrics}>
+            <Metric
+              labelKey="client.energy.savingKwh"
+              value={saving.kWh.value}
+              unit="kWh"
+              provenance={saving.kWh.provenance}
+              lastSeen={saving.kWh.lastSeen}
+            />
+            <Metric
+              labelKey="client.energy.savingIdr"
+              value={saving.idr.value}
+              unit="IDR"
+              provenance={saving.idr.provenance}
+              lastSeen={saving.idr.lastSeen}
+            />
+            <Metric
+              labelKey="client.energy.savingPct"
+              value={saving.pct.value}
+              unit="%"
+              provenance={saving.pct.provenance}
+              lastSeen={saving.pct.lastSeen}
+            />
+          </div>
         </div>
       </section>
       <section className={styles.section}>
@@ -562,6 +569,10 @@ function Sparkline({ series }: { series: EnergySeries }) {
       <svg
         className={styles.chart}
         viewBox="0 0 100 30"
+        /* A trend line, not a shape: let it fill the panel rather than
+           letterbox itself in the middle. `non-scaling-stroke` below keeps
+           the stroke even once the box is no longer 100:30. */
+        preserveAspectRatio="none"
         role="img"
         aria-label={t('client.energy.chartAlt', {
           actual: format(actualTotal),

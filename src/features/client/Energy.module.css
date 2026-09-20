@@ -55,7 +55,8 @@
   list-style: none;
 }
 
-.card {
+.card,
+.panel {
   width: 100%;
   padding: var(--space-3);
   border: 1px solid var(--color-gray-5);
@@ -102,6 +103,12 @@
   inline-size: 100%;
 }
 
+.chartActual,
+.chartBaseline {
+  /* The box is stretched, so the stroke must not be. */
+  vector-effect: non-scaling-stroke;
+}
+
 .chartActual {
   fill: none;
   stroke: var(--color-brand-primary);
@@ -145,5 +152,40 @@
   .metrics,
   .list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* The headline analysis of this screen — what the saving is, and the shape it
+   took over the period — read as loose text on the canvas while every lesser
+   thing around it was carded. It is one idea, so it is one panel: the chart
+   carries the shape, the figures beside it carry the totals. */
+.panel {
+  display: grid;
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.panelChart {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+
+@media (min-width: 1024px) {
+  .panel {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    gap: var(--space-4);
+  }
+
+  /* A sparkline is a footnote; this is the screen's subject. Give it the
+     height to actually read as a trend. */
+  .chart {
+    block-size: var(--space-10);
+  }
+
+  .panel .metrics {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
