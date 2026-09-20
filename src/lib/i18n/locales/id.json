@@ -832,7 +832,8 @@
       "viewEnergy": "Lihat energi",
       "commandSteps": "Perkembangan perintah",
       "commandFailed": "Perintah gagal — unit tidak bergerak, dan kontrol tetap pada posisinya sampai ada perintah terverifikasi.",
-      "commandQueued": "Antre — perangkat tidak dapat dijangkau. Ditahan sejak {{time}}; perintah menunggu, bukan dihapus."
+      "commandQueued": "Antre — perangkat tidak dapat dijangkau. Ditahan sejak {{time}}; perintah menunggu, bukan dihapus.",
+      "commandQueuedNoTime": "Antre — perangkat tidak terjangkau. Perintah menunggu, bukan dibuang."
     },
     "work-order": {
       "title": "Perintah kerja",

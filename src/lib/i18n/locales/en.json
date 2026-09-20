@@ -832,7 +832,8 @@
       "viewEnergy": "View energy",
       "commandSteps": "Command progress",
       "commandFailed": "The command failed — the unit did not move, and the control stays where it was until a verified command.",
-      "commandQueued": "Queued — device unreachable. Held since {{time}}; the command waits instead of being dropped."
+      "commandQueued": "Queued — device unreachable. Held since {{time}}; the command waits instead of being dropped.",
+      "commandQueuedNoTime": "Queued — device unreachable. The command waits instead of being dropped."
     },
     "work-order": {
       "title": "Work order",

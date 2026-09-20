@@ -894,9 +894,16 @@ function CommandProgress({
           {t('shared.unit.commandFailed')}
         </p>
       ) : null}
-      {terminal === 'queued' && at ? (
+      {/* A queued command says so whether or not it has a timestamp. The time
+          used to gate the whole sentence, so the first command sent to a unit
+          with no prior command — exactly the case where `lastCommand` is
+          absent — showed a stalled pipeline and no reason for it. Missing is
+          stated as missing; it does not delete the news. */}
+      {terminal === 'queued' ? (
         <p className={styles.meta}>
-          {t('shared.unit.commandQueued', { time: formatDateTime(at) })}
+          {at
+            ? t('shared.unit.commandQueued', { time: formatDateTime(at) })
+            : t('shared.unit.commandQueuedNoTime')}
         </p>
       ) : null}
     </div>
