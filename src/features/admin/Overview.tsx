@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button.tsx';
 import { Metric } from '../../components/Metric.tsx';
+import { ProvenanceChip } from '../../components/ProvenanceChip.tsx';
 import { restrictionSeverity } from '../../lib/domain/restriction.ts';
 import type { Severity } from '../../lib/domain/severity.ts';
 import { LOAD_STATE, type LoadState } from '../../lib/domain/loadState.ts';
@@ -30,6 +31,10 @@ import { SectionHeader } from '../../patterns/SectionHeader.tsx';
 import { ADMIN_OVERVIEW_VIEWS } from '../../routes/navigation.ts';
 import { useSession } from '../auth/session.ts';
 import { ViewTabs } from '../shared/ViewTabs.tsx';
+import {
+  MRV_COMPLETENESS_THRESHOLD,
+  portfolioCompleteness,
+} from './portfolioCompleteness.ts';
 import styles from '../shared/Screen.module.css';
 
 /** No severity field travels on an account standing row directly; this
@@ -48,7 +53,9 @@ export default function Overview() {
   const [accounts, setAccounts] = useState(
     [] as { property: Property; standing: AccountStanding }[],
   );
-  const [energy, setEnergy] = useState(null as EnergySeries | null);
+  const [energy, setEnergy] = useState(
+    [] as { property: Property; series: EnergySeries }[],
+  );
   const [approvals, setApprovals] = useState([] as RestrictionRequest[]);
   const [retry, setRetry] = useState(0);
 
@@ -76,14 +83,17 @@ export default function Overview() {
             return { property, standing };
           }),
         );
-        const first = properties[0];
-        const series = first
-          ? await simulatedTelemetry.getEnergy(
-              scope,
-              first.id,
-              trailingPeriod(new Date(REFERENCE_NOW), 30),
-            )
-          : null;
+        // Every site, not just the first one. This section is headed
+        // "Portfolio glance" and used to show `properties[0]`'s completeness
+        // under it — one site's figure standing in for the whole estate, and
+        // a reader has no way to tell which site they are looking at.
+        const period = trailingPeriod(new Date(REFERENCE_NOW), 30);
+        const series = await Promise.all(
+          properties.map(async (property) => ({
+            property,
+            series: await simulatedTelemetry.getEnergy(scope, property.id, period),
+          })),
+        );
         if (cancelled) return;
         setAlerts(nextAlerts);
         setOrders(nextOrders);
@@ -139,6 +149,7 @@ export default function Overview() {
     );
   }
 
+  const portfolio = portfolioCompleteness(energy);
   const unassigned = orders.filter((order) => {
     return !order.assignedTo && order.state !== 'closed';
   });
@@ -265,12 +276,30 @@ export default function Overview() {
       <PriorityList groups={priorityGroups} ariaLabelKey="admin.overview.title" />
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>{t('admin.overview.portfolio')}</h2>
-        {energy ? (
-          <p className={styles.meta}>
-            {t('admin.energy-portfolio.completeness', {
-              value: format(energy.completeness * 100),
-            })}
-          </p>
+        {portfolio ? (
+          <>
+            <p className={styles.meta}>
+              {t('admin.overview.completenessAcross', {
+                value: format(portfolio.completeness * 100),
+                count: energy.length,
+              })}
+              {/* INV-AGGREGATE — an aggregate inherits the weakest provenance
+                  of its inputs, and it says so beside the figure. */}
+              <ProvenanceChip provenance={portfolio.provenance} />
+            </p>
+            {/* D6 FR-71 draws a line below which a derived package is only
+                provisional. A portfolio mean can sit above that line while a
+                site sits under it, so the site is named, not averaged away. */}
+            {portfolio.weakest ? (
+              <p className={styles.meta}>
+                {t('admin.overview.completenessWeakest', {
+                  name: portfolio.weakest.property.name,
+                  value: format(portfolio.weakest.series.completeness * 100),
+                  threshold: format(MRV_COMPLETENESS_THRESHOLD * 100),
+                })}
+              </p>
+            ) : null}
+          </>
         ) : null}
         {silent.length > 0 ? (
           <p className={styles.meta}>{t('loadState.noData')}</p>

@@ -1185,6 +1185,8 @@
       "openBoard": "Buka papan layanan",
       "openEvents": "Buka peristiwa",
       "openPayments": "Buka pembayaran",
+      "completenessAcross": "Kelengkapan {{value}} % di {{count}} lokasi",
+      "completenessWeakest": "{{name}} paling rendah di {{value}} %, di bawah {{threshold}} % yang dibutuhkan metode ini.",
       "portfolio": "Sekilas portofolio",
       "listTitle": "Berdasarkan kategori",
       "kpi": {

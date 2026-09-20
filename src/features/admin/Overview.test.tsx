@@ -10,6 +10,12 @@ import { describe, expect, it } from 'vitest';
 import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router';
 import { SessionProvider } from '../auth/SessionProvider.tsx';
+import {
+  REFERENCE_NOW,
+  simulatedTelemetry,
+  trailingPeriod,
+} from '../../lib/simulation/index.ts';
+import i18n from '../../lib/i18n/index.ts';
 import Overview from './Overview.tsx';
 
 const hq = {
@@ -106,5 +112,56 @@ describe('admin.overview — FR-12 FR-52', () => {
     expect(links.some((href) => href?.startsWith('/accounts/case?property='))).toBe(
       true,
     );
+  });
+});
+
+describe('admin.overview — the portfolio glance is the portfolio · FR-71', () => {
+  it('averages every site instead of reporting the first one', async () => {
+    // The two sites have different completeness, and the section used to
+    // load `properties[0]` only — so HQ read one site's figure as the estate's.
+    const scope = { role: hq.role, userId: hq.userId };
+    const period = trailingPeriod(new Date(REFERENCE_NOW), 30);
+    const properties = await simulatedTelemetry.listProperties(scope);
+    const all = await Promise.all(
+      properties.map((property) =>
+        simulatedTelemetry.getEnergy(scope, property.id, period),
+      ),
+    );
+    // The fixture must keep more than one site, or this proves nothing.
+    expect(properties.length).toBeGreaterThan(1);
+    const mean = all.reduce((sum, series) => sum + series.completeness, 0) / all.length;
+    expect(mean).not.toBeCloseTo(all[0].completeness, 3);
+
+    renderOverview();
+    await screen.findByRole('heading', { name: 'Portfolio glance' });
+    expect(
+      // Built from the locale, not concatenated here: the separators are the
+      // locale's business and a hand-built matcher would pass in English only.
+      screen.getByText(
+        i18n.t('admin.overview.completenessAcross', {
+          value: new Intl.NumberFormat(i18n.language, {
+            maximumFractionDigits: 0,
+          }).format(mean * 100),
+          count: all.length,
+        }),
+      ),
+    ).toBeInTheDocument();
+  });
+
+  it('names no site while every site has met the method', async () => {
+    // Bintaro sits exactly ON the threshold, and FR-71's wording is "below",
+    // so it has met the method and must not be named. That branch
+    // is covered in portfolioCompleteness.test.ts, where a site can be put
+    // under it — no fixture puts one there today.
+    renderOverview();
+    await screen.findByRole('heading', { name: 'Portfolio glance' });
+    expect(screen.queryByText(/is the lowest at/)).toBeNull();
+  });
+
+  it('carries provenance beside the aggregate, as every figure must', async () => {
+    renderOverview();
+    const heading = await screen.findByRole('heading', { name: 'Portfolio glance' });
+    const section = heading.closest('section') as HTMLElement;
+    expect(within(section).getByText('Simulated')).toBeInTheDocument();
   });
 });
