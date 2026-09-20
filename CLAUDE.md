@@ -15,6 +15,7 @@ sprint. React 19 + TypeScript + Vite.
 | What are we building, for whom, and why                | `context/10-product.md`                  |
 | Domain model: severity, parts, roles, hierarchy        | `context/20-domain.md`                   |
 | Any visual decision — colour, type, spacing, component | `context/30-design-system.md`            |
+| How a screen is composed, and which colour register    | `context/35-dashboard-composition.md`    |
 | Where code goes, who owns which files                  | `context/40-architecture.md`             |
 | Working alongside other agents                         | `context/50-agent-protocol.md`           |
 | Is this finished?                                      | `context/60-definition-of-done.md`       |
