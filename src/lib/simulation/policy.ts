@@ -34,75 +34,26 @@ export const LEVER_KEYS = [
 
 export type LeverKey = (typeof LEVER_KEYS)[number];
 
-/** Which direction breaches the limit. Superheat falling is as bad as
- *  vibration rising, and a single "over/under" flag is what keeps the
- *  generator from reporting a healthy part as failing. */
-export type BreachDirection = 'above' | 'below';
-
-export interface SignalLimit {
-  limit: number;
-  /** SI symbol. International, not localised (see `MetricProps.unit`). */
-  unit: string;
-  breach: BreachDirection;
-}
-
 /**
- * Per-part signal limits. Keyed by part id then signal key, because `current`
- * on a compressor and `current` on a blower are not the same quantity and a
- * flat table by signal name would silently conflate them.
+ * NO SIGNAL LIMITS LIVE HERE. They are in `PART_CATALOGUE` (`catalogue.ts`),
+ * beside the signal each one belongs to.
+ *
+ * There used to be a second table in this file, and it is worth recording why
+ * it went. A threshold on its own is not a number — it is a number, a unit and
+ * the direction that breaches it, and the moment those three live apart from
+ * the signal they describe, they drift. They did: the two tables disagreed on
+ * 17 of 24 rows, on units as well as values (the drain pan was 60 % here and
+ * 25 mm there), and this one named a `subcoolingTrend` signal that no part
+ * measures. Nothing evaluated against this table — every alert, evidence line,
+ * checklist and post-service verification reads the catalogue — so the only
+ * thing it did was render on `admin.settings` as the published rule, which
+ * made the one screen an admin consults the one screen that was wrong.
+ *
+ * The separation this file's header argues for is against `lib/domain`, which
+ * holds rules. The catalogue is simulation data, same layer as this file, so
+ * a limit sitting there does not become a specification by accident. It still
+ * carries `provenance: 'simulated'` and still replaces in one edit.
  */
-export const SIMULATED_SIGNAL_LIMITS: Readonly<
-  Record<string, Readonly<Record<string, SignalLimit>>>
-> = {
-  'air-filter': {
-    pressureDrop: { limit: 120, unit: 'Pa', breach: 'above' },
-    runHours: { limit: 2000, unit: 'h', breach: 'above' },
-  },
-  'evaporator-coil': {
-    approachTemp: { limit: 12, unit: 'K', breach: 'above' },
-    frost: { limit: 6, unit: 'min/h', breach: 'above' },
-  },
-  'blower-motor-fan': {
-    current: { limit: 1.9, unit: 'A', breach: 'above' },
-    vibration: { limit: 2.8, unit: 'mm/s', breach: 'above' },
-  },
-  'condensate-drain-pan': {
-    level: { limit: 60, unit: '%', breach: 'above' },
-    overflow: { limit: 1, unit: 'events/d', breach: 'above' },
-  },
-  'vents-louvers': {
-    airflow: { limit: 320, unit: 'm³/h', breach: 'below' },
-    actuator: { limit: 2, unit: 'faults/d', breach: 'above' },
-  },
-  'condenser-coil': {
-    dischargeVsAmbient: { limit: 22, unit: 'K', breach: 'above' },
-  },
-  compressor: {
-    current: { limit: 6.5, unit: 'A', breach: 'above' },
-    cycling: { limit: 6, unit: 'starts/h', breach: 'above' },
-    vibration: { limit: 4.5, unit: 'mm/s', breach: 'above' },
-  },
-  'condenser-fan-blades': {
-    current: { limit: 1.4, unit: 'A', breach: 'above' },
-    imbalance: { limit: 1.5, unit: 'mm/s', breach: 'above' },
-  },
-  'refrigerant-lines': {
-    superheat: { limit: 5, unit: 'K', breach: 'below' },
-    subcoolingTrend: { limit: 3, unit: 'K', breach: 'below' },
-  },
-  'thermostat-sensors': {
-    drift: { limit: 1.5, unit: 'K', breach: 'above' },
-    disagreement: { limit: 2, unit: 'K', breach: 'above' },
-  },
-  'capacitor-contactor': {
-    startCurrent: { limit: 45, unit: 'A', breach: 'above' },
-    chatter: { limit: 3, unit: 'events/h', breach: 'above' },
-  },
-  'electrical-wiring': {
-    voltageSag: { limit: 198, unit: 'V', breach: 'below' },
-    harmonics: { limit: 8, unit: '%', breach: 'above' },
-  },
-};
 
 export const SIMULATED_POLICY = {
   /**

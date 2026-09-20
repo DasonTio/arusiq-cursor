@@ -8,7 +8,7 @@ import { MockBoundary } from '../../components/MockBoundary.tsx';
 import {
   DEMO_ACCOUNTS,
   GRID_FACTOR,
-  SIMULATED_SIGNAL_LIMITS,
+  PART_CATALOGUE,
   TARIFF,
 } from '../../lib/simulation/index.ts';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
@@ -22,6 +22,12 @@ export default function Settings() {
   const formatDate = (iso: string) =>
     new Intl.DateTimeFormat(i18n.language, { dateStyle: 'medium' }).format(
       new Date(iso),
+    );
+  /** Each signal declares the precision it is read at; a threshold shown to
+   *  more places than the reading suggests a tolerance nothing measures. */
+  const formatLimit = (value: number, decimals: number) =>
+    new Intl.NumberFormat(i18n.language, { maximumFractionDigits: decimals }).format(
+      value,
     );
   const formatIdr = (value: number) =>
     new Intl.NumberFormat(i18n.language, {
@@ -55,16 +61,29 @@ export default function Settings() {
       </section>
       <MockBoundary explanationKey="admin.settings.preview">
         <SectionHeader titleKey="admin.settings.thresholds" />
+        {/* Straight from PART_CATALOGUE — the table every alert, evidence
+            line and checklist is evaluated against. Rendering a second,
+            display-only copy is how this screen came to publish limits the
+            product did not use. */}
         <ul className={styles.list}>
-          {Object.entries(SIMULATED_SIGNAL_LIMITS).map(([partId, signals]) => {
+          {PART_CATALOGUE.map((part) => {
             return (
-              <li key={partId} className={styles.card}>
-                <p className={styles.cardTitle}>{t(`part.${partId}`)}</p>
-                {Object.entries(signals).map(([signal, limit]) => {
+              <li key={part.id} className={styles.card}>
+                <p className={styles.cardTitle}>{t(`part.${part.id}`)}</p>
+                {part.signals.map((signal) => {
+                  // A bare "198 V" reads as a ceiling. Supply voltage and
+                  // airflow are floors — the direction is half the rule.
+                  const line =
+                    signal.direction === 'below'
+                      ? 'admin.settings.limitBelow'
+                      : 'admin.settings.limitAbove';
                   return (
-                    <p key={signal} className={styles.meta}>
-                      {t(`signal.${partId}.${signal}`)} · {format(limit.limit)}{' '}
-                      {limit.unit}
+                    <p key={signal.key} className={styles.meta}>
+                      {t(line, {
+                        signal: t(`signal.${part.id}.${signal.key}`),
+                        value: formatLimit(signal.threshold, signal.decimals),
+                        unit: signal.unit,
+                      })}
                     </p>
                   );
                 })}

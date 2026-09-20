@@ -497,8 +497,7 @@
     },
     "refrigerant-lines": {
       "superheat": "Superheat",
-      "subcooling": "Subcooling",
-      "subcoolingTrend": "Subcooling trend"
+      "subcooling": "Subcooling"
     },
     "thermostat-sensors": {
       "drift": "Sensor drift",
@@ -1281,7 +1280,9 @@
       "grid": "Grid factors",
       "thresholds": "Part thresholds (preview)",
       "preview": "Preview only — this does not write a live rule.",
-      "users": "Users and roles"
+      "users": "Users and roles",
+      "limitAbove": "{{signal}} · alerts above {{value}} {{unit}}",
+      "limitBelow": "{{signal}} · alerts below {{value}} {{unit}}"
     },
     "audit": {
       "title": "Audit log",

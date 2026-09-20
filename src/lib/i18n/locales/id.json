@@ -497,8 +497,7 @@
     },
     "refrigerant-lines": {
       "superheat": "Superheat",
-      "subcooling": "Subcooling",
-      "subcoolingTrend": "Tren subcooling"
+      "subcooling": "Subcooling"
     },
     "thermostat-sensors": {
       "drift": "Pergeseran sensor",
@@ -1281,7 +1280,9 @@
       "grid": "Faktor jaringan",
       "thresholds": "Ambang bagian (pratinjau)",
       "preview": "Hanya pratinjau — ini tidak menulis aturan hidup.",
-      "users": "Pengguna dan peran"
+      "users": "Pengguna dan peran",
+      "limitAbove": "{{signal}} · memberi peringatan di atas {{value}} {{unit}}",
+      "limitBelow": "{{signal}} · memberi peringatan di bawah {{value}} {{unit}}"
     },
     "audit": {
       "title": "Log audit",

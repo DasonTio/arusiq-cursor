@@ -30,12 +30,7 @@ export { GRID_FACTOR, TARIFF, BASELINE_METHOD, TECHNICIANS } from './fixtures.ts
 export { links } from './links.ts';
 export { walkUnits, walkRooms } from './tree.ts';
 export { asReading, isAbsent } from './readings.ts';
-export {
-  SIMULATED_POLICY,
-  SIMULATED_SIGNAL_LIMITS,
-  LEVER_KEYS,
-  type LeverKey,
-} from './policy.ts';
+export { SIMULATED_POLICY, LEVER_KEYS, type LeverKey } from './policy.ts';
 
 export { deriveClientOverview, selectClientOverview } from './overview.ts';
 /** D2 O-WO — the work-order record. Screens call the adapter; these are for a
