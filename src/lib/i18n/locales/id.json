@@ -1294,7 +1294,8 @@
       "exportMock": "Ekspor disimulasikan. Tidak ada berkas yang meninggalkan perangkat ini.",
       "rowRestriction": "{{step}} · {{requester}} / {{approver}}",
       "rowCommand": "{{unit}} · {{state}}",
-      "rowVisit": "{{title}} · {{state}}"
+      "rowVisit": "{{title}} · {{state}}",
+      "rowRestrictionSignedOff": "{{step}} · {{requester}} / {{approver}} · ditandatangani oleh {{manager}}"
     },
     "device": {
       "title": "Kesehatan perangkat",

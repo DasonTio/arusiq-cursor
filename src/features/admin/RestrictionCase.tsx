@@ -243,6 +243,18 @@ export default function RestrictionCase() {
             time: formatDateTime(restriction.approval.at),
           })}
         </p>
+        {/* ADR-0015 OD-02 — rung 4 carries a named management sign-off on top
+            of the two-person approval. This screen exists to BE the record of
+            the ladder, so omitting the third signature made the heaviest rung
+            look like every other one. */}
+        {restriction.approval.signedOff ? (
+          <p>
+            {t('admin.approve.decidedSignedOff', {
+              name: restriction.approval.signedOff.manager,
+              time: formatDateTime(restriction.approval.signedOff.at),
+            })}
+          </p>
+        ) : null}
       </section>
       <section className={styles.section}>
         <SectionHeader titleKey="admin.case.evidenceTitle" />

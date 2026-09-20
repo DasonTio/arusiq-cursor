@@ -47,11 +47,20 @@ export default function Audit() {
             next.push({
               id: `restriction-${unit.id}`,
               at: unit.restriction.approval.at,
-              text: t('admin.audit.rowRestriction', {
-                step: t(`restriction.${unit.restriction.step}`),
-                requester: unit.restriction.approval.requester,
-                approver: unit.restriction.approval.approver,
-              }),
+              // ADR-0015 OD-02 — rung 4 carries a third signature. An audit
+              // row that shows two of three signatures is not an audit row.
+              text: unit.restriction.approval.signedOff
+                ? t('admin.audit.rowRestrictionSignedOff', {
+                    step: t(`restriction.${unit.restriction.step}`),
+                    requester: unit.restriction.approval.requester,
+                    approver: unit.restriction.approval.approver,
+                    manager: unit.restriction.approval.signedOff.manager,
+                  })
+                : t('admin.audit.rowRestriction', {
+                    step: t(`restriction.${unit.restriction.step}`),
+                    requester: unit.restriction.approval.requester,
+                    approver: unit.restriction.approval.approver,
+                  }),
             });
           }
           if (unit.control.lastCommand) {

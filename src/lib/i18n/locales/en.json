@@ -1294,7 +1294,8 @@
       "exportMock": "Export is mocked. No file left this device.",
       "rowRestriction": "{{step}} · {{requester}} / {{approver}}",
       "rowCommand": "{{unit}} · {{state}}",
-      "rowVisit": "{{title}} · {{state}}"
+      "rowVisit": "{{title}} · {{state}}",
+      "rowRestrictionSignedOff": "{{step}} · {{requester}} / {{approver}} · signed off by {{manager}}"
     },
     "device": {
       "title": "Device health",

@@ -149,6 +149,15 @@ export default function Payments() {
                         time: formatDateTime(restriction.approval.at),
                       })}
                     </p>
+                    {/* ADR-0015 OD-02 — the rung-4 management sign-off. */}
+                    {restriction.approval.signedOff ? (
+                      <p className={styles.meta}>
+                        {t('admin.approve.decidedSignedOff', {
+                          name: restriction.approval.signedOff.manager,
+                          time: formatDateTime(restriction.approval.signedOff.at),
+                        })}
+                      </p>
+                    ) : null}
                     <Button
                       variant="ghost"
                       to={`/accounts/case?property=${encodeURIComponent(row.property.id)}`}

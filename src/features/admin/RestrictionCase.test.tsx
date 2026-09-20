@@ -77,6 +77,15 @@ describe('admin.restriction-case — the whole ladder on one object · FR-52', (
     ).toBeInTheDocument();
   });
 
+  it('shows the rung-4 management sign-off, not just the two approvers (ADR-0015 OD-02)', async () => {
+    // SCBD sits on `stop`, the one rung that needs a third signature. Showing
+    // two of three made the heaviest rung look like every other one.
+    renderCase('/accounts/case?property=prop-scbd');
+    await screen.findByRole('heading', { level: 1, name: 'Restriction case' });
+    expect(screen.getByText(/Requested by Andi Nugroho/)).toBeInTheDocument();
+    expect(screen.getByText(/Signed off by Sri Handayani/)).toBeInTheDocument();
+  });
+
   it('carries the notice history as the evidence and consent record', async () => {
     renderCase('/accounts/case?property=prop-bintaro');
     await screen.findByRole('heading', { level: 1, name: 'Restriction case' });
