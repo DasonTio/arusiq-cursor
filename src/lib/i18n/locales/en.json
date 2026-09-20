@@ -58,6 +58,7 @@
       "notInScope": "This request is not yours to decide.",
       "alreadyDecided": "This request has already been decided.",
       "healthSensitiveStop": "Cooling cannot be stopped in a health-sensitive space. Approve a lower step instead.",
+      "mixedRungs": "The units in this space are on different steps. Restrict them one at a time, so none skips a step it was owed.",
       "notNextRung": "Steps are applied one at a time. Approve the step directly above the one in force.",
       "signOffRequired": "Stopping service needs a named management sign-off as well as your approval.",
       "selfApproval": "You raised this request, so you cannot also approve it. A second person has to decide it.",

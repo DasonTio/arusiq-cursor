@@ -14,6 +14,7 @@ import {
   RESTRICTION_STEP,
   expectedNextStep,
   refuseRestrictionApproval,
+  worstRung,
   requiresManagementSignOff,
 } from './restriction.ts';
 
@@ -54,7 +55,7 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
   it('permits the next rung on an ordinary space with two-person control', () => {
     expect(
       refuseRestrictionApproval({
-        currentStep: 'reminder',
+        currentSteps: ['reminder'],
         requestedStep: 'setpointRaised',
         space: open,
         signedOffBy: null,
@@ -67,7 +68,7 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
   it('REFUSES stop on a health-sensitive space — D6 FR-53, no signature helps', () => {
     expect(
       refuseRestrictionApproval({
-        currentStep: 'ecoLockLimitedHours',
+        currentSteps: ['ecoLockLimitedHours'],
         requestedStep: 'stop',
         space: sensitive,
         signedOffBy: 'Sri Handayani',
@@ -82,7 +83,7 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
     // a paperwork problem invites somebody to go and find the paperwork.
     expect(
       refuseRestrictionApproval({
-        currentStep: 'ecoLockLimitedHours',
+        currentSteps: ['ecoLockLimitedHours'],
         requestedStep: 'stop',
         space: sensitive,
         signedOffBy: null,
@@ -95,7 +96,7 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
   it('refuses a rung that skips the one below it', () => {
     expect(
       refuseRestrictionApproval({
-        currentStep: 'reminder',
+        currentSteps: ['reminder'],
         requestedStep: 'ecoLockLimitedHours',
         space: open,
         signedOffBy: null,
@@ -108,7 +109,7 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
   it('refuses re-applying the rung already in force', () => {
     expect(
       refuseRestrictionApproval({
-        currentStep: 'stop',
+        currentSteps: ['stop'],
         requestedStep: 'stop',
         space: open,
         signedOffBy: 'Sri Handayani',
@@ -120,7 +121,7 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
 
   it('refuses rung 4 without a named management sign-off, and permits it with one', () => {
     const ctx = {
-      currentStep: 'ecoLockLimitedHours',
+      currentSteps: ['ecoLockLimitedHours'],
       requestedStep: 'stop',
       space: open,
       signedOffBy: null,
@@ -139,7 +140,7 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
   it('does not ask rungs 1–3 for a manager — ceremony teaches approvers to click through', () => {
     expect(
       refuseRestrictionApproval({
-        currentStep: null,
+        currentSteps: [null],
         requestedStep: 'reminder',
         space: sensitive,
         signedOffBy: null,
@@ -156,7 +157,7 @@ describe('two-person control — ADR-0015 OD-02', () => {
     // ladder. It held only because the fixture ids happened to differ.
     expect(
       refuseRestrictionApproval({
-        currentStep: 'reminder',
+        currentSteps: ['reminder'],
         requestedStep: 'setpointRaised',
         space: open,
         signedOffBy: null,
@@ -169,7 +170,7 @@ describe('two-person control — ADR-0015 OD-02', () => {
   it('refuses it by name too, so a second account is not a way round it', () => {
     expect(
       refuseRestrictionApproval({
-        currentStep: 'reminder',
+        currentSteps: ['reminder'],
         requestedStep: 'setpointRaised',
         space: open,
         signedOffBy: null,
@@ -184,7 +185,7 @@ describe('two-person control — ADR-0015 OD-02', () => {
     // signature sends them to fetch one, and the answer is still no.
     expect(
       refuseRestrictionApproval({
-        currentStep: 'ecoLockLimitedHours',
+        currentSteps: ['ecoLockLimitedHours'],
         requestedStep: 'stop',
         space: open,
         signedOffBy: null,
@@ -197,7 +198,7 @@ describe('two-person control — ADR-0015 OD-02', () => {
   it('puts the safety refusal ahead of self-approval', () => {
     expect(
       refuseRestrictionApproval({
-        currentStep: 'ecoLockLimitedHours',
+        currentSteps: ['ecoLockLimitedHours'],
         requestedStep: 'stop',
         space: sensitive,
         signedOffBy: null,
@@ -209,7 +210,7 @@ describe('two-person control — ADR-0015 OD-02', () => {
 
   it('refuses a rung-4 manager who is the approver or the requester', () => {
     const ctx = {
-      currentStep: 'ecoLockLimitedHours',
+      currentSteps: ['ecoLockLimitedHours'],
       requestedStep: 'stop',
       space: open,
       requester: andi,
@@ -230,7 +231,7 @@ describe('two-person control — ADR-0015 OD-02', () => {
   it('still permits an ordinary two-person approval on rungs 1–3', () => {
     expect(
       refuseRestrictionApproval({
-        currentStep: 'reminder',
+        currentSteps: ['reminder'],
         requestedStep: 'setpointRaised',
         space: open,
         signedOffBy: null,
@@ -238,5 +239,81 @@ describe('two-person control — ADR-0015 OD-02', () => {
         approver: rina,
       }),
     ).toBeNull();
+  });
+});
+
+describe('the ladder has no skips — D7 §13.2', () => {
+  const base = {
+    requestedStep: 'setpointRaised',
+    space: open,
+    signedOffBy: null,
+    requester: andi,
+    approver: rina,
+  } as const;
+
+  it('refuses a space whose units are standing on different rungs', () => {
+    // One unit on rung 1, one on nothing. Collapsing to the worst rung and
+    // approving rung 2 would carry the second unit past the reminder its
+    // occupants were owed — a skip, which is the switch D7 §13.2 forbids.
+    expect(
+      refuseRestrictionApproval({ ...base, currentSteps: ['reminder', null] }),
+    ).toBe('mixedRungs');
+  });
+
+  it('permits a space whose units are all on the same rung', () => {
+    expect(
+      refuseRestrictionApproval({
+        ...base,
+        currentSteps: ['reminder', 'reminder', 'reminder'],
+      }),
+    ).toBeNull();
+  });
+
+  it('treats a space with no restriction anywhere as one rung, not a mixture', () => {
+    expect(
+      refuseRestrictionApproval({
+        ...base,
+        requestedStep: 'reminder',
+        currentSteps: [null, null],
+      }),
+    ).toBeNull();
+  });
+
+  it('puts the safety refusal ahead of the mixture', () => {
+    expect(
+      refuseRestrictionApproval({
+        ...base,
+        requestedStep: 'stop',
+        space: sensitive,
+        currentSteps: ['ecoLockLimitedHours', null],
+      }),
+    ).toBe('healthSensitiveStop');
+  });
+
+  it('still reports a genuine skip on a uniform space as notNextRung', () => {
+    expect(
+      refuseRestrictionApproval({
+        ...base,
+        requestedStep: 'stop',
+        currentSteps: ['reminder', 'reminder'],
+      }),
+    ).toBe('notNextRung');
+  });
+});
+
+describe('worstRung — for display, never for a decision', () => {
+  it('ranks by ladder position, not by name', () => {
+    // Alphabetically 'ecoLockLimitedHours' < 'stop' < 'setpointRaised' is not
+    // the ladder order, and a name compare would invert two rungs.
+    expect(worstRung(['reminder', 'stop', 'setpointRaised'])).toBe('stop');
+    expect(worstRung(['setpointRaised', 'ecoLockLimitedHours'])).toBe(
+      'ecoLockLimitedHours',
+    );
+  });
+
+  it('ignores units with no restriction, and is null when none have one', () => {
+    expect(worstRung([null, 'reminder', null])).toBe('reminder');
+    expect(worstRung([null, null])).toBeNull();
+    expect(worstRung([])).toBeNull();
   });
 });

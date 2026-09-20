@@ -12,7 +12,9 @@ import { describe, expect, it } from 'vitest';
 import { expectedNextStep } from '../domain/restriction.ts';
 import { createTelemetryAdapter } from './adapter.ts';
 import { fixedClock, REFERENCE_NOW } from './clock.ts';
-import { RESTRICTION_REJECT } from './restrictions.ts';
+import { RESTRICTION_REJECT, currentStepAcross, stepsAcross } from './restrictions.ts';
+import { datasetAt } from './adapter.ts';
+import { worstRung } from '../domain/restriction.ts';
 
 const admin = { role: 'admin' as const, userId: 'user-admin' };
 const client = { role: 'client' as const, userId: 'user-client' };
@@ -294,5 +296,27 @@ describe('two-person control at the adapter — ADR-0015 OD-02', () => {
       decidedByName: 'Andi Nugroho',
     });
     expect(result.ok).toBe(true);
+  });
+});
+
+describe('stepsAcross — one entry per unit, nulls included', () => {
+  it('never drops a unit, because a dropped null hides a mixture', () => {
+    // If this filtered out unrestricted units, a room with one unit on
+    // `reminder` and one on nothing would look uniform to the approval rule,
+    // and the ladder skip would be back.
+    const ds = datasetAt(new Date(REFERENCE_NOW));
+    const unitIds = ds.index.unitIdsByAsset.get('prop-bintaro') ?? [];
+    expect(unitIds.length).toBeGreaterThan(1);
+    const steps = stepsAcross(unitIds, ds.index.unitById);
+    expect(steps).toHaveLength(unitIds.length);
+    expect(steps.some((step) => step === null)).toBe(true);
+  });
+
+  it('and the display roll-up still reports the worst of them', () => {
+    const ds = datasetAt(new Date(REFERENCE_NOW));
+    const unitIds = ds.index.unitIdsByAsset.get('prop-bintaro') ?? [];
+    expect(currentStepAcross(unitIds, ds.index.unitById)).toBe(
+      worstRung(stepsAcross(unitIds, ds.index.unitById)),
+    );
   });
 });

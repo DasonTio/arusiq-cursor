@@ -79,10 +79,32 @@ export const expectedNextStep = (
  *  does not own words, and the caller maps this to a locale key. */
 export type RestrictionRefusal =
   | 'healthSensitiveStop'
+  | 'mixedRungs'
   | 'notNextRung'
   | 'selfApproval'
   | 'signOffRequired'
   | 'signOffNotIndependent';
+
+/**
+ * The worst rung in force across a set of spaces, for DISPLAY — "what is
+ * happening to this room now".
+ *
+ * Deliberately not the input to an approval. A room whose units sit on
+ * different rungs has no single next rung, and collapsing them to the worst
+ * one before asking "may this be approved" is how a unit gets carried from
+ * nothing straight past the notice it was owed. `refuseRestrictionApproval`
+ * therefore takes the whole set and refuses the mixture.
+ */
+export const worstRung = (
+  steps: readonly (RestrictionStep | null)[],
+): RestrictionStep | null =>
+  steps.reduce<RestrictionStep | null>((worst, step) => {
+    if (!step) return worst;
+    if (worst === null) return step;
+    return RESTRICTION_STEP.indexOf(step) > RESTRICTION_STEP.indexOf(worst)
+      ? step
+      : worst;
+  }, null);
 
 /** Trimmed and case-folded. Two signatures differing only in capitalisation
  *  are one person, and a sign-off box is free text. */
@@ -93,8 +115,12 @@ const sameName = (a: string | null, b: string | null): boolean => {
 };
 
 export interface RestrictionApprovalContext {
-  /** The rung in force on the affected space now, or `null` for none. */
-  currentStep: RestrictionStep | null;
+  /**
+   * The rung in force on EACH unit the request would move, in any order;
+   * `null` for a unit with no restriction. One entry per unit, never
+   * pre-collapsed — see `worstRung`.
+   */
+  currentSteps: readonly (RestrictionStep | null)[];
   requestedStep: RestrictionStep;
   space: SpaceRestrictionContext;
   /** The named manager signing rung 4 off. `null` when nobody has. */
@@ -122,7 +148,12 @@ export interface RestrictionApprovalContext {
  *    is never reported as a missing signature — that wording invites somebody
  *    to go and find the signature, and no signature makes it permitted
  *    (D6 FR-53).
- * 2. `notNextRung` — whether this rung is approvable at all, before who.
+ * 2. `mixedRungs` then `notNextRung` — whether this rung is approvable at all,
+ *    before who. A space whose units are on different rungs is refused rather
+ *    than levelled up to the worst of them: one approval that moves a unit
+ *    from nothing to `setpointRaised` has skipped the reminder that unit's
+ *    occupants were owed, and a ladder with a skip in it is the switch D7
+ *    §13.2 says this feature must not be.
  * 3. `selfApproval` before `signOffRequired`, for the same reason as (1): a
  *    requester approving their own request must not be told they need a
  *    signature, because they would go and get one and the answer would still
@@ -134,7 +165,13 @@ export const refuseRestrictionApproval = (
   ctx: RestrictionApprovalContext,
 ): RestrictionRefusal | null => {
   if (!isStepPermitted(ctx.requestedStep, ctx.space)) return 'healthSensitiveStop';
-  if (ctx.requestedStep !== expectedNextStep(ctx.currentStep)) return 'notNextRung';
+
+  // Every affected unit must be standing on the same rung, or "the next rung"
+  // names different steps for different units and one approval cannot mean
+  // all of them.
+  if (new Set(ctx.currentSteps).size > 1) return 'mixedRungs';
+  const currentStep = ctx.currentSteps[0] ?? null;
+  if (ctx.requestedStep !== expectedNextStep(currentStep)) return 'notNextRung';
 
   // Two-person control. Restriction is the one action in the product that
   // takes cooling away from a household, and a ladder one person can walk

@@ -19,6 +19,7 @@ import {
   isStepPermitted,
   refuseRestrictionApproval,
   requiresManagementSignOff,
+  worstRung,
   type RestrictionRefusal,
   type RestrictionStep,
 } from '../domain/restriction.ts';
@@ -56,6 +57,7 @@ export const RESTRICTION_REJECT = {
   alreadyDecided: 'restriction.reject.alreadyDecided',
   /** D6 FR-53 — THE safety refusal. */
   healthSensitiveStop: 'restriction.reject.healthSensitiveStop',
+  mixedRungs: 'restriction.reject.mixedRungs',
   notNextRung: 'restriction.reject.notNextRung',
   /** ADR-0015 OD-02 — two-person control on every rung. */
   selfApproval: 'restriction.reject.selfApproval',
@@ -67,6 +69,7 @@ export const RESTRICTION_REJECT = {
 
 const REFUSAL_KEY: Record<RestrictionRefusal, I18nKey> = {
   healthSensitiveStop: RESTRICTION_REJECT.healthSensitiveStop,
+  mixedRungs: RESTRICTION_REJECT.mixedRungs,
   notNextRung: RESTRICTION_REJECT.notNextRung,
   selfApproval: RESTRICTION_REJECT.selfApproval,
   signOffRequired: RESTRICTION_REJECT.signOffRequired,
@@ -164,23 +167,26 @@ export const affectedUnitIds = (
   return unitIdsByAsset.get(unitId ?? roomId ?? propertyId) ?? [];
 };
 
+/** The rung in force on each unit, in `unitIds` order. `null` where a unit
+ *  carries no restriction. Never collapsed here — the ladder rules need to
+ *  see the whole set (`worstRung` for display, the mixture for approval). */
+export const stepsAcross = (
+  unitIds: string[],
+  unitById: Map<string, Unit>,
+): (RestrictionStep | null)[] =>
+  unitIds.map((id) => unitById.get(id)?.restriction?.step ?? null);
+
 /**
  * The rung in force across the affected units — the WORST of them, by position
  * on the ladder rather than by name. A request has to say where it starts or
  * "the next rung" is meaningless.
+ *
+ * For DISPLAY. Approval takes `stepsAcross` and judges the whole set.
  */
 export const currentStepAcross = (
   unitIds: string[],
   unitById: Map<string, Unit>,
-): RestrictionStep | null =>
-  unitIds.reduce<RestrictionStep | null>((worst, id) => {
-    const step = unitById.get(id)?.restriction?.step;
-    if (!step) return worst;
-    if (worst === null) return step;
-    return RESTRICTION_STEP.indexOf(step) > RESTRICTION_STEP.indexOf(worst)
-      ? step
-      : worst;
-  }, null);
+): RestrictionStep | null => worstRung(stepsAcross(unitIds, unitById));
 
 const noticesFor = (spec: RestrictionRequestSpec, now: Date): AlertDelivery[] =>
   spec.notices.map((n) => ({
@@ -347,11 +353,14 @@ export const decideRequest = (
   }
 
   const unitIds = affectedUnitIds(request, ctx.unitIdsByAsset);
-  const currentStep = currentStepAcross(unitIds, ctx.unitById);
+  // The whole set, not the worst of it. A room holding one unit on `reminder`
+  // and one on nothing has no single next rung, and levelling both to the
+  // worst would carry the second past the notice it was owed.
+  const currentSteps = stepsAcross(unitIds, ctx.unitById);
   const signedOffBy = entry.signedOffBy ?? null;
 
   const refusal = refuseRestrictionApproval({
-    currentStep,
+    currentSteps,
     requestedStep: request.requestedStep,
     // Re-read from the spaces rather than trusting the flag on the request:
     // the request is a message, and a message is not a source of truth about

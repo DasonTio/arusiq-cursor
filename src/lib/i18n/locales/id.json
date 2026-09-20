@@ -58,6 +58,7 @@
       "notInScope": "Permintaan ini bukan wewenang Anda untuk diputuskan.",
       "alreadyDecided": "Permintaan ini sudah diputuskan.",
       "healthSensitiveStop": "Pendinginan tidak dapat dihentikan di ruang peka kesehatan. Setujui langkah yang lebih rendah.",
+      "mixedRungs": "Unit di ruang ini berada pada langkah yang berbeda. Terapkan pembatasan satu per satu, agar tidak ada yang melewati langkah yang seharusnya.",
       "notNextRung": "Langkah diterapkan satu per satu. Setujui langkah tepat di atas langkah yang sedang berlaku.",
       "signOffRequired": "Penghentian layanan memerlukan persetujuan manajemen atas nama tertentu, selain persetujuan Anda.",
       "selfApproval": "Anda yang mengajukan permintaan ini, sehingga Anda tidak dapat menyetujuinya sendiri. Orang kedua harus memutuskannya.",
