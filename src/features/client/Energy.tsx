@@ -4,7 +4,7 @@
  *
  * @requirement FR-60 FR-61 FR-62
  */
-import { useEffect, useState } from 'react';
+import { useEffect, useId, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button.tsx';
@@ -519,6 +519,8 @@ function comparableTotals(series: EnergySeries) {
 
 function Sparkline({ series }: { series: EnergySeries }) {
   const { t, i18n } = useTranslation();
+  /** Two sparklines can share a page, so the gradient needs its own id. */
+  const areaId = `${useId()}-area`;
   const format = (value: number) =>
     new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 1 }).format(value);
   const { actual: actualTotal, baseline: baselineTotal } = comparableTotals(series);
@@ -543,27 +545,49 @@ function Sparkline({ series }: { series: EnergySeries }) {
     return domain.length <= 1 ? 0 : (index / (domain.length - 1)) * 100;
   };
 
-  // A day with no meter reading breaks the line rather than being drawn
-  // through — missing is not zero, and a line crossing a silent day is a
-  // reading nobody took (D7 §11.2).
-  const toPath = (points: readonly { t: string; kWh: number }[]) => {
+  // Contiguous runs of reported days. A day with no meter reading breaks the
+  // run rather than being drawn through — missing is not zero, and a line
+  // crossing a silent day is a reading nobody took (D7 §11.2). The fill below
+  // is built from the same runs, so a gap is a gap in both channels.
+  const runsOf = (points: readonly { t: string; kWh: number }[]) => {
     const byDay = new Map(points.map((point) => [point.t, point.kWh] as const));
-    let pen: 'M' | 'L' = 'M';
-    return domain
-      .map((stamp) => {
-        const kWh = byDay.get(stamp);
-        if (kWh === undefined) {
-          pen = 'M';
-          return '';
-        }
-        const command = pen;
-        pen = 'L';
-        const y = 28 - (kWh / max) * 26;
-        return `${command} ${xAt(stamp).toFixed(2)} ${y.toFixed(2)}`;
-      })
-      .filter(Boolean)
-      .join(' ');
+    const runs: { x: number; y: number }[][] = [];
+    let run: { x: number; y: number }[] = [];
+    domain.forEach((stamp) => {
+      const kWh = byDay.get(stamp);
+      if (kWh === undefined) {
+        if (run.length > 0) runs.push(run);
+        run = [];
+        return;
+      }
+      run.push({ x: xAt(stamp), y: 28 - (kWh / max) * 26 });
+    });
+    if (run.length > 0) runs.push(run);
+    return runs;
   };
+
+  const draw = (run: { x: number; y: number }[]) =>
+    run
+      .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`)
+      .join(' ');
+
+  const toPath = (points: readonly { t: string; kWh: number }[]) =>
+    runsOf(points).map(draw).join(' ');
+
+  /** The same runs, closed to the floor of the plot so the line reads as a
+   *  quantity rather than as a squiggle. */
+  const toArea = (points: readonly { t: string; kWh: number }[]) =>
+    runsOf(points)
+      .filter((run) => run.length > 1)
+      .map((run) => {
+        const last = run[run.length - 1];
+        return `${draw(run)} L ${last.x.toFixed(2)} 30 L ${run[0].x.toFixed(2)} 30 Z`;
+      })
+      .join(' ');
+
+  /** Quarter gridlines. A trend with nothing behind it is a shape; with a
+   *  scale behind it, it is a reading. */
+  const gridlines = [0.25, 0.5, 0.75].map((fraction) => 28 - fraction * 26);
 
   return (
     <figure className={styles.sparkline}>
@@ -580,6 +604,22 @@ function Sparkline({ series }: { series: EnergySeries }) {
           baseline: format(baselineTotal),
         })}
       >
+        <defs>
+          <linearGradient id={areaId} x1="0" y1="0" x2="0" y2="1">
+            <stop className={styles.areaTop} offset="0%" />
+            <stop className={styles.areaBottom} offset="100%" />
+          </linearGradient>
+        </defs>
+        {gridlines.map((y) => (
+          <line key={y} className={styles.gridline} x1="0" x2="100" y1={y} y2={y} />
+        ))}
+        {series.actual.length > 1 ? (
+          <path
+            className={styles.chartArea}
+            d={toArea(series.actual)}
+            fill={`url(#${areaId})`}
+          />
+        ) : null}
         {series.baseline.length > 1 ? (
           <path className={styles.chartBaseline} d={toPath(series.baseline)} />
         ) : null}

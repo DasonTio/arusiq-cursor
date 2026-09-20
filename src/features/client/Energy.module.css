@@ -182,7 +182,7 @@
   /* A sparkline is a footnote; this is the screen's subject. Give it the
      height to actually read as a trend. */
   .chart {
-    block-size: var(--space-10);
+    block-size: var(--space-11);
   }
 
   .panel .metrics {
@@ -195,4 +195,29 @@
   .panel {
     padding: var(--space-4);
   }
+}
+
+/* The fill turns a line into a quantity. Both stops are the accent; only the
+   opacity changes, so the gradient is composed from the palette rather than
+   painted with new colours. */
+.areaTop {
+  stop-color: var(--color-brand-accent);
+  stop-opacity: 0.2;
+}
+
+.areaBottom {
+  stop-color: var(--color-brand-accent);
+  stop-opacity: 0;
+}
+
+.chartArea {
+  stroke: none;
+}
+
+/* A trend with nothing behind it is a shape; with a scale behind it, it is a
+   reading. Hairlines only — they must never compete with the series. */
+.gridline {
+  stroke: var(--color-gray-5);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
 }
