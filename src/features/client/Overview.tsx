@@ -9,6 +9,7 @@
  * @requirement FR-10 FR-15 FR-61 FR-70
  */
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Bell, ClipboardList, LineChart, Wallet } from 'lucide-react';
 import { Button } from '../../components/Button.tsx';
@@ -476,20 +477,37 @@ export default function Overview() {
           {t('client.overview.maintenanceTitle')}
         </h2>
         <ol className={styles.timeline}>
-          {overview.maintenance.map((event) => (
-            <li key={event.id} className={styles.timelineItem}>
-              <div className={styles.timelineTop}>
-                <p className={styles.timelineTitle}>{t(event.titleKey)}</p>
-                <time dateTime={event.at}>{formatDateTime(event.at)}</time>
-              </div>
-              <p className={styles.timelineMeta}>
-                {event.technician ? event.technician.name : t('loadState.noData')}
-              </p>
-              <Button variant="ghost" to={event.action.href}>
-                {t(event.action.labelKey)}
-              </Button>
-            </li>
-          ))}
+          {/* Chronological, because it is a timeline. The adapter returns
+              these in record order, which put September before August and a
+              2027 warranty expiry in the middle of last month's visits. */}
+          {[...overview.maintenance]
+            .sort((a, b) => Date.parse(a.at) - Date.parse(b.at))
+            .map((event) => (
+              <li key={event.id}>
+                {/* The row is the link. Twelve events each carrying their own
+                  button was twelve times the weight of one column of rows,
+                  and gave no sense of sequence at all. The action label is
+                  kept as a hint because it is the state cue — "See completed
+                  work" and "Review the proposal" are not the same event. */}
+                <Link className={styles.timelineLink} to={event.action.href}>
+                  <time className={styles.timelineWhen} dateTime={event.at}>
+                    {formatDate(event.at)}
+                  </time>
+                  <span className={styles.timelineRail} aria-hidden="true">
+                    <span className={styles.timelineDot} />
+                  </span>
+                  <span className={styles.timelineBody}>
+                    <span className={styles.timelineTitle}>{t(event.titleKey)}</span>
+                    <span className={styles.timelineWho}>
+                      {event.technician ? event.technician.name : t('loadState.noData')}
+                    </span>
+                    <span className={styles.timelineHint}>
+                      {t(event.action.labelKey)}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
         </ol>
       </section>
     </div>
