@@ -387,7 +387,13 @@ export function createTelemetryAdapter(clock: Clock = fixedClock()): TelemetryAd
         properties[0] ??
         null;
       if (!home) return Promise.resolve(null);
-      return Promise.resolve(deriveClientOverview(dataset, home, clock()));
+      // Cloned like every other read on this interface. `deriveClientOverview`
+      // assembles `attention` from `dataset.alerts`, `dataset.accounts` and
+      // `dataset.maintenance`, carrying their `action` and `scope` objects
+      // through by reference — so without this a screen holding an attention
+      // item could rewrite the store, and the damage would surface on a
+      // different screen entirely.
+      return Promise.resolve(clone(deriveClientOverview(dataset, home, clock())));
     },
 
     listRestrictionRequests(scope, filter) {
