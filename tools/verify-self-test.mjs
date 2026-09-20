@@ -48,6 +48,7 @@ const EXPECTED = {
     'sized-to-english',
     'physical-direction',
   ],
+  'tools/verify-links.mjs': ['route-not-found', 'href-outside-links'],
 };
 
 const failures = [];

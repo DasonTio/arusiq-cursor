@@ -75,6 +75,15 @@ export const links = {
       return `/overview/events?alert=${encodeURIComponent(alertId)}`;
     return null;
   },
+  /**
+   * P-APPROVE — the gate on the restriction ladder. The path is
+   * `/accounts/approve`, under the accounts destination; `restrictions.ts`
+   * built `/approve?request=` by hand and every "review this request" action
+   * in a notice landed nowhere, which is the dead end this file exists to
+   * stop (INV-NO-DEAD-END).
+   */
+  approve: (requestId: string): string =>
+    `/accounts/approve?request=${encodeURIComponent(requestId)}`,
   energy: (): string => '/insights',
   carbon: (): string => '/insights/carbon',
   /** D6 FR-61 — "the chart is not permitted without a link to the method". */

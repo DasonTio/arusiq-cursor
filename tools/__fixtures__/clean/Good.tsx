@@ -29,6 +29,7 @@ export function Good({ t, total, provenance }) {
       <input placeholder={t('form.email')} />
       <div style={{ marginInlineStart: 'var(--space-3)' }}>{total}</div>
       <Metric value={5} unit="kWh" provenance={provenance} />
+      <Button to="/accounts/approve?request=req-1">{t('common.review')}</Button>
     </div>
   );
 }

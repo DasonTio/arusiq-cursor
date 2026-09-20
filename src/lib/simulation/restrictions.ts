@@ -27,6 +27,7 @@ import {
   type HealthSensitiveSpec,
   type RestrictionRequestSpec,
 } from './fixtures.ts';
+import { links } from './links.ts';
 import { SIMULATED_POLICY } from './policy.ts';
 import type {
   AccountStanding,
@@ -279,7 +280,7 @@ const buildRequest = (
       : null,
     action: {
       labelKey: 'restriction.request.review',
-      href: `/approve?request=${spec.id}`,
+      href: links.approve(spec.id),
     },
     // Every value in this object came out of the simulator (ADR-0004), and it
     // says so at the source rather than waiting for a screen to add a chip.

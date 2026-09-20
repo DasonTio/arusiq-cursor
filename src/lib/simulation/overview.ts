@@ -133,7 +133,7 @@ export function deriveClientOverview(
     dueAt: now.toISOString(),
     state: 'current',
     restriction: null,
-    payAction: { labelKey: 'billing.pay', href: '/account' },
+    payAction: { labelKey: 'billing.pay', href: links.billing() },
   };
 
   const attention: AttentionItem[] = [];
@@ -157,7 +157,7 @@ export function deriveClientOverview(
       severity: 'warning',
       titleKey: 'attention.restriction.title',
       bodyKey: 'attention.restriction.body',
-      action: { labelKey: 'attention.restriction.action', href: '/account' },
+      action: { labelKey: 'attention.restriction.action', href: links.billing() },
       dueAt: account.restriction.graceEndsAt,
       scope: { propertyId: property.id, unitId: restricted?.id },
     });

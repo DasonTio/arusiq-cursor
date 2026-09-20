@@ -24,6 +24,7 @@ const steps = [
   ['tokens', ['node', 'tools/verify-tokens.mjs']],
   ['provenance', ['node', 'tools/verify-provenance.mjs']],
   ['i18n', ['node', 'tools/verify-i18n.mjs']],
+  ['links', ['node', 'tools/verify-links.mjs']],
   ['types', ['npx', 'tsc', '--noEmit', '-p', 'tsconfig.app.json']],
   ['lint', ['npx', 'eslint', '.']],
   ['test', ['npx', 'vitest', 'run', '--silent']],

@@ -15,6 +15,7 @@ export function Everything() {
         Rp ${total}
       </div>
       <Metric value={5} unit="kWh" />
+      <Button to="/approve?request=req-1">Review</Button>
     </div>
   );
 }

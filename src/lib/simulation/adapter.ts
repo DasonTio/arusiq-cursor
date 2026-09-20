@@ -14,6 +14,7 @@ import type { Clock } from './clock.ts';
 import { fixedClock } from './clock.ts';
 import { buildEnergySeries, emptyEnergySeries } from './energy.ts';
 import { GRID_FACTOR } from './fixtures.ts';
+import { links } from './links.ts';
 import { deriveClientOverview } from './overview.ts';
 import { SIMULATED_POLICY } from './policy.ts';
 import {
@@ -80,7 +81,7 @@ const hiddenAccount = (now: Date) => ({
   dueAt: now.toISOString(),
   state: 'current' as const,
   restriction: null,
-  payAction: { labelKey: 'billing.pay', href: '/account' },
+  payAction: { labelKey: 'billing.pay', href: links.billing() },
 });
 
 export const datasetAt = (now: Date): SimDataset => buildDataset(now);

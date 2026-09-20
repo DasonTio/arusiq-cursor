@@ -98,15 +98,16 @@ export const SIMULATED_POLICY = {
   /** Bounds of the deterministic within-day variation applied to `powerW`. */
   hourlyVariation: { min: 0.82, max: 1.18 },
 
-  /**
-   * D6 FR-61 — the published counterfactual method. The chart is not permitted
-   * without a link to it, so the link is part of the data, not the screen.
-   */
-  method: {
-    id: 'adjusted-baseline',
-    version: '0.3.0',
-    href: '/insights#method-adjusted-baseline',
-  },
+  /* D6 FR-61's published counterfactual method is `BASELINE_METHOD` in
+   * `fixtures.ts`, reached through `energyMethod()` and `links.method()`.
+   *
+   * A second copy used to sit here, and it had gone stale in every field it
+   * had: id `adjusted-baseline` against the live `adjusted-baseline-v2`,
+   * version `0.3.0` against `2.1`, and an href to a `#method-adjusted-baseline`
+   * anchor that exists on no screen. Nothing read it, so nothing caught it —
+   * the same way the signal-limit table above went wrong. One identity for
+   * the method, in one place, or the version stamped on a published figure is
+   * a coin toss. */
 
   /**
    * D6 FR-70 / FR-101 — a versioned regional factor, displayed with its source
