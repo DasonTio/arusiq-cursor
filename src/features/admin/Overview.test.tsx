@@ -165,3 +165,23 @@ describe('admin.overview — the portfolio glance is the portfolio · FR-71', ()
     expect(within(section).getByText('Simulated')).toBeInTheDocument();
   });
 });
+
+describe('admin.overview — a silent unit is stated, not left blank · INV-GREY', () => {
+  it('says how many units are silent and when one was last heard from', async () => {
+    // This was a bare "No data" under the portfolio figure: no subject, no
+    // count and no last-seen. Grey means "we do not know", and the rule is
+    // that it always carries a last-seen time.
+    renderOverview();
+    await screen.findByRole('heading', { name: 'Portfolio glance' });
+    const line = screen.getByText(/Units not reporting: \d+\./);
+    expect(line).toBeInTheDocument();
+    expect(line.textContent).toMatch(/Last heard from .+/);
+  });
+
+  it('marks it with the unknown severity, not a bare sentence', async () => {
+    renderOverview();
+    const heading = await screen.findByRole('heading', { name: 'Portfolio glance' });
+    const section = heading.closest('section') as HTMLElement;
+    expect(within(section).getByText('No data')).toBeInTheDocument();
+  });
+});

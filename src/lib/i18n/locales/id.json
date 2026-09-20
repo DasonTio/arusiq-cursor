@@ -1185,6 +1185,8 @@
       "openBoard": "Buka papan layanan",
       "openEvents": "Buka peristiwa",
       "openPayments": "Buka pembayaran",
+      "silentUnits": "Unit tidak melapor: {{count}}. Terakhir terdengar {{time}}.",
+      "silentUnitsNeverReported": "Unit tidak melapor: {{count}}. Belum ada yang pernah melapor.",
       "completenessAcross": "Kelengkapan {{value}} % di {{count}} lokasi",
       "completenessWeakest": "{{name}} paling rendah di {{value}} %, di bawah {{threshold}} % yang dibutuhkan metode ini.",
       "portfolio": "Sekilas portofolio",

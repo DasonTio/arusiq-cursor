@@ -1,3 +1,17 @@
+/* The app shell owns the viewport height, so `MockBoundary` can stay a section
+ * marker that sizes to its content wherever else it is used. `> *` keeps the
+ * growth scoped to the shell's own child: a blanket `flex: 1` on the boundary
+ * itself would stretch every inline mock inside a column too. */
+.shell {
+  min-block-size: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+.shell > * {
+  flex: 1 1 auto;
+}
+
 .public {
   min-block-size: 100dvh;
   display: flex;

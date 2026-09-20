@@ -13,6 +13,19 @@
   gap: var(--space-5);
 }
 
+/* Content blocks fill the column; intrinsic controls do not.
+ *
+ * `align-items: flex-start` above is right for `.card` and `.state`, where a
+ * retry button must not stretch to the full width. It is wrong for a section,
+ * which is a container: without this, `admin.overview`'s priority list sat at
+ * 450 px beside a 960 px metric strip, and `admin.settings` rendered its
+ * thresholds narrower than the heading above them. Most screens already look
+ * right because `.list` sets its own width — these were the ones nesting a
+ * list inside a wrapper that had already shrunk. */
+.section {
+  align-self: stretch;
+}
+
 .intro h1,
 .sectionTitle,
 .cardTitle,
@@ -78,6 +91,15 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
+  gap: var(--space-2);
+}
+
+/* A severity mark and the sentence that explains it, on one line. Wraps on a
+   narrow viewport rather than pushing the sentence off the edge. */
+.statusLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-2);
 }
 

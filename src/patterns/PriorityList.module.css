@@ -4,10 +4,13 @@
    only — the SeverityIndicator in the row carries the actual severity
    expression (colour + shape + label). */
 
+/* Always a content block, never an inline control, so it fills its column
+   rather than shrinking to its longest row inside a `flex-start` parent. */
 .root {
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  inline-size: 100%;
 }
 
 .group {

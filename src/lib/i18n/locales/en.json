@@ -1185,6 +1185,8 @@
       "openBoard": "Open the service board",
       "openEvents": "Open events",
       "openPayments": "Open payments",
+      "silentUnits": "Units not reporting: {{count}}. Last heard from {{time}}.",
+      "silentUnitsNeverReported": "Units not reporting: {{count}}. None has ever reported.",
       "completenessAcross": "Completeness {{value}} % across {{count}} sites",
       "completenessWeakest": "{{name}} is the lowest at {{value}} %, under the {{threshold}} % the method needs.",
       "portfolio": "Portfolio glance",

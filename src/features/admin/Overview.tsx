@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button.tsx';
 import { Metric } from '../../components/Metric.tsx';
 import { ProvenanceChip } from '../../components/ProvenanceChip.tsx';
+import { SeverityIndicator } from '../../components/SeverityIndicator.tsx';
 import { restrictionSeverity } from '../../lib/domain/restriction.ts';
 import type { Severity } from '../../lib/domain/severity.ts';
 import { LOAD_STATE, type LoadState } from '../../lib/domain/loadState.ts';
@@ -112,6 +113,11 @@ export default function Overview() {
 
   const format = (value: number) =>
     new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 0 }).format(value);
+  const formatDateTime = (iso: string) =>
+    new Intl.DateTimeFormat(i18n.language, {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    }).format(new Date(iso));
 
   if (!session) {
     return (
@@ -169,6 +175,14 @@ export default function Overview() {
   ).filter((unit) => {
     return !unit.device.online;
   });
+  // The most recent heartbeat among the silent units — the "last seen" the
+  // grey state is required to carry. `null` when none of them ever reported,
+  // which is a different sentence, not a missing one.
+  const lastHeardFrom = silent
+    .map((unit) => unit.device.lastHeartbeat)
+    .filter((at): at is string => at !== null)
+    .sort()
+    .at(-1);
 
   const priorityGroups: PriorityGroup[] = [
     // First on purpose: an approval lapses if nobody answers it (FR-52), and
@@ -278,7 +292,7 @@ export default function Overview() {
         <h2 className={styles.sectionTitle}>{t('admin.overview.portfolio')}</h2>
         {portfolio ? (
           <>
-            <p className={styles.meta}>
+            <p className={`${styles.meta} ${styles.statusLine}`}>
               {t('admin.overview.completenessAcross', {
                 value: format(portfolio.completeness * 100),
                 count: energy.length,
@@ -301,8 +315,22 @@ export default function Overview() {
             ) : null}
           </>
         ) : null}
+        {/* "Grey is not a pass": a silent unit is stated as silent, with how
+            many and when one was last heard from. This was a bare "No data"
+            under the portfolio figure — no subject, no last-seen and nothing
+            to do about it, which is the one shape this rule forbids. */}
         {silent.length > 0 ? (
-          <p className={styles.meta}>{t('loadState.noData')}</p>
+          <p className={`${styles.meta} ${styles.statusLine}`}>
+            <SeverityIndicator severity="unknown" />
+            {lastHeardFrom
+              ? t('admin.overview.silentUnits', {
+                  count: silent.length,
+                  time: formatDateTime(lastHeardFrom),
+                })
+              : t('admin.overview.silentUnitsNeverReported', {
+                  count: silent.length,
+                })}
+          </p>
         ) : null}
         <Button variant="ghost" to="/reporting">
           {t('nav.admin.energy')}

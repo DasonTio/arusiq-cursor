@@ -42,50 +42,54 @@ function PublicChrome({ children }: { children: ReactNode }) {
 export function AppRouter() {
   return (
     <SessionProvider>
-      <MockBoundary explanationKey="shell.mock">
-        <BrowserRouter>
-          <Routes>
-            {PUBLIC_ROUTES.map((route) => {
-              const Screen = route.component;
-              return (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={
-                    <PublicChrome>
-                      <Screen />
-                    </PublicChrome>
-                  }
-                />
-              );
-            })}
-            <Route
-              element={
-                <RequireAuth>
-                  <RoleShell />
-                </RequireAuth>
-              }
-            >
-              {PROTECTED_ROUTES.map((route) => {
+      {/* The shell carries the viewport height (D7 §14.4's banner still sits
+          at the top of it); the boundary itself only marks the mock. */}
+      <div className={styles.shell}>
+        <MockBoundary explanationKey="shell.mock">
+          <BrowserRouter>
+            <Routes>
+              {PUBLIC_ROUTES.map((route) => {
                 const Screen = route.component;
                 return (
                   <Route
                     key={route.path}
                     path={route.path}
                     element={
-                      <RequireRole allowedRoles={route.allowedRoles}>
+                      <PublicChrome>
                         <Screen />
-                      </RequireRole>
+                      </PublicChrome>
                     }
                   />
                 );
               })}
-              <Route path="*" element={<NotAvailable />} />
-            </Route>
-            <Route path="/" element={<LandingRedirect />} />
-          </Routes>
-        </BrowserRouter>
-      </MockBoundary>
+              <Route
+                element={
+                  <RequireAuth>
+                    <RoleShell />
+                  </RequireAuth>
+                }
+              >
+                {PROTECTED_ROUTES.map((route) => {
+                  const Screen = route.component;
+                  return (
+                    <Route
+                      key={route.path}
+                      path={route.path}
+                      element={
+                        <RequireRole allowedRoles={route.allowedRoles}>
+                          <Screen />
+                        </RequireRole>
+                      }
+                    />
+                  );
+                })}
+                <Route path="*" element={<NotAvailable />} />
+              </Route>
+              <Route path="/" element={<LandingRedirect />} />
+            </Routes>
+          </BrowserRouter>
+        </MockBoundary>
+      </div>
     </SessionProvider>
   );
 }

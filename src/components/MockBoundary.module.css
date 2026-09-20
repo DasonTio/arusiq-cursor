@@ -1,7 +1,14 @@
+/* Sizes to its content and fills its column.
+ *
+ * This used to carry `min-block-size: 100dvh`, which is right for the one use
+ * that wraps the whole app and wrong for the twelve that mark a section. On
+ * `admin.audit` it produced a 900 px box around 82 px of content — eight
+ * hundred pixels of white space below a labelled mock. The full-viewport
+ * height belongs to the shell, which now owns it (`AppRouter.module.css`). */
 .root {
   display: flex;
   flex-direction: column;
-  min-block-size: 100dvh;
+  inline-size: 100%;
 }
 
 .banner {
