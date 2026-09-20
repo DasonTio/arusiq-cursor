@@ -8,6 +8,12 @@
   gap: var(--space-2);
 }
 
+/* A section is a container: it fills the column while the intrinsic
+   controls inside it keep their own width. */
+.section {
+  align-self: stretch;
+}
+
 .root {
   gap: var(--space-5);
 }
@@ -54,7 +60,7 @@
   padding: var(--space-3);
   border: 1px solid var(--color-gray-5);
   border-radius: var(--radius-lg);
-  background: var(--surface-page);
+  background: var(--surface-raised);
   box-shadow: var(--shadow-sm);
 }
 
@@ -75,7 +81,7 @@
 .skeletonBlock {
   min-block-size: var(--space-9);
   border-radius: var(--radius-lg);
-  background: var(--surface-raised);
+  background: var(--surface-sunken);
   border: 1px solid var(--color-gray-5);
 }
 

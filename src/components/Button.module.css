@@ -29,9 +29,22 @@
   color: var(--color-on-inverse);
 }
 
+/* ADR-0017 — the second rung of one BLUE ladder, not a second colour.
+ *
+ * This was a filled brand-red button. Red is the loudest thing the palette
+ * has, so every "secondary" action outshouted the primary one beside it, and
+ * the product read as red-accented when the brand is navy. Red now means what
+ * it should: severity, and the mark. An outlined navy button sits clearly
+ * below a filled navy one and clearly above a ghost.
+ *
+ * Like `.ghost` it paints no fill, so it cannot name a colour outright: navy
+ * on the ADR-0005 hero would be navy on navy. The accent is therefore a
+ * variable the SURFACE may override — `.hero` sets it to `--color-on-inverse`
+ * — and brand navy is only the default for the light surfaces. */
 .secondary {
-  background: var(--color-brand-red);
-  color: var(--color-on-inverse);
+  background: transparent;
+  color: var(--button-accent, var(--color-brand-primary));
+  border-color: var(--button-accent, var(--color-brand-primary));
 }
 
 /* The only variant with no fill of its own, so it is the only one whose

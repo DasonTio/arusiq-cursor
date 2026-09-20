@@ -18,7 +18,7 @@
   padding-block: var(--space-2);
   padding-inline: var(--grid-margin-mobile);
   border-block-end: 1px solid var(--color-gray-5);
-  background: var(--surface-page);
+  background: var(--surface-raised);
   position: sticky;
   inset-block-start: 0;
   z-index: var(--z-sticky);
@@ -91,7 +91,7 @@
   padding-block: var(--space-1);
   padding-inline: var(--space-1);
   border-block-start: 1px solid var(--color-gray-5);
-  background: var(--surface-page);
+  background: var(--surface-raised);
   position: sticky;
   inset-block-end: 0;
   z-index: var(--z-sticky);

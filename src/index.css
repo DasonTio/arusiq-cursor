@@ -113,7 +113,7 @@ h6 {
   overflow: visible;
   clip-path: none;
   white-space: normal;
-  background: var(--surface-page);
+  background: var(--surface-raised);
   color: var(--color-brand-primary);
   border-radius: var(--radius-md);
   z-index: var(--z-toast);

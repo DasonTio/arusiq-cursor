@@ -42,6 +42,9 @@
   border-radius: var(--radius-lg);
   background: var(--surface-inverse);
   color: var(--color-on-inverse);
+  /* ADR-0017 — this surface declares its own accent, so an outlined button
+     inside it draws in white rather than in navy-on-navy. */
+  --button-accent: var(--color-on-inverse);
 }
 
 .heroLabel {
@@ -91,6 +94,12 @@
   gap: var(--space-3);
 }
 
+/* A section is a container: it fills the column while the intrinsic
+   controls inside it keep their own width. */
+.section {
+  align-self: stretch;
+}
+
 .sectionTitle {
   font-size: var(--font-size-h6);
   line-height: var(--line-height-h6);
@@ -104,6 +113,10 @@
   margin: 0;
   padding: 0;
   list-style: none;
+  /* Content blocks fill the column. `.section` is `flex-start` so its
+     intrinsic controls keep their own width; without this the timeline
+     collapsed to its widest card and left two thirds of the page empty. */
+  width: 100%;
 }
 
 .attentionItem,
@@ -112,7 +125,7 @@
 .metricCard {
   border: 1px solid var(--color-gray-5);
   border-radius: var(--radius-lg);
-  background: var(--surface-page);
+  background: var(--surface-raised);
   box-shadow: var(--shadow-sm);
 }
 
@@ -150,6 +163,7 @@
 .metricGrid {
   display: grid;
   gap: var(--space-3);
+  width: 100%;
 }
 
 .metricCard {
@@ -184,7 +198,7 @@
 .skeletonBlock {
   min-block-size: var(--space-9);
   border-radius: var(--radius-lg);
-  background: var(--surface-raised);
+  background: var(--surface-sunken);
   border: 1px solid var(--color-gray-5);
 }
 
@@ -197,6 +211,7 @@
   flex-direction: column;
   gap: var(--space-2);
   margin: 0;
+  width: 100%;
 }
 
 .chart {
@@ -266,7 +281,8 @@
   }
 
   .attentionList,
-  .roomList {
+  .roomList,
+  .timeline {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

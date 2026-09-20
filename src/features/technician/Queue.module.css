@@ -36,6 +36,6 @@
 .skeletonBlock {
   min-block-size: var(--space-9);
   border-radius: var(--radius-lg);
-  background: var(--surface-raised);
+  background: var(--surface-sunken);
   border: 1px solid var(--color-gray-5);
 }

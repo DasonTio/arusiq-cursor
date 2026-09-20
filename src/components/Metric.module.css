@@ -20,9 +20,13 @@
   gap: var(--space-1);
 }
 
+/* The display size is a variable so a dense context can step it down. A
+   figure is never allowed to clip: `1,645,629 IDR` at h4 overflowed a KPI
+   tile on `client.energy`, and a clipped currency value is the one thing this
+   product cannot ship. */
 .value {
   font-family: var(--font-heading);
-  font-size: var(--font-size-h4);
+  font-size: var(--metric-value-size, var(--font-size-h4));
   line-height: var(--line-height-h4);
   font-weight: var(--font-weight-bold);
   color: var(--color-gray-1);
@@ -49,7 +53,10 @@
 
 @media (min-width: 768px) {
   .value {
-    font-size: var(--font-size-h3);
+    /* Same variable as the base rule, so a context that steps the figure
+       down keeps it stepped down here. Without this the desktop bump
+       reinstated the display size and clipped the tile it was set to fit. */
+    font-size: var(--metric-value-size, var(--font-size-h3));
     line-height: var(--line-height-h3);
   }
 }

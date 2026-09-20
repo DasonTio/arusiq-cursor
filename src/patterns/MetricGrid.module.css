@@ -12,6 +12,11 @@
 }
 
 .tile {
+  /* A KPI tile is the densest place a metric appears — five to a row on a
+     desktop frame — so its figure sits one step below the display size.
+     Raising the grid's 10rem floor instead would cost the two-up phone row
+     the floor exists to guarantee. */
+  --metric-value-size: var(--font-size-h5);
   padding: var(--space-3);
   border: 1px solid var(--color-gray-5);
   border-radius: var(--radius-lg);

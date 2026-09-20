@@ -21,7 +21,7 @@
   padding: var(--space-3);
   border: 1px solid var(--color-gray-5);
   border-radius: var(--radius-lg);
-  background: var(--surface-page);
+  background: var(--surface-raised);
 }
 
 /* The rung in force is the one the occupant is living with — it gets the

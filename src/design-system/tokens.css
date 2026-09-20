@@ -69,8 +69,8 @@
   --color-gray-3:  #7F7F7F; /* CONTROL BORDERS only. Never text — see ADR-0002*/
   --color-gray-4:  #BDBDBD; /* decorative dividers, disabled borders, baseline*/
   --color-gray-5:  #E0E0E0; /* surfaces, table stripes. Never a control border*/
-  --color-white-1: #FFFFFF; /* page background                                */
-  --color-white-2: #F5F5F5; /* raised cards, inset panels, table headers      */
+  --color-white-1: #FFFFFF; /* panels: cards, the rail, headers (ADR-0016)    */
+  --color-white-2: #F5F5F5; /* the app canvas everything sits on (ADR-0016)   */
 
   /* --- Inverse surface · ADR-0005 · the dark hero ONLY --------------------
      FR-10 opens the Client overview on a dark hero (carbon reduced this
@@ -87,9 +87,14 @@
   /* --- Surfaces · D7 §5.2 · the four legal backgrounds --------------------
      Every foreground token clears its bar against ALL FOUR, not white alone.
      Phase 1 is light mode only. Do not add a dark variant (D7 §5.2).         */
-  --surface-page:   var(--color-white-1);
-  --surface-raised: var(--color-white-2);
-  --surface-sunken: var(--color-gray-5);
+  /* ADR-0016 — the canvas is grey and panels are white, not the reverse.
+     `--surface-page` used to be white AND `.card` used to paint itself with
+     it, so a card and the page it sat on were the same colour and separated
+     only by a hairline. That is why whole screens read as flat. A panel now
+     separates by tone; the border became emphasis rather than the only cue. */
+  --surface-page:   var(--color-white-2); /* #F5F5F5 · the canvas            */
+  --surface-raised: var(--color-white-1); /* #FFFFFF · cards, rail, headers  */
+  --surface-sunken: var(--color-gray-5);  /* recessed: wells, skeletons      */
   --surface-inverse: var(--color-brand-primary); /* ADR-0005 · hero only · ADR-0009 */
   /* --surface-callout is {state|severity} at 10%, composed per component.    */
 

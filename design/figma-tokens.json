@@ -195,12 +195,12 @@
       "white-1": {
         "$type": "color",
         "$value": "#FFFFFF",
-        "$description": "page background"
+        "$description": "panels: cards, the rail, headers (ADR-0016)"
       },
       "white-2": {
         "$type": "color",
         "$value": "#F5F5F5",
-        "$description": "raised cards, inset panels, table headers"
+        "$description": "the app canvas everything sits on (ADR-0016)"
       },
       "$description": "Every neutral has ONE role. gray-3 is a CONTROL BORDER, not text — at 4.00:1 it is below the 4.5:1 text bar, so placeholders use gray-2 (ADR-0002). gray-4 and gray-5 are decorative; an input outlined in either is an accessibility failure."
     },
@@ -230,15 +230,18 @@
   "surface": {
     "page": {
       "$type": "color",
-      "$value": "#FFFFFF"
+      "$value": "#F5F5F5",
+      "$description": "#F5F5F5 · the canvas"
     },
     "raised": {
       "$type": "color",
-      "$value": "#F5F5F5"
+      "$value": "#FFFFFF",
+      "$description": "#FFFFFF · cards, rail, headers"
     },
     "sunken": {
       "$type": "color",
-      "$value": "#E0E0E0"
+      "$value": "#E0E0E0",
+      "$description": "recessed: wells, skeletons"
     },
     "inverse": {
       "$type": "color",
