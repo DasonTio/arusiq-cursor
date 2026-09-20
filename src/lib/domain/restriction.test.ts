@@ -45,6 +45,11 @@ describe('requiresManagementSignOff — ADR-0015 OD-02', () => {
   });
 });
 
+/** Two distinct accounts. ADR-0015 OD-02 makes every approval two-person, so
+ *  a context naming one person is no longer a legal approval anywhere here. */
+const andi = { id: 'user-ops', name: 'Andi Nugroho' };
+const rina = { id: 'user-admin', name: 'Rina Kusuma' };
+
 describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => {
   it('permits the next rung on an ordinary space with two-person control', () => {
     expect(
@@ -53,6 +58,8 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
         requestedStep: 'setpointRaised',
         space: open,
         signedOffBy: null,
+        requester: andi,
+        approver: rina,
       }),
     ).toBeNull();
   });
@@ -64,6 +71,8 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
         requestedStep: 'stop',
         space: sensitive,
         signedOffBy: 'Sri Handayani',
+        requester: andi,
+        approver: rina,
       }),
     ).toBe('healthSensitiveStop');
   });
@@ -77,6 +86,8 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
         requestedStep: 'stop',
         space: sensitive,
         signedOffBy: null,
+        requester: andi,
+        approver: rina,
       }),
     ).toBe('healthSensitiveStop');
   });
@@ -88,6 +99,8 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
         requestedStep: 'ecoLockLimitedHours',
         space: open,
         signedOffBy: null,
+        requester: andi,
+        approver: rina,
       }),
     ).toBe('notNextRung');
   });
@@ -99,6 +112,8 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
         requestedStep: 'stop',
         space: open,
         signedOffBy: 'Sri Handayani',
+        requester: andi,
+        approver: rina,
       }),
     ).toBe('notNextRung');
   });
@@ -109,6 +124,8 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
       requestedStep: 'stop',
       space: open,
       signedOffBy: null,
+      requester: andi,
+      approver: rina,
     } as const;
     expect(refuseRestrictionApproval(ctx)).toBe('signOffRequired');
     expect(
@@ -126,6 +143,99 @@ describe('refuseRestrictionApproval — the gate a screen cannot bypass', () => 
         requestedStep: 'reminder',
         space: sensitive,
         signedOffBy: null,
+        requester: andi,
+        approver: rina,
+      }),
+    ).toBeNull();
+  });
+});
+
+describe('two-person control — ADR-0015 OD-02', () => {
+  it('refuses an approver deciding their own request, by id', () => {
+    // The hole this closes: nothing stopped one person walking the whole
+    // ladder. It held only because the fixture ids happened to differ.
+    expect(
+      refuseRestrictionApproval({
+        currentStep: 'reminder',
+        requestedStep: 'setpointRaised',
+        space: open,
+        signedOffBy: null,
+        requester: andi,
+        approver: { id: andi.id, name: 'A. Nugroho' },
+      }),
+    ).toBe('selfApproval');
+  });
+
+  it('refuses it by name too, so a second account is not a way round it', () => {
+    expect(
+      refuseRestrictionApproval({
+        currentStep: 'reminder',
+        requestedStep: 'setpointRaised',
+        space: open,
+        signedOffBy: null,
+        requester: andi,
+        approver: { id: 'user-other', name: '  andi nugroho ' },
+      }),
+    ).toBe('selfApproval');
+  });
+
+  it('reports self-approval ahead of a missing signature, never instead of it', () => {
+    // Same reasoning as the safety refusal: telling a requester they need a
+    // signature sends them to fetch one, and the answer is still no.
+    expect(
+      refuseRestrictionApproval({
+        currentStep: 'ecoLockLimitedHours',
+        requestedStep: 'stop',
+        space: open,
+        signedOffBy: null,
+        requester: andi,
+        approver: andi,
+      }),
+    ).toBe('selfApproval');
+  });
+
+  it('puts the safety refusal ahead of self-approval', () => {
+    expect(
+      refuseRestrictionApproval({
+        currentStep: 'ecoLockLimitedHours',
+        requestedStep: 'stop',
+        space: sensitive,
+        signedOffBy: null,
+        requester: andi,
+        approver: andi,
+      }),
+    ).toBe('healthSensitiveStop');
+  });
+
+  it('refuses a rung-4 manager who is the approver or the requester', () => {
+    const ctx = {
+      currentStep: 'ecoLockLimitedHours',
+      requestedStep: 'stop',
+      space: open,
+      requester: andi,
+      approver: rina,
+    } as const;
+    // Three signatures means three people, or rung 4 is rung 3 with a flourish.
+    expect(refuseRestrictionApproval({ ...ctx, signedOffBy: rina.name })).toBe(
+      'signOffNotIndependent',
+    );
+    expect(refuseRestrictionApproval({ ...ctx, signedOffBy: andi.name })).toBe(
+      'signOffNotIndependent',
+    );
+    expect(
+      refuseRestrictionApproval({ ...ctx, signedOffBy: 'Sri Handayani' }),
+    ).toBeNull();
+  });
+
+  it('still permits an ordinary two-person approval on rungs 1–3', () => {
+    expect(
+      refuseRestrictionApproval({
+        currentStep: 'reminder',
+        requestedStep: 'setpointRaised',
+        space: open,
+        signedOffBy: null,
+        requester: andi,
+        approver: rina,
       }),
     ).toBeNull();
   });

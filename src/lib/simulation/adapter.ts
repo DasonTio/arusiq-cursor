@@ -57,6 +57,21 @@ import type {
 
 const clone = <T>(value: T): T => structuredClone(value);
 
+/**
+ * ADR-0015 OD-02 — stamp a request with whether its reader raised it.
+ *
+ * Answered here rather than on the screen so the two-person rule has one
+ * author. `decideRequest` refuses a self-approval whatever the screen shows;
+ * this only lets the screen stop offering a button that would be refused.
+ */
+const forViewer = (
+  request: RestrictionRequest,
+  scope: DataScope,
+): RestrictionRequest => ({
+  ...request,
+  raisedByViewer: request.requestedBy.id === scope.userId,
+});
+
 /** The simulator's pace for the Sent → Acknowledged → Verified pipeline. Not a
  *  requirement — see the header of `policy.ts`. */
 const COMMAND_TIMINGS = SIMULATED_POLICY.commandTimings;
@@ -386,7 +401,7 @@ export function createTelemetryAdapter(clock: Clock = fixedClock()): TelemetryAd
             }
             return true;
           }),
-        ),
+        ).map((request) => forViewer(request, scope)),
       );
     },
 
@@ -395,7 +410,7 @@ export function createTelemetryAdapter(clock: Clock = fixedClock()): TelemetryAd
       if (!request || !canSeeRestrictionRequest(dataset, scope, request)) {
         return Promise.resolve(null);
       }
-      return Promise.resolve(clone(request));
+      return Promise.resolve(forViewer(clone(request), scope));
     },
 
     decideRestrictionRequest(scope, requestId, decision) {
@@ -415,6 +430,10 @@ export function createTelemetryAdapter(clock: Clock = fixedClock()): TelemetryAd
         // fallback so a caller that omits it degrades to the old behaviour
         // rather than to an empty signature.
         actorName: decision.decidedByName?.trim() || scope.userId,
+        // The account deciding. Two-person control compares this against the
+        // requester's id, so a caller cannot defeat it by typing a different
+        // display name into `decidedByName`.
+        actorId: scope.userId,
         unitById: dataset.index.unitById,
         unitIdsByAsset: dataset.index.unitIdsByAsset,
         healthSensitiveUnitIds: dataset.index.healthSensitiveUnitIds,

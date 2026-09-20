@@ -60,6 +60,8 @@
       "healthSensitiveStop": "Pendinginan tidak dapat dihentikan di ruang peka kesehatan. Setujui langkah yang lebih rendah.",
       "notNextRung": "Langkah diterapkan satu per satu. Setujui langkah tepat di atas langkah yang sedang berlaku.",
       "signOffRequired": "Penghentian layanan memerlukan persetujuan manajemen atas nama tertentu, selain persetujuan Anda.",
+      "selfApproval": "Anda yang mengajukan permintaan ini, sehingga Anda tidak dapat menyetujuinya sendiri. Orang kedua harus memutuskannya.",
+      "signOffNotIndependent": "Persetujuan manajemen harus orang ketiga, bukan pemohon atau penyetuju.",
       "declineNeedsReason": "Sebutkan alasan penolakan, agar catatannya menjelaskan dirinya sendiri."
     }
   },

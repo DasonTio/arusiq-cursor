@@ -8,7 +8,7 @@ import Dispatch from './Dispatch.tsx';
 const admin = {
   userId: 'user-admin',
   role: 'admin' as const,
-  name: 'Andi Nugroho',
+  name: 'Rina Kusuma',
 };
 
 function renderDispatch(path = '/service') {

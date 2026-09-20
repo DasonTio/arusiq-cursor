@@ -202,6 +202,12 @@ export default function Approve() {
 
   const decided = request.decision !== null;
   const { evidence } = request;
+  // Both answers come from the adapter: `permitted` is the FR-53 safety check,
+  // `raisedByViewer` is ADR-0015's two-person control. The screen offers
+  // Approve only where the adapter would accept it — and Decline stays
+  // available in both cases, so neither refusal leaves the request stranded
+  // in the queue with nothing an approver can do about it.
+  const decidable = request.permitted && !request.raisedByViewer;
 
   return (
     <div className={styles.root}>
@@ -341,14 +347,23 @@ export default function Approve() {
               might work — but declining stays available, so a request that
               policy forbids is still formally answerable rather than a dead
               end in the queue. */}
-          {request.permitted ? null : (
+          {decidable ? null : (
             <section className={gate.refusal} role="status">
               <SectionHeader titleKey="admin.approve.refusedTitle" />
-              <p>{t('restriction.reject.healthSensitiveStop')}</p>
+              {/* Safety first, exactly as `refuseRestrictionApproval` orders
+                  them: a `stop` on a nursery is not "fetch a second approver",
+                  and saying so would send someone to fetch one. */}
+              <p>
+                {t(
+                  request.permitted
+                    ? 'restriction.reject.selfApproval'
+                    : 'restriction.reject.healthSensitiveStop',
+                )}
+              </p>
             </section>
           )}
 
-          {request.permitted && request.requiresManagementSignOff ? (
+          {decidable && request.requiresManagementSignOff ? (
             <section className={styles.section}>
               <SectionHeader titleKey="admin.approve.signOffTitle" />
               <Textfield
@@ -387,7 +402,7 @@ export default function Approve() {
           ) : null}
 
           <div className={styles.choices}>
-            {request.permitted ? (
+            {decidable ? (
               <Button
                 variant="primary"
                 onClick={() => {

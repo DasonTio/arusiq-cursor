@@ -23,9 +23,17 @@ const NURSERY_STOP = 'rq-2026-0036';
 /** A rung-2 ask with nothing blocking it. */
 const APPROVABLE = 'rq-2026-0031';
 
-function renderApprove(path: string) {
+/** The collections officer who RAISED the seeded requests. Signing in as this
+ *  account is the two-person-control case (ADR-0015 OD-02). */
+const requester = {
+  userId: 'user-admin-collections',
+  role: 'admin' as const,
+  name: 'Andi Nugroho',
+};
+
+function renderApprove(path: string, session = hq) {
   return render(
-    <SessionProvider initialSession={hq}>
+    <SessionProvider initialSession={session}>
       <MemoryRouter initialEntries={[path]}>
         <Approve />
       </MemoryRouter>
@@ -129,5 +137,48 @@ describe('shared.approve — the safety guarantee · FR-53', () => {
       await screen.findByRole('heading', { name: 'Decision record' }),
     ).toBeInTheDocument();
     expect(screen.getByText(/Declined by/)).toBeInTheDocument();
+  });
+});
+
+describe('shared.approve — two-person control · ADR-0015 OD-02', () => {
+  it('does not offer Approve to the person who raised the request', async () => {
+    // The adapter refuses a self-approval regardless. The screen must not
+    // offer the button anyway: an affordance that always fails teaches an
+    // approver that the gate is noise.
+    renderApprove(`/accounts/approve?request=${APPROVABLE}`, requester);
+    await screen.findByRole('heading', {
+      level: 1,
+      name: 'Approve a restriction step',
+    });
+    expect(screen.queryByRole('button', { name: 'Approve this step' })).toBeNull();
+  });
+
+  it("says why, in the approver's own terms", async () => {
+    renderApprove(`/accounts/approve?request=${APPROVABLE}`, requester);
+    await screen.findByRole('heading', {
+      level: 1,
+      name: 'Approve a restriction step',
+    });
+    expect(screen.getByText(/you cannot also approve it/i)).toBeInTheDocument();
+  });
+
+  it('still lets them decline it, so it is not stranded in the queue', async () => {
+    renderApprove(`/accounts/approve?request=${APPROVABLE}`, requester);
+    await screen.findByRole('heading', {
+      level: 1,
+      name: 'Approve a restriction step',
+    });
+    expect(screen.getByRole('button', { name: 'Decline' })).toBeInTheDocument();
+  });
+
+  it('offers Approve to a different approver on the same request', async () => {
+    renderApprove(`/accounts/approve?request=${APPROVABLE}`, hq);
+    await screen.findByRole('heading', {
+      level: 1,
+      name: 'Approve a restriction step',
+    });
+    expect(
+      screen.getByRole('button', { name: 'Approve this step' }),
+    ).toBeInTheDocument();
   });
 });

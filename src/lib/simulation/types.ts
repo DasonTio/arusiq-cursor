@@ -271,6 +271,16 @@ export interface RestrictionRequest {
   permitted: boolean;
   /** ADR-0015 OD-02 — true on rung 4, where a named manager must sign. */
   requiresManagementSignOff: boolean;
+  /**
+   * ADR-0015 OD-02 — true when the account READING this request is the one
+   * that raised it, so the screen can decline to offer an Approve button that
+   * the adapter would refuse.
+   *
+   * Viewer-dependent, like the scoping that decides whether this request is
+   * visible at all. It is set on the way out rather than stored, because it is
+   * a fact about the reader and not about the request.
+   */
+  raisedByViewer: boolean;
   /** The grace period the rung would carry if approved, in hours. */
   graceHours: number;
   /** When the request lapses unactioned. A queue with no expiry is a backlog. */

@@ -16,6 +16,7 @@
  */
 import {
   RESTRICTION_STEP,
+  isStepPermitted,
   refuseRestrictionApproval,
   requiresManagementSignOff,
   type RestrictionRefusal,
@@ -56,14 +57,20 @@ export const RESTRICTION_REJECT = {
   /** D6 FR-53 — THE safety refusal. */
   healthSensitiveStop: 'restriction.reject.healthSensitiveStop',
   notNextRung: 'restriction.reject.notNextRung',
+  /** ADR-0015 OD-02 — two-person control on every rung. */
+  selfApproval: 'restriction.reject.selfApproval',
   signOffRequired: 'restriction.reject.signOffRequired',
+  /** Rung 4's third signature has to be a third person. */
+  signOffNotIndependent: 'restriction.reject.signOffNotIndependent',
   declineNeedsReason: 'restriction.reject.declineNeedsReason',
 } as const satisfies Record<string, I18nKey>;
 
 const REFUSAL_KEY: Record<RestrictionRefusal, I18nKey> = {
   healthSensitiveStop: RESTRICTION_REJECT.healthSensitiveStop,
   notNextRung: RESTRICTION_REJECT.notNextRung,
+  selfApproval: RESTRICTION_REJECT.selfApproval,
   signOffRequired: RESTRICTION_REJECT.signOffRequired,
+  signOffNotIndependent: RESTRICTION_REJECT.signOffNotIndependent,
 };
 
 const reject = (reasonKey: I18nKey): RestrictionRequestResult => ({
@@ -218,14 +225,11 @@ const buildRequest = (
     Math.floor((now.getTime() - Date.parse(dueAt)) / (24 * 60 * 60 * 1000)),
   );
 
-  const refusal = refuseRestrictionApproval({
-    currentStep,
-    requestedStep: spec.requestedStep,
-    space: { healthSensitive },
-    // Only asking whether the SPACE permits the rung here, so the sign-off is
-    // assumed present; `permitted` is the FR-53 check, not the paperwork one.
-    signedOffBy: 'pending',
-  });
+  // `permitted` is the FR-53 safety question and only that: may this rung ever
+  // land on this space? It is deliberately NOT the full approval policy, which
+  // also weighs the ladder position, two-person control and the rung-4
+  // signature — those are answered at decision time, by the person deciding.
+  const permitted = isStepPermitted(spec.requestedStep, { healthSensitive });
 
   return {
     id: spec.id,
@@ -257,8 +261,11 @@ const buildRequest = (
     requestedAt: hoursBefore(now, spec.requestedHoursAgo),
     healthSensitive,
     healthSensitiveDesignation: designation,
-    permitted: refusal !== 'healthSensitiveStop',
+    permitted,
     requiresManagementSignOff: requiresManagementSignOff(spec.requestedStep),
+    // Stored false; the adapter stamps the truth per reader (`forViewer`),
+    // because whether you raised a request is a fact about you, not about it.
+    raisedByViewer: false,
     graceHours: SIMULATED_POLICY.restrictionGraceDays[spec.requestedStep] * 24,
     expiresAt: hoursAfter(
       now,
@@ -298,6 +305,9 @@ export const buildRestrictionRequests = (
 export interface DecisionContext {
   now: Date;
   actorName: string;
+  /** ADR-0015 OD-02 — the deciding account, so two-person control is checked
+   *  against an id and not only against a typed name. */
+  actorId: string;
   unitById: Map<string, Unit>;
   unitIdsByAsset: Map<string, string[]>;
   /** The authoritative answer to "is this space protected", re-read at
@@ -350,6 +360,8 @@ export const decideRequest = (
       healthSensitive: unitIds.some((id) => ctx.healthSensitiveUnitIds.has(id)),
     },
     signedOffBy,
+    requester: { id: request.requestedBy.id, name: request.requestedBy.name },
+    approver: { id: ctx.actorId, name: ctx.actorName },
   });
   if (refusal) return reject(REFUSAL_KEY[refusal]);
 

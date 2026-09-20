@@ -78,7 +78,19 @@ export const expectedNextStep = (
 /** Why an approval was refused. An enum rather than a sentence: the domain
  *  does not own words, and the caller maps this to a locale key. */
 export type RestrictionRefusal =
-  'healthSensitiveStop' | 'notNextRung' | 'signOffRequired';
+  | 'healthSensitiveStop'
+  | 'notNextRung'
+  | 'selfApproval'
+  | 'signOffRequired'
+  | 'signOffNotIndependent';
+
+/** Trimmed and case-folded. Two signatures differing only in capitalisation
+ *  are one person, and a sign-off box is free text. */
+const sameName = (a: string | null, b: string | null): boolean => {
+  const left = a?.trim().toLocaleLowerCase() ?? '';
+  const right = b?.trim().toLocaleLowerCase() ?? '';
+  return left !== '' && left === right;
+};
 
 export interface RestrictionApprovalContext {
   /** The rung in force on the affected space now, or `null` for none. */
@@ -87,23 +99,60 @@ export interface RestrictionApprovalContext {
   space: SpaceRestrictionContext;
   /** The named manager signing rung 4 off. `null` when nobody has. */
   signedOffBy: string | null;
+  /**
+   * ADR-0015 OD-02 — two-person control. Who raised the request and who is
+   * deciding it, so the domain can tell whether that is two people.
+   *
+   * Ids are the real comparison; the names are here because the rung-4
+   * sign-off box is free text and a manager has no id to compare. A name
+   * match is weaker evidence than an id match and is treated as a refusal
+   * anyway: the cost of blocking a genuine namesake is a second signatory,
+   * and the cost of missing it is one person restricting a household alone.
+   */
+  requester: { id: string; name: string };
+  approver: { id: string; name: string };
 }
 
 /**
  * `null` when the rung may be approved; otherwise why not.
  *
- * Order matters. The safety refusal is checked FIRST so that `stop` on a
- * health-sensitive space is never reported as a missing signature — that
- * wording invites somebody to go and find the signature, and no signature
- * makes it permitted (D6 FR-53).
+ * Order matters, and it is the safety order.
+ *
+ * 1. `healthSensitiveStop` is FIRST so that `stop` on a health-sensitive space
+ *    is never reported as a missing signature — that wording invites somebody
+ *    to go and find the signature, and no signature makes it permitted
+ *    (D6 FR-53).
+ * 2. `notNextRung` — whether this rung is approvable at all, before who.
+ * 3. `selfApproval` before `signOffRequired`, for the same reason as (1): a
+ *    requester approving their own request must not be told they need a
+ *    signature, because they would go and get one and the answer would still
+ *    be no. Nothing the approver can type fixes being the requester.
+ * 4. `signOffNotIndependent` last — it is the narrowest, and it only applies
+ *    once a signature exists to examine.
  */
 export const refuseRestrictionApproval = (
   ctx: RestrictionApprovalContext,
 ): RestrictionRefusal | null => {
   if (!isStepPermitted(ctx.requestedStep, ctx.space)) return 'healthSensitiveStop';
   if (ctx.requestedStep !== expectedNextStep(ctx.currentStep)) return 'notNextRung';
-  if (requiresManagementSignOff(ctx.requestedStep) && !ctx.signedOffBy?.trim()) {
-    return 'signOffRequired';
+
+  // Two-person control. Restriction is the one action in the product that
+  // takes cooling away from a household, and a ladder one person can walk
+  // alone is the switch ADR-0015 refused to build.
+  if (ctx.requester.id === ctx.approver.id) return 'selfApproval';
+  if (sameName(ctx.requester.name, ctx.approver.name)) return 'selfApproval';
+
+  if (!requiresManagementSignOff(ctx.requestedStep)) return null;
+  if (!ctx.signedOffBy?.trim()) return 'signOffRequired';
+
+  // Rung 4 is three signatures, which means three people. A manager counter-
+  // signing their own approval — or the requester's — restores the two-person
+  // rung the third signature exists to exceed.
+  if (
+    sameName(ctx.signedOffBy, ctx.approver.name) ||
+    sameName(ctx.signedOffBy, ctx.requester.name)
+  ) {
+    return 'signOffNotIndependent';
   }
   return null;
 };

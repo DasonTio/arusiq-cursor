@@ -241,3 +241,58 @@ describe('the designation record — ADR-0015 OD-01', () => {
     expect(reviews.some((d) => d > Date.parse(REFERENCE_NOW))).toBe(true);
   });
 });
+
+describe('two-person control at the adapter — ADR-0015 OD-02', () => {
+  it('approves for a decider who is not the requester', async () => {
+    // The test that did not exist. 387 tests passed while the happy path was
+    // broken, because none of them ever approved anything through the adapter.
+    const api = fresh();
+    const result = await api.decideRestrictionRequest(admin, GUEST_SETPOINT, {
+      outcome: 'approve',
+      decidedByName: 'Rina Kusuma',
+    });
+    expect(result.ok).toBe(true);
+  });
+
+  it('refuses a decider who raised the request', async () => {
+    const api = fresh();
+    const collections = { role: 'admin' as const, userId: 'user-admin-collections' };
+    const result = await api.decideRestrictionRequest(collections, GUEST_SETPOINT, {
+      outcome: 'approve',
+      decidedByName: 'Andi Nugroho',
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.reasonKey).toBe(RESTRICTION_REJECT.selfApproval);
+  });
+
+  it('refuses on the name too, so a second account is not a way round it', async () => {
+    const api = fresh();
+    const alias = { role: 'admin' as const, userId: 'user-admin-alias' };
+    const result = await api.decideRestrictionRequest(alias, GUEST_SETPOINT, {
+      outcome: 'approve',
+      decidedByName: 'Andi Nugroho',
+    });
+    expect(result.ok).toBe(false);
+    if (!result.ok) expect(result.reasonKey).toBe(RESTRICTION_REJECT.selfApproval);
+  });
+
+  it('tells the reader when they raised the request themselves', async () => {
+    const api = fresh();
+    const collections = { role: 'admin' as const, userId: 'user-admin-collections' };
+    const mine = await api.getRestrictionRequest(collections, GUEST_SETPOINT);
+    expect(mine?.raisedByViewer).toBe(true);
+    const theirs = await api.getRestrictionRequest(admin, GUEST_SETPOINT);
+    expect(theirs?.raisedByViewer).toBe(false);
+  });
+
+  it('declining your own request stays allowed — it takes nothing away', async () => {
+    const api = fresh();
+    const collections = { role: 'admin' as const, userId: 'user-admin-collections' };
+    const result = await api.decideRestrictionRequest(collections, GUEST_SETPOINT, {
+      outcome: 'decline',
+      reasonKey: 'restriction.declineReason.evidenceThin',
+      decidedByName: 'Andi Nugroho',
+    });
+    expect(result.ok).toBe(true);
+  });
+});

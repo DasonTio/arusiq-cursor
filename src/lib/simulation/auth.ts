@@ -47,7 +47,14 @@ export const DEMO_ACCOUNTS: readonly DemoAccount[] = [
     identifiers: ['hq@arusiq.demo', '08110000004'],
     password: 'demo',
     role: 'admin',
-    name: 'Andi Nugroho',
+    // The HQ approver, and a DIFFERENT person from the collections officer who
+    // raises restriction requests (`user-admin-collections`, Andi Nugroho).
+    // Both accounts were called "Andi Nugroho", which made every decided
+    // record read "requested by Andi Nugroho, approved by Andi Nugroho" — a
+    // self-approval on the face of it, and the ADR-0015 two-person check
+    // rightly refused it. The fixtures already cast Rina Kusuma as the
+    // approver on every decided request; the sign-in account is now her.
+    name: 'Rina Kusuma',
   },
 ];
 
