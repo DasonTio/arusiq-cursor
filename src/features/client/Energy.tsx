@@ -29,6 +29,7 @@ import {
   type Unit,
 } from '../../lib/simulation/index.ts';
 import { MetricGrid } from '../../patterns/MetricGrid.tsx';
+import { CalendarDays, Wallet, Zap } from 'lucide-react';
 import { MetricTile } from '../../patterns/MetricTile.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { INSIGHT_VIEWS } from '../../routes/navigation.ts';
@@ -320,7 +321,7 @@ export default function Energy() {
         })}
       </p>
       <MetricGrid>
-        <MetricTile>
+        <MetricTile icon={Zap} tone="accent">
           <Metric
             labelKey="client.energy.powerNow"
             value={power.value}
@@ -329,7 +330,7 @@ export default function Energy() {
             lastSeen={power.lastSeen}
           />
         </MetricTile>
-        <MetricTile>
+        <MetricTile icon={Zap} tone="accent">
           <Metric
             labelKey="client.energy.energyToday"
             value={today.value}
@@ -338,7 +339,7 @@ export default function Energy() {
             lastSeen={today.lastSeen}
           />
         </MetricTile>
-        <MetricTile>
+        <MetricTile icon={CalendarDays} tone="accent">
           <Metric
             labelKey="client.energy.energyMonth"
             value={month.value}
@@ -347,7 +348,7 @@ export default function Energy() {
             lastSeen={month.lastSeen}
           />
         </MetricTile>
-        <MetricTile>
+        <MetricTile icon={Wallet} tone="info">
           <Metric
             labelKey="client.energy.costToday"
             value={costOf(today).value}
@@ -356,7 +357,7 @@ export default function Energy() {
             lastSeen={costOf(today).lastSeen}
           />
         </MetricTile>
-        <MetricTile>
+        <MetricTile icon={Wallet} tone="info">
           <Metric
             labelKey="client.energy.costMonth"
             value={costOf(month).value}

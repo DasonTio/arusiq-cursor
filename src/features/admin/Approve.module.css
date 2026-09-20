@@ -11,7 +11,7 @@
   width: 100%;
   padding: var(--space-3);
   border: 1px solid var(--color-severity-warning-text);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   background: var(--surface-raised);
 }
 
@@ -24,4 +24,10 @@
   border: 1px solid var(--color-state-error);
   border-radius: var(--radius-lg);
   color: var(--color-state-error-text);
+}
+
+@media (min-width: 1024px) {
+  .refusal {
+    padding: var(--space-4);
+  }
 }

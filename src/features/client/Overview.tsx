@@ -17,6 +17,7 @@ import { ProvenanceChip } from '../../components/ProvenanceChip.tsx';
 import { SeverityIndicator } from '../../components/SeverityIndicator.tsx';
 import { SeverityRollUp } from '../../components/SeverityRollUp.tsx';
 import { MetricGrid } from '../../patterns/MetricGrid.tsx';
+import { Thermometer, TrendingDown, TriangleAlert, Zap } from 'lucide-react';
 import { MetricTile } from '../../patterns/MetricTile.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { QuickActions } from '../../patterns/QuickActions.tsx';
@@ -284,7 +285,7 @@ export default function Overview() {
           {t('client.overview.summaryTitle')}
         </h2>
         <MetricGrid>
-          <MetricTile>
+          <MetricTile icon={TriangleAlert} tone="warning">
             <Metric
               labelKey="client.overview.needsAttention"
               value={overview.rollUp.contributing}
@@ -298,7 +299,7 @@ export default function Overview() {
               })}
             </p>
           </MetricTile>
-          <MetricTile>
+          <MetricTile icon={Zap} tone="accent">
             <Metric
               labelKey="client.overview.energyToday"
               value={overview.kpis.energyToday.kWh.value}
@@ -316,7 +317,7 @@ export default function Overview() {
               </p>
             ) : null}
           </MetricTile>
-          <MetricTile>
+          <MetricTile icon={TrendingDown} tone="eco">
             <Metric
               labelKey="client.overview.savingVsNormal"
               value={overview.kpis.savingVsNormal.kWh.value}
@@ -330,7 +331,7 @@ export default function Overview() {
               </p>
             ) : null}
           </MetricTile>
-          <MetricTile>
+          <MetricTile icon={Thermometer} tone="info">
             <Metric
               labelKey="client.overview.comfortableRooms"
               value={overview.kpis.comfort.comfortable}

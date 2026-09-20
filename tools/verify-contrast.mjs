@@ -235,6 +235,10 @@ check('brand-red (button fill)', T('brand-red'), 'ui');
 const CHART = [1, 2, 3, 4, 5, 6].map((n) => T(`chart-${n}`));
 CHART.forEach((hex, i) => check(`chart-${i + 1} (series)`, hex, 'ui'));
 
+// ADR-0018 — the accent carries links and outlined buttons, so it must clear
+// the TEXT bar on every light surface, not merely the 3:1 non-text bar.
+check('brand-accent', T('brand-accent'), 'text');
+
 // --- Text placed ON a fill: the pairing is fixed by the component (D7 §3.3) -
 // NOTE: there is deliberately no `white on severity-*-mark` row. No single
 // foreground clears 4.5:1 across all four severity marks (warning tops out at
@@ -243,6 +247,9 @@ CHART.forEach((hex, i) => check(`chart-${i + 1} (series)`, hex, 'ui'));
 // pattern instead: 10 % tint + text-safe foreground + hairline mark border.
 const ON_FILL = [
   ['brand-primary', 'white-1'],
+  // ADR-0018 — the interactive accent is a FILL (primary action, active tab)
+  // and a TEXT tone (links, outlined action), so it is measured as both.
+  ['brand-accent', 'white-1'],
   ['brand-primary-deep', 'white-1'],
   ['brand-red', 'white-1'],
   ['state-eco', 'white-1'],

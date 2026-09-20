@@ -37,7 +37,7 @@
   width: 100%;
   padding: var(--space-3);
   border: 1px solid var(--color-gray-5);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   background: var(--surface-raised);
 }
 
@@ -69,4 +69,11 @@
 .fieldset legend {
   padding-inline: var(--space-2);
   font-weight: var(--font-weight-semibold);
+}
+
+@media (min-width: 1024px) {
+  .card,
+  .confirmation {
+    padding: var(--space-4);
+  }
 }

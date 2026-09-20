@@ -25,7 +25,7 @@
 }
 
 .primary {
-  background: var(--color-brand-primary);
+  background: var(--color-brand-accent);
   color: var(--color-on-inverse);
 }
 
@@ -43,8 +43,8 @@
  * — and brand navy is only the default for the light surfaces. */
 .secondary {
   background: transparent;
-  color: var(--button-accent, var(--color-brand-primary));
-  border-color: var(--button-accent, var(--color-brand-primary));
+  color: var(--button-accent, var(--color-brand-accent));
+  border-color: var(--button-accent, var(--color-brand-accent));
 }
 
 /* The only variant with no fill of its own, so it is the only one whose

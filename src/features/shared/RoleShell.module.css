@@ -125,9 +125,11 @@
 }
 
 .active {
-  color: var(--color-brand-primary);
+  color: var(--color-brand-accent);
   font-weight: var(--font-weight-semibold);
-  background: var(--surface-sunken);
+  /* A tint of the accent, not a grey well: the selected destination is the
+     one interactive thing on the rail that is currently true. */
+  background: color-mix(in srgb, var(--color-brand-accent) 12%, var(--surface-raised));
 }
 
 .signOut {
@@ -250,5 +252,11 @@
 
   .main {
     max-inline-size: var(--content-max);
+  }
+}
+
+@media (min-width: 1024px) {
+  .sideNav {
+    padding: var(--space-4);
   }
 }

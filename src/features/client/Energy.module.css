@@ -60,7 +60,7 @@
   width: 100%;
   padding: var(--space-3);
   border: 1px solid var(--color-gray-5);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   background: var(--surface-raised);
   box-shadow: var(--shadow-sm);
 }
@@ -111,7 +111,7 @@
 
 .chartActual {
   fill: none;
-  stroke: var(--color-brand-primary);
+  stroke: var(--color-brand-accent);
   stroke-width: 0.6;
 }
 
@@ -141,7 +141,7 @@
   block-size: var(--space-1);
   margin-inline-end: var(--space-2);
   vertical-align: middle;
-  background: var(--color-brand-primary);
+  background: var(--color-brand-accent);
 }
 
 .legendBaseline::before {
@@ -187,5 +187,12 @@
 
   .panel .metrics {
     grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .card,
+  .panel {
+    padding: var(--space-4);
   }
 }

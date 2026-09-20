@@ -25,6 +25,7 @@ import {
   type WorkOrderSummary,
 } from '../../lib/simulation/index.ts';
 import { MetricGrid } from '../../patterns/MetricGrid.tsx';
+import { Lock, TriangleAlert, Wallet, Wrench } from 'lucide-react';
 import { MetricTile } from '../../patterns/MetricTile.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { PriorityList, type PriorityGroup } from '../../patterns/PriorityList.tsx';
@@ -249,7 +250,7 @@ export default function Overview() {
       <ViewTabs items={ADMIN_OVERVIEW_VIEWS} />
       <PageHeader titleKey="admin.overview.title" contextKey="admin.overview.purpose" />
       <MetricGrid>
-        <MetricTile>
+        <MetricTile icon={Wrench} tone="accent">
           <Metric
             labelKey="admin.overview.kpi.unassigned"
             value={unassigned.length}
@@ -258,7 +259,7 @@ export default function Overview() {
           />
           <p className={styles.meta}>{t('admin.overview.kpi.unassignedCaption')}</p>
         </MetricTile>
-        <MetricTile>
+        <MetricTile icon={TriangleAlert} tone="critical">
           <Metric
             labelKey="admin.overview.kpi.critical"
             value={critical.length}
@@ -267,7 +268,7 @@ export default function Overview() {
           />
           <p className={styles.meta}>{t('admin.overview.kpi.criticalCaption')}</p>
         </MetricTile>
-        <MetricTile>
+        <MetricTile icon={Wallet} tone="warning">
           <Metric
             labelKey="admin.overview.kpi.overdue"
             value={overdue.length}
@@ -276,7 +277,7 @@ export default function Overview() {
           />
           <p className={styles.meta}>{t('admin.overview.kpi.overdueCaption')}</p>
         </MetricTile>
-        <MetricTile>
+        <MetricTile icon={Lock} tone="warning">
           <Metric
             labelKey="admin.overview.kpi.restricted"
             value={restricted.length}

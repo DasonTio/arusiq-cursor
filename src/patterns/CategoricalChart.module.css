@@ -208,7 +208,7 @@
 
 .method {
   align-self: flex-start;
-  color: var(--color-brand-primary);
+  color: var(--color-brand-accent);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-sm);
 }

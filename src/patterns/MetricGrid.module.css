@@ -16,10 +16,64 @@
      desktop frame — so its figure sits one step below the display size.
      Raising the grid's 10rem floor instead would cost the two-up phone row
      the floor exists to guarantee. */
-  --metric-value-size: var(--font-size-h5);
+  --metric-value-size: var(--font-size-h4);
   padding: var(--space-3);
   border: 1px solid var(--color-gray-5);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   background: var(--surface-raised);
   box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 1024px) {
+  .tile {
+    padding: var(--space-4);
+  }
+}
+
+/* ADR-0018 — the tile head: a label and, optionally, a tinted icon chip.
+ *
+ * A KPI card in any dashboard worth copying carries a small coloured mark:
+ * it gives the tile a focal point, tells you at a glance which domain the
+ * figure belongs to, and is the difference between a designed card and a
+ * bordered rectangle. The chip is a 10% tint of a token with the token's own
+ * glyph on it, so it is composed from the palette rather than painted. */
+.tileHead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-block-end: var(--space-2);
+}
+
+.tileChip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  inline-size: var(--space-6);
+  block-size: var(--space-6);
+  border-radius: var(--radius-md);
+  /* Tone is supplied by the caller; the accent is the default subject. */
+  background: color-mix(
+    in srgb,
+    var(--tile-tone, var(--color-brand-accent)) 12%,
+    var(--surface-raised)
+  );
+  color: var(--tile-tone, var(--color-brand-accent));
+}
+
+.toneEco {
+  --tile-tone: var(--color-state-eco-text);
+}
+
+.toneCritical {
+  --tile-tone: var(--color-severity-critical-text);
+}
+
+.toneWarning {
+  --tile-tone: var(--color-severity-warning-text);
+}
+
+.toneInfo {
+  --tile-tone: var(--color-state-info-text);
 }

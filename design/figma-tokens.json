@@ -4,7 +4,7 @@
       "primary": {
         "$type": "color",
         "$value": "#0B1B48",
-        "$description": "16.61:1 on white-1 · main action, active · hero"
+        "$description": "16.61:1 on white-1 · headings, hero, deep brand"
       },
       "primary-deep": {
         "$type": "color",
@@ -14,7 +14,11 @@
       "red": {
         "$type": "color",
         "$value": "#DB1217",
-        "$description": "5.11:1 · secondary button. NOT a problem signal."
+        "$description": "5.11:1 · the mark. NOT an action, NOT a signal."
+      },
+      "accent": {
+        "$type": "color",
+        "$value": "#1D4ED8"
       }
     },
     "state": {

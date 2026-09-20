@@ -62,7 +62,7 @@
   width: 100%;
   padding: var(--space-3);
   border: 1px solid var(--color-gray-5);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   background: var(--surface-raised);
   box-shadow: var(--shadow-sm);
 }
@@ -130,7 +130,7 @@
 
 .chartActual {
   fill: none;
-  stroke: var(--color-brand-primary);
+  stroke: var(--color-brand-accent);
   stroke-width: 0.6;
 }
 
@@ -222,4 +222,13 @@
 .commandStep.broken::before {
   background: var(--color-state-error);
   border-color: var(--color-state-error);
+}
+
+@media (min-width: 1024px) {
+  .banner,
+  .card,
+  .part,
+  .day {
+    padding: var(--space-4);
+  }
 }

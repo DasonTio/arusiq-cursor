@@ -58,7 +58,7 @@
   width: 100%;
   padding: var(--space-3);
   border: 1px solid var(--color-gray-5);
-  border-radius: var(--radius-lg);
+  border-radius: var(--radius-xl);
   background: var(--surface-raised);
   box-shadow: var(--shadow-sm);
 }
@@ -85,7 +85,7 @@
 .progressFill {
   block-size: 100%;
   border-radius: var(--radius-full);
-  background: var(--color-brand-primary);
+  background: var(--color-brand-accent);
 }
 
 .parts {
@@ -130,5 +130,13 @@
   .metrics,
   .nowGrid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .banner,
+  .card,
+  .part {
+    padding: var(--space-4);
   }
 }

@@ -10,9 +10,16 @@
 
 :root {
   /* --- Brand · D7 §2 · see ADR-0009 (the Figma variables; logo navy) ------ */
-  --color-brand-primary:      #0B1B48; /* 16.61:1 on white-1 · main action, active · hero   */
+  --color-brand-primary:      #0B1B48; /* 16.61:1 on white-1 · headings, hero, deep brand   */
   --color-brand-primary-deep: #0B1933; /* 17.48:1 · focus ring, deepest brand tone          */
-  --color-brand-red:          #DB1217; /*  5.11:1 · secondary button. NOT a problem signal. */
+  --color-brand-red:          #DB1217; /*  5.11:1 · the mark. NOT an action, NOT a signal.  */
+  /* ADR-0018 — the interactive accent. The navy above is a TEXT tone: at
+     16.61:1 it reads as near-black, so a product whose every action was navy
+     had no accent at all, only ink. This carries interaction — filled primary
+     action, active navigation, links, the lead series on a chart — and it is
+     the one hue allowed to mean "this responds to you".
+     6.70:1 as white-on-fill AND as text on a panel; 5.72:1 on its own 10% tint. */
+  --color-brand-accent:       #1D4ED8;
 
   /* --- State · D7 §3 · interface + form feedback ONLY, never severity ------
      Fills carry no text. Where a state colour becomes type, use *-text.      */

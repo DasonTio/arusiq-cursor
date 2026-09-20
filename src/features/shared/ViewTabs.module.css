@@ -18,8 +18,8 @@
 }
 
 .active {
-  background: var(--color-brand-primary);
-  border-color: var(--color-brand-primary);
+  background: var(--color-brand-accent);
+  border-color: var(--color-brand-accent);
   color: var(--color-on-inverse);
   font-weight: var(--font-weight-semibold);
 }
