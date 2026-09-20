@@ -287,18 +287,7 @@ export default function Energy() {
       : lastDayKWh(series);
   const month = periodKWh(series);
   const saving = savingVsBaseline(series);
-  const actualTotal = series.actual.reduce((sum, point) => {
-    return sum + point.kWh;
-  }, 0);
-  const baselineTotal = series.baseline
-    .filter((point) => {
-      return series.actual.some((actual) => {
-        return actual.t === point.t;
-      });
-    })
-    .reduce((sum, point) => {
-      return sum + point.kWh;
-    }, 0);
+  const { actual: actualTotal, baseline: baselineTotal } = comparableTotals(series);
   const reporting = units.filter((unit) => {
     return unit.device.online;
   }).length;
@@ -500,16 +489,31 @@ export default function Energy() {
   );
 }
 
+/**
+ * Actual and baseline over the SAME days, which is the only way the two are
+ * comparable. The generator emits a baseline for every day in the period but
+ * skips `actual` on any day a unit was silent, so the arrays routinely differ
+ * in length — Rumah Bintaro runs 27 actual against 30 baseline. Summing them
+ * whole compares a 30-day normal with a 27-day meter and reports the two
+ * missing days as a saving. `savingVsBaseline` in `energy.ts` has guarded
+ * against exactly this since it was written; this screen has to do the same,
+ * and in ONE place, because the two call sites had already drifted apart.
+ */
+function comparableTotals(series: EnergySeries) {
+  const reported = new Set(series.actual.map((point) => point.t));
+  const sum = (points: readonly { kWh: number }[]) =>
+    points.reduce((total, point) => total + point.kWh, 0);
+  return {
+    actual: sum(series.actual),
+    baseline: sum(series.baseline.filter((point) => reported.has(point.t))),
+  };
+}
+
 function Sparkline({ series }: { series: EnergySeries }) {
   const { t, i18n } = useTranslation();
   const format = (value: number) =>
     new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 1 }).format(value);
-  const actualTotal = series.actual.reduce((sum, point) => {
-    return sum + point.kWh;
-  }, 0);
-  const baselineTotal = series.baseline.reduce((sum, point) => {
-    return sum + point.kWh;
-  }, 0);
+  const { actual: actualTotal, baseline: baselineTotal } = comparableTotals(series);
   const max = Math.max(
     ...series.actual.map((point) => {
       return point.kWh;
@@ -519,14 +523,39 @@ function Sparkline({ series }: { series: EnergySeries }) {
     }),
     1,
   );
-  const toPath = (points: { kWh: number }[]) =>
-    points
-      .map((point, index) => {
-        const x = points.length <= 1 ? 0 : (index / (points.length - 1)) * 100;
-        const y = 28 - (point.kWh / max) * 26;
-        return `${index === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)}`;
+  // One x axis for both lines: the sorted union of every day either series
+  // reports. Scaling each series across its own length instead stretched a
+  // 27-day meter to the full width of a 30-day normal and stacked the two on
+  // top of each other, so any vertical comparison read off two different days.
+  const domain = [
+    ...new Set([...series.baseline, ...series.actual].map((point) => point.t)),
+  ].sort();
+  const xAt = (stamp: string) => {
+    const index = domain.indexOf(stamp);
+    return domain.length <= 1 ? 0 : (index / (domain.length - 1)) * 100;
+  };
+
+  // A day with no meter reading breaks the line rather than being drawn
+  // through — missing is not zero, and a line crossing a silent day is a
+  // reading nobody took (D7 §11.2).
+  const toPath = (points: readonly { t: string; kWh: number }[]) => {
+    const byDay = new Map(points.map((point) => [point.t, point.kWh] as const));
+    let pen: 'M' | 'L' = 'M';
+    return domain
+      .map((stamp) => {
+        const kWh = byDay.get(stamp);
+        if (kWh === undefined) {
+          pen = 'M';
+          return '';
+        }
+        const command = pen;
+        pen = 'L';
+        const y = 28 - (kWh / max) * 26;
+        return `${command} ${xAt(stamp).toFixed(2)} ${y.toFixed(2)}`;
       })
+      .filter(Boolean)
       .join(' ');
+  };
 
   return (
     <figure className={styles.sparkline}>

@@ -24,6 +24,7 @@ import { asChartSeries } from '../../patterns/categoricalSeries.ts';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { ADMIN_REPORTING_VIEWS } from '../../routes/navigation.ts';
 import { useSession } from '../auth/session.ts';
+import { savingSeries } from './energyPortfolioSeries.ts';
 import { ViewTabs } from '../shared/ViewTabs.tsx';
 import styles from '../shared/Screen.module.css';
 
@@ -119,13 +120,7 @@ export default function EnergyPortfolio() {
   }
 
   const chartSeries = asChartSeries(
-    rows.map((row) => ({
-      name: row.property.name,
-      points: row.series.actual.map((point, i) => ({
-        t: point.t,
-        value: row.series.baseline[i] ? row.series.baseline[i].kWh - point.kWh : null,
-      })),
-    })),
+    rows.map((row) => savingSeries(row.property.name, row.series)),
   );
 
   return (
