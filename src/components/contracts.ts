@@ -270,6 +270,33 @@ export type CategoricalSeriesSet =
 export type CategoricalTextAlternative =
   { kind: 'table' } | { kind: 'summary'; summary: string };
 
+/* ------------------------------------------------------------- trend chart */
+
+/** One dated reading. `value` is unit-agnostic; the caller labels it. */
+export interface TrendPoint {
+  t: string;
+  value: number;
+}
+
+/**
+ * One measured series against the counterfactual it is compared against.
+ *
+ * `accessibleName` is a FUNCTION, not a string, and that is deliberate: the
+ * component hands it totals computed over the days both series report, so a
+ * caller cannot summarise a 30-day normal against a 27-day meter. Three
+ * hand-rolled copies of this chart each did exactly that before the component
+ * existed.
+ */
+export interface TrendChartProps {
+  /** The measurement. The fill belongs to this series. */
+  lead: readonly TrendPoint[];
+  /** The counterfactual, drawn dashed — it is not a measurement. */
+  reference: readonly TrendPoint[];
+  accessibleName: (totals: { lead: number; reference: number }) => string;
+  leadLabelKey: I18nKey;
+  referenceLabelKey: I18nKey;
+}
+
 /**
  * ADR-0011 / ADR-0013 — N properties, sites or units on one pair of axes:
  * "saving vs baseline by site", "consumption by unit".

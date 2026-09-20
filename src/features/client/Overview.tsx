@@ -19,6 +19,7 @@ import { SeverityRollUp } from '../../components/SeverityRollUp.tsx';
 import { MetricGrid } from '../../patterns/MetricGrid.tsx';
 import { Thermometer, TrendingDown, TriangleAlert, Zap } from 'lucide-react';
 import { MetricTile } from '../../patterns/MetricTile.tsx';
+import { TrendChart } from '../../patterns/TrendChart.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { QuickActions } from '../../patterns/QuickActions.tsx';
 import { comfortLabelKey } from '../../lib/domain/comfort.ts';
@@ -46,56 +47,30 @@ const readingOf = (input: MaybeReading): Reading => {
   return input;
 };
 
+const toTrend = (points: readonly { t: string; kWh: number }[]) =>
+  points.map((point) => ({ t: point.t, value: point.kWh }));
+
 function Sparkline({ overview }: { overview: ClientOverview }) {
   const { t, i18n } = useTranslation();
   const format = (value: number) =>
     new Intl.NumberFormat(i18n.language, { maximumFractionDigits: 1 }).format(value);
-  const actualTotal = overview.energy.actual.reduce((s, p) => s + p.kWh, 0);
-  const baselineTotal = overview.energy.baseline.reduce((s, p) => s + p.kWh, 0);
-  const points = overview.energy.actual;
-  const max = Math.max(
-    ...points.map((p) => p.kWh),
-    ...overview.energy.baseline.map((p) => p.kWh),
-    1,
-  );
-  const toPath = (series: { kWh: number }[]) =>
-    series
-      .map((p, i) => {
-        const x = series.length <= 1 ? 0 : (i / (series.length - 1)) * 100;
-        const y = 28 - (p.kWh / max) * 26;
-        return `${i === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)}`;
-      })
-      .join(' ');
+  // The summary is built from the totals TrendChart computes over the days
+  // both series report, so it can no longer compare a whole baseline against
+  // a partial meter.
+  const summary = (totals: { lead: number; reference: number }) =>
+    t('client.overview.sparklineAlt', {
+      actual: format(totals.lead),
+      baseline: format(totals.reference),
+    });
 
   return (
-    <figure className={styles.sparkline}>
-      <svg
-        className={styles.chart}
-        viewBox="0 0 100 30"
-        role="img"
-        aria-label={t('client.overview.sparklineAlt', {
-          actual: format(actualTotal),
-          baseline: format(baselineTotal),
-        })}
-      >
-        {overview.energy.baseline.length > 1 ? (
-          <path className={styles.chartBaseline} d={toPath(overview.energy.baseline)} />
-        ) : null}
-        {points.length > 1 ? (
-          <path className={styles.chartActual} d={toPath(points)} />
-        ) : null}
-      </svg>
-      <p className={styles.chartCaption}>
-        {t('client.overview.sparklineAlt', {
-          actual: format(actualTotal),
-          baseline: format(baselineTotal),
-        })}
-      </p>
-      <ul className={styles.legend}>
-        <li className={styles.legendActual}>{t('client.overview.actualSeries')}</li>
-        <li className={styles.legendBaseline}>{t('client.overview.baselineSeries')}</li>
-      </ul>
-    </figure>
+    <TrendChart
+      lead={toTrend(overview.energy.actual)}
+      reference={toTrend(overview.energy.baseline)}
+      accessibleName={summary}
+      leadLabelKey="client.overview.actualSeries"
+      referenceLabelKey="client.overview.baselineSeries"
+    />
   );
 }
 

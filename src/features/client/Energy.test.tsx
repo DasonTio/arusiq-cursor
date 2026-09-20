@@ -72,7 +72,7 @@ describe('client.energy — actual and baseline describe the same days · FR-61'
   it('breaks the meter line on a silent day instead of drawing through it', async () => {
     const { container } = renderEnergy();
     await screen.findByRole('img', { name: ALT });
-    const actualLine = container.querySelector('path[class*="chartActual"]');
+    const actualLine = container.querySelector('path[class*="lead"]');
     expect(actualLine).not.toBeNull();
     const d = actualLine?.getAttribute('d') ?? '';
     // Every path starts with one M. A second M is a deliberate gap, and the
@@ -92,8 +92,8 @@ describe('client.energy — actual and baseline describe the same days · FR-61'
       const coords = d.trim().split(' ');
       return Number(coords[coords.length - 2]);
     };
-    const baselineEnd = lastX('path[class*="chartBaseline"]');
-    const actualEnd = lastX('path[class*="chartActual"]');
+    const baselineEnd = lastX('path[class*="reference"]');
+    const actualEnd = lastX('path[class*="lead"]');
     // The baseline covers three more days, so it must reach further right.
     // Both ending at x=100 is the bug: two different spans, one width.
     expect(baselineEnd).toBeCloseTo(100, 1);

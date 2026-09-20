@@ -86,68 +86,7 @@
   border: 1px solid var(--color-gray-5);
 }
 
-/* A `figure` carries a UA default side margin. With `width: 100%` that is the
-   full column PLUS those margins, which pushed the chart past the content edge
-   and gave the page a horizontal scrollbar. `CategoricalChart` already zeroes
-   it; these did not. */
-.sparkline {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  margin: 0;
-  width: 100%;
-}
-
-.chart {
-  block-size: var(--space-9);
-  inline-size: 100%;
-}
-
 .chartActual,
-.chartBaseline {
-  /* The box is stretched, so the stroke must not be. */
-  vector-effect: non-scaling-stroke;
-}
-
-.chartActual {
-  fill: none;
-  stroke: var(--color-brand-accent);
-  stroke-width: 0.6;
-}
-
-.chartBaseline {
-  fill: none;
-  stroke: var(--color-gray-4);
-  stroke-width: 0.6;
-  stroke-dasharray: 1.5 1;
-}
-
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-sm);
-}
-
-.legendActual::before,
-.legendBaseline::before {
-  content: '';
-  display: inline-block;
-  inline-size: var(--space-4);
-  block-size: var(--space-1);
-  margin-inline-end: var(--space-2);
-  vertical-align: middle;
-  background: var(--color-brand-accent);
-}
-
-.legendBaseline::before {
-  background: var(--color-gray-4);
-}
-
 @media (min-width: 768px) {
   .metrics,
   .list {
@@ -195,29 +134,4 @@
   .panel {
     padding: var(--space-4);
   }
-}
-
-/* The fill turns a line into a quantity. Both stops are the accent; only the
-   opacity changes, so the gradient is composed from the palette rather than
-   painted with new colours. */
-.areaTop {
-  stop-color: var(--color-brand-accent);
-  stop-opacity: 0.2;
-}
-
-.areaBottom {
-  stop-color: var(--color-brand-accent);
-  stop-opacity: 0;
-}
-
-.chartArea {
-  stroke: none;
-}
-
-/* A trend with nothing behind it is a shape; with a scale behind it, it is a
-   reading. Hairlines only — they must never compete with the series. */
-.gridline {
-  stroke: var(--color-gray-5);
-  stroke-width: 1;
-  vector-effect: non-scaling-stroke;
 }

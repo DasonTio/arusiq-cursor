@@ -42,6 +42,7 @@ import {
   type Unit as UnitRecord,
 } from '../../lib/simulation/index.ts';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
+import { TrendChart } from '../../patterns/TrendChart.tsx';
 import { useSession } from '../auth/session.ts';
 import styles from './Unit.module.css';
 
@@ -257,40 +258,15 @@ export default function Unit() {
     draftMode !== unit.control.mode ||
     Number(draftSetpoint) !== unit.control.setpointC ||
     draftFan !== unit.control.fanSpeed;
-  const actualTotal = energy
-    ? energy.actual.reduce((sum, point) => {
-        return sum + point.kWh;
-      }, 0)
-    : null;
-  const baselineTotal = energy
-    ? energy.baseline.reduce((sum, point) => {
-        return sum + point.kWh;
-      }, 0)
-    : null;
-  const maxKWh = energy
-    ? Math.max(
-        ...energy.actual.map((point) => {
-          return point.kWh;
-        }),
-        ...energy.baseline.map((point) => {
-          return point.kWh;
-        }),
-        1,
-      )
-    : 1;
-  const showEnergyChart =
-    energy !== null &&
-    energy.actual.length >= 2 &&
-    actualTotal !== null &&
-    baselineTotal !== null;
-  const toPath = (series: { kWh: number }[]) =>
-    series
-      .map((point, index) => {
-        const x = series.length <= 1 ? 0 : (index / (series.length - 1)) * 100;
-        const y = 28 - (point.kWh / maxKWh) * 26;
-        return `${index === 0 ? 'M' : 'L'} ${x.toFixed(2)} ${y.toFixed(2)}`;
-      })
-      .join(' ');
+  const showEnergyChart = energy !== null && energy.actual.length >= 2;
+  const toTrend = (points: readonly { t: string; kWh: number }[]) =>
+    points.map((point) => ({ t: point.t, value: point.kWh }));
+  // Totals come from the chart, over the days both series report.
+  const energySummary = (totals: { lead: number; reference: number }) =>
+    t('shared.unit.energyAlt', {
+      actual: format(totals.lead),
+      baseline: format(totals.reference),
+    });
 
   const send = () => {
     const setpoint = Number(draftSetpoint);
@@ -534,26 +510,13 @@ export default function Unit() {
       {view === 'energy' ? (
         <section className={styles.section}>
           {showEnergyChart ? (
-            <figure className={styles.sparkline}>
-              <svg
-                className={styles.chart}
-                viewBox="0 0 100 30"
-                role="img"
-                aria-label={t('shared.unit.energyAlt', {
-                  actual: format(actualTotal),
-                  baseline: format(baselineTotal),
-                })}
-              >
-                <path className={styles.chartBaseline} d={toPath(energy.baseline)} />
-                <path className={styles.chartActual} d={toPath(energy.actual)} />
-              </svg>
-              <p className={styles.meta}>
-                {t('shared.unit.energyAlt', {
-                  actual: format(actualTotal),
-                  baseline: format(baselineTotal),
-                })}
-              </p>
-            </figure>
+            <TrendChart
+              lead={toTrend(energy.actual)}
+              reference={toTrend(energy.baseline)}
+              accessibleName={energySummary}
+              leadLabelKey="client.energy.actualSeries"
+              referenceLabelKey="client.energy.baselineSeries"
+            />
           ) : (
             <p className={styles.meta}>{t('loadState.noData')}</p>
           )}

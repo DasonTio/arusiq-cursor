@@ -1,0 +1,91 @@
+/* TrendChart — one measured series against its counterfactual.
+   Every value is a token; the gradient is the accent at two opacities so no
+   new colour enters the system. */
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  inline-size: 100%;
+}
+
+.plot {
+  block-size: var(--space-9);
+  inline-size: 100%;
+}
+
+/* A trend with nothing behind it is a shape; with a scale behind it, it is a
+   reading. Hairlines only — they must never compete with the series. */
+.gridline {
+  stroke: var(--color-gray-5);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.areaTop {
+  stop-color: var(--color-brand-accent);
+  stop-opacity: 0.2;
+}
+
+.areaBottom {
+  stop-color: var(--color-brand-accent);
+  stop-opacity: 0;
+}
+
+.area {
+  stroke: none;
+}
+
+/* The box is stretched to fill its panel, so the strokes must not be. */
+.lead,
+.reference {
+  fill: none;
+  stroke-width: 0.6;
+  vector-effect: non-scaling-stroke;
+}
+
+.lead {
+  stroke: var(--color-brand-accent);
+}
+
+/* D7 §11.1 — the counterfactual is dashed, never a second solid line: it is
+   not a measurement. */
+.reference {
+  stroke: var(--color-gray-4);
+  stroke-dasharray: 1.5 1;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  color: var(--color-gray-2);
+}
+
+.legendLead::before,
+.legendReference::before {
+  content: '';
+  display: inline-block;
+  inline-size: var(--space-4);
+  block-size: var(--space-1);
+  margin-inline-end: var(--space-2);
+  vertical-align: middle;
+  background: var(--color-brand-accent);
+}
+
+.legendReference::before {
+  background: var(--color-gray-4);
+  opacity: 0.7;
+}
+
+@media (min-width: 1024px) {
+  .plot {
+    block-size: var(--space-11);
+  }
+}
