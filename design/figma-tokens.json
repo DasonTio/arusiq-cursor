@@ -499,7 +499,7 @@
   "chart": {
     "strokeWidth": {
       "$type": "number",
-      "$value": 0.6,
+      "$value": 2,
       "$description": "series line + baseline + legend swatch"
     },
     "$description": "Chart geometry in USER UNITS of the shared 100 × 30 plot viewBox, not pixels (ADR-0013). Every series line in the product — the actual-vs-baseline pair and the six categorical slots — uses this one weight, and the dash patterns that carry series identity alongside colour are tuned against it."

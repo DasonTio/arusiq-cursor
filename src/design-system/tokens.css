@@ -196,7 +196,12 @@
      categorical slots are the same drawing at a glance only if they share a
      weight, and the dash patterns are tuned against this number (a 1.6-unit
      gap reads as a gap at 0.6 and as a smudge at 1.2). Not a prop.           */
-  --chart-stroke-width: 0.6; /* series line + baseline + legend swatch        */
+  /* ADR-0019 — PIXELS, not viewBox units. The plot now fills its panel
+     exactly (so a y tick and its gridline mean the same height), which means
+     the box no longer matches the viewBox ratio and a scaling stroke would
+     render a different width horizontally than vertically. The series stroke
+     is therefore `non-scaling-stroke`, and this value is read in px. */
+  --chart-stroke-width: 2; /* series line + baseline + legend swatch          */
 
   /* --- Grid · D7 §8 · margins and gutters fixed, columns flex -------------- */
   --grid-margin-mobile:  var(--space-3); /* 16px @ 375 */

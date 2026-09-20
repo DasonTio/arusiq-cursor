@@ -44,7 +44,10 @@ const Y_TOP = 2;
 const Y_BOTTOM = 28;
 /** The third channel. Sized against `--chart-stroke-width`: a marker smaller
  *  than twice the stroke reads as a kink in the line rather than as a point. */
-const MARKER_R = 1.2;
+/* In viewBox units, so it stretches with the box. Kept small enough that the
+   end marker still reads as a point rather than as a blob once the plot is a
+   wide dashboard band. */
+const MARKER_R = 0.7;
 
 /** The ramp has six colours (ADR-0011). Six is the cap, not a default. */
 const SLOTS = 6;
@@ -138,53 +141,77 @@ export function CategoricalChart({
 
   return (
     <figure className={styles.root}>
-      <p className={styles.scale}>
-        {number(top)}
-        <span className={styles.unit}>{unit}</span>
-      </p>
-      <svg
-        className={styles.plot}
-        viewBox="0 0 100 30"
-        preserveAspectRatio="xMidYMid meet"
-        role="img"
-        aria-label={t(accessibleNameKey)}
-        focusable="false"
-      >
-        {series.map((s, index) => {
-          const runs = runsFor(index);
-          const last = runs.at(-1)?.at(-1) ?? null;
-          return (
-            <g
-              key={`${index}-${s.name}`}
-              className={slotClass(index)}
-              data-series={index + 1}
-            >
-              {runs.map((run, r) =>
-                run.length > 1 ? (
-                  <path key={r} className={styles.line} d={pathOf(run)} />
-                ) : (
+      {/* Three labelled ticks instead of one floating number. The space
+          under a flat series then reads as scale rather than as a hole —
+          which is what the empty half of this plot looked like. */}
+      <p className={styles.scaleUnit}>{unit}</p>
+      <div className={styles.plotRow}>
+        <ol className={styles.ticks} aria-hidden="true">
+          {[top, floor + span / 2, floor].map((value) => (
+            <li key={value}>{number(value)}</li>
+          ))}
+        </ol>
+        <svg
+          className={styles.plot}
+          viewBox="0 0 100 30"
+          /* `meet` letterboxes the drawing inside a capped box and centres it,
+           which left the y ticks describing a plot area the series were not
+           actually drawn in. Filling the box exactly is what lets a tick and
+           its gridline mean the same height. */
+          preserveAspectRatio="none"
+          role="img"
+          aria-label={t(accessibleNameKey)}
+          focusable="false"
+        >
+          {[0.25, 0.5, 0.75].map((fraction) => {
+            const y = Y_BOTTOM - fraction * (Y_BOTTOM - Y_TOP);
+            return (
+              <line
+                className={styles.gridline}
+                key={fraction}
+                x1={X0}
+                x2={X1}
+                y1={y}
+                y2={y}
+              />
+            );
+          })}
+          {series.map((s, index) => {
+            const runs = runsFor(index);
+            const last = runs.at(-1)?.at(-1) ?? null;
+            return (
+              <g
+                key={`${index}-${s.name}`}
+                className={slotClass(index)}
+                data-series={index + 1}
+              >
+                {runs.map((run, r) =>
+                  run.length > 1 ? (
+                    <path key={r} className={styles.line} d={pathOf(run)} />
+                  ) : (
+                    <circle
+                      key={r}
+                      className={styles.point}
+                      cx={run[0].x}
+                      cy={run[0].y}
+                      r={MARKER_R}
+                    />
+                  ),
+                )}
+                {last ? (
                   <circle
-                    key={r}
-                    className={styles.point}
-                    cx={run[0].x}
-                    cy={run[0].y}
+                    className={styles.marker}
+                    data-marker="true"
+                    cx={last.x}
+                    cy={last.y}
                     r={MARKER_R}
                   />
-                ),
-              )}
-              {last ? (
-                <circle
-                  className={styles.marker}
-                  data-marker="true"
-                  cx={last.x}
-                  cy={last.y}
-                  r={MARKER_R}
-                />
-              ) : null}
-            </g>
-          );
-        })}
-      </svg>
+                ) : null}
+              </g>
+            );
+          })}
+        </svg>
+      </div>
       {domain.length > 0 ? (
         <p className={styles.axis}>
           <span>{stampLabel(domain[0])}</span>
