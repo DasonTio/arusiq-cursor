@@ -79,10 +79,15 @@
   border: 1px solid var(--color-gray-5);
 }
 
+/* A `figure` carries a UA default side margin. With `width: 100%` that is the
+   full column PLUS those margins, which pushed the chart past the content edge
+   and gave the page a horizontal scrollbar. `CategoricalChart` already zeroes
+   it; these did not. */
 .sparkline {
   display: flex;
   flex-direction: column;
   gap: var(--space-2);
+  margin: 0;
   width: 100%;
 }
 
