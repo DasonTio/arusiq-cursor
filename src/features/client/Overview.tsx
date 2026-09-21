@@ -238,18 +238,27 @@ export default function Overview() {
           </h2>
           <ul className={styles.attentionList}>
             {overview.attention.map((item) => (
-              <li key={item.id} className={styles.attentionItem}>
-                <div className={styles.attentionTop}>
-                  <SeverityIndicator severity={item.severity} />
-                  <p className={styles.attentionTitle}>{t(item.titleKey)}</p>
-                </div>
-                <p className={styles.attentionDetail}>{t(item.bodyKey)}</p>
-                {item.dueAt ? (
-                  <p className={styles.attentionDetail}>{formatDateTime(item.dueAt)}</p>
-                ) : null}
-                <Button variant="secondary" to={item.action.href}>
-                  {t(item.action.labelKey)}
-                </Button>
+              <li key={item.id}>
+                {/* The CARD is the link, as the service timeline already does.
+                    Six full-width buttons stacked down a landing screen is six
+                    times the weight of six rows, and the recommended action is
+                    kept as the hint that names it — every alert still leads
+                    somewhere (INV-NO-DEAD-END). */}
+                <Link className={styles.attentionItem} to={item.action.href}>
+                  <span className={styles.attentionTop}>
+                    <SeverityIndicator severity={item.severity} />
+                    <span className={styles.attentionTitle}>{t(item.titleKey)}</span>
+                  </span>
+                  <span className={styles.attentionDetail}>{t(item.bodyKey)}</span>
+                  {item.dueAt ? (
+                    <span className={styles.attentionDetail}>
+                      {formatDateTime(item.dueAt)}
+                    </span>
+                  ) : null}
+                  <span className={styles.attentionAction}>
+                    {t(item.action.labelKey)}
+                  </span>
+                </Link>
               </li>
             ))}
           </ul>
@@ -441,20 +450,25 @@ export default function Overview() {
             {overview.alerts
               .filter((a) => a.state === 'needsAction')
               .map((alert) => (
-                <li key={alert.id} className={styles.attentionItem}>
-                  <div className={styles.attentionTop}>
-                    <SeverityIndicator
-                      severity={alert.severity}
-                      suspected={alert.suspected}
-                    />
-                    <p className={styles.attentionTitle}>{t(alert.titleKey)}</p>
-                  </div>
-                  <p className={styles.attentionDetail}>
-                    {t(alert.impactIfIgnoredKey)}
-                  </p>
-                  <Button variant="secondary" to={alert.recommendedAction.href}>
-                    {t(alert.recommendedAction.labelKey)}
-                  </Button>
+                <li key={alert.id}>
+                  <Link
+                    className={styles.attentionItem}
+                    to={alert.recommendedAction.href}
+                  >
+                    <span className={styles.attentionTop}>
+                      <SeverityIndicator
+                        severity={alert.severity}
+                        suspected={alert.suspected}
+                      />
+                      <span className={styles.attentionTitle}>{t(alert.titleKey)}</span>
+                    </span>
+                    <span className={styles.attentionDetail}>
+                      {t(alert.impactIfIgnoredKey)}
+                    </span>
+                    <span className={styles.attentionAction}>
+                      {t(alert.recommendedAction.labelKey)}
+                    </span>
+                  </Link>
                 </li>
               ))}
           </ul>

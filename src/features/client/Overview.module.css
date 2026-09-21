@@ -136,15 +136,41 @@
 .attentionItem {
   display: grid;
   gap: var(--space-2);
+  color: inherit;
+  text-decoration: none;
 }
 
-.attentionTop,
+.attentionItem:hover {
+  border-color: var(--color-brand-accent);
+}
+
+/* The recommended action, as the hint that names it rather than as a
+   full-width button. Six of those down a landing screen was six times the
+   weight of six rows. */
+.attentionAction {
+  color: var(--color-brand-accent);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+}
+
 .roomTop,
 .timelineTop {
   display: flex;
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
+  gap: var(--space-2);
+}
+
+/* The severity and the headline are ONE statement — "Warning: a bill needs
+   paying" — so they sit together. `space-between` pushed the headline to the
+   far edge of the card, leaving the reader to jump a gap to find out what the
+   warning was about. */
+.attentionTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   gap: var(--space-2);
 }
 
