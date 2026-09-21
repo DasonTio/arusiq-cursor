@@ -86,9 +86,7 @@
 
   .table,
   .table tbody,
-  .table tr,
-  .table td,
-  .table .rowHeader {
+  .table tr {
     display: block;
     inline-size: 100%;
   }
@@ -102,9 +100,19 @@
     border-block-end: none;
   }
 
+  /* Label BESIDE the value, not above it.
+     Stacking them was costing a line per column: the settings thresholds are
+     five columns over twenty-four rows, so the phone frame ran to 6,619 px —
+     taller than the deck of cards the table replaced, which rather defeats
+     the point. A label and its value on one line halves it. */
   .table td,
   .table .rowHeader {
-    padding: var(--space-1) 0;
+    display: grid;
+    grid-template-columns: minmax(0, var(--space-11)) minmax(0, 1fr);
+    align-items: baseline;
+    gap: var(--space-3);
+    padding-block: var(--space-1);
+    padding-inline: 0;
     border-block-end: none;
     text-align: start;
     white-space: normal;
@@ -113,9 +121,27 @@
   .table td::before,
   .table .rowHeader::before {
     content: attr(data-label);
-    display: block;
     font-size: var(--font-size-caption);
     line-height: var(--line-height-caption);
     color: var(--color-gray-2);
+  }
+
+  /* The row's own name leads it, at full width — it is the heading of the
+     block, not one of its fields. */
+  .table .rowHeader {
+    display: block;
+    padding-block-end: var(--space-1);
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-md);
+  }
+
+  .table .rowHeader::before {
+    display: none;
+  }
+
+  /* A numeric column is right-aligned against a column edge that no longer
+     exists once the row is a block. */
+  .numeric {
+    text-align: start;
   }
 }
