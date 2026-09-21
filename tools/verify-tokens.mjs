@@ -28,8 +28,38 @@ const BREAKPOINTS = new Set([320, 375, 768, 1024, 1440, 1536]);
 
 const EXEMPT = /(^|\s)\/[/*]\s*design-system-exempt/;
 
+/**
+ * A selector list that never reaches its rule — `.chartActual,` followed by an
+ * `@media`, left behind when the rule under it was deleted.
+ *
+ * Browsers drop the invalid rule silently, every gate passed, and the screens
+ * looked right; `lightningcss` refuses it, so `npm run build` had been failing
+ * with "Invalid empty selector" and no file name for however long it took
+ * anyone to run a production build. Caught here because this is the tool that
+ * already reads every stylesheet line by line.
+ */
+function danglingSelectors(file, text) {
+  if (!file.endsWith('.css')) return;
+  const stripped = text.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
+  const lines = stripped.split('\n');
+  lines.forEach((raw, i) => {
+    if (!raw.trimEnd().endsWith(',')) return;
+    // The next line with anything on it must continue the selector list.
+    const next = lines.slice(i + 1).find((l) => l.trim() !== '');
+    if (next === undefined || /^\s*@/.test(next))
+      add(
+        file,
+        i + 1,
+        'dangling-selector',
+        'a selector list ends in a comma and never reaches a rule — the whole list is dropped by the browser and refused by the CSS minifier',
+      );
+  });
+}
+
 for (const file of files) {
-  const lines = readFileSync(file, 'utf8').split('\n');
+  const source = readFileSync(file, 'utf8');
+  danglingSelectors(file, source);
+  const lines = source.split('\n');
   lines.forEach((raw, i) => {
     const n = i + 1;
     const line = raw.split(/\/\/|\/\*/)[0]; // ignore trailing comments

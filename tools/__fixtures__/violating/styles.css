@@ -12,3 +12,12 @@
 @media (min-width: 900px) {
   .bad { color: #123456; }
 }
+
+/* A selector list that never reaches its rule: the browser drops the whole
+   list silently and the CSS minifier refuses to build at all. */
+.chartActual,
+@media (min-width: 768px) {
+  .metrics {
+    gap: var(--space-3);
+  }
+}

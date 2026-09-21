@@ -35,6 +35,7 @@ const EXPECTED = {
     'light-mode-only',
     'unknown-breakpoint',
     'surface-dependent-foreground',
+    'dangling-selector',
   ],
   'tools/verify-provenance.mjs': [
     'metric-needs-provenance',

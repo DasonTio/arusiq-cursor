@@ -86,7 +86,6 @@
   border: 1px solid var(--color-gray-5);
 }
 
-.chartActual,
 @media (min-width: 768px) {
   .metrics,
   .list {
