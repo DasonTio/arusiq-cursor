@@ -19,6 +19,8 @@ import {
   type EnergySeries,
   type Property,
 } from '../../lib/simulation/index.ts';
+import { Factory, TrendingDown } from 'lucide-react';
+import { FactStrip } from '../../patterns/FactStrip.tsx';
 import { MetricGrid } from '../../patterns/MetricGrid.tsx';
 import { MetricTile } from '../../patterns/MetricTile.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
@@ -198,7 +200,12 @@ export default function Carbon() {
         </Button>
       </div>
       <MetricGrid>
-        <MetricTile>
+        {/* Carbon is the ECO channel (`35-dashboard-composition.md` §1), and
+            this is the screen the channel exists for — it was the only KPI
+            row in the product with no chip on either tile. The tone names the
+            channel, not a verdict: emitting is not "bad orange" and avoiding
+            is not "good green", they are both carbon. */}
+        <MetricTile icon={Factory} tone="eco">
           <Metric
             labelKey="client.carbon.scope2"
             value={carbon.scope2KgCO2e.value}
@@ -207,7 +214,7 @@ export default function Carbon() {
             lastSeen={carbon.scope2KgCO2e.lastSeen}
           />
         </MetricTile>
-        <MetricTile>
+        <MetricTile icon={TrendingDown} tone="eco">
           <Metric
             labelKey="client.carbon.avoided"
             value={carbon.avoidedKgCO2e.value}
@@ -217,27 +224,52 @@ export default function Carbon() {
           />
         </MetricTile>
       </MetricGrid>
-      <p className={styles.meta}>
-        {t('client.carbon.gridFactor', {
-          value: format(carbon.gridFactor.value),
-          source: carbon.gridFactor.source,
-          date: formatDate(carbon.gridFactor.effectiveFrom),
-        })}
-      </p>
-      <ProvenanceChip provenance={carbon.scope2KgCO2e.provenance} />
-      {energy ? (
-        <p className={styles.meta}>
-          {t('client.carbon.completeness', {
-            value: format(energy.completeness * 100),
-          })}
-        </p>
-      ) : null}
-      <Button
-        variant="ghost"
-        to={energy?.method.href ?? '/insights?method=adjusted-baseline-v2'}
-      >
-        {t('client.carbon.methodLink')}
-      </Button>
+      {/* D6 FR-70 — the grid factor is displayed, never hidden, and it is
+          not a footnote: it is the number every figure above was multiplied
+          by. It and the completeness were loose paragraphs on the canvas
+          beside a ghost button. */}
+      <div className={styles.methodPanel}>
+        <FactStrip
+          columns={3}
+          fields={[
+            {
+              labelKey: 'client.carbon.gridFactorLabel',
+              value: t('client.carbon.gridFactorValue', {
+                value: format(carbon.gridFactor.value),
+              }),
+            },
+            {
+              labelKey: 'client.carbon.sourceLabel',
+              value: carbon.gridFactor.source,
+            },
+            {
+              labelKey: 'client.carbon.fromLabel',
+              value: (
+                <time dateTime={carbon.gridFactor.effectiveFrom}>
+                  {formatDate(carbon.gridFactor.effectiveFrom)}
+                </time>
+              ),
+            },
+            ...(energy
+              ? [
+                  {
+                    labelKey: 'client.carbon.completenessLabel' as const,
+                    value: t('client.carbon.completenessValue', {
+                      value: format(energy.completeness * 100),
+                    }),
+                  },
+                ]
+              : []),
+          ]}
+        />
+        <ProvenanceChip provenance={carbon.scope2KgCO2e.provenance} />
+        <Button
+          variant="ghost"
+          to={energy?.method.href ?? '/insights?method=adjusted-baseline-v2'}
+        >
+          {t('client.carbon.methodLink')}
+        </Button>
+      </div>
       <section className={styles.section}>
         <SectionHeader titleKey="client.carbon.reportTitle" />
         <p>

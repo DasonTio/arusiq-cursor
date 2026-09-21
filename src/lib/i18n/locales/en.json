@@ -1089,7 +1089,13 @@
       "methodLink": "How this was calculated",
       "days7": "Last 7 days",
       "days30": "Last 30 days",
-      "completeness": "Completeness {{value}} %"
+      "completeness": "Completeness {{value}} %",
+      "gridFactorLabel": "Grid factor",
+      "gridFactorValue": "{{value}} kgCO₂e per kWh",
+      "sourceLabel": "Source",
+      "fromLabel": "Effective from",
+      "completenessLabel": "Completeness",
+      "completenessValue": "{{value}} %"
     },
     "billing": {
       "title": "Bills & notices",

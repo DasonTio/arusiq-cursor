@@ -1089,7 +1089,13 @@
       "methodLink": "Cara ini dihitung",
       "days7": "7 hari terakhir",
       "days30": "30 hari terakhir",
-      "completeness": "Kelengkapan {{value}} %"
+      "completeness": "Kelengkapan {{value}} %",
+      "gridFactorLabel": "Faktor jaringan",
+      "gridFactorValue": "{{value}} kgCO₂e per kWh",
+      "sourceLabel": "Sumber",
+      "fromLabel": "Berlaku sejak",
+      "completenessLabel": "Kelengkapan",
+      "completenessValue": "{{value}} %"
     },
     "billing": {
       "title": "Tagihan & pemberitahuan",

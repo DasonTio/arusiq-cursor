@@ -77,3 +77,9 @@
 .toneInfo {
   --tile-tone: var(--color-state-info-text);
 }
+
+/* Grey is a severity, not an absence of one, and a count of silent units is
+   a severity count like any other — so the tile can say so. */
+.toneUnknown {
+  --tile-tone: var(--color-severity-unknown-text);
+}

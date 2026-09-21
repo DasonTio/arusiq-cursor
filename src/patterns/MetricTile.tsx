@@ -17,7 +17,7 @@ import { Icon } from '../components/Icon.tsx';
 import type { I18nKey } from '../components/contracts.ts';
 import styles from './MetricGrid.module.css';
 
-export type TileTone = 'accent' | 'eco' | 'info' | 'warning' | 'critical';
+export type TileTone = 'accent' | 'eco' | 'info' | 'warning' | 'critical' | 'unknown';
 
 const TONE_CLASS: Record<TileTone, string> = {
   accent: '',
@@ -25,6 +25,7 @@ const TONE_CLASS: Record<TileTone, string> = {
   info: styles.toneInfo,
   warning: styles.toneWarning,
   critical: styles.toneCritical,
+  unknown: styles.toneUnknown,
 };
 
 export function MetricTile({

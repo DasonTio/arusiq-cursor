@@ -134,3 +134,25 @@
     padding: var(--space-4);
   }
 }
+
+/* client.carbon — the method's own facts. The grid factor is what every
+   figure above was multiplied by (D6 FR-70), and it sat on the canvas as a
+   grey sentence beside a ghost button. */
+.methodPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  inline-size: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 1024px) {
+  .methodPanel {
+    padding: var(--space-4);
+  }
+}

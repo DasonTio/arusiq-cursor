@@ -20,6 +20,7 @@ import {
   type WorkOrderSummary,
 } from '../../lib/simulation/index.ts';
 import { MetricGrid } from '../../patterns/MetricGrid.tsx';
+import { CalendarClock, CalendarDays, ShieldAlert, WifiOff } from 'lucide-react';
 import { MetricTile } from '../../patterns/MetricTile.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { PriorityList, type PriorityGroup } from '../../patterns/PriorityList.tsx';
@@ -163,7 +164,12 @@ export default function Queue() {
     <div className={styles.root}>
       <PageHeader titleKey="tech.queue.title" contextKey="tech.queue.purpose" />
       <MetricGrid>
-        <MetricTile>
+        {/* Each of these IS a severity count or a workload figure, so the
+            chip carries the channel it belongs to rather than decorating the
+            box. Without an icon `MetricTile` renders no chip at all, which is
+            why this row was four grey rectangles while the client's home and
+            the HQ overview were not. */}
+        <MetricTile icon={ShieldAlert} tone="critical">
           <Metric
             labelKey="tech.queue.critical"
             value={critical.length}
@@ -171,7 +177,7 @@ export default function Queue() {
             provenance="simulated"
           />
         </MetricTile>
-        <MetricTile>
+        <MetricTile icon={CalendarClock} tone="accent">
           <Metric
             labelKey="tech.queue.today"
             value={today.length}
@@ -179,7 +185,7 @@ export default function Queue() {
             provenance="simulated"
           />
         </MetricTile>
-        <MetricTile>
+        <MetricTile icon={CalendarDays} tone="info">
           <Metric
             labelKey="tech.queue.week"
             value={week.length}
@@ -187,7 +193,9 @@ export default function Queue() {
             provenance="simulated"
           />
         </MetricTile>
-        <MetricTile>
+        {/* Silent units are grey, and grey is a severity rather than the
+            absence of one (§4.3) — so the tile says grey, not orange. */}
+        <MetricTile icon={WifiOff} tone="unknown">
           <Metric
             labelKey="tech.queue.silent"
             value={silent.length}
