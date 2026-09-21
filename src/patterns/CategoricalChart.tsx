@@ -61,6 +61,7 @@ export function CategoricalChart({
   provenance,
   textAlternative,
   methodHref,
+  partialFrom = null,
 }: CategoricalChartProps) {
   const { t, i18n } = useTranslation();
 
@@ -139,6 +140,14 @@ export function CategoricalChart({
 
   const slotClass = (index: number) => styles[`s${index + 1}`];
 
+  /** The x of a final point that is only PART of a period — today so far. It
+   *  is a true reading and it is also a fraction of the days beside it, so a
+   *  chart that does not mark it draws a collapse that never happened. */
+  const partialX =
+    partialFrom !== null && domain.at(-1) === partialFrom
+      ? xOf(domain.length - 1)
+      : null;
+
   return (
     <figure className={styles.root}>
       {/* Three labelled ticks instead of one floating number. The space
@@ -200,8 +209,13 @@ export function CategoricalChart({
                 )}
                 {last ? (
                   <circle
-                    className={styles.marker}
+                    className={
+                      last.x === partialX
+                        ? `${styles.marker} ${styles.partial}`
+                        : styles.marker
+                    }
                     data-marker="true"
+                    data-partial={last.x === partialX ? 'true' : undefined}
                     cx={last.x}
                     cy={last.y}
                     r={MARKER_R}
@@ -246,6 +260,10 @@ export function CategoricalChart({
           );
         })}
       </ul>
+
+      {partialX !== null ? (
+        <p className={styles.note}>{t('chart.partialDay')}</p>
+      ) : null}
 
       <p className={styles.provenance}>
         <ProvenanceChip provenance={provenance} />

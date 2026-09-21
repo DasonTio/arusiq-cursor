@@ -1433,6 +1433,8 @@
     "legend": "Series",
     "dataTable": "View the data",
     "time": "Time",
-    "method": "How this is calculated"
+    "method": "How this is calculated",
+    "partialDay": "The last point is today so far, not a whole day.",
+    "measuredTo": "Measured to {{time}}. The normal runs to the end of the period."
   }
 }

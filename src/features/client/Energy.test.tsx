@@ -95,8 +95,10 @@ describe('client.energy — actual and baseline describe the same days · FR-61'
     const baselineEnd = lastX('path[class*="reference"]');
     const actualEnd = lastX('path[class*="lead"]');
     // The baseline covers three more days, so it must reach further right.
-    // Both ending at x=100 is the bug: two different spans, one width.
-    expect(baselineEnd).toBeCloseTo(100, 1);
+    // Both ending at the same x is the bug: two different spans, one width.
+    // The right edge is 98.5 — the plot is inset so an end marker drawn on
+    // the last point is not clipped in half.
+    expect(baselineEnd).toBeCloseTo(98.5, 1);
     expect(actualEnd).toBeLessThan(baselineEnd);
   });
 });

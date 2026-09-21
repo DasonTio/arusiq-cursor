@@ -115,6 +115,23 @@
   stroke: none;
 }
 
+/* A hollow end marker: the period's last point is still running. "The series
+   ends here" and "this point is not finished" are two different statements
+   and get two different marks. */
+.partial {
+  fill: var(--surface-raised);
+  stroke: var(--series-color);
+  stroke-width: var(--chart-stroke-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.note {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-gray-2);
+}
+
 /* --- axis and scale ----------------------------------------------------- */
 
 /* Caption size in gray-2 (D7 §12.2) — the lighter greys most chart libraries

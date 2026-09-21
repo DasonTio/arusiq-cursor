@@ -1,6 +1,12 @@
 /* TrendChart — one measured series against its counterfactual.
    Every value is a token; the gradient is the accent at two opacities so no
-   new colour enters the system. */
+   new colour enters the system.
+
+   It was a line in a box: `block-size: var(--space-9)` on a plot that fills
+   its panel's width, which at 1440 is a nine-to-one band. Lines in a band
+   that shallow have no shape, and there was no scale, no date and no unit to
+   read them against. It is now the same construction as `CategoricalChart`:
+   an aspect-ratio box with a ceiling, y ticks beside it, dates beneath. */
 
 .root {
   display: flex;
@@ -10,9 +16,52 @@
   inline-size: 100%;
 }
 
+/* The ratio governs the small end, the ceiling governs the large one: ten by
+   three is right at the phone frame and half a page on a monitor. */
 .plot {
-  block-size: var(--space-9);
   inline-size: 100%;
+  aspect-ratio: 10 / 3;
+  max-block-size: var(--space-11);
+  overflow: visible;
+}
+
+.plotRow {
+  display: flex;
+  align-items: stretch;
+  gap: var(--space-2);
+  inline-size: 100%;
+}
+
+.ticks {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  flex-shrink: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-gray-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.scaleUnit,
+.note {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-gray-2);
+}
+
+.axis {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin: 0;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-gray-2);
 }
 
 /* A trend with nothing behind it is a shape; with a scale behind it, it is a
@@ -41,7 +90,7 @@
 .lead,
 .reference {
   fill: none;
-  stroke-width: 0.6;
+  stroke-width: var(--chart-stroke-width);
   vector-effect: non-scaling-stroke;
 }
 
@@ -50,10 +99,44 @@
 }
 
 /* D7 §11.1 — the counterfactual is dashed, never a second solid line: it is
-   not a measurement. */
+   not a measurement.
+
+   ADR-0019 — PIXELS, not viewBox units. Under `non-scaling-stroke` a dash
+   authored as `1.5 1` renders at a pixel and a half and reads as solid, which
+   is exactly how the second channel was lost on the categorical chart. */
 .reference {
   stroke: var(--color-gray-4);
-  stroke-dasharray: 1.5 1;
+  stroke-dasharray: 6 4;
+}
+
+/* Where the measurement stops. Filled for a whole day; hollow for a day still
+   running, so "the meter ends here" and "this day is not over" are two marks
+   and not one. */
+.marker {
+  fill: var(--color-brand-accent);
+  stroke: none;
+}
+
+.partialMarker,
+.partialReference {
+  fill: var(--surface-raised);
+  stroke-width: var(--chart-stroke-width);
+  vector-effect: non-scaling-stroke;
+}
+
+.partialMarker {
+  stroke: var(--color-brand-accent);
+}
+
+/* The counterfactual's end carries the same two marks in its own grey, so the
+   line that is not a measurement never borrows the measurement's colour. */
+.referenceMarker {
+  fill: var(--color-gray-4);
+  stroke: none;
+}
+
+.partialReference {
+  stroke: var(--color-gray-4);
 }
 
 .legend {
@@ -86,6 +169,6 @@
 
 @media (min-width: 1024px) {
   .plot {
-    block-size: var(--space-11);
+    max-block-size: calc(var(--space-11) * 2);
   }
 }

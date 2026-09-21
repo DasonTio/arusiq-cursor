@@ -323,6 +323,15 @@ export interface EnergySeries {
   provenance: Provenance;
   /** D6 FR-62 — savings attributed to the lever that produced them. */
   levers: { key: string; kWh: number }[];
+  /**
+   * The timestamp of the final day WHEN THAT DAY IS STILL RUNNING, else null.
+   *
+   * The reading for today is the energy drawn so far, which is true and is
+   * also lower than every whole day beside it. Plotted without saying so it
+   * reads as a collapse in consumption on the last day of every chart in the
+   * product. The series states it; the chart marks it.
+   */
+  partialFrom: string | null;
 }
 
 export interface CarbonSummary {

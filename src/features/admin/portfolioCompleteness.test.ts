@@ -24,6 +24,7 @@ const site = (
     completeness,
     provenance,
     levers: [],
+    partialFrom: null,
   },
 });
 

@@ -137,6 +137,9 @@ export default function EnergyPortfolio() {
           unit="kWh"
           provenance={weakestProvenance(rows.map((row) => row.series.provenance))}
           textAlternative={{ kind: 'table' }}
+          /* Every site's series runs to the same clock, so the first row's
+             part-day is every row's part-day. */
+          partialFrom={rows[0]?.series.partialFrom ?? null}
         />
       ) : (
         <p className={styles.meta}>{t('admin.energy-portfolio.chartTooMany')}</p>

@@ -1433,6 +1433,8 @@
     "legend": "Seri",
     "dataTable": "Lihat datanya",
     "time": "Waktu",
-    "method": "Cara perhitungannya"
+    "method": "Cara perhitungannya",
+    "partialDay": "Titik terakhir adalah hari ini sejauh ini, bukan satu hari penuh.",
+    "measuredTo": "Terukur sampai {{time}}. Garis normal berjalan sampai akhir periode."
   }
 }

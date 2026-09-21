@@ -538,6 +538,8 @@ function Sparkline({ series }: { series: EnergySeries }) {
       accessibleName={summary}
       leadLabelKey="client.energy.actualSeries"
       referenceLabelKey="client.energy.baselineSeries"
+      unit="kWh"
+      partialFrom={series.partialFrom}
     />
   );
 }

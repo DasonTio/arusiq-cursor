@@ -71,6 +71,8 @@ function Sparkline({ overview }: { overview: ClientOverview }) {
       accessibleName={summary}
       leadLabelKey="client.overview.actualSeries"
       referenceLabelKey="client.overview.baselineSeries"
+      unit="kWh"
+      partialFrom={overview.energy.partialFrom}
     />
   );
 }
@@ -479,11 +481,16 @@ export default function Overview() {
         <h2 className={styles.sectionTitle} id="home-energy">
           {t('client.overview.sparklineName')}
         </h2>
-        <Sparkline overview={overview} />
-        <ProvenanceChip provenance={overview.energy.provenance} />
-        <Button variant="ghost" to={overview.energy.method.href}>
-          {t('client.overview.methodLink')}
-        </Button>
+        {/* The chart was drawn straight onto the canvas: a line, a legend and
+            a link floating on grey with no edge to say where the figure
+            began. Same panel as every other block on the screen. */}
+        <div className={styles.chartPanel}>
+          <Sparkline overview={overview} />
+          <ProvenanceChip provenance={overview.energy.provenance} />
+          <Button variant="ghost" to={overview.energy.method.href}>
+            {t('client.overview.methodLink')}
+          </Button>
+        </div>
       </section>
 
       <section className={styles.section} aria-labelledby="home-service">

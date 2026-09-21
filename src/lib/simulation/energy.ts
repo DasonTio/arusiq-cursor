@@ -37,6 +37,7 @@ export const emptyEnergySeries = (): EnergySeries => ({
   completeness: 0,
   provenance: 'simulated',
   levers: [],
+  partialFrom: null,
 });
 
 /** A unit's counterfactual is 14–22 % above what it actually drew: the
@@ -159,12 +160,22 @@ export const buildEnergySeries = (
   // (INV-AGGREGATE). The label is decided here, at the source.
   const basis: Provenance = assetBasis(dataset, assetId);
 
+  // The final day is only a whole day once it is over. `unitDays` already
+  // scales today's reading by the fraction elapsed; this is where that fact
+  // leaves the generator, so no screen has to work it out from a clock.
+  const lastDay = days.at(-1);
+  const partialFrom =
+    lastDay && lastDay.getTime() === startOfLocalDay(now).getTime()
+      ? lastDay.toISOString()
+      : null;
+
   return {
     actual,
     baseline,
     method: energyMethod(),
     completeness,
     provenance: basis,
+    partialFrom,
     levers: SAVING_LEVERS.map((l) => ({
       key: l.key,
       kWh: round(savedKWh * l.share, 2),

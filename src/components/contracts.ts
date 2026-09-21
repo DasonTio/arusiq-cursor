@@ -295,6 +295,19 @@ export interface TrendChartProps {
   accessibleName: (totals: { lead: number; reference: number }) => string;
   leadLabelKey: I18nKey;
   referenceLabelKey: I18nKey;
+  /**
+   * The SYMBOL — "kWh", "IDR". Required for the same reason it is on
+   * `CategoricalChartProps`: a scale without a unit is a shape, and the chart
+   * cannot label its own y axis without one.
+   */
+  unit: string;
+  /**
+   * The timestamp of a final point that is a PART of a period rather than a
+   * whole one — today so far. It is a true reading and it is also lower than
+   * every whole day beside it, so the chart marks it rather than letting it
+   * read as a collapse. `EnergySeries.partialFrom` carries it.
+   */
+  partialFrom?: string | null;
 }
 
 /**
@@ -326,6 +339,9 @@ export interface CategoricalChartProps {
   provenance: Provenance;
   textAlternative: CategoricalTextAlternative;
   methodHref?: string;
+  /** As on `TrendChartProps`: the timestamp of a final point that covers part
+   *  of a period rather than the whole of it. Marked, never smoothed away. */
+  partialFrom?: string | null;
 }
 
 /* ------------------------------------------------------------------ carbon */

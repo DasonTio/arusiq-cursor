@@ -516,6 +516,8 @@ export default function Unit() {
               accessibleName={energySummary}
               leadLabelKey="client.energy.actualSeries"
               referenceLabelKey="client.energy.baselineSeries"
+              unit="kWh"
+              partialFrom={energy.partialFrom}
             />
           ) : (
             <p className={styles.meta}>{t('loadState.noData')}</p>

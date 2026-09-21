@@ -29,6 +29,7 @@ const gapInTheMiddle: EnergySeries = {
   completeness: 0.75,
   provenance: 'simulated',
   levers: [],
+  partialFrom: null,
 };
 
 describe('admin.energy-portfolio — saving joined by day · FR-62', () => {

@@ -352,3 +352,24 @@
   color: var(--color-brand-accent);
   font-weight: var(--font-weight-semibold);
 }
+
+/* The energy chart's panel. `.section` is `flex-start`, so the panel states
+   its own width rather than shrinking to the legend. */
+.chartPanel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-3);
+  inline-size: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 1024px) {
+  .chartPanel {
+    padding: var(--space-4);
+  }
+}
