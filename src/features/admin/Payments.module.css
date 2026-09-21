@@ -1,0 +1,124 @@
+/* admin.payments — the accounts table. One panel, one table: the same seven
+ * fields repeat on every account, so the screen is a table, not a deck of
+ * stacked-sentence cards (§3 "the text-dump card").
+ *
+ * Numerics (balance, due) right-align. Tabular figures are set once,
+ * globally, on body (§30) — they are inherited here, never re-declared.
+ *
+ * Below 768 px the table recomposes: the header is clipped (still in the
+ * a11y tree), every cell becomes a block and carries its column name in a
+ * `data-label` pseudo-element — recompose, don't shrink. */
+
+.panel {
+  inline-size: 100%;
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
+}
+
+.table {
+  inline-size: 100%;
+  border-collapse: collapse;
+}
+
+.head th {
+  padding-block: var(--space-2);
+  padding-inline: var(--space-3);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-2);
+  text-align: start;
+  vertical-align: bottom;
+  border-block-end: 1px solid var(--color-gray-4);
+}
+
+.table td {
+  padding-block: var(--space-3);
+  padding-inline: var(--space-3);
+  vertical-align: middle;
+  border-block-end: 1px solid var(--color-gray-5);
+}
+
+.table tbody tr:last-child > * {
+  border-block-end: none;
+}
+
+.site {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-1);
+  text-align: start;
+}
+
+.numeric {
+  text-align: end;
+  /* A balance or a due date is one figure — it never wraps onto two lines. */
+  white-space: nowrap;
+}
+
+.rung {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.approvals p {
+  margin: 0;
+  color: var(--color-gray-2);
+}
+
+.approvals p + p {
+  margin-block-start: var(--space-1);
+}
+
+/* BELOW the 768 frame the columns no longer hold, so the table
+ * recomposes: the header is clipped (still in the a11y tree), every cell
+ * becomes a block and carries its column name in a `data-label`
+ * pseudo-element — recompose, don't shrink. */
+@media (max-width: 767px) {
+  /* Keep the header in the accessibility tree, off the canvas. */
+  .head {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  .table,
+  .table tbody,
+  .table tr,
+  .table td,
+  .table .site {
+    display: block;
+    inline-size: 100%;
+  }
+
+  .table tr {
+    padding: var(--space-3);
+    border-block-end: 1px solid var(--color-gray-5);
+  }
+
+  .table tbody tr:last-child {
+    border-block-end: none;
+  }
+
+  .table td {
+    padding: var(--space-1) 0;
+    border-block-end: none;
+    text-align: start;
+    white-space: normal;
+  }
+
+  .table td::before {
+    content: attr(data-label);
+    display: block;
+    font-size: var(--font-size-caption);
+    line-height: var(--line-height-caption);
+    color: var(--color-gray-2);
+  }
+}
