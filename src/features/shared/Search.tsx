@@ -4,9 +4,12 @@
  * @requirement FR-13
  */
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button.tsx';
 import { Textfield } from '../../components/Textfield.tsx';
+import { Icon } from '../../components/Icon.tsx';
+import { ChevronRight } from 'lucide-react';
 import { LOAD_STATE, type LoadState } from '../../lib/domain/loadState.ts';
 import {
   links,
@@ -18,6 +21,7 @@ import {
 } from '../../lib/simulation/index.ts';
 import { useSession } from '../auth/session.ts';
 import styles from './Screen.module.css';
+import results from './Search.module.css';
 
 const matches = (haystack: string, query: string): boolean =>
   haystack.toLowerCase().includes(query.trim().toLowerCase());
@@ -142,45 +146,69 @@ export default function Search() {
         onChange={setQuery}
       />
       {none ? <p>{t('shared.search.noMatch')}</p> : null}
-      <h2 className={styles.sectionTitle}>{t('shared.search.units')}</h2>
-      <ul className={styles.list}>
-        {units.map((unit) => {
-          return (
-            <li key={unit.id} className={styles.card}>
-              <p className={styles.cardTitle}>{unit.name}</p>
-              <Button variant="ghost" to={unitHref(unit.id)}>
-                {unit.name}
-              </Button>
-            </li>
-          );
-        })}
-      </ul>
-      <h2 className={styles.sectionTitle}>{t('shared.search.spaces')}</h2>
-      <ul className={styles.list}>
-        {rooms.map((room) => {
-          return (
-            <li key={room.id} className={styles.card}>
-              <p className={styles.cardTitle}>{room.name}</p>
-              <Button variant="ghost" to={roomHref(room.id)}>
-                {room.name}
-              </Button>
-            </li>
-          );
-        })}
-      </ul>
-      <h2 className={styles.sectionTitle}>{t('shared.search.visits')}</h2>
-      <ul className={styles.list}>
-        {visits.map((order) => {
-          return (
-            <li key={order.id} className={styles.card}>
-              <p className={styles.cardTitle}>{t(order.titleKey)}</p>
-              <Button variant="ghost" to={order.action.href}>
-                {t(order.action.labelKey)}
-              </Button>
-            </li>
-          );
-        })}
-      </ul>
+
+      {/* Every result used to be a card holding the name as text and then the
+          SAME name again as the label of a ghost button — thirty-six cards,
+          3,226 px, and each one said its one word twice. The row is the link
+          and the name appears once. */}
+      {units.length > 0 ? (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>{t('shared.search.units')}</h2>
+          <ul
+            className={`${results.list} ${results.compact}`}
+            aria-label={t('shared.search.units')}
+          >
+            {units.map((unit) => (
+              <li key={unit.id}>
+                <Link className={results.row} to={unitHref(unit.id)}>
+                  <span className={results.name}>{unit.name}</span>
+                  <Icon icon={ChevronRight} size={16} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {rooms.length > 0 ? (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>{t('shared.search.spaces')}</h2>
+          <ul
+            className={`${results.list} ${results.compact}`}
+            aria-label={t('shared.search.spaces')}
+          >
+            {rooms.map((room) => (
+              <li key={room.id}>
+                <Link className={results.row} to={roomHref(room.id)}>
+                  <span className={results.name}>{room.name}</span>
+                  <Icon icon={ChevronRight} size={16} />
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {visits.length > 0 ? (
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>{t('shared.search.visits')}</h2>
+          <ul className={results.list} aria-label={t('shared.search.visits')}>
+            {visits.map((order) => (
+              <li key={order.id}>
+                {/* A visit's errand genuinely differs — "Do this visit" is
+                    not "Open the record" — so it keeps its words. */}
+                <Link className={results.row} to={order.action.href}>
+                  <span className={results.name}>{t(order.titleKey)}</span>
+                  {order.unitName ? (
+                    <span className={results.where}>{order.unitName}</span>
+                  ) : null}
+                  <span className={results.hint}>{t(order.action.labelKey)}</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
     </div>
   );
 }

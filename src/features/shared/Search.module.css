@@ -1,0 +1,79 @@
+/* shared.search — the results.
+ *
+ * Every result was a card holding the name as text and then the SAME name
+ * again as the label of a ghost button beside it: thirty-six cards, 3,226 px,
+ * each one saying its single word twice and carrying two ways to reach one
+ * place. The same defect the space tree had, on the screen whose entire job
+ * is getting somewhere quickly.
+ *
+ * The row is the link and the name appears once. */
+
+.list {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: var(--space-2);
+  list-style: none;
+  inline-size: 100%;
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  min-block-size: var(--target-min);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-md);
+  color: var(--color-gray-3);
+  text-decoration: none;
+}
+
+.row:hover {
+  background: color-mix(in srgb, var(--color-brand-accent) 8%, var(--surface-raised));
+}
+
+.name {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-1);
+  min-inline-size: 0;
+}
+
+/* Which unit the visit is on. Seven rows reading "Repair visit" are not a
+   result set a reader can choose from. */
+.where {
+  grid-column: 1;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  color: var(--color-gray-2);
+}
+
+.hint {
+  grid-column: 2;
+  grid-row: 1 / -1;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-brand-accent);
+  text-align: end;
+}
+
+/* A unit or a space is one short name. One per row leaves a 1440 px panel
+   holding the word "Dining", so the two name-only groups run in columns —
+   the visits group does not, because its rows carry an errand as well. */
+@media (min-width: 768px) {
+  .compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1440px) {
+  .compact {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
