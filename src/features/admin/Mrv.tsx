@@ -16,11 +16,14 @@ import {
   type CarbonSummary,
   type Property,
 } from '../../lib/simulation/index.ts';
+import { DataTable } from '../../patterns/DataTable.tsx';
+import { FactStrip } from '../../patterns/FactStrip.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { ADMIN_REPORTING_VIEWS } from '../../routes/navigation.ts';
 import { useSession } from '../auth/session.ts';
 import { ViewTabs } from '../shared/ViewTabs.tsx';
 import styles from '../shared/Screen.module.css';
+import mrv from './Mrv.module.css';
 
 export default function Mrv() {
   const { t, i18n } = useTranslation();
@@ -125,38 +128,79 @@ export default function Mrv() {
     <div className={styles.root}>
       <ViewTabs items={ADMIN_REPORTING_VIEWS} />
       <PageHeader titleKey="admin.mrv.title" contextKey="admin.mrv.purpose" />
+      {/* D6 FR-70 — the factor every figure below was multiplied by. It was a
+          grey sentence floating above them, as it was on `client.carbon`. */}
       {factor ? (
-        <p className={styles.meta}>
-          {t('client.carbon.gridFactor', {
-            value: format(factor.value),
-            source: factor.source,
-            date: formatDate(factor.effectiveFrom),
-          })}
-        </p>
+        <div className={mrv.factorPanel}>
+          <FactStrip
+            columns={3}
+            fields={[
+              {
+                labelKey: 'client.carbon.gridFactorLabel',
+                value: t('client.carbon.gridFactorValue', {
+                  value: format(factor.value),
+                }),
+              },
+              { labelKey: 'client.carbon.sourceLabel', value: factor.source },
+              {
+                labelKey: 'client.carbon.fromLabel',
+                value: (
+                  <time dateTime={factor.effectiveFrom}>
+                    {formatDate(factor.effectiveFrom)}
+                  </time>
+                ),
+              },
+            ]}
+          />
+        </div>
       ) : null}
-      <ul className={styles.list}>
-        {rows.map((row) => {
-          return (
-            <li key={row.property.id} className={styles.card}>
-              <p className={styles.cardTitle}>{row.property.name}</p>
+
+      {/* Two sites carrying the same two figures is a comparison, and a card
+          each puts them side by side without aligning them. A table does. */}
+      <DataTable
+        captionKey="admin.mrv.title"
+        rows={rows}
+        rowKey={(row) => row.property.id}
+        columns={[
+          {
+            key: 'site',
+            labelKey: 'admin.payments.colSite',
+            rowHeader: true,
+            nowrap: true,
+            cell: (row) => row.property.name,
+          },
+          {
+            key: 'scope2',
+            labelKey: 'client.carbon.scope2',
+            numeric: true,
+            cell: (row) => (
               <Metric
+                compact
                 labelKey="client.carbon.scope2"
                 value={row.carbon.scope2KgCO2e.value}
                 unit="kgCO₂e"
                 provenance={row.carbon.scope2KgCO2e.provenance}
                 lastSeen={row.carbon.scope2KgCO2e.lastSeen}
               />
+            ),
+          },
+          {
+            key: 'avoided',
+            labelKey: 'client.carbon.avoided',
+            numeric: true,
+            cell: (row) => (
               <Metric
+                compact
                 labelKey="client.carbon.avoided"
                 value={row.carbon.avoidedKgCO2e.value}
                 unit="kgCO₂e"
                 provenance={row.carbon.avoidedKgCO2e.provenance}
                 lastSeen={row.carbon.avoidedKgCO2e.lastSeen}
               />
-            </li>
-          );
-        })}
-      </ul>
+            ),
+          },
+        ]}
+      />
       <MockBoundary explanationKey="admin.mrv.registryMock">
         <div className={styles.choices}>
           <Button

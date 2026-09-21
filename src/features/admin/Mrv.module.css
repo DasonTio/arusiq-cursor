@@ -1,0 +1,18 @@
+/* admin.mrv — the published grid factor.
+ *
+ * D6 FR-70 requires it displayed. It is the number every figure in the table
+ * below was multiplied by, and it was a grey sentence floating above them. */
+.factorPanel {
+  inline-size: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 1024px) {
+  .factorPanel {
+    padding: var(--space-4);
+  }
+}
