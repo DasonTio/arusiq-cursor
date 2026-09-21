@@ -51,7 +51,26 @@
   color: var(--color-severity-unknown-text);
 }
 
+/* "No data" is a WORD, not a figure. At display size it took three lines in
+   a room card and shouted louder than the readings that exist — which is the
+   opposite of what grey means. It keeps the unknown colour, the shape of the
+   slot and its last-seen line; it just stops being set like a number. */
+.missing .value {
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  font-weight: var(--font-weight-semibold);
+}
+
 @media (min-width: 768px) {
+  /* The step-down above must survive the desktop bump below, or "No data"
+     goes back to display size at the frame where the room grid is four
+     across. */
+  .missing .value {
+    font-size: var(--font-size-md);
+    line-height: var(--line-height-md);
+  }
+
   .value {
     /* Same variable as the base rule, so a context that steps the figure
        down keeps it stepped down here. Without this the desktop bump

@@ -246,6 +246,16 @@
   }
 }
 
+/* Eight rooms, each carrying a verdict, two readings and an equipment
+   roll-up, at two per row was a thousand pixels of the home screen for what
+   is a status board. Four across at the desktop frame, where there is room
+   for it. */
+@media (min-width: 1440px) {
+  .roomList {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 /* --- service timeline ----------------------------------------------------
    Twelve events, each with the same four fields and its own button, drawn as
    twelve cards: twelve times the visual weight of one column of rows, and no

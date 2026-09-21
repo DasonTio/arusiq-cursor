@@ -443,39 +443,12 @@ export default function Overview() {
         </ul>
       </section>
 
-      {overview.alerts.filter((a) => a.state === 'needsAction').length > 0 ? (
-        <section className={styles.section} aria-labelledby="home-alerts">
-          <h2 className={styles.sectionTitle} id="home-alerts">
-            {t('client.overview.alertsTitle')}
-          </h2>
-          <ul className={styles.attentionList}>
-            {overview.alerts
-              .filter((a) => a.state === 'needsAction')
-              .map((alert) => (
-                <li key={alert.id}>
-                  <Link
-                    className={styles.attentionItem}
-                    to={alert.recommendedAction.href}
-                  >
-                    <span className={styles.attentionTop}>
-                      <SeverityIndicator
-                        severity={alert.severity}
-                        suspected={alert.suspected}
-                      />
-                      <span className={styles.attentionTitle}>{t(alert.titleKey)}</span>
-                    </span>
-                    <span className={styles.attentionDetail}>
-                      {t(alert.impactIfIgnoredKey)}
-                    </span>
-                    <span className={styles.attentionAction}>
-                      {t(alert.recommendedAction.labelKey)}
-                    </span>
-                  </Link>
-                </li>
-              ))}
-          </ul>
-        </section>
-      ) : null}
+      {/* "Anything that needs a look" used to render here: every
+          `needsAction` alert, with the same title, the same impact line and
+          the same action as the attention list above. `buildClientOverview`
+          already folds those alerts INTO `attention`, so the compressor alert
+          and the tamper alert each appeared twice on the screen, about eight
+          hundred pixels apart, looking like two different problems. */}
 
       <section className={styles.section} aria-labelledby="home-energy">
         <h2 className={styles.sectionTitle} id="home-energy">
