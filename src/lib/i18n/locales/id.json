@@ -833,7 +833,14 @@
       "commandSteps": "Perkembangan perintah",
       "commandFailed": "Perintah gagal — unit tidak bergerak, dan kontrol tetap pada posisinya sampai ada perintah terverifikasi.",
       "commandQueued": "Antre — perangkat tidak dapat dijangkau. Ditahan sejak {{time}}; perintah menunggu, bukan dihapus.",
-      "commandQueuedNoTime": "Antre — perangkat tidak terjangkau. Perintah menunggu, bukan dibuang."
+      "commandQueuedNoTime": "Antre — perangkat tidak terjangkau. Perintah menunggu, bukan dibuang.",
+      "colPart": "Bagian",
+      "colReadings": "Pembacaan",
+      "colStatus": "Status",
+      "colAction": "Tindakan",
+      "deviceState": "Perangkat",
+      "lastHeartbeat": "Terakhir terlihat",
+      "modeLabel": "Mode"
     },
     "work-order": {
       "title": "Perintah kerja",
@@ -1400,6 +1407,8 @@
       "notFound": "Permintaan itu bukan wewenang Anda, atau sudah tidak ada.",
       "queueTitle": "Menunggu keputusan",
       "queueEmpty": "Tidak ada langkah pembatasan yang menunggu keputusan.",
+      "metaRequester": "Pemohon",
+      "metaRequested": "Diajukan",
       "askTitle": "Yang diminta",
       "askLine": "Naik dari {{from}} ke {{to}}",
       "askFromNone": "Mulai tangga pada {{to}}",

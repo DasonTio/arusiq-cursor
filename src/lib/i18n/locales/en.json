@@ -833,7 +833,14 @@
       "commandSteps": "Command progress",
       "commandFailed": "The command failed — the unit did not move, and the control stays where it was until a verified command.",
       "commandQueued": "Queued — device unreachable. Held since {{time}}; the command waits instead of being dropped.",
-      "commandQueuedNoTime": "Queued — device unreachable. The command waits instead of being dropped."
+      "commandQueuedNoTime": "Queued — device unreachable. The command waits instead of being dropped.",
+      "colPart": "Part",
+      "colReadings": "Readings",
+      "colStatus": "Status",
+      "colAction": "Action",
+      "deviceState": "Device",
+      "lastHeartbeat": "Last seen",
+      "modeLabel": "Mode"
     },
     "work-order": {
       "title": "Work order",
@@ -1400,6 +1407,8 @@
       "notFound": "That request is not yours to decide, or it no longer exists.",
       "queueTitle": "Waiting on a decision",
       "queueEmpty": "No restriction step is waiting on a decision.",
+      "metaRequester": "Requester",
+      "metaRequested": "Requested",
       "askTitle": "What is being asked",
       "askLine": "Move from {{from}} to {{to}}",
       "askFromNone": "Start the ladder at {{to}}",

@@ -80,9 +80,20 @@ const simulated = (value: number | null, lastSeen: string): Reading => ({
   lastSeen,
 });
 
-/** The value a signal reports when the part is behaving. */
-const nominalValue = (def: SignalDefinition, jitter: number): number =>
-  round(def.nominal + jitter * (def.threshold - def.nominal) * 0.25, def.decimals);
+/**
+ * The value a signal reports when the part is behaving.
+ *
+ * A signal whose nominal is ZERO counts occurrences — frost minutes, overflow
+ * events, louver faults, contactor chatter — and a count has no negative
+ * side. The jitter is symmetric, so half of those rolls were coming out
+ * below zero and the unit screen was publishing "−1 min" of frost and "−0 n"
+ * of overflow. Missing is not zero (INV-NO-FABRICATION), and neither is a
+ * count that never happened minus one.
+ */
+const nominalValue = (def: SignalDefinition, jitter: number): number => {
+  const value = def.nominal + jitter * (def.threshold - def.nominal) * 0.25;
+  return round(def.nominal === 0 ? Math.max(0, value) : value, def.decimals);
+};
 
 /** The value a signal reports at `breach` multiples past its threshold.
  *  `direction` matters: superheat fails downward, pressure drop upward. */

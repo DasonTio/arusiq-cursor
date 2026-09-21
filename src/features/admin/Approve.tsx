@@ -26,6 +26,7 @@ import { LOAD_STATE, type LoadState } from '../../lib/domain/loadState.ts';
 import { restrictionSeverity } from '../../lib/domain/restriction.ts';
 import {
   simulatedTelemetry,
+  REFERENCE_NOW,
   type RestrictionRequest,
 } from '../../lib/simulation/index.ts';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
@@ -43,6 +44,13 @@ const DECLINE_REASONS = [
   'restriction.decline.reason.evidenceInsufficient',
   'restriction.decline.reason.healthRisk',
 ] as const;
+
+/** A decision queue reads by severity, like every other HQ queue. Grouping by
+ *  severity also fills the PriorityList's two-column desktop grid: a single
+ *  group always sat in the left half of the canvas. */
+const SEVERITY_ORDER = ['critical', 'warning', 'normal', 'unknown'] as const;
+
+const HOUR_MS = 60 * 60 * 1000;
 
 export default function Approve() {
   const { t, i18n } = useTranslation();
@@ -92,6 +100,16 @@ export default function Approve() {
       dateStyle: 'medium',
       timeStyle: 'short',
     }).format(new Date(iso));
+
+  // Ages render against the simulation's fixed reference instant, not the
+  // wall clock — the dataset is seeded relative to REFERENCE_NOW.
+  const formatAge = (iso: string) => {
+    const elapsedHours = (Date.parse(REFERENCE_NOW) - Date.parse(iso)) / HOUR_MS;
+    const relative = new Intl.RelativeTimeFormat(i18n.language, { numeric: 'auto' });
+    return elapsedHours < 48
+      ? relative.format(-Math.round(elapsedHours), 'hour')
+      : relative.format(-Math.round(elapsedHours / 24), 'day');
+  };
 
   if (!session) {
     return (
@@ -158,20 +176,36 @@ export default function Approve() {
   /* ------------------------------------------------ the queue (no request) */
 
   if (!requestId) {
-    const groups: PriorityGroup[] = [
-      {
-        id: 'pending',
-        labelKey: 'admin.approve.queueTitle',
-        items: queue.map((item) => ({
+    const groups: PriorityGroup[] = SEVERITY_ORDER.filter((severity) => {
+      return queue.some((item) => restrictionSeverity(item.requestedStep) === severity);
+    }).map((severity) => ({
+      id: severity,
+      labelKey: 'client.alerts.severityGroup',
+      labelValues: {
+        severity: t(`severity.${severity}`),
+        count: queue.filter(
+          (item) => restrictionSeverity(item.requestedStep) === severity,
+        ).length,
+      },
+      items: queue
+        .filter((item) => restrictionSeverity(item.requestedStep) === severity)
+        .sort((a, b) => Date.parse(a.requestedAt) - Date.parse(b.requestedAt))
+        .map((item) => ({
           id: item.id,
           title: item.spaceName,
           detail: item.propertyName,
           severity: restrictionSeverity(item.requestedStep),
           statusKey: `restriction.${item.requestedStep}`,
+          meta: [
+            { labelKey: 'admin.approve.metaRequester', value: item.requestedBy.name },
+            {
+              labelKey: 'admin.approve.metaRequested',
+              value: formatAge(item.requestedAt),
+            },
+          ],
           to: `/accounts/approve?request=${encodeURIComponent(item.id)}`,
         })),
-      },
-    ];
+    }));
     return (
       <div className={styles.root}>
         <PageHeader titleKey="admin.approve.title" contextKey="admin.approve.purpose" />

@@ -7,7 +7,7 @@
  * @requirement FR-14 FR-15 FR-20 FR-40 FR-41 FR-65 FR-66
  */
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button.tsx';
 import { Metric } from '../../components/Metric.tsx';
@@ -41,6 +41,8 @@ import {
   type Reading,
   type Unit as UnitRecord,
 } from '../../lib/simulation/index.ts';
+import { DataTable } from '../../patterns/DataTable.tsx';
+import { FactStrip } from '../../patterns/FactStrip.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { TrendChart } from '../../patterns/TrendChart.tsx';
 import { useSession } from '../auth/session.ts';
@@ -295,22 +297,44 @@ export default function Unit() {
       >
         <SeverityIndicator severity={unit.rollUp.severity} />
       </PageHeader>
-      <p className={styles.meta}>
-        {unit.device.online ? t('shared.unit.online') : t('shared.unit.offline')}
-      </p>
-      {unit.device.lastHeartbeat ? (
-        <p className={styles.meta}>
-          {t('loadState.lastSeen', { time: formatDateTime(unit.device.lastHeartbeat) })}
-        </p>
-      ) : null}
+      {/* The device's own state, as fields. It was four loose paragraphs
+          under the heading — make, reporting state, last seen, and sometimes
+          maintenance mode — which is the text-dump at the top of the one
+          screen all three roles open. */}
+      <FactStrip
+        columns={3}
+        fields={[
+          {
+            labelKey: 'shared.unit.deviceState',
+            value: unit.device.online
+              ? t('shared.unit.online')
+              : t('shared.unit.offline'),
+          },
+          {
+            labelKey: 'shared.unit.lastHeartbeat',
+            value: unit.device.lastHeartbeat ? (
+              <time dateTime={unit.device.lastHeartbeat}>
+                {formatDateTime(unit.device.lastHeartbeat)}
+              </time>
+            ) : (
+              t('loadState.noData')
+            ),
+          },
+          ...(unit.device.maintenanceMode
+            ? [
+                {
+                  labelKey: 'shared.unit.modeLabel' as const,
+                  value: t('shared.unit.maintenanceMode'),
+                },
+              ]
+            : []),
+        ]}
+      />
 
       {unit.device.tamperSuspected ? (
         <p className={styles.banner} role="status">
           {t('shared.unit.tamper')}
         </p>
-      ) : null}
-      {unit.device.maintenanceMode ? (
-        <p className={styles.meta}>{t('shared.unit.maintenanceMode')}</p>
       ) : null}
 
       {restriction ? (
@@ -370,7 +394,7 @@ export default function Unit() {
       ) : null}
 
       {view === 'health' ? (
-        <HealthView unit={unit} alerts={alerts} format={format} role={session.role} />
+        <HealthView unit={unit} alerts={alerts} role={session.role} />
       ) : null}
 
       {view === 'control' ? (
@@ -705,12 +729,10 @@ function NowView({
 function HealthView({
   unit,
   alerts,
-  format,
   role,
 }: {
   unit: UnitRecord;
   alerts: Alert[];
-  format: (value: number) => string;
   role: Role;
 }) {
   const { t } = useTranslation();
@@ -718,25 +740,66 @@ function HealthView({
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>{t('shared.unit.partsTitle')}</h2>
       {GROUPS.map((group) => {
-        const grouped = unit.parts.filter((part) => {
-          return part.group === group;
-        });
+        const grouped: Part[] = unit.parts.filter((part) => part.group === group);
         return (
           <div key={group} className={styles.section}>
             <h3 className={styles.sectionTitle}>{t(`partGroup.${group}`)}</h3>
-            <ul className={styles.parts}>
-              {grouped.map((part) => {
-                return (
-                  <PartRow
-                    key={part.id}
-                    part={part}
-                    alerts={alerts}
-                    format={format}
-                    role={role}
-                  />
-                );
-              })}
-            </ul>
+            {/* Twelve parts, each with the same four fields — a name, its
+                readings, a verdict and one errand — drawn as twelve
+                full-width cards with a button on each. Repeating fields are
+                a table (§3), and this one is the technician's whole
+                diagnostic surface. */}
+            <DataTable
+              captionKey="shared.unit.partsTitle"
+              rows={grouped}
+              rowKey={(part) => part.id}
+              columns={[
+                {
+                  key: 'part',
+                  labelKey: 'shared.unit.colPart',
+                  rowHeader: true,
+                  cell: (part) => (
+                    <span className={styles.partIdentity}>
+                      <PartIcon part={part.id} size={20} />
+                      <span>{t(part.labelKey)}</span>
+                    </span>
+                  ),
+                },
+                {
+                  key: 'readings',
+                  labelKey: 'shared.unit.colReadings',
+                  cell: (part) => <PartReadings part={part} />,
+                },
+                {
+                  key: 'status',
+                  labelKey: 'shared.unit.colStatus',
+                  cell: (part) => (
+                    <span className={styles.partStatus}>
+                      <SeverityIndicator
+                        severity={part.severity}
+                        suspected={part.suspected}
+                      />
+                      {/* Only when it VARIES. "Confirmed by measurement" on
+                          all twelve rows is a sentence that carries nothing;
+                          `suspected` is the one that changes the reading. */}
+                      {part.suspected ? (
+                        <span className={styles.partMeta}>
+                          {t('shared.unit.suspected')}
+                        </span>
+                      ) : null}
+                    </span>
+                  ),
+                },
+                {
+                  key: 'action',
+                  labelKey: 'shared.unit.colAction',
+                  nowrap: true,
+                  cell: (part) => (
+                    <PartAction part={part} alerts={alerts} role={role} />
+                  ),
+                },
+              ]}
+            />
           </div>
         );
       })}
@@ -744,21 +807,58 @@ function HealthView({
   );
 }
 
-function PartRow({
+/** Every signal the part declares, with its own name — a bare column of
+ *  figures cannot be read, and the part name does not say which is which. */
+function PartReadings({ part }: { part: Part }) {
+  const { t } = useTranslation();
+  return (
+    <span className={styles.readings}>
+      {part.signals.map((signal) => {
+        const reading = readingOf(signal.reading);
+        const shortKey = signal.key.split('.').at(-1);
+        const partDef = PART_CATALOGUE.find((item) => item.id === part.id);
+        const signalUnit = partDef?.signals.find((item) => item.key === shortKey)?.unit;
+        return (
+          /* Three bare figures under a column headed "Readings" is a quiz:
+             0.99 A and 1.8 mm/s are a current and a vibration and nothing
+             says which. `Metric` keeps the name for assistive technology;
+             the caption is the sighted reader's copy and is hidden from the
+             accessibility tree so it is not announced twice. */
+          <span key={signal.key} className={styles.reading}>
+            <span className={styles.partMeta} aria-hidden="true">
+              {t(signal.key)}
+            </span>
+            <Metric
+              compact
+              labelKey={signal.key}
+              value={reading.value}
+              unit={signalUnit ?? ''}
+              provenance={reading.provenance}
+              lastSeen={reading.lastSeen}
+            />
+          </span>
+        );
+      })}
+    </span>
+  );
+}
+
+/** The errand differs per part — a filter is washed, a compressor opens its
+ *  alert, everything else opens the service history — so it stays a link with
+ *  its own words rather than becoming a chevron. */
+function PartAction({
   part,
   alerts,
-  format,
   role,
 }: {
   part: Part;
   alerts: Alert[];
-  format: (value: number) => string;
   role: Role;
 }) {
   const { t } = useTranslation();
-  const alert = alerts.find((item) => {
-    return item.scope.partId === part.id && item.state === 'needsAction';
-  });
+  const alert = alerts.find(
+    (item) => item.scope.partId === part.id && item.state === 'needsAction',
+  );
   const actionTo = alert?.recommendedAction.href ?? links.serviceFor(role);
   const actionKey =
     part.id === 'air-filter'
@@ -766,50 +866,10 @@ function PartRow({
       : alert
         ? 'shared.unit.partAction'
         : 'shared.unit.noAlert';
-
   return (
-    <li className={styles.part}>
-      <div className={styles.partTop}>
-        <span className={styles.partIdentity}>
-          <PartIcon part={part.id} size={24} />
-          <p className={styles.partName}>{t(part.labelKey)}</p>
-        </span>
-        <SeverityIndicator severity={part.severity} suspected={part.suspected} />
-      </div>
-      <p className={styles.meta}>
-        {part.suspected ? t('shared.unit.suspected') : t('shared.unit.confirmed')}
-      </p>
-      {alert ? (
-        <p className={styles.meta}>
-          {t('shared.unit.completeness', { value: format(alert.confidence * 100) })}
-        </p>
-      ) : null}
-      <div className={styles.metrics}>
-        {part.signals.map((signal) => {
-          const reading = readingOf(signal.reading);
-          const shortKey = signal.key.split('.').at(-1);
-          const partDef = PART_CATALOGUE.find((item) => {
-            return item.id === part.id;
-          });
-          const unit = partDef?.signals.find((item) => {
-            return item.key === shortKey;
-          })?.unit;
-          return (
-            <Metric
-              key={signal.key}
-              labelKey={signal.key}
-              value={reading.value}
-              unit={unit ?? ''}
-              provenance={reading.provenance}
-              lastSeen={reading.lastSeen}
-            />
-          );
-        })}
-      </div>
-      <Button variant="secondary" to={actionTo}>
-        {t(actionKey)}
-      </Button>
-    </li>
+    <Link className={styles.partLink} to={actionTo}>
+      {t(actionKey)}
+    </Link>
   );
 }
 

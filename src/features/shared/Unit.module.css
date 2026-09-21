@@ -202,3 +202,48 @@
     padding: var(--space-4);
   }
 }
+
+/* --- the twelve monitored parts ------------------------------------------
+   Twelve cards, each with a glyph, a name, an unvarying "Confirmed by
+   measurement" line, up to three display-size figures and a button, was
+   3,378 px of the technician's diagnostic surface. The fields repeat on
+   every part, so it is a table (§3). */
+
+.partIdentity {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-inline-size: 0;
+}
+
+.readings {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+
+.reading {
+  display: grid;
+  gap: 0;
+  min-inline-size: 0;
+}
+
+.partStatus {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.partMeta {
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-gray-2);
+}
+
+/* The errand differs per part, so it keeps its own words rather than
+   becoming a chevron — but it is a link in a cell, not a button on a card. */
+.partLink {
+  color: var(--color-brand-accent);
+  font-weight: var(--font-weight-semibold);
+}

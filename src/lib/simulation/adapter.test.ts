@@ -108,3 +108,37 @@ describe('simulated telemetry — FR-15 FR-20 FR-34', () => {
     );
   });
 });
+
+describe('a count never reports a negative', () => {
+  it('keeps zero-nominal signals at or above zero', async () => {
+    // Frost minutes, overflow events, louver faults and contactor chatter all
+    // count occurrences. The jitter around a nominal is symmetric, so half of
+    // those rolls used to land below zero and the unit screen published
+    // "−1 min" of frost and "−0 n" of overflow — a reading that cannot
+    // physically exist, on the screen a technician diagnoses from.
+    const counts = new Set(
+      PART_CATALOGUE.flatMap((part) =>
+        part.signals.filter((s) => s.nominal === 0).map((s) => `${part.id}.${s.key}`),
+      ),
+    );
+    expect(counts.size).toBeGreaterThan(0);
+
+    const properties = await adapter.listProperties(admin);
+    const units = walkUnits(properties);
+    expect(units.length).toBeGreaterThan(0);
+
+    for (const unit of units) {
+      const record = await adapter.getUnit(admin, unit.id);
+      for (const part of record?.parts ?? []) {
+        for (const signal of part.signals) {
+          const short = signal.key.split('.').at(-1);
+          if (!counts.has(`${part.id}.${short}`)) continue;
+          const reading = signal.reading;
+          if (reading && 'value' in reading && typeof reading.value === 'number') {
+            expect(reading.value).toBeGreaterThanOrEqual(0);
+          }
+        }
+      }
+    }
+  });
+});

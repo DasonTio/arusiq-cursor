@@ -51,6 +51,22 @@ describe('shared.approve — the queue', () => {
       expect(link.getAttribute('href')).toContain('/accounts/approve?request=');
     }
   });
+
+  it('groups the queue by decision severity and carries requester and age on each row', async () => {
+    renderApprove('/accounts/approve');
+    const list = await screen.findByRole('group', { name: 'Waiting on a decision' });
+    // The seeded queue holds critical and warning asks — one labelled group each.
+    expect(
+      within(list).getByRole('heading', { level: 3, name: /Critical/ }),
+    ).toBeInTheDocument();
+    expect(
+      within(list).getByRole('heading', { level: 3, name: /Warning/ }),
+    ).toBeInTheDocument();
+    expect(within(list).getAllByText('Requester').length).toBeGreaterThan(1);
+    expect(within(list).getAllByText('Requested').length).toBeGreaterThan(1);
+    // Names are data, not locale text — Andi Nugroho raised the seeded asks.
+    expect(within(list).getAllByText('Andi Nugroho').length).toBeGreaterThan(1);
+  });
 });
 
 describe('shared.approve — one request · FR-52', () => {

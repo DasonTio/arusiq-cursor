@@ -111,11 +111,21 @@ describe('shared.unit — Now view · FR-14 FR-15', () => {
     expect(
       await screen.findByRole('heading', { name: 'Twelve monitored parts' }),
     ).toBeInTheDocument();
-    // Every part row's identity group carries a decorative <svg> glyph.
+    // Every part row's identity cell carries a decorative <svg> glyph.
     const names = screen.getAllByText('Compressor');
     expect(names.length).toBeGreaterThan(0);
-    const row = names[0].closest('li');
+    const row = names[0].closest('tr');
     expect(row?.querySelector('svg')).toBeInTheDocument();
+
+    // All twelve, across the three groups — a glyph per part is ADR-0012's
+    // whole point, and a table must not lose one on the way in.
+    const glyphs = screen
+      .getAllByRole('table')
+      .flatMap((table) => [...table.querySelectorAll('tbody tr')]);
+    expect(glyphs).toHaveLength(12);
+    glyphs.forEach((partRow) => {
+      expect(partRow.querySelector('svg')).not.toBeNull();
+    });
   });
 
   it('marks the active view tab with aria-current, not colour alone (ADR-0014)', async () => {
