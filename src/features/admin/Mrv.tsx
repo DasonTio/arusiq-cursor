@@ -202,29 +202,84 @@ export default function Mrv() {
         ]}
       />
       <MockBoundary explanationKey="admin.mrv.registryMock">
-        <div className={styles.choices}>
-          <Button
-            variant={first ? 'primary' : 'secondary'}
-            pressed={first}
-            onClick={() => {
-              setFirst(true);
-            }}
-          >
-            {t('admin.mrv.approve')}
-          </Button>
-          <Button
-            variant={second ? 'primary' : 'ghost'}
-            pressed={second}
-            disabled={!first}
-            onClick={() => {
-              setSecond(true);
-            }}
-          >
-            {t('admin.mrv.second')}
-          </Button>
-        </div>
-        {first && !second ? <p role="status">{t('admin.mrv.firstApproved')}</p> : null}
-        {first && second ? <p role="status">{t('admin.mrv.exported')}</p> : null}
+        {/* Dual approval is a SEQUENCE, and it was two buttons with the
+            second one disabled — the reader could see that something was
+            unavailable but not that they were at step one of two, nor what
+            the second step was waiting for. Same failure the restriction
+            ladder exists to prevent: a two-person control drawn as a pair of
+            switches (D7 §13.2). */}
+        <section className={mrv.approval} aria-labelledby="mrv-approval">
+          <h2 className={mrv.approvalTitle} id="mrv-approval">
+            {t('admin.mrv.approvalTitle')}
+          </h2>
+          <ol className={mrv.steps}>
+            <li className={first ? `${mrv.step} ${mrv.done}` : mrv.step}>
+              <span className={mrv.marker} aria-hidden="true">
+                {new Intl.NumberFormat(i18n.language).format(1)}
+              </span>
+              <span className={mrv.stepBody}>
+                <span className={mrv.stepName}>{t('admin.mrv.stepOne')}</span>
+                <span className={mrv.stepState}>
+                  {first ? t('admin.mrv.stateRecorded') : t('admin.mrv.stateAwaiting')}
+                </span>
+              </span>
+              {first ? null : (
+                <Button
+                  variant="secondary"
+                  onClick={() => {
+                    setFirst(true);
+                  }}
+                >
+                  {t('admin.mrv.approve')}
+                </Button>
+              )}
+            </li>
+            <li
+              className={[mrv.step, second ? mrv.done : '', first ? '' : mrv.blocked]
+                .filter(Boolean)
+                .join(' ')}
+            >
+              <span className={mrv.marker} aria-hidden="true">
+                {new Intl.NumberFormat(i18n.language).format(2)}
+              </span>
+              <span className={mrv.stepBody}>
+                <span className={mrv.stepName}>{t('admin.mrv.stepTwo')}</span>
+                <span className={mrv.stepState}>
+                  {second
+                    ? t('admin.mrv.stateRecorded')
+                    : first
+                      ? t('admin.mrv.stateAwaiting')
+                      : t('admin.mrv.stateBlocked')}
+                </span>
+              </span>
+              {/* Present and disabled, not absent. A control that appears
+                  when a condition is met leaves the reader wondering whether
+                  they missed it; a disabled one with its reason stated beside
+                  it tells them what has to happen first. */}
+              {second ? null : (
+                <Button
+                  variant="secondary"
+                  disabled={!first}
+                  onClick={() => {
+                    setSecond(true);
+                  }}
+                >
+                  {t('admin.mrv.second')}
+                </Button>
+              )}
+            </li>
+          </ol>
+          {first && !second ? (
+            <p className={mrv.result} role="status">
+              {t('admin.mrv.firstApproved')}
+            </p>
+          ) : null}
+          {first && second ? (
+            <p className={mrv.result} role="status">
+              {t('admin.mrv.exported')}
+            </p>
+          ) : null}
+        </section>
       </MockBoundary>
     </div>
   );

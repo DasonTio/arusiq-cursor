@@ -1329,7 +1329,13 @@
       "approve": "Approve an export",
       "second": "Second approver",
       "exported": "Nothing was sent to a registry.",
-      "firstApproved": "First approval recorded. A second approver can now confirm."
+      "firstApproved": "First approval recorded. A second approver can now confirm.",
+      "approvalTitle": "Registry export — two approvals",
+      "stepOne": "First approval",
+      "stepTwo": "Second approval",
+      "stateAwaiting": "Awaiting",
+      "stateRecorded": "Recorded",
+      "stateBlocked": "Waits on the first approval"
     },
     "settings": {
       "title": "Settings",

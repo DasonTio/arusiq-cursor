@@ -1329,7 +1329,13 @@
       "approve": "Setujui ekspor",
       "second": "Penyetuju kedua",
       "exported": "Tidak ada yang dikirim ke registri.",
-      "firstApproved": "Persetujuan pertama tercatat. Penyetuju kedua kini dapat mengonfirmasi."
+      "firstApproved": "Persetujuan pertama tercatat. Penyetuju kedua kini dapat mengonfirmasi.",
+      "approvalTitle": "Ekspor registri — dua persetujuan",
+      "stepOne": "Persetujuan pertama",
+      "stepTwo": "Persetujuan kedua",
+      "stateAwaiting": "Menunggu",
+      "stateRecorded": "Tercatat",
+      "stateBlocked": "Menunggu persetujuan pertama"
     },
     "settings": {
       "title": "Pengaturan",
