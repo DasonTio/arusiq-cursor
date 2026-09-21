@@ -1197,7 +1197,10 @@
       "loading": "Loading your week",
       "weekTitle": "This week",
       "closed": "Closed",
-      "open": "Open"
+      "open": "Open",
+      "metaChecks": "Checks",
+      "checksValue": "{{recorded}} of {{total}}",
+      "noChecklist": "No checklist"
     }
   },
   "admin": {

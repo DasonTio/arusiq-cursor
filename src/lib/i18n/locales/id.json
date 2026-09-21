@@ -1197,7 +1197,10 @@
       "loading": "Memuat minggu Anda",
       "weekTitle": "Minggu ini",
       "closed": "Ditutup",
-      "open": "Terbuka"
+      "open": "Terbuka",
+      "metaChecks": "Pemeriksaan",
+      "checksValue": "{{recorded}} dari {{total}}",
+      "noChecklist": "Tanpa daftar periksa"
     }
   },
   "admin": {

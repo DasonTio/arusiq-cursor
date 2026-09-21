@@ -20,8 +20,14 @@ import { SessionActions } from '../shared/Profile.tsx';
 import styles from '../shared/Screen.module.css';
 
 export default function Me() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { session } = useSession();
+  const format = (value: number) => new Intl.NumberFormat(i18n.language).format(value);
+  const formatDateTime = (iso: string) =>
+    new Intl.DateTimeFormat(i18n.language, {
+      dateStyle: 'medium',
+      timeStyle: 'short',
+    }).format(new Date(iso));
   const [state, setState] = useState(LOAD_STATE[0] as LoadState);
   const [orders, setOrders] = useState([] as WorkOrderSummary[]);
   const [retry, setRetry] = useState(0);
@@ -96,8 +102,29 @@ export default function Me() {
     items: bucket.map((order) => ({
       id: order.id,
       titleKey: order.titleKey,
+      // Five rows reading "Repair visit" and nothing else is a list a
+      // technician cannot act on: the unit is what tells them WHICH repair
+      // visit, and the SLA is what tells them which one first. The board on
+      // `/work` and the route on `/map` both carry this already.
+      detail: order.unitName ?? undefined,
       severity: order.severity,
       suspected: order.suspected,
+      meta: [
+        { labelKey: 'admin.dispatch.metaSla', value: formatDateTime(order.slaDueAt) },
+        {
+          labelKey: 'tech.me.metaChecks',
+          // A visit with no checklist has none — "0 of 0" is a progress bar
+          // for a thing that does not exist (§4.4).
+          value:
+            order.checklist.total === 0
+              ? null
+              : t('tech.me.checksValue', {
+                  recorded: format(order.checklist.recorded),
+                  total: format(order.checklist.total),
+                }),
+          absentKey: 'tech.me.noChecklist',
+        },
+      ],
       to: order.action.href,
     })),
   });

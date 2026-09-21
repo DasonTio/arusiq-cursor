@@ -25,6 +25,7 @@ import {
   type WorkOrderOutcome,
 } from '../../lib/simulation/index.ts';
 import { DataTable } from '../../patterns/DataTable.tsx';
+import { FactStrip } from '../../patterns/FactStrip.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { useSession } from '../auth/session.ts';
 import styles from './WorkOrder.module.css';
@@ -631,11 +632,6 @@ function BriefView({
   const { t } = useTranslation();
   const { confidence, signals, raisedAt } = order.evidence;
   const confidencePct = confidence === null ? null : Math.round(confidence * 100);
-  // A CSS length, not display text — the percentage the reader actually sees is
-  // rendered through t() below. Hoisted out of the JSX so the marker stays on
-  // the line directly above the one it covers, however Prettier wraps the tag.
-  // i18n-exempt
-  const confidenceFill = `${confidencePct ?? 0}%`;
   const daysObserved = raisedAt
     ? Math.round(
         (new Date(REFERENCE_NOW).getTime() - new Date(raisedAt).getTime()) / 86_400_000,
@@ -677,9 +673,15 @@ function BriefView({
                 value: format(confidencePct),
               })}
             >
+              {/* A CSS length, not display text — the percentage the reader
+                  sees is rendered through t() below. The zero fallback this
+                  used to carry was unreachable, because the null case is
+                  handled in the branch above; it only served to trip
+                  `missing-is-not-zero` as soon as anything else in the file
+                  mentioned a missing reading. */}
               <div
                 className={styles.progressFill}
-                style={{ inlineSize: confidenceFill }}
+                style={{ inlineSize: `${confidencePct}%` }}
               />
             </div>
             <p className={styles.meta}>
@@ -756,19 +758,31 @@ function BriefView({
         <h2 className={styles.cardTitle} id="brief-device">
           {t('shared.work-order.deviceStateCard')}
         </h2>
-        <p>
-          {order.evidence.dataQuality.reporting
-            ? t('shared.work-order.reporting')
-            : t('shared.work-order.notReporting')}
-        </p>
-        {order.evidence.dataQuality.lastSeen ? (
-          <p className={styles.meta}>
-            {t('loadState.lastSeen', {
-              time: formatDateTime(order.evidence.dataQuality.lastSeen),
-            })}
-          </p>
-        ) : null}
-        <p className={styles.meta}>{t(order.evidence.dataQuality.noteKey)}</p>
+        {/* Two facts, not three sentences. The third was `noteKey` — "The
+            unit is reporting." — which restates the line above it and is
+            already the opening line of the Evidence tab, the tab that exists
+            to explain data quality. */}
+        <FactStrip
+          columns={2}
+          fields={[
+            {
+              labelKey: 'shared.unit.deviceState',
+              value: order.evidence.dataQuality.reporting
+                ? t('shared.work-order.reporting')
+                : t('shared.work-order.notReporting'),
+            },
+            {
+              labelKey: 'shared.unit.lastHeartbeat',
+              value: order.evidence.dataQuality.lastSeen ? (
+                <time dateTime={order.evidence.dataQuality.lastSeen}>
+                  {formatDateTime(order.evidence.dataQuality.lastSeen)}
+                </time>
+              ) : (
+                t('loadState.noData')
+              ),
+            },
+          ]}
+        />
       </section>
     </div>
   );
