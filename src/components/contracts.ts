@@ -671,3 +671,51 @@ export interface BarListProps {
   /** Which channel the bars belong to. Energy is the accent; carbon is eco. */
   tone?: 'accent' | 'eco';
 }
+
+/* ---------------------------------------------------------------- asset tree */
+
+/**
+ * One node of the asset hierarchy, as the TREE needs it — not as the
+ * simulation models it. Property, Floor, Room and Unit all satisfy this
+ * shape, and the screen maps its own hierarchy into it: the pattern owns
+ * drawing a hierarchy, the screen owns what the hierarchy is.
+ */
+export interface TreeNode {
+  id: string;
+  /** Free text a person typed. */
+  name: string;
+  /**
+   * Where this node's roll-up leads. Carried per node rather than derived by
+   * the tree, because only the screen that built the node knows whether it is
+   * a room or a unit — and guessing that from an id prefix is the kind of
+   * thing that breaks silently when an id scheme changes.
+   */
+  href: string;
+  /** Set when the name belongs to the locale pack instead — a generated
+   *  floor name. The tree never invents a string. */
+  nameKey?: I18nKey | null;
+  rollUp: { severity: Severity; contributing: number; total: number };
+  /** A second, quieter line beside the name: a category, a floor. */
+  metaKey?: I18nKey | null;
+  meta?: string | null;
+  /** D6 FR-53 — marked wherever it appears, because rung 4 is unreachable
+   *  there and an approver must see it before deciding. */
+  healthSensitive?: boolean;
+  children?: readonly TreeNode[];
+}
+
+/**
+ * A hierarchy is a tree (`35-dashboard-composition.md` §3): indentation and a
+ * connector hairline, inside ONE panel.
+ *
+ * `client.spaces` and `admin.fleet` walk the same four levels and each drew
+ * them as cards inside cards inside cards — a unit sat four boxes deep and the
+ * page read as packaging rather than as structure.
+ */
+export interface AssetTreeProps {
+  nodes: readonly TreeNode[];
+  /** Names the tree for assistive technology. */
+  labelKey: I18nKey;
+  /** The word for a health-sensitive space. */
+  sensitiveLabelKey: I18nKey;
+}

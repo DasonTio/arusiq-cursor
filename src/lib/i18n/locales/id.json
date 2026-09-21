@@ -955,7 +955,7 @@
       "error": "Ruang tidak dapat dimuat.",
       "retry": "Coba lagi",
       "loading": "Memuat ruang",
-      "open": "Buka"
+      "healthSensitive": "Sensitif kesehatan"
     },
     "alerts": {
       "title": "Peringatan",

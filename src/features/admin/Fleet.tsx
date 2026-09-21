@@ -8,21 +8,19 @@ import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button.tsx';
 import { MockBoundary } from '../../components/MockBoundary.tsx';
-import { SeverityRollUp } from '../../components/SeverityRollUp.tsx';
+import type { TreeNode } from '../../components/contracts.ts';
 import { LOAD_STATE, type LoadState } from '../../lib/domain/loadState.ts';
 import {
   simulatedTelemetry,
   walkUnits,
-  type Floor,
   type Property,
-  type Room,
 } from '../../lib/simulation/index.ts';
+import { AssetTree } from '../../patterns/AssetTree.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { useSession } from '../auth/session.ts';
 import Space from '../shared/Space.tsx';
 import Unit from '../shared/Unit.tsx';
 import styles from '../shared/Screen.module.css';
-import tree from './Fleet.module.css';
 
 const href = (id: string) => `/fleet?node=${encodeURIComponent(id)}`;
 
@@ -140,15 +138,11 @@ export default function Fleet() {
     <div className={styles.root}>
       <PageHeader titleKey="admin.fleet.title" contextKey="admin.fleet.purpose" />
       <MockBoundary explanationKey="admin.fleet.mapMock">
-        <ul className={tree.tree}>
-          {properties.map((property) => {
-            return (
-              <li key={property.id}>
-                <PropertyBranch property={property} />
-              </li>
-            );
-          })}
-        </ul>
+        <AssetTree
+          nodes={properties.map(toTreeNode)}
+          labelKey="admin.fleet.title"
+          sensitiveLabelKey="admin.fleet.healthSensitive"
+        />
       </MockBoundary>
       <section className={styles.section} aria-label={t('admin.fleet.activityTitle')}>
         <h2 className={styles.sectionTitle}>{t('admin.fleet.activityTitle')}</h2>
@@ -180,103 +174,40 @@ export default function Fleet() {
   );
 }
 
-function PropertyBranch({ property }: { property: Property }) {
-  const { t } = useTranslation();
-  return (
-    <>
-      <div className={`${tree.row} ${tree.site}`}>
-        <div className={tree.rowText}>
-          <p className={tree.name}>{property.name}</p>
-          <p className={tree.meta}>{t(`category.${property.category}`)}</p>
-        </div>
-        <SeverityRollUp
-          severity={property.rollUp.severity}
-          contributing={property.rollUp.contributing}
-          total={property.rollUp.total}
-          href={href(property.id)}
-        />
-      </div>
-      <ul className={tree.branch}>
-        {property.floors.map((floor) => {
-          return (
-            <li key={floor.id}>
-              <FloorBranch floor={floor} />
-            </li>
-          );
-        })}
-      </ul>
-    </>
-  );
-}
-
-function FloorBranch({ floor }: { floor: Floor }) {
-  const { t } = useTranslation();
-  return (
-    <>
-      <div className={tree.row}>
-        <p className={tree.name}>{floor.nameKey ? t(floor.nameKey) : floor.name}</p>
-        <SeverityRollUp
-          severity={floor.rollUp.severity}
-          contributing={floor.rollUp.contributing}
-          total={floor.rollUp.total}
-          href={href(floor.id)}
-        />
-      </div>
-      <ul className={tree.branch}>
-        {floor.rooms.map((room) => {
-          return (
-            <li key={room.id}>
-              <RoomBranch room={room} />
-            </li>
-          );
-        })}
-      </ul>
-    </>
-  );
-}
-
-function RoomBranch({ room }: { room: Room }) {
-  const { t } = useTranslation();
-  return (
-    <>
-      <div className={tree.row}>
-        <div className={tree.rowText}>
-          <p className={tree.name}>{room.name}</p>
-          {room.healthSensitive ? (
-            <p className={tree.sensitive}>{t('admin.fleet.healthSensitive')}</p>
-          ) : null}
-        </div>
-        <SeverityRollUp
-          severity={room.rollUp.severity}
-          contributing={room.rollUp.contributing}
-          total={room.rollUp.total}
-          href={href(room.id)}
-        />
-      </div>
-      <ul className={tree.branch}>
-        {room.units.map((unit) => {
-          return (
-            <li key={unit.id}>
-              {/* The leaf. It used to print the unit name TWICE — once as
-                  text and again as the label of a ghost button beside it —
-                  and carried two links to the same place. `SeverityRollUp` is
-                  documented as "one anchor, not a row of controls", so it is
-                  the single tab stop here and the name is plain text. */}
-              <div className={tree.row}>
-                <p className={tree.name}>{unit.name}</p>
-                <SeverityRollUp
-                  severity={unit.rollUp.severity}
-                  contributing={unit.rollUp.contributing}
-                  total={unit.rollUp.total}
-                  href={href(unit.id)}
-                />
-              </div>
-            </li>
-          );
-        })}
-      </ul>
-    </>
-  );
+/**
+ * The simulation's hierarchy, mapped into what the tree needs. The pattern
+ * owns drawing a hierarchy; this screen owns what the hierarchy IS — which is
+ * why the health-sensitive flag rides on the room here and the category rides
+ * on the site.
+ */
+function toTreeNode(property: Property): TreeNode {
+  return {
+    id: property.id,
+    name: property.name,
+    href: href(property.id),
+    metaKey: `category.${property.category}`,
+    rollUp: property.rollUp,
+    children: property.floors.map((floor) => ({
+      id: floor.id,
+      name: floor.name,
+      nameKey: floor.nameKey,
+      href: href(floor.id),
+      rollUp: floor.rollUp,
+      children: floor.rooms.map((room) => ({
+        id: room.id,
+        name: room.name,
+        href: href(room.id),
+        healthSensitive: room.healthSensitive,
+        rollUp: room.rollUp,
+        children: room.units.map((unit) => ({
+          id: unit.id,
+          name: unit.name,
+          href: href(unit.id),
+          rollUp: unit.rollUp,
+        })),
+      })),
+    })),
+  };
 }
 
 function locateRoom(properties: Property[], nodeId: string) {

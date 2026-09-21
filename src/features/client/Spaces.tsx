@@ -8,7 +8,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button.tsx';
-import { SeverityRollUp } from '../../components/SeverityRollUp.tsx';
+import type { TreeNode } from '../../components/contracts.ts';
 import { LOAD_STATE, type LoadState } from '../../lib/domain/loadState.ts';
 import {
   links,
@@ -18,6 +18,7 @@ import {
   type Property,
   type Room,
 } from '../../lib/simulation/index.ts';
+import { AssetTree } from '../../patterns/AssetTree.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { useSession } from '../auth/session.ts';
 import Space from '../shared/Space.tsx';
@@ -130,129 +131,70 @@ export default function Spaces() {
   return (
     <div className={styles.root}>
       <PageHeader titleKey="client.spaces.title" contextKey="client.spaces.purpose" />
-      <Tree located={located} properties={properties} />
+      {/* `?node=` opens one branch of the same tree rather than a different
+          screen: a floor is still a floor with its rooms under it. */}
+      <AssetTree
+        nodes={
+          located?.type === 'floor'
+            ? [toFloorNode(located.floor)]
+            : located?.type === 'property'
+              ? [toTreeNode(located.property)]
+              : properties.map(toTreeNode)
+        }
+        labelKey="client.spaces.title"
+        sensitiveLabelKey="client.spaces.healthSensitive"
+      />
     </div>
   );
 }
 
-function Tree({
-  located,
-  properties,
-}: {
-  located: ReturnType<typeof locate>;
-  properties: Property[];
-}) {
-  if (located?.type === 'room') {
-    return <RoomBranch room={located.room} floor={located.floor} />;
-  }
-  if (located?.type === 'floor') {
-    return <FloorBranch floor={located.floor} />;
-  }
-  if (located?.type === 'property') {
-    return <PropertyBranch property={located.property} />;
-  }
-  return (
-    <ul className={styles.tree}>
-      {properties.map((property) => (
-        <li key={property.id} className={styles.node}>
-          <PropertyBranch property={property} />
-        </li>
-      ))}
-    </ul>
-  );
+/**
+ * The household's hierarchy, mapped into what the tree needs. The pattern
+ * owns drawing a hierarchy; this screen owns what the hierarchy IS — which is
+ * why a room carries its floor as the quiet second line here, and its
+ * category on the admin's copy.
+ */
+function toTreeNode(property: Property): TreeNode {
+  return {
+    id: property.id,
+    name: property.name,
+    href: links.node(property.id),
+    metaKey: `category.${property.category}`,
+    rollUp: property.rollUp,
+    children: property.floors.map((floor) => toFloorNode(floor)),
+  };
 }
 
-function PropertyBranch({ property }: { property: Property }) {
-  const { t } = useTranslation();
-  return (
-    <>
-      <div className={styles.nodeTop}>
-        <div>
-          <p className={styles.nodeName}>{property.name}</p>
-          <p className={styles.nodeMeta}>{t(`category.${property.category}`)}</p>
-        </div>
-        <SeverityRollUp
-          severity={property.rollUp.severity}
-          contributing={property.rollUp.contributing}
-          total={property.rollUp.total}
-          href={links.node(property.id)}
-        />
-      </div>
-      <ul className={styles.childList}>
-        {property.floors.map((floor) => (
-          <li key={floor.id} className={styles.node}>
-            <FloorBranch floor={floor} />
-          </li>
-        ))}
-      </ul>
-    </>
-  );
+function toFloorNode(floor: Floor): TreeNode {
+  return {
+    id: floor.id,
+    name: floor.name,
+    nameKey: floor.nameKey,
+    href: links.node(floor.id),
+    rollUp: floor.rollUp,
+    children: floor.rooms.map((room) => toRoomNode(room, floor)),
+  };
 }
 
-function FloorBranch({ floor }: { floor: Floor }) {
-  const { t } = useTranslation();
-  return (
-    <>
-      <div className={styles.nodeTop}>
-        <p className={styles.nodeName}>
-          {floor.nameKey ? t(floor.nameKey) : floor.name}
-        </p>
-        <SeverityRollUp
-          severity={floor.rollUp.severity}
-          contributing={floor.rollUp.contributing}
-          total={floor.rollUp.total}
-          href={links.node(floor.id)}
-        />
-      </div>
-      <ul className={styles.childList}>
-        {floor.rooms.map((room) => (
-          <li key={room.id} className={styles.node}>
-            <RoomBranch room={room} floor={floor} />
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-}
-
-function RoomBranch({ room, floor }: { room: Room; floor: Floor }) {
-  const { t } = useTranslation();
-  return (
-    <>
-      <div className={styles.nodeTop}>
-        <div>
-          <p className={styles.nodeName}>{room.name}</p>
-          <p className={styles.nodeMeta}>
-            {floor.nameKey ? t(floor.nameKey) : floor.name}
-          </p>
-        </div>
-        <SeverityRollUp
-          severity={room.rollUp.severity}
-          contributing={room.rollUp.contributing}
-          total={room.rollUp.total}
-          href={links.node(room.id)}
-        />
-      </div>
-      <ul className={styles.childList}>
-        {room.units.map((unit) => (
-          <li key={unit.id} className={styles.node}>
-            <div className={styles.nodeTop}>
-              <p className={styles.nodeName}>{unit.name}</p>
-              <Button variant="ghost" to={links.unit(unit.id)}>
-                {t('client.spaces.open')}
-              </Button>
-            </div>
-            <SeverityRollUp
-              severity={unit.rollUp.severity}
-              contributing={unit.rollUp.contributing}
-              total={unit.rollUp.total}
-              href={links.unit(unit.id)}
-            />
-          </li>
-        ))}
-      </ul>
-    </>
-  );
+function toRoomNode(room: Room, floor: Floor): TreeNode {
+  return {
+    id: room.id,
+    name: room.name,
+    href: links.node(room.id),
+    metaKey: floor.nameKey,
+    meta: floor.nameKey ? null : floor.name,
+    healthSensitive: room.healthSensitive,
+    rollUp: room.rollUp,
+    // The leaf. It used to print the unit name TWICE — once as text and again
+    // as the label of a ghost button beside it — and carried two links to the
+    // same place. `SeverityRollUp` is the single anchor on a tree row.
+    children: room.units.map((unit) => ({
+      id: unit.id,
+      name: unit.name,
+      href: links.unit(unit.id),
+      rollUp: unit.rollUp,
+    })),
+  };
 }
 
 function locate(properties: Property[], nodeId: string) {

@@ -1,10 +1,10 @@
-/* admin.fleet — the organisation tree.
+/* AssetTree — the asset hierarchy, for `client.spaces` and `admin.fleet`.
  *
- * It used to be drawn as cards inside cards inside cards: every level of the
- * hierarchy added a border, a radius and a shadow, so a unit sat four boxes
- * deep and the page read as packaging rather than as structure. Depth is
- * indentation and a connector line. There is exactly ONE panel here — the
- * tree — and everything inside it is a row.
+ * Both used to draw it as cards inside cards inside cards: every level added a
+ * border, a radius and a shadow, so a unit sat four boxes deep and the page
+ * read as packaging rather than as structure. Depth is indentation and a
+ * connector line. There is exactly ONE panel here — the tree — and everything
+ * inside it is a row.
  *
  * See `context/35-dashboard-composition.md` §3: a hierarchy is a tree. */
 

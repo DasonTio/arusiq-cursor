@@ -955,7 +955,7 @@
       "error": "Spaces could not be loaded.",
       "retry": "Try again",
       "loading": "Loading spaces",
-      "open": "Open"
+      "healthSensitive": "Health-sensitive"
     },
     "alerts": {
       "title": "Alerts",
