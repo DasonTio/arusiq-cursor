@@ -81,7 +81,14 @@ for (const file of files) {
       if (/--(space|radius|grid|target|focus|font-size|line-height)/.test(line))
         continue;
       if (isMediaCondition) {
-        if (!BREAKPOINTS.has(v))
+        // A `max-width` query is the COMPLEMENT of a documented frame, so the
+        // legal value is one pixel below it: `max-width: 767px` is "below the
+        // 768 frame", not an invented number. The rule was written assuming
+        // min-width only and rejected the complement, which is a gap in the
+        // check rather than a fault in the layout that tripped it.
+        const isMax = /max-(width|inline-size)/.test(line);
+        const legal = isMax ? BREAKPOINTS.has(v + 1) : BREAKPOINTS.has(v);
+        if (!legal)
           add(
             file,
             n,

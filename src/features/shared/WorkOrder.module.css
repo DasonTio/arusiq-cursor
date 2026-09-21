@@ -140,3 +140,39 @@
     padding: var(--space-4);
   }
 }
+
+/* The order's facts, as a strip rather than a stack.
+   Five one-line paragraphs ran a long way down the page before a technician
+   reached the tabs — the text-dump anti-pattern in
+   `context/35-dashboard-composition.md` §3, on the screen they live in. */
+.metaStrip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--space-11), 1fr));
+  gap: var(--space-3);
+  align-self: stretch;
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+.metaLabel {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-gray-2);
+}
+
+.metaValue {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-1);
+}
+
+@media (min-width: 1024px) {
+  .metaStrip {
+    padding: var(--space-4);
+  }
+}

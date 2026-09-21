@@ -880,7 +880,12 @@
       "startAction": "Mulai checklist",
       "deviceStateCard": "Status perangkat & data",
       "reporting": "Sedang melapor",
-      "notReporting": "Tidak melapor"
+      "notReporting": "Tidak melapor",
+      "metaSpace": "Ruang",
+      "metaState": "Status",
+      "metaPriority": "Prioritas",
+      "metaAssignee": "Teknisi",
+      "metaSla": "Batas SLA"
     }
   },
   "client": {
@@ -1251,7 +1256,14 @@
       "retry": "Coba lagi",
       "loading": "Memuat pembayaran",
       "mock": "Penagihan disimulasikan.",
-      "openCase": "Buka kasus"
+      "openCase": "Buka kasus",
+      "colSite": "Situs",
+      "colStanding": "Status",
+      "colBalance": "Saldo",
+      "colDue": "Jatuh tempo",
+      "colRung": "Langkah",
+      "colApprovals": "Persetujuan",
+      "colAction": "Tindakan"
     },
     "energy-portfolio": {
       "title": "Portofolio energi",

@@ -880,7 +880,12 @@
       "startAction": "Start the checklist",
       "deviceStateCard": "Device & data state",
       "reporting": "Reporting now",
-      "notReporting": "Not reporting"
+      "notReporting": "Not reporting",
+      "metaSpace": "Space",
+      "metaState": "Status",
+      "metaPriority": "Priority",
+      "metaAssignee": "Assignee",
+      "metaSla": "SLA due"
     }
   },
   "client": {
@@ -1251,7 +1256,14 @@
       "retry": "Try again",
       "loading": "Loading payments",
       "mock": "Collections are simulated.",
-      "openCase": "Open case"
+      "openCase": "Open case",
+      "colSite": "Site",
+      "colStanding": "Standing",
+      "colBalance": "Balance",
+      "colDue": "Due",
+      "colRung": "Rung",
+      "colApprovals": "Approvals",
+      "colAction": "Action"
     },
     "energy-portfolio": {
       "title": "Energy portfolio",

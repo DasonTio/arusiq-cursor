@@ -250,19 +250,41 @@ export default function WorkOrder() {
           suspected={order.brief.suspected}
         />
       </PageHeader>
-      {order.unitName ? <p className={styles.meta}>{order.unitName}</p> : null}
-      <p className={styles.meta}>{t(`workOrder.state.${order.state}`)}</p>
-      <p className={styles.meta}>{t(`workOrder.priority.${order.priority}`)}</p>
-      {order.assignedTo ? (
-        <p className={styles.meta}>
-          {t('shared.work-order.assigned', { name: order.assignedTo.name })}
-        </p>
-      ) : (
-        <p className={styles.meta}>{t('shared.work-order.unassigned')}</p>
-      )}
-      <p className={styles.meta}>
-        {t('shared.work-order.sla', { time: formatDateTime(order.slaDueAt) })}
-      </p>
+      {/* Five one-line paragraphs stacked down the page cost ~300px before a
+          technician reached the tabs they came for. The same five fields are
+          a labelled strip: one row, scannable, and the labels say what each
+          value IS rather than leaving "Urgent" floating on its own line. */}
+      <dl className={styles.metaStrip}>
+        {order.unitName ? (
+          <div>
+            <dt className={styles.metaLabel}>{t('shared.work-order.metaSpace')}</dt>
+            <dd className={styles.metaValue}>{order.unitName}</dd>
+          </div>
+        ) : null}
+        <div>
+          <dt className={styles.metaLabel}>{t('shared.work-order.metaState')}</dt>
+          <dd className={styles.metaValue}>{t(`workOrder.state.${order.state}`)}</dd>
+        </div>
+        <div>
+          <dt className={styles.metaLabel}>{t('shared.work-order.metaPriority')}</dt>
+          <dd className={styles.metaValue}>
+            {t(`workOrder.priority.${order.priority}`)}
+          </dd>
+        </div>
+        <div>
+          <dt className={styles.metaLabel}>{t('shared.work-order.metaAssignee')}</dt>
+          {/* Unassigned is STATED, never blank — INV-NO-FABRICATION. */}
+          <dd className={styles.metaValue}>
+            {order.assignedTo
+              ? order.assignedTo.name
+              : t('shared.work-order.unassigned')}
+          </dd>
+        </div>
+        <div>
+          <dt className={styles.metaLabel}>{t('shared.work-order.metaSla')}</dt>
+          <dd className={styles.metaValue}>{formatDateTime(order.slaDueAt)}</dd>
+        </div>
+      </dl>
       <ProvenanceChip provenance={order.provenance} />
 
       {order.brief.suspected ? (
