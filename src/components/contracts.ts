@@ -543,3 +543,74 @@ export type IconComponent = ComponentType<{
   'aria-label'?: string;
   focusable?: 'false' | 'true' | boolean;
 }>;
+
+/* --------------------------------------------------------------- fact strip */
+
+/**
+ * One labelled field. `value` is a node, not a string, so a date can stay a
+ * `<time>` and a figure can stay a `<Metric>` — the strip is layout, it never
+ * formats.
+ *
+ * `wide` spans the whole row: an approval record is a sentence, not a field,
+ * and squeezing it into a quarter of the panel is what made five columns read
+ * as a wall.
+ */
+export interface Fact {
+  labelKey: I18nKey;
+  value: ReactNode;
+  wide?: boolean;
+}
+
+/**
+ * D7 §12 — the same device the work order and the restriction record both
+ * arrived at independently: label above value, in columns.
+ *
+ * Six sentences in a column are six things to read before the reader knows
+ * anything; six labelled fields are six things to scan. `columns` is the
+ * count at the 768 frame and above; below it the strip is always two.
+ */
+export interface FactStripProps {
+  fields: readonly Fact[];
+  columns?: 2 | 3 | 4;
+}
+
+/* -------------------------------------------------------------- notice list */
+
+/** One delivery attempt, as the alert records it. */
+export interface NoticeDelivery {
+  channel: 'inApp' | 'push' | 'whatsapp' | 'email';
+  state: 'queued' | 'sent' | 'delivered' | 'read' | 'failed';
+  at: string;
+}
+
+/**
+ * The part of an alert a notice row shows. Structural on purpose: the row
+ * renders the delivery record, and nothing here should be able to reach the
+ * evidence, the projection or the recommended action.
+ */
+export interface Notice {
+  id: string;
+  severity: Severity;
+  titleKey: I18nKey;
+  provenance: Provenance;
+  delivery: readonly NoticeDelivery[];
+}
+
+/**
+ * D6 FR-63 — notices with their per-channel delivery state.
+ *
+ * Every notice carries the same fields, so they are rows in one panel rather
+ * than a deck of cards (§3). Where a row leads somewhere, the ROW is the link
+ * — never a card with a button in the corner (§4).
+ *
+ * `hrefFor` is optional because the two callers differ in kind: a resident's
+ * notice opens the alert it came from (INV-NO-DEAD-END), while the admin case
+ * screen shows the same notices as the RECORD that consent was given, which
+ * leads nowhere by design.
+ */
+export interface NoticeListProps {
+  notices: readonly Notice[];
+  hrefFor?: (notice: Notice) => string;
+  /** The row's call to action. Required when `hrefFor` is given. */
+  hintKey?: I18nKey;
+}

@@ -1,0 +1,54 @@
+/* Explicit tracks, never `auto-fit`: a full-width spanning field keeps every
+   auto-fit track alive, so the fields above it stay at their minimum and the
+   strip packs into a third of its panel. */
+
+.facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+  inline-size: 100%;
+}
+
+/* `start`, not the default stretch: the tallest field in a row was pushing
+   its neighbours' values down by a line each, so no two values began on the
+   same baseline and the row stopped reading as a row. */
+.fact {
+  display: grid;
+  align-content: start;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.wide {
+  grid-column: 1 / -1;
+}
+
+.label {
+  margin: 0;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-2);
+}
+
+.value {
+  margin: 0;
+}
+
+/* The two-column strip is the base layout at every width — declared so the
+   class exists, because a CSS-module class that is never written resolves to
+   `undefined` in the template string that composes it. */
+.two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 768px) {
+  .three {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .four {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

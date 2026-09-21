@@ -7,9 +7,11 @@
  * turned down. It now composes as three ideas:
  *
  *   1 what is owed and what to do about it — one panel, the figure leading
- *   2 the notices that were sent — repeating fields, so rows, and the row is
- *     the link (§3)
- *   3 the restriction — a fact strip, then the ladder pattern
+ *   2 the notices that were sent — `patterns/NoticeList`
+ *   3 the restriction — `patterns/FactStrip`, then `patterns/RestrictionLadder`
+ *
+ * Only what is peculiar to this screen lives here. The three patterns are
+ * shared with `admin.restriction-case`, which drew every one of them itself.
  */
 
 /* --- 1 · the account panel ------------------------------------------------
@@ -95,56 +97,6 @@
   }
 }
 
-/* --- a fact strip ---------------------------------------------------------
-   Label above value, in columns. Five sentences each beginning "Grace ends…",
-   "Requested by…" are five lines a reader has to parse; five labelled fields
-   are five they can scan. Same device as the work order (§3). */
-
-/* Explicit tracks, not `auto-fit`: the approval line spans the whole row, and
-   a spanning item keeps every auto-fit track alive — so the four fields above
-   it stayed at their minimum and left a third of the panel empty. */
-.facts {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--space-3);
-  margin: 0;
-  inline-size: 100%;
-}
-
-@media (min-width: 768px) {
-  .facts {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-/* `start`, not the default stretch: the tallest field in the row was pushing
-   its neighbours' values down by a line each, so no two values began on the
-   same baseline and the strip stopped reading as a row. */
-.fact {
-  display: grid;
-  align-content: start;
-  gap: var(--space-1);
-  min-inline-size: 0;
-}
-
-/* The approval record is a sentence, not a field — it gets its own line
-   rather than squeezing four columns into three. */
-.factWide {
-  grid-column: 1 / -1;
-}
-
-.factLabel {
-  margin: 0;
-  font-size: var(--font-size-caption);
-  line-height: var(--line-height-caption);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-gray-2);
-}
-
-.factValue {
-  margin: 0;
-}
-
 /* --- 2 · how to pay -------------------------------------------------------
    Two named methods with one instruction between them. Tiles, so the two read
    as a choice of two rather than as three more sentences. */
@@ -187,93 +139,7 @@
   font-weight: var(--font-weight-semibold);
 }
 
-/* --- 3 · notices ----------------------------------------------------------
-   Every notice carries the same fields, so they are rows in one panel, and
-   the row itself is the link — not a card with a button on it (§4). */
-
-.notices {
-  display: grid;
-  gap: 0;
-  margin: 0;
-  padding: var(--space-2);
-  list-style: none;
-  inline-size: 100%;
-  border: 1px solid var(--color-gray-5);
-  border-radius: var(--radius-xl);
-  background: var(--surface-raised);
-  box-shadow: var(--shadow-sm);
-}
-
-.noticeLink {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: var(--space-2) var(--space-3);
-  min-block-size: var(--target-min);
-  padding-block: var(--space-2);
-  padding-inline: var(--space-2);
-  border-radius: var(--radius-md);
-  color: inherit;
-  text-decoration: none;
-}
-
-.noticeLink:hover {
-  background: color-mix(in srgb, var(--color-brand-accent) 8%, var(--surface-raised));
-}
-
-.noticeBody {
-  display: grid;
-  gap: var(--space-1);
-  min-inline-size: 0;
-}
-
-.noticeTitle {
-  margin: 0;
-  font-weight: var(--font-weight-semibold);
-}
-
-/* Delivery is several short facts, not several sentences: channel and state
-   sit on one line as chips so four notices do not become twelve paragraphs. */
-.delivery {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-1) var(--space-2);
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.deliveryItem {
-  padding-block: var(--space-1);
-  padding-inline: var(--space-2);
-  border-radius: var(--radius-full);
-  background: var(--surface-sunken);
-  font-size: var(--font-size-caption);
-  line-height: var(--line-height-caption);
-  color: var(--color-gray-2);
-}
-
-.noticeHint {
-  grid-column: 2;
-  margin: 0;
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-brand-accent);
-}
-
-@media (min-width: 768px) {
-  .noticeLink {
-    grid-template-columns: auto 1fr auto;
-  }
-
-  .noticeHint {
-    grid-column: auto;
-    text-align: end;
-  }
-}
-
-/* --- 4 · the restriction record ------------------------------------------ */
+/* --- 3 · the restriction record ------------------------------------------ */
 
 .restriction {
   display: grid;

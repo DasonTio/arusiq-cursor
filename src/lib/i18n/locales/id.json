@@ -1127,7 +1127,9 @@
       "reasonLabel": "Alasan",
       "graceLabel": "Masa tenggang berakhir",
       "approvalsLabel": "Persetujuan",
-      "noticeOpen": "Buka pemberitahuan"
+      "noticeOpen": "Buka pemberitahuan",
+      "standingLabel": "Status akun",
+      "dueLabel": "Jatuh tempo"
     },
     "maintenance": {
       "title": "Layanan & kunjungan",
@@ -1364,7 +1366,8 @@
       "accountTitle": "Akun",
       "ladderTitle": "Tangga yang berlaku",
       "approvalsTitle": "Catatan keputusan",
-      "evidenceTitle": "Bukti dan persetujuan"
+      "evidenceTitle": "Bukti dan persetujuan",
+      "signOffLabel": "Persetujuan manajemen"
     },
     "approve": {
       "title": "Setujui langkah pembatasan",

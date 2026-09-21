@@ -1,0 +1,50 @@
+/* admin.restriction-case — the record of one account's ladder.
+ *
+ * Everything on it was a paragraph: the site name, the balance, the standing,
+ * the reason, the approvers, the sign-off. Six sentences in a column, which is
+ * the text-dump from `35-dashboard-composition.md` §4 — and this is the screen
+ * an auditor reads to answer "who authorised turning this person's cooling
+ * down". The ladder, the fact strip and the notice rows are now patterns
+ * shared with `client.billing`; only the two panels are local.
+ */
+
+.account,
+.record {
+  display: grid;
+  gap: var(--space-3);
+  inline-size: 100%;
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+.accountFigure {
+  display: grid;
+  gap: var(--space-2);
+  justify-items: start;
+  min-inline-size: 0;
+}
+
+.site {
+  margin: 0;
+  font-size: var(--font-size-h6);
+  line-height: var(--line-height-h6);
+  font-weight: var(--font-weight-semibold);
+}
+
+@media (min-width: 768px) {
+  .account {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+    gap: var(--space-4);
+  }
+}
+
+@media (min-width: 1024px) {
+  .account,
+  .record {
+    padding: var(--space-4);
+  }
+}

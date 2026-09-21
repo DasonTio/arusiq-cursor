@@ -5,13 +5,12 @@
  * @requirement FR-50 FR-51 FR-52
  */
 import { useEffect, useState } from 'react';
-import { Link, useSearchParams } from 'react-router';
+import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Landmark, QrCode } from 'lucide-react';
 import { Button } from '../../components/Button.tsx';
 import { Icon } from '../../components/Icon.tsx';
 import { Metric } from '../../components/Metric.tsx';
-import { ProvenanceChip } from '../../components/ProvenanceChip.tsx';
 import { SeverityIndicator } from '../../components/SeverityIndicator.tsx';
 import { LOAD_STATE, type LoadState } from '../../lib/domain/loadState.ts';
 import { restrictionSeverity } from '../../lib/domain/restriction.ts';
@@ -22,6 +21,8 @@ import {
   type Alert,
   type Property,
 } from '../../lib/simulation/index.ts';
+import { FactStrip } from '../../patterns/FactStrip.tsx';
+import { NoticeList } from '../../patterns/NoticeList.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { RestrictionLadder } from '../../patterns/RestrictionLadder.tsx';
 import { SectionHeader } from '../../patterns/SectionHeader.tsx';
@@ -194,42 +195,14 @@ export default function Billing() {
         {notices.length === 0 ? (
           <p>{t('client.billing.noticesEmpty')}</p>
         ) : (
-          <ul className={account.notices}>
-            {notices.map((alert) => {
-              return (
-                <li key={alert.id}>
-                  {/* The row is the link. A notice that cannot be opened is a
-                      dead end, and the notice is where the restriction that
-                      follows was first explained (INV-NO-DEAD-END). */}
-                  <Link className={account.noticeLink} to={`/alerts?alert=${alert.id}`}>
-                    <SeverityIndicator severity={alert.severity} />
-                    <span className={account.noticeBody}>
-                      <span className={account.noticeTitle}>{t(alert.titleKey)}</span>
-                      <ProvenanceChip provenance={alert.provenance} />
-                      <span className={account.delivery}>
-                        {alert.delivery.map((item) => {
-                          return (
-                            <span
-                              key={`${item.channel}-${item.at}`}
-                              className={account.deliveryItem}
-                            >
-                              {t('client.alerts.deliveryLine', {
-                                channel: t(`alertDelivery.channel.${item.channel}`),
-                                state: t(`alertDelivery.state.${item.state}`),
-                              })}
-                            </span>
-                          );
-                        })}
-                      </span>
-                    </span>
-                    <span className={account.noticeHint}>
-                      {t('client.billing.noticeOpen')}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          /* The row is the link. A notice that cannot be opened is a dead end,
+             and the notice is where the restriction below was first explained
+             (INV-NO-DEAD-END). */
+          <NoticeList
+            notices={notices}
+            hrefFor={(notice) => `/alerts?alert=${notice.id}`}
+            hintKey="client.billing.noticeOpen"
+          />
         )}
       </section>
       <section className={styles.section}>
@@ -245,48 +218,39 @@ export default function Billing() {
             {/* Six sentences in a column were six things to read before the
                 reader knew whether their cooling was affected. The same six
                 facts, labelled, are six things to scan. */}
-            <dl className={account.facts}>
-              <div className={account.fact}>
-                <dt className={account.factLabel}>{t('client.billing.reasonLabel')}</dt>
-                <dd className={account.factValue}>{t(restriction.reasonKey)}</dd>
-              </div>
-              <div className={account.fact}>
-                <dt className={account.factLabel}>
-                  {t('client.billing.restrictionChanges')}
-                </dt>
-                <dd className={account.factValue}>
-                  {t(`client.billing.change.${restriction.step}`)}
-                </dd>
-              </div>
-              <div className={account.fact}>
-                <dt className={account.factLabel}>
-                  {t('client.billing.restrictionRestores')}
-                </dt>
-                <dd className={account.factValue}>
-                  {t(`client.billing.restore.${restriction.step}`)}
-                </dd>
-              </div>
-              <div className={account.fact}>
-                <dt className={account.factLabel}>{t('client.billing.graceLabel')}</dt>
-                <dd className={account.factValue}>
-                  <time dateTime={restriction.graceEndsAt}>
-                    {formatDateTime(restriction.graceEndsAt)}
-                  </time>
-                </dd>
-              </div>
-              <div className={`${account.fact} ${account.factWide}`}>
-                <dt className={account.factLabel}>
-                  {t('client.billing.approvalsLabel')}
-                </dt>
-                <dd className={account.factValue}>
-                  {t('client.billing.restrictionApprovers', {
+            <FactStrip
+              fields={[
+                {
+                  labelKey: 'client.billing.reasonLabel',
+                  value: t(restriction.reasonKey),
+                },
+                {
+                  labelKey: 'client.billing.restrictionChanges',
+                  value: t(`client.billing.change.${restriction.step}`),
+                },
+                {
+                  labelKey: 'client.billing.restrictionRestores',
+                  value: t(`client.billing.restore.${restriction.step}`),
+                },
+                {
+                  labelKey: 'client.billing.graceLabel',
+                  value: (
+                    <time dateTime={restriction.graceEndsAt}>
+                      {formatDateTime(restriction.graceEndsAt)}
+                    </time>
+                  ),
+                },
+                {
+                  labelKey: 'client.billing.approvalsLabel',
+                  wide: true,
+                  value: t('client.billing.restrictionApprovers', {
                     requester: restriction.approval.requester,
                     approver: restriction.approval.approver,
                     time: formatDateTime(restriction.approval.at),
-                  })}
-                </dd>
-              </div>
-            </dl>
+                  }),
+                },
+              ]}
+            />
             {/* The `stop` guarantee is NOT repeated here. It is stated on the
                 rung it concerns, in the ladder directly below — printing the
                 same sentence twice, a screen apart, made it read as boilerplate

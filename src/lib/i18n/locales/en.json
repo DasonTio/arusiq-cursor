@@ -1127,7 +1127,9 @@
       "reasonLabel": "Why",
       "graceLabel": "Grace ends",
       "approvalsLabel": "Approvals",
-      "noticeOpen": "Open notice"
+      "noticeOpen": "Open notice",
+      "standingLabel": "Standing",
+      "dueLabel": "Due"
     },
     "maintenance": {
       "title": "Service & visits",
@@ -1364,7 +1366,8 @@
       "accountTitle": "Account",
       "ladderTitle": "The ladder in force",
       "approvalsTitle": "Decision record",
-      "evidenceTitle": "Evidence and consent"
+      "evidenceTitle": "Evidence and consent",
+      "signOffLabel": "Management sign-off"
     },
     "approve": {
       "title": "Approve a restriction step",

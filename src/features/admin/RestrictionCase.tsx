@@ -16,7 +16,6 @@ import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button.tsx';
 import { Metric } from '../../components/Metric.tsx';
-import { ProvenanceChip } from '../../components/ProvenanceChip.tsx';
 import { LOAD_STATE, type LoadState } from '../../lib/domain/loadState.ts';
 import {
   simulatedTelemetry,
@@ -24,11 +23,14 @@ import {
   type Alert,
   type Property,
 } from '../../lib/simulation/index.ts';
+import { FactStrip } from '../../patterns/FactStrip.tsx';
+import { NoticeList } from '../../patterns/NoticeList.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { RestrictionLadder } from '../../patterns/RestrictionLadder.tsx';
 import { SectionHeader } from '../../patterns/SectionHeader.tsx';
 import { useSession } from '../auth/session.ts';
 import styles from '../shared/Screen.module.css';
+import account from './RestrictionCase.module.css';
 
 export default function RestrictionCase() {
   const { t, i18n } = useTranslation();
@@ -166,11 +168,12 @@ export default function RestrictionCase() {
         {t('admin.case.back')}
       </Button>
       <PageHeader titleKey="admin.case.title" contextKey="admin.case.purpose" />
-      <p>{property.name}</p>
-      <section className={styles.section}>
-        <SectionHeader titleKey="admin.case.accountTitle" />
-        {standing ? (
-          <>
+      {/* The account this case is about — the site name was a bare paragraph
+          floating between the heading and a stack of six more. */}
+      <div className={account.account}>
+        <div className={account.accountFigure}>
+          <p className={account.site}>{property.name}</p>
+          {standing ? (
             <Metric
               labelKey="client.billing.balance"
               value={standing.balanceIdr.value}
@@ -178,14 +181,33 @@ export default function RestrictionCase() {
               provenance={standing.balanceIdr.provenance}
               lastSeen={standing.balanceIdr.lastSeen}
             />
-            <p className={styles.meta}>
-              {t('client.billing.due', { time: formatDateTime(standing.dueAt) })}
-            </p>
-            <p>{t(`client.billing.state.${standing.state}`)}</p>
-          </>
+          ) : null}
+        </div>
+        {standing ? (
+          <FactStrip
+            columns={2}
+            fields={[
+              {
+                labelKey: 'client.billing.standingLabel',
+                value: t(`client.billing.state.${standing.state}`),
+              },
+              {
+                labelKey: 'client.billing.dueLabel',
+                value: (
+                  <time dateTime={standing.dueAt}>
+                    {formatDateTime(standing.dueAt)}
+                  </time>
+                ),
+              },
+              {
+                labelKey: 'client.billing.reasonLabel',
+                wide: true,
+                value: t(restriction.reasonKey),
+              },
+            ]}
+          />
         ) : null}
-        <p>{t(restriction.reasonKey)}</p>
-      </section>
+      </div>
       <section className={styles.section}>
         <SectionHeader titleKey="admin.case.ladderTitle" />
         <RestrictionLadder
@@ -201,51 +223,47 @@ export default function RestrictionCase() {
       </section>
       <section className={styles.section}>
         <SectionHeader titleKey="admin.case.approvalsTitle" />
-        <p>
-          {t('client.billing.restrictionApprovers', {
-            requester: restriction.approval.requester,
-            approver: restriction.approval.approver,
-            time: formatDateTime(restriction.approval.at),
-          })}
-        </p>
         {/* ADR-0015 OD-02 — rung 4 carries a named management sign-off on top
             of the two-person approval. This screen exists to BE the record of
             the ladder, so omitting the third signature made the heaviest rung
             look like every other one. */}
-        {restriction.approval.signedOff ? (
-          <p>
-            {t('admin.approve.decidedSignedOff', {
-              name: restriction.approval.signedOff.manager,
-              time: formatDateTime(restriction.approval.signedOff.at),
-            })}
-          </p>
-        ) : null}
+        <div className={account.record}>
+          <FactStrip
+            columns={2}
+            fields={[
+              {
+                labelKey: 'client.billing.approvalsLabel',
+                wide: !restriction.approval.signedOff,
+                value: t('client.billing.restrictionApprovers', {
+                  requester: restriction.approval.requester,
+                  approver: restriction.approval.approver,
+                  time: formatDateTime(restriction.approval.at),
+                }),
+              },
+              ...(restriction.approval.signedOff
+                ? [
+                    {
+                      labelKey: 'admin.case.signOffLabel' as const,
+                      value: t('admin.approve.decidedSignedOff', {
+                        name: restriction.approval.signedOff.manager,
+                        time: formatDateTime(restriction.approval.signedOff.at),
+                      }),
+                    },
+                  ]
+                : []),
+            ]}
+          />
+        </div>
       </section>
       <section className={styles.section}>
         <SectionHeader titleKey="admin.case.evidenceTitle" />
         {notices.length === 0 ? (
           <p>{t('client.billing.noticesEmpty')}</p>
         ) : (
-          <ul className={styles.list}>
-            {notices.map((alert) => {
-              return (
-                <li key={alert.id} className={styles.card}>
-                  <p className={styles.cardTitle}>{t(alert.titleKey)}</p>
-                  <ProvenanceChip provenance={alert.provenance} />
-                  {alert.delivery.map((item) => {
-                    return (
-                      <p key={`${item.channel}-${item.at}`} className={styles.meta}>
-                        {t('client.alerts.deliveryLine', {
-                          channel: t(`alertDelivery.channel.${item.channel}`),
-                          state: t(`alertDelivery.state.${item.state}`),
-                        })}
-                      </p>
-                    );
-                  })}
-                </li>
-              );
-            })}
-          </ul>
+          /* No link here, unlike the resident's copy of the same list: this is
+             the record that consent was given, and a record does not
+             navigate. */
+          <NoticeList notices={notices} />
         )}
       </section>
     </div>
