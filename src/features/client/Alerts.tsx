@@ -17,7 +17,7 @@
  * @requirement FR-21 FR-22 FR-25
  */
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router';
+import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button.tsx';
 import { Metric } from '../../components/Metric.tsx';
@@ -442,7 +442,6 @@ function Queue({
                     key={alert.id}
                     alert={alert}
                     rooms={rooms}
-                    format={format}
                     formatDateTime={formatDateTime}
                   />
                 );
@@ -458,12 +457,10 @@ function Queue({
 function AlertRow({
   alert,
   rooms,
-  format,
   formatDateTime,
 }: {
   alert: Alert;
   rooms: Room[];
-  format: (value: number) => string;
   formatDateTime: (iso: string) => string;
 }) {
   const { t } = useTranslation();
@@ -477,69 +474,92 @@ function AlertRow({
   const seen = lastSeenOf(alert);
 
   return (
-    <li className={styles.card}>
-      <div className={styles.cardTop}>
-        <p className={styles.cardTitle}>{t(alert.titleKey)}</p>
-        <SeverityIndicator severity={alert.severity} suspected={alert.suspected} />
-      </div>
-      {/* D7 §14.5 — tamper is critical, and a different category from a
-          mechanical fault. It keeps its own label rather than dissolving into
-          the maintenance queue. */}
-      <p className={styles.meta}>{t(`alertCategory.${alert.category}`)}</p>
-      <p className={styles.meta}>
-        {alert.suspected ? t('client.alerts.suspected') : t('client.alerts.confirmed')}
-      </p>
-      {unit ? (
-        <p className={styles.meta}>
-          {t('client.alerts.unitLine', { name: unit.name })}
-        </p>
-      ) : null}
-      {room ? (
-        <p className={styles.meta}>
-          {t('client.alerts.spaceLine', { name: room.name })}
-        </p>
-      ) : null}
-      <p className={styles.meta}>
-        {t('client.alerts.raised', { time: formatDateTime(alert.raisedAt) })}
-      </p>
-      {alert.severity === 'unknown' ? (
-        <p className={styles.meta}>
-          {seen
-            ? t('loadState.lastSeen', { time: formatDateTime(seen) })
-            : t('loadState.noData')}
-        </p>
-      ) : null}
-      {signal ? (
-        <div className={styles.metrics}>
-          <Metric
-            labelKey={signal.signalKey}
-            value={signal.observed.value}
-            unit={signal.unit}
-            provenance={signal.observed.provenance}
-            lastSeen={signal.observed.lastSeen}
-          />
-          <Metric
-            labelKey="client.alerts.limit"
-            value={signal.threshold.value}
-            unit={signal.unit}
-            provenance={signal.threshold.provenance}
-            lastSeen={signal.threshold.lastSeen}
-          />
-        </div>
-      ) : null}
-      <p className={styles.meta}>
-        {t('client.alerts.confidence', { value: format(alert.confidence * 100) })}
-      </p>
-      <ProvenanceChip provenance={alert.provenance} />
-      <Delivery alert={alert} />
-      <div className={styles.actions}>
-        <Button variant="ghost" to={links.alert(alert.id)}>
-          {t('client.alerts.openDetail')}
-        </Button>
-        <Button variant="secondary" to={alert.recommendedAction.href}>
-          {t(alert.recommendedAction.labelKey)}
-        </Button>
-      </div>
+    /* The ROW is the link, and it carries what the reader needs to triage:
+       how bad, what, where, how far past the limit, when. Everything else —
+       delivery, confidence, cause, impact and the action itself — is one
+       click away in the detail, which already renders all of it. The board
+       used to carry the whole alert record in twelve stacked label lines plus
+       two buttons per card, on a screen whose job is deciding which of seven
+       alerts to open first. */
+    <li>
+      <Link className={styles.row} to={links.alert(alert.id)}>
+        <span className={styles.rowTop}>
+          <SeverityIndicator severity={alert.severity} suspected={alert.suspected} />
+          <span className={styles.rowTitle}>{t(alert.titleKey)}</span>
+        </span>
+
+        <span className={styles.chips}>
+          {/* D7 §14.5 — tamper is critical, and a different category from a
+              mechanical fault. It keeps its own label rather than dissolving
+              into the maintenance queue. */}
+          <span className={styles.chip}>{t(`alertCategory.${alert.category}`)}</span>
+          {/* Only when true. "Confirmed" on every other card was a word that
+              never varied, which is a word that carries nothing. */}
+          {alert.suspected ? (
+            <span className={styles.chip}>{t('client.alerts.suspected')}</span>
+          ) : null}
+        </span>
+
+        {signal ? (
+          /* The reading AND what it is measured against. Two bare figures
+             side by side is a quiz: 9.24 and 8.5 mean nothing until one of
+             them is named the limit. `Metric` keeps the name for assistive
+             technology; the caption beside it is the sighted reader's copy,
+             and is hidden from the accessibility tree so it is not read
+             twice. */
+          <span className={styles.reading}>
+            <span className={styles.readingItem}>
+              <span className={styles.readingLabel} aria-hidden="true">
+                {t(signal.signalKey)}
+              </span>
+              <Metric
+                compact
+                labelKey={signal.signalKey}
+                value={signal.observed.value}
+                unit={signal.unit}
+                provenance={signal.observed.provenance}
+                lastSeen={signal.observed.lastSeen}
+              />
+            </span>
+            <span className={styles.readingItem}>
+              <span className={styles.readingLabel} aria-hidden="true">
+                {t('client.alerts.limit')}
+              </span>
+              <Metric
+                compact
+                labelKey="client.alerts.limit"
+                value={signal.threshold.value}
+                unit={signal.unit}
+                provenance={signal.threshold.provenance}
+                lastSeen={signal.threshold.lastSeen}
+              />
+            </span>
+          </span>
+        ) : null}
+
+        <span className={styles.where}>
+          {[
+            unit ? t('client.alerts.unitLine', { name: unit.name }) : null,
+            room ? t('client.alerts.spaceLine', { name: room.name }) : null,
+            t('client.alerts.raised', { time: formatDateTime(alert.raisedAt) }),
+            // Grey is never a pass: it carries its last-seen time wherever it
+            // appears, including here (INV-NO-FABRICATION).
+            alert.severity === 'unknown'
+              ? seen
+                ? t('loadState.lastSeen', { time: formatDateTime(seen) })
+                : t('loadState.noData')
+              : null,
+          ]
+            .filter(Boolean)
+            .map((line) => (
+              <span key={line} className={styles.whereItem}>
+                {line}
+              </span>
+            ))}
+        </span>
+
+        <span className={styles.rowHint}>{t(alert.recommendedAction.labelKey)}</span>
+      </Link>
     </li>
   );
 }

@@ -193,3 +193,101 @@
     padding: var(--space-4);
   }
 }
+
+/* --- the board row --------------------------------------------------------
+   The board carried the whole alert record on every card — twelve stacked
+   label lines, two `Metric` blocks, the delivery history and two buttons —
+   on the screen whose job is deciding which of seven alerts to open first.
+   Everything cut from here is in the detail view the row now links to.
+
+   The row IS the link (§4 "a button on every card"). */
+
+.row {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+  color: inherit;
+  text-decoration: none;
+}
+
+.row:hover {
+  border-color: var(--color-brand-accent);
+}
+
+.rowTop {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* The severity and the headline are ONE statement — "Critical: the compressor
+   current is too high" — so they sit together on one line. */
+.rowTitle {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  font-weight: var(--font-weight-semibold);
+  min-inline-size: 0;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-2);
+}
+
+.chip {
+  padding-block: var(--space-1);
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-full);
+  background: var(--surface-sunken);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-gray-2);
+}
+
+/* The reading against its limit, side by side: the comparison IS the alert.
+   Stacked as two full metric blocks it was two thirds of the card. */
+.reading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+}
+
+.readingItem {
+  display: grid;
+  gap: 0;
+  min-inline-size: 0;
+}
+
+.readingLabel {
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-gray-2);
+}
+
+.where {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  color: var(--color-gray-2);
+}
+
+.whereItem {
+  min-inline-size: 0;
+}
+
+/* What acting on this will mean, as a hint rather than as a second button.
+   The action itself is a primary control in the detail. */
+.rowHint {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-brand-accent);
+}

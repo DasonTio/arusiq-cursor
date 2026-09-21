@@ -87,16 +87,17 @@ describe('client.alerts — FR-21 FR-22', () => {
     const critical = rowFor('Compressor current is too high');
     expect(within(critical).getByText('Critical')).toBeInTheDocument();
     expect(within(critical).getByText('Equipment fault')).toBeInTheDocument();
-    const action = within(critical).getByRole('link', {
-      name: 'Open the compressor alert',
-    });
-    expect(action).toHaveAttribute(
+    // The ROW is the link, and it is the only one: the board is for deciding
+    // which alert to open, and the action that resolves this one is a primary
+    // control in the detail it opens.
+    const links = within(critical).getAllByRole('link');
+    expect(links).toHaveLength(1);
+    expect(links[0]).toHaveAttribute(
       'href',
-      '/account/service?request=new&alert=alert-unit-dining-1-compressor',
+      '/alerts?alert=alert-unit-dining-1-compressor',
     );
-    // The row offers the alert itself and one action that resolves it —
-    // no third button competing for the same decision.
-    expect(within(critical).getAllByRole('link')).toHaveLength(2);
+    // What acting will mean is still on the row, as a hint.
+    expect(within(critical).getByText('Open the compressor alert')).toBeInTheDocument();
 
     const watching = within(queueFor('Watching'));
     const suspected = watching
@@ -120,12 +121,27 @@ describe('client.alerts — FR-21 FR-22', () => {
 
   it('states the delivery of the notice that carried each alert', async () => {
     // The mock banner is suppressed by ADR-0020. The per-notice delivery
-    // trail below is the part that carries evidence, and it stays.
+    // trail is the part that carries evidence, and it stays — in the detail,
+    // where four channel lines per alert do not multiply by seven rows.
+    renderAlerts('/alerts?alert=alert-unit-study-1-tamper');
+    await screen.findByRole('heading', { name: 'Possible device tamper' });
+    expect(screen.getByText('WhatsApp · Delivered')).toBeInTheDocument();
+    expect(screen.getByText('Email · Failed')).toBeInTheDocument();
+  });
+
+  it('keeps the board to what a triage decision needs', async () => {
+    // Every field below is on the DETAIL. On the board they were twelve
+    // stacked label lines per card, seven cards deep, on the screen whose
+    // whole job is choosing which one to open first.
     renderAlerts();
     await screen.findByRole('heading', { name: 'Alerts' });
-    const tamper = rowFor('Possible device tamper');
-    expect(within(tamper).getByText('WhatsApp · Delivered')).toBeInTheDocument();
-    expect(within(tamper).getByText('Email · Failed')).toBeInTheDocument();
+    const critical = rowFor('Compressor current is too high');
+    expect(within(critical).queryByText(/Confidence/)).not.toBeInTheDocument();
+    expect(within(critical).queryByText(/WhatsApp/)).not.toBeInTheDocument();
+    // But the reading against its limit is exactly what triage needs, so it
+    // stays: 9.24 A against a working limit of 8.5 A.
+    expect(within(critical).getByText('9.24')).toBeInTheDocument();
+    expect(within(critical).getByText('8.5')).toBeInTheDocument();
   });
 
   it('narrows the queue by part group and by space', async () => {
@@ -258,9 +274,11 @@ describe('client.alerts — FR-21 FR-22', () => {
     expect(
       within(queueFor('Perlu tindakan')).getByText('Kritis · 2'),
     ).toBeInTheDocument();
-    expect(screen.getAllByText('WhatsApp · Sampai').length).toBeGreaterThan(0);
-    expect(
-      within(rowFor('Kemungkinan gangguan perangkat')).getByText('Email · Gagal'),
-    ).toBeInTheDocument();
+    const tamper = rowFor('Kemungkinan gangguan perangkat');
+    expect(within(tamper).getByText('Gangguan perangkat')).toBeInTheDocument();
+    // And the delivery trail is localised too, in the detail that carries it.
+    renderAlerts('/alerts?alert=alert-unit-study-1-tamper');
+    await screen.findByRole('heading', { name: 'Kemungkinan gangguan perangkat' });
+    expect(screen.getAllByText('Email · Gagal').length).toBeGreaterThan(0);
   });
 });
