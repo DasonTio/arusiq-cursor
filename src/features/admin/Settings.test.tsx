@@ -62,6 +62,6 @@ describe('admin.settings — the published thresholds · FR-27', () => {
     // The "preview only" note rode on the mock banner, which ADR-0020
     // suppresses. The table it wrapped is the thing that matters here.
     renderSettings();
-    expect(screen.getByText('Part thresholds (preview)')).toBeInTheDocument();
+    expect(screen.getByText('Part thresholds')).toBeInTheDocument();
   });
 });

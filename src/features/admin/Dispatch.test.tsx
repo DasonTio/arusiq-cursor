@@ -31,9 +31,7 @@ describe('HQ assignment — FR-31 FR-34', () => {
     expect(screen.getByText('Needs an assignee')).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Budi Pratama' }));
     await user.click(screen.getByRole('button', { name: 'Confirm assignment' }));
-    expect(
-      screen.getByText('Budi Pratama is assigned in this prototype session.'),
-    ).toBeInTheDocument();
+    expect(screen.getByText('Budi Pratama is assigned.')).toBeInTheDocument();
   });
 });
 

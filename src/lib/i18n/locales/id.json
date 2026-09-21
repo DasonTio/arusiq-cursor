@@ -656,13 +656,13 @@
     },
     "assistant": {
       "title": "Asisten",
-      "purpose": "Tanya dengan teks. Suara dipratinjau sebagai transkrip. Tidak ada yang dijalankan sebelum Anda konfirmasi.",
+      "purpose": "Tanya dengan teks. Suara masuk sebagai transkrip. Tidak ada yang dijalankan sebelum Anda konfirmasi.",
       "empty": "Belum ada apa pun di sini",
       "error": "Tidak dapat memuat",
       "prompt": "Pertanyaan Anda",
       "send": "Kirim",
-      "voice": "Suara (simulasi)",
-      "voiceMock": "Rekaman suara disimulasikan. Ketik saja.",
+      "voice": "Suara",
+      "voiceMock": "Suara masuk sebagai transkrip. Ketik saja.",
       "confirm": "Konfirmasi tindakan ini",
       "cancel": "Jangan jalankan",
       "mock": "Asisten disimulasikan. Ia tidak mengubah unit atau kunjungan.",
@@ -683,7 +683,7 @@
     },
     "serviceRequest": {
       "title": "Minta kunjungan layanan",
-      "purpose": "Peringatan sumber dan unit telah diisi. Pilih detail kunjungan sebelum mengirim simulasi ini.",
+      "purpose": "Peringatan sumber dan unit telah diisi. Pilih detail kunjungan sebelum mengirim.",
       "loading": "Memuat permintaan",
       "error": "Permintaan ini tidak dapat disiapkan.",
       "back": "Kembali ke peringatan",
@@ -731,7 +731,7 @@
     },
     "assign": {
       "title": "Tugaskan kunjungan ini",
-      "purpose": "Pilih teknisi dalam cakupan dan jendela kedatangan. Penugasan ini hanya ada dalam sesi prototipe ini.",
+      "purpose": "Pilih teknisi dalam cakupan dan jendela kedatangan.",
       "back": "Kembali ke papan layanan",
       "unassigned": "Memerlukan penugasan",
       "technician": "Teknisi",
@@ -749,7 +749,7 @@
       "notificationMock": "Notifikasi penugasan disimulasikan. Tidak ada pesan yang dikirim.",
       "notificationBody": "Penerima tugas hanya akan melihat ringkasan, bukti, dan unit yang ditugaskan.",
       "confirm": "Konfirmasi penugasan",
-      "submitted": "{{name}} ditugaskan dalam sesi prototipe ini.",
+      "submitted": "{{name}} ditugaskan.",
       "return": "Kembali ke papan layanan"
     },
     "method": {
@@ -858,7 +858,7 @@
       "checklistTally": "{{recorded}} dari {{total}} tercatat · {{failed}} gagal",
       "noUnitChecklist": "Tidak ada unit pada kunjungan ini, jadi tidak ada yang diukur.",
       "limit": "Batas",
-      "photoCaption": "Foto (tiruan): {{label}} · {{time}}",
+      "photoCaption": "{{label}} · {{time}}",
       "noFindings": "Belum ada temuan yang dicatat.",
       "recordFinding": "Catat temuan",
       "saveFinding": "Simpan temuan",
@@ -886,6 +886,12 @@
       "metaPriority": "Prioritas",
       "metaAssignee": "Teknisi",
       "metaSla": "Batas SLA"
+    },
+    "ladder": {
+      "inForce": "Berlaku sekarang",
+      "passed": "Terlewati",
+      "ahead": "Belum tercapai",
+      "blocked": "Stop diblokir pada ruang yang sensitif kesehatan."
     }
   },
   "client": {
@@ -1065,8 +1071,8 @@
       "heroUnit": "kgCO₂e",
       "reportTitle": "Laporan sederhana",
       "reportBody": "Periode ini memakai {{used}} kWh dan menghindari {{avoided}} kgCO₂e terhadap garis dasar yang disesuaikan.",
-      "offsetTitle": "Pratinjau offset",
-      "offsetMock": "Pensiun offset disimulasikan. Tidak ada yang dibeli atau dipensiunkan.",
+      "offsetTitle": "Offset",
+      "offsetMock": "Tidak ada yang dibeli atau dipensiunkan di sini.",
       "offsetBody": "Paket terverifikasi di masa depan dapat memensiunkan volume yang setara. Fase 1A tidak menerbitkannya.",
       "methodLink": "Cara ini dihitung",
       "days7": "7 hari terakhir",
@@ -1075,7 +1081,7 @@
     },
     "billing": {
       "title": "Tagihan & pemberitahuan",
-      "purpose": "Saldo, cara membayar, pemberitahuan yang kami simulasi, dan tangga pembatasan jika sedang berlaku.",
+      "purpose": "Saldo, cara membayar, riwayat pemberitahuan, dan tangga pembatasan jika sedang berlaku.",
       "empty": "Tidak ada akun dalam akses Anda.",
       "emptyAction": "Buka Beranda",
       "error": "Tagihan tidak dapat dimuat.",
@@ -1091,11 +1097,11 @@
       "methodsTitle": "Cara membayar",
       "methodVa": "Virtual account",
       "methodQris": "QRIS",
-      "methodMock": "Penagihan disimulasikan. Tidak ada uang yang bergerak dalam prototipe ini.",
+      "methodMock": "Tidak ada uang yang berpindah dari layar ini.",
       "instructions": "Gunakan tautan pembayaran pada pemberitahuan. Simpan nomor virtual account pada invoice.",
       "noticesTitle": "Riwayat pemberitahuan",
       "noticesEmpty": "Tidak ada pemberitahuan pembayaran pada akun ini.",
-      "noticesMock": "Pengiriman WhatsApp dan email disimulasikan.",
+      "noticesMock": "Status pengiriman per saluran ditampilkan pada setiap pemberitahuan.",
       "restrictionTitle": "Pembatasan yang berlaku",
       "restrictionNone": "Tidak ada pembatasan yang berlaku.",
       "restrictionCurrent": "Langkah saat ini",
@@ -1117,7 +1123,11 @@
         "stop": "Bayar invoice dan persetujuan ganda diperlukan sebelum pendinginan kembali."
       },
       "ladderTitle": "Empat langkah",
-      "payMock": "Bayar disimulasikan dan tidak menyelesaikan invoice nyata."
+      "payMock": "Tidak ada invoice yang diselesaikan dari sini.",
+      "reasonLabel": "Alasan",
+      "graceLabel": "Masa tenggang berakhir",
+      "approvalsLabel": "Persetujuan",
+      "noticeOpen": "Buka pemberitahuan"
     },
     "maintenance": {
       "title": "Layanan & kunjungan",
@@ -1152,7 +1162,7 @@
     },
     "map": {
       "title": "Peta",
-      "purpose": "Situs yang ditugaskan dalam urutan perjalanan. Perlakuan peta tidak ada dalam prototipe ini, jadi daftar ini adalah rutenya.",
+      "purpose": "Situs yang ditugaskan dalam urutan perjalanan. Daftar ini adalah rutenya — tidak ada peta yang digambar.",
       "empty": "Tidak ada situs yang ditugaskan kepada Anda.",
       "emptyAction": "Buka antrean kerja",
       "error": "Rute tidak dapat dimuat.",
@@ -1250,7 +1260,7 @@
     },
     "payments": {
       "title": "Pembayaran",
-      "purpose": "Status akun, tangga pembatasan, dan pengiriman pemberitahuan tersimulasi per situs.",
+      "purpose": "Status akun, tangga pembatasan, dan pengiriman pemberitahuan per situs.",
       "empty": "Tidak ada akun dalam cakupan.",
       "error": "Pembayaran tidak dapat dimuat.",
       "retry": "Coba lagi",
@@ -1280,27 +1290,27 @@
     },
     "mrv": {
       "title": "Paket & ekspor",
-      "purpose": "Cakupan 2 dan emisi yang dihindari per situs. Koneksi registri adalah simulasi berlabel di balik persetujuan ganda.",
+      "purpose": "Cakupan 2 dan emisi yang dihindari per situs. Koneksi registri berada di balik persetujuan ganda.",
       "empty": "Tidak ada paket untuk diekspor.",
       "error": "Paket tidak dapat dimuat.",
       "retry": "Coba lagi",
       "loading": "Memuat paket",
       "registryMock": "Koneksi registri disimulasikan. Persetujuan ganda diperlukan sebelum apa pun dikirim.",
-      "approve": "Setujui ekspor (simulasi)",
-      "second": "Penyetuju kedua (simulasi)",
+      "approve": "Setujui ekspor",
+      "second": "Penyetuju kedua",
       "exported": "Tidak ada yang dikirim ke registri.",
       "firstApproved": "Persetujuan pertama tercatat. Penyetuju kedua kini dapat mengonfirmasi."
     },
     "settings": {
       "title": "Pengaturan",
-      "purpose": "Tabel yang dipublikasikan dan ambang tersimulasi. Mengubah nilai di sini hanya pratinjau.",
+      "purpose": "Tabel yang dipublikasikan dan ambang bagian. Mengubah nilai di sini tidak menulis aturan aktif.",
       "empty": "Belum ada apa pun di sini",
       "error": "Pengaturan tidak dapat dimuat.",
       "retry": "Coba lagi",
       "loading": "Memuat pengaturan",
       "tariffs": "Tarif",
       "grid": "Faktor jaringan",
-      "thresholds": "Ambang bagian (pratinjau)",
+      "thresholds": "Ambang bagian",
       "preview": "Hanya pratinjau — ini tidak menulis aturan hidup.",
       "users": "Pengguna dan peran",
       "limitAbove": "{{signal}} · memberi peringatan di atas {{value}} {{unit}}",
@@ -1308,13 +1318,13 @@
     },
     "audit": {
       "title": "Log audit",
-      "purpose": "Tindakan sensitif yang disusun ulang dari rekaman tersimulasi. Hanya tambah; ekspor disimulasikan.",
-      "empty": "Tidak ada baris audit pada irisan prototipe ini.",
+      "purpose": "Tindakan sensitif, disusun ulang dari rekaman. Hanya tambah.",
+      "empty": "Tidak ada baris audit pada periode ini.",
       "error": "Log audit tidak dapat dimuat.",
       "retry": "Coba lagi",
       "loading": "Memuat audit",
-      "export": "Ekspor (simulasi)",
-      "exportMock": "Ekspor disimulasikan. Tidak ada berkas yang meninggalkan perangkat ini.",
+      "export": "Ekspor",
+      "exportMock": "Tidak ada berkas yang meninggalkan perangkat ini.",
       "rowRestriction": "{{step}} · {{requester}} / {{approver}}",
       "rowCommand": "{{unit}} · {{state}}",
       "rowVisit": "{{title}} · {{state}}",
@@ -1354,10 +1364,7 @@
       "accountTitle": "Akun",
       "ladderTitle": "Tangga yang berlaku",
       "approvalsTitle": "Catatan keputusan",
-      "evidenceTitle": "Bukti dan persetujuan",
-      "rungPassed": "Terlewati",
-      "rungInForce": "Berlaku sekarang",
-      "rungAhead": "Belum tercapai"
+      "evidenceTitle": "Bukti dan persetujuan"
     },
     "approve": {
       "title": "Setujui langkah pembatasan",

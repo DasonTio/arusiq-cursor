@@ -1,6 +1,6 @@
 import type { ReactElement } from 'react';
 import { describe, expect, it } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter } from 'react-router';
 import { SessionProvider } from '../auth/SessionProvider.tsx';
@@ -54,22 +54,58 @@ describe('client insights and account — FR-50 FR-60 FR-61 FR-70', () => {
     expect(screen.getByText('Scope 2 this period')).toBeInTheDocument();
     expect(screen.getByText('Avoided emissions')).toBeInTheDocument();
     expect(screen.getByText(/Grid factor/)).toBeInTheDocument();
-    expect(screen.getByText(/Offset retirement is mocked/)).toBeInTheDocument();
+    expect(screen.getByText(/Nothing is purchased or retired/)).toBeInTheDocument();
     expect(screen.queryByText(/ppm/i)).not.toBeInTheDocument();
   });
 
-  it('shows the overdue balance, mocked pay path and the restriction ladder', async () => {
+  it('shows the overdue balance, the pay path and the restriction ladder', async () => {
     wrap(<Billing />, '/account');
     expect(
       await screen.findByRole('heading', { name: 'Bills & notices' }),
     ).toBeInTheDocument();
     expect(screen.getByText('Overdue')).toBeInTheDocument();
-    expect(screen.getByText(/Payment collection is simulated/)).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Pay this bill' })).toHaveAttribute(
+      'href',
+      '/account?pay=balance',
+    );
     expect(screen.getByText('The four steps')).toBeInTheDocument();
     expect(screen.getByText('Service stopped')).toBeInTheDocument();
     expect(
       screen.getAllByText('Stop is blocked on health-sensitive spaces.').length,
     ).toBeGreaterThan(0);
+  });
+
+  it('draws all four rungs, in order, with their state in words', async () => {
+    // FR-52 — the ladder is the safety guarantee, so it renders whole
+    // whatever rung is in force: the reader has to be able to see that `stop`
+    // is unreachable WITHOUT having to arrive at it.
+    wrap(<Billing />, '/account');
+    const ladder = await screen.findByRole('list', { name: 'The four steps' });
+    const rungs = within(ladder).getAllByRole('listitem');
+    expect(rungs.length).toBe(4);
+    expect(within(ladder).getAllByText('Passed').length).toBeGreaterThan(0);
+    expect(within(ladder).getByText('In force now')).toBeInTheDocument();
+  });
+
+  it('makes every notice openable — a notice is not a dead end', async () => {
+    // The restriction below was first explained on one of these notices
+    // (INV-NO-DEAD-END). The row itself is the link, so there is no button.
+    wrap(<Billing />, '/account');
+    await screen.findByRole('heading', { name: 'Bills & notices' });
+    const notices = screen.getAllByRole('link', { name: /Open notice/ });
+    expect(notices.length).toBeGreaterThan(0);
+    notices.forEach((link) => {
+      expect(link.getAttribute('href')).toMatch(/^\/alerts\?alert=/);
+    });
+  });
+
+  it('says nothing about being a simulation — ADR-0020', async () => {
+    // The owner's decision: the prototype is disclosed at the presentation,
+    // so the screens do not repeat it. This is the screen that carried it
+    // four times over.
+    const { container } = wrap(<Billing />, '/account');
+    await screen.findByRole('heading', { name: 'Bills & notices' });
+    expect(container.textContent ?? '').not.toMatch(/simulat|mock|prototype/i);
   });
 
   it('completes a mocked payment hand-off without settling the restriction', async () => {

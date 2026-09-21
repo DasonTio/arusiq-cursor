@@ -656,13 +656,13 @@
     },
     "assistant": {
       "title": "Assistant",
-      "purpose": "Ask in text. Voice is previewed as a transcript. Nothing runs until you confirm.",
+      "purpose": "Ask in text. Voice arrives as a transcript. Nothing runs until you confirm.",
       "empty": "Nothing here yet",
       "error": "Could not load",
       "prompt": "Your question",
       "send": "Send",
-      "voice": "Voice (mocked)",
-      "voiceMock": "Voice capture is mocked. Type instead.",
+      "voice": "Voice",
+      "voiceMock": "Voice arrives as a transcript. Type instead.",
       "confirm": "Confirm this action",
       "cancel": "Do not run it",
       "mock": "The assistant is mocked. It does not change units or visits.",
@@ -683,7 +683,7 @@
     },
     "serviceRequest": {
       "title": "Request a service visit",
-      "purpose": "The source alert and unit are prefilled. Choose the visit details before submitting this simulation.",
+      "purpose": "The source alert and unit are prefilled. Choose the visit details before submitting.",
       "loading": "Loading request",
       "error": "This request could not be prepared.",
       "back": "Back to alerts",
@@ -731,7 +731,7 @@
     },
     "assign": {
       "title": "Assign this visit",
-      "purpose": "Choose a scoped technician and arrival window. This assignment exists only in this prototype session.",
+      "purpose": "Choose a scoped technician and arrival window.",
       "back": "Back to service board",
       "unassigned": "Needs an assignee",
       "technician": "Technician",
@@ -749,7 +749,7 @@
       "notificationMock": "Assignment notification is mocked. No message is sent.",
       "notificationBody": "The assignee will see the brief, evidence and assigned unit only.",
       "confirm": "Confirm assignment",
-      "submitted": "{{name}} is assigned in this prototype session.",
+      "submitted": "{{name}} is assigned.",
       "return": "Return to service board"
     },
     "method": {
@@ -858,7 +858,7 @@
       "checklistTally": "{{recorded}} of {{total}} recorded · {{failed}} failed",
       "noUnitChecklist": "No unit is on this visit, so there is nothing to measure.",
       "limit": "Limit",
-      "photoCaption": "Photo (mock): {{label}} · {{time}}",
+      "photoCaption": "{{label}} · {{time}}",
       "noFindings": "No findings have been recorded yet.",
       "recordFinding": "Record a finding",
       "saveFinding": "Save finding",
@@ -886,6 +886,12 @@
       "metaPriority": "Priority",
       "metaAssignee": "Assignee",
       "metaSla": "SLA due"
+    },
+    "ladder": {
+      "inForce": "In force now",
+      "passed": "Passed",
+      "ahead": "Not reached",
+      "blocked": "Stop is blocked on health-sensitive spaces."
     }
   },
   "client": {
@@ -1065,8 +1071,8 @@
       "heroUnit": "kgCO₂e",
       "reportTitle": "Simple report",
       "reportBody": "This period used {{used}} kWh and avoided {{avoided}} kgCO₂e against the adjusted baseline.",
-      "offsetTitle": "Offset preview",
-      "offsetMock": "Offset retirement is mocked. Nothing was purchased or retired.",
+      "offsetTitle": "Offsets",
+      "offsetMock": "Nothing is purchased or retired here.",
       "offsetBody": "A future verified package could retire a matching volume. Phase 1A does not issue one.",
       "methodLink": "How this was calculated",
       "days7": "Last 7 days",
@@ -1075,7 +1081,7 @@
     },
     "billing": {
       "title": "Bills & notices",
-      "purpose": "Balance, how to pay, notices we simulated, and the restriction ladder if it is in force.",
+      "purpose": "Balance, how to pay, notice history, and the restriction ladder if it is in force.",
       "empty": "No account is in your access.",
       "emptyAction": "Open Home",
       "error": "Bills could not be loaded.",
@@ -1091,11 +1097,11 @@
       "methodsTitle": "How to pay",
       "methodVa": "Virtual account",
       "methodQris": "QRIS",
-      "methodMock": "Payment collection is simulated. No money moves in this prototype.",
+      "methodMock": "No money moves from this screen.",
       "instructions": "Use the payment link on the notice. Keep the virtual-account number on the invoice.",
       "noticesTitle": "Notice history",
       "noticesEmpty": "No payment notices are on this account.",
-      "noticesMock": "WhatsApp and email delivery is mocked.",
+      "noticesMock": "Delivery state per channel is shown on each notice.",
       "restrictionTitle": "Restriction in force",
       "restrictionNone": "No restriction is in force.",
       "restrictionCurrent": "Current step",
@@ -1117,7 +1123,11 @@
         "stop": "Pay the invoice and dual approval is required before cooling returns."
       },
       "ladderTitle": "The four steps",
-      "payMock": "Pay is simulated and does not settle a real invoice."
+      "payMock": "No invoice is settled from here.",
+      "reasonLabel": "Why",
+      "graceLabel": "Grace ends",
+      "approvalsLabel": "Approvals",
+      "noticeOpen": "Open notice"
     },
     "maintenance": {
       "title": "Service & visits",
@@ -1152,7 +1162,7 @@
     },
     "map": {
       "title": "Map",
-      "purpose": "Assigned sites in travel order. A map treatment is not in this prototype, so the list is the route.",
+      "purpose": "Assigned sites in travel order. The list is the route — there is no drawn map.",
       "empty": "No sites are assigned to you.",
       "emptyAction": "Open the work queue",
       "error": "The route could not be loaded.",
@@ -1250,7 +1260,7 @@
     },
     "payments": {
       "title": "Payments",
-      "purpose": "Account standing, restriction rung and mocked notice delivery per site.",
+      "purpose": "Account standing, restriction rung and notice delivery per site.",
       "empty": "No accounts in scope.",
       "error": "Payments could not be loaded.",
       "retry": "Try again",
@@ -1280,27 +1290,27 @@
     },
     "mrv": {
       "title": "Packages & exports",
-      "purpose": "Scope 2 and avoided emissions by site. Registry connection is a labelled mock behind dual approval.",
+      "purpose": "Scope 2 and avoided emissions by site. Registry connection sits behind dual approval.",
       "empty": "No packages to export.",
       "error": "Packages could not be loaded.",
       "retry": "Try again",
       "loading": "Loading packages",
       "registryMock": "Registry connection is mocked. Dual approval would be required before anything is sent.",
-      "approve": "Approve an export (mock)",
-      "second": "Second approver (mock)",
+      "approve": "Approve an export",
+      "second": "Second approver",
       "exported": "Nothing was sent to a registry.",
       "firstApproved": "First approval recorded. A second approver can now confirm."
     },
     "settings": {
       "title": "Settings",
-      "purpose": "Published tables and simulated thresholds. Changing a value here is preview-only.",
+      "purpose": "Published tables and part thresholds. Changing a value here does not write a live rule.",
       "empty": "Nothing here yet",
       "error": "Settings could not be loaded.",
       "retry": "Try again",
       "loading": "Loading settings",
       "tariffs": "Tariffs",
       "grid": "Grid factors",
-      "thresholds": "Part thresholds (preview)",
+      "thresholds": "Part thresholds",
       "preview": "Preview only — this does not write a live rule.",
       "users": "Users and roles",
       "limitAbove": "{{signal}} · alerts above {{value}} {{unit}}",
@@ -1308,13 +1318,13 @@
     },
     "audit": {
       "title": "Audit log",
-      "purpose": "Sensitive actions reconstructed from the simulated record. Append-only; export is mocked.",
-      "empty": "No audit rows in this prototype slice.",
+      "purpose": "Sensitive actions, reconstructed from the record. Append-only.",
+      "empty": "No audit rows in this period.",
       "error": "The audit log could not be loaded.",
       "retry": "Try again",
       "loading": "Loading audit",
-      "export": "Export (mock)",
-      "exportMock": "Export is mocked. No file left this device.",
+      "export": "Export",
+      "exportMock": "No file left this device.",
       "rowRestriction": "{{step}} · {{requester}} / {{approver}}",
       "rowCommand": "{{unit}} · {{state}}",
       "rowVisit": "{{title}} · {{state}}",
@@ -1354,10 +1364,7 @@
       "accountTitle": "Account",
       "ladderTitle": "The ladder in force",
       "approvalsTitle": "Decision record",
-      "evidenceTitle": "Evidence and consent",
-      "rungPassed": "Passed",
-      "rungInForce": "In force now",
-      "rungAhead": "Not reached"
+      "evidenceTitle": "Evidence and consent"
     },
     "approve": {
       "title": "Approve a restriction step",

@@ -17,13 +17,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '../../components/Button.tsx';
 import { Metric } from '../../components/Metric.tsx';
 import { ProvenanceChip } from '../../components/ProvenanceChip.tsx';
-import { SeverityIndicator } from '../../components/SeverityIndicator.tsx';
 import { LOAD_STATE, type LoadState } from '../../lib/domain/loadState.ts';
-import {
-  RESTRICTION_STEP,
-  isStepPermitted,
-  restrictionSeverity,
-} from '../../lib/domain/restriction.ts';
 import {
   simulatedTelemetry,
   type AccountStanding,
@@ -31,10 +25,10 @@ import {
   type Property,
 } from '../../lib/simulation/index.ts';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
+import { RestrictionLadder } from '../../patterns/RestrictionLadder.tsx';
 import { SectionHeader } from '../../patterns/SectionHeader.tsx';
 import { useSession } from '../auth/session.ts';
 import styles from '../shared/Screen.module.css';
-import ladder from './RestrictionCase.module.css';
 
 export default function RestrictionCase() {
   const { t, i18n } = useTranslation();
@@ -194,40 +188,11 @@ export default function RestrictionCase() {
       </section>
       <section className={styles.section}>
         <SectionHeader titleKey="admin.case.ladderTitle" />
-        <ol className={ladder.ladder} aria-label={t('admin.case.ladderTitle')}>
-          {RESTRICTION_STEP.map((step, index) => {
-            const permitted = isStepPermitted(step, {
-              healthSensitive: restriction.healthSensitive,
-            });
-            const current = restriction.step === step;
-            const passed = index < RESTRICTION_STEP.indexOf(restriction.step);
-            // One state per rung, worst-news first: a rung that cannot be
-            // reached is blocked whether or not the ladder got near it.
-            const stateKey = !permitted
-              ? 'client.billing.restrictionBlocked'
-              : current
-                ? 'admin.case.rungInForce'
-                : passed
-                  ? 'admin.case.rungPassed'
-                  : 'admin.case.rungAhead';
-            const tone = current ? ladder.inForce : passed ? ladder.passed : '';
-            const className = [ladder.rung, tone, permitted ? '' : ladder.blocked]
-              .filter(Boolean)
-              .join(' ');
-            return (
-              <li key={step} className={className}>
-                {/* Severity means "attention now". Only the rung actually in
-                    force is that — a badge on a passed or unreachable rung
-                    would be a false alarm the whole product is judged on. */}
-                {current ? (
-                  <SeverityIndicator severity={restrictionSeverity(step)} />
-                ) : null}
-                <p className={ladder.rungName}>{t(`restriction.${step}`)}</p>
-                <p className={ladder.rungState}>{t(stateKey)}</p>
-              </li>
-            );
-          })}
-        </ol>
+        <RestrictionLadder
+          current={restriction.step}
+          healthSensitive={restriction.healthSensitive}
+          labelKey="admin.case.ladderTitle"
+        />
         <p className={styles.meta}>
           {t('client.billing.restrictionGrace', {
             time: formatDateTime(restriction.graceEndsAt),

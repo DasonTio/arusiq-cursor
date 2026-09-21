@@ -1,0 +1,170 @@
+/* FR-52 — "a ladder, never a switch" (D7 §13.2). Four equal cards said the
+   four rungs were four options. A rail with numbered markers says what is
+   true: they are an ordered climb, taken one at a time, and the reader is
+   somewhere on it.
+
+   One column at every width. A ladder that reflows into two columns stops
+   being a ladder. */
+
+.ladder {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: var(--space-2);
+  list-style: none;
+  inline-size: 100%;
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+.rung {
+  display: grid;
+  grid-template-columns: var(--space-6) 1fr auto;
+  align-items: center;
+  gap: var(--space-3);
+  min-block-size: var(--target-min);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-md);
+}
+
+/* The rail. A marker per rung on a continuous line is what turns four rows
+   into a sequence; it runs between markers, not past the ends. */
+.rail {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rail::before {
+  content: '';
+  position: absolute;
+  inset-block: 0;
+  inline-size: 1px;
+  background: var(--color-gray-5);
+}
+
+.rung:first-child .rail::before {
+  inset-block-start: 50%;
+}
+
+.rung:last-child .rail::before {
+  inset-block-end: 50%;
+}
+
+.marker {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-gray-4);
+  background: var(--surface-raised);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-2);
+  font-variant-numeric: tabular-nums;
+}
+
+.body {
+  display: grid;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.rungName,
+.rungState {
+  margin: 0;
+}
+
+.rungName {
+  font-weight: var(--font-weight-semibold);
+}
+
+.rungState {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  color: var(--color-gray-2);
+}
+
+/* Rungs already climbed are history, not alarm: the marker is filled, the
+   words recede. */
+.passed .marker {
+  border-color: var(--color-gray-4);
+  background: var(--color-gray-5);
+}
+
+.passed .rungName {
+  color: var(--color-gray-2);
+  font-weight: var(--font-weight-regular);
+}
+
+/* The rung in force is the one the occupant is living with. It carries the
+   only SeverityIndicator on the ladder, and the row is tinted in that same
+   severity so the eye lands on it — colour SECOND, never alone. */
+.inForce {
+  background: color-mix(in srgb, var(--rung-mark) 10%, var(--surface-raised));
+}
+
+.inForce .marker {
+  border-color: var(--rung-mark);
+  color: var(--rung-text);
+}
+
+.inForce .rungName {
+  color: var(--rung-text);
+}
+
+.critical {
+  --rung-mark: var(--color-severity-critical-mark);
+  --rung-text: var(--color-severity-critical-text);
+}
+
+.warning {
+  --rung-mark: var(--color-severity-warning-mark);
+  --rung-text: var(--color-severity-warning-text);
+}
+
+.normal {
+  --rung-mark: var(--color-severity-normal-mark);
+  --rung-text: var(--color-severity-normal-text);
+}
+
+.unknown {
+  --rung-mark: var(--color-severity-unknown-mark);
+  --rung-text: var(--color-severity-unknown-text);
+}
+
+/* Blocked is the safety guarantee made visible (FR-52). Muted rather than
+   loud: it is the one rung that CANNOT happen here, so it must not read as an
+   emergency. The words carry it; the dashed marker is the second channel. */
+.blocked .marker {
+  border-style: dashed;
+  color: var(--color-gray-3);
+}
+
+.blocked .rungName {
+  color: var(--color-gray-2);
+}
+
+.blocked .rungState {
+  color: var(--color-severity-warning-text);
+}
+
+@media (min-width: 1024px) {
+  .ladder {
+    padding: var(--space-3);
+  }
+
+  .rung {
+    padding-block: var(--space-3);
+    padding-inline: var(--space-3);
+  }
+}

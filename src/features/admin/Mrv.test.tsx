@@ -37,9 +37,7 @@ describe('admin.mrv dual approval — FR-70 FR-71 FR-73 FR-74', () => {
   it('announces the first approval as a status region, not a silent colour change', async () => {
     const user = userEvent.setup();
     renderMrv();
-    await user.click(
-      await screen.findByRole('button', { name: 'Approve an export (mock)' }),
-    );
+    await user.click(await screen.findByRole('button', { name: 'Approve an export' }));
     expect(
       statusWithText('First approval recorded. A second approver can now confirm.'),
     ).toBeInTheDocument();
@@ -48,7 +46,7 @@ describe('admin.mrv dual approval — FR-70 FR-71 FR-73 FR-74', () => {
   it('enables the second approval only after the first', async () => {
     renderMrv();
     const second = await screen.findByRole('button', {
-      name: 'Second approver (mock)',
+      name: 'Second approver',
     });
     expect(second).toBeDisabled();
   });
@@ -56,10 +54,8 @@ describe('admin.mrv dual approval — FR-70 FR-71 FR-73 FR-74', () => {
   it('announces the export confirmation as a status region and replaces the first-approval status', async () => {
     const user = userEvent.setup();
     renderMrv();
-    await user.click(
-      await screen.findByRole('button', { name: 'Approve an export (mock)' }),
-    );
-    await user.click(screen.getByRole('button', { name: 'Second approver (mock)' }));
+    await user.click(await screen.findByRole('button', { name: 'Approve an export' }));
+    await user.click(screen.getByRole('button', { name: 'Second approver' }));
     expect(statusWithText('Nothing was sent to a registry.')).toBeInTheDocument();
     expect(
       statusWithText('First approval recorded. A second approver can now confirm.'),
