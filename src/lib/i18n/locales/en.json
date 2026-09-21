@@ -639,7 +639,11 @@
       "signOutThis": "Sign out on this device",
       "signOutAll": "Sign out everywhere",
       "empty": "Nothing here yet",
-      "error": "Could not load"
+      "error": "Could not load",
+      "identityTitle": "Signed in as",
+      "preferencesTitle": "Preferences",
+      "sessionTitle": "This session",
+      "sessionBody": "Sign out here, or on every device you have used."
     },
     "search": {
       "title": "Search",

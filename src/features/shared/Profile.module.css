@@ -15,3 +15,75 @@
   flex-wrap: wrap;
   gap: var(--space-2);
 }
+
+/* Three panels: who you are, what you have set, and how you leave. The screen
+   was a heading, two grey lines and three controls loose on the canvas with
+   five hundred pixels of nothing beneath them. */
+
+.panels {
+  display: grid;
+  gap: var(--space-3);
+  inline-size: 100%;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border: 1px solid var(--color-gray-5);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+.panelTitle {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-2);
+}
+
+.name {
+  margin: 0;
+  font-size: var(--font-size-h5);
+  line-height: var(--line-height-h5);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-gray-1);
+}
+
+/* A role is a category, and it decides what this person can see — the one
+   fact on the screen worth a channel of its own. */
+.roleChip {
+  margin: 0;
+  padding-block: var(--space-1);
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-sm);
+  font-weight: var(--font-weight-semibold);
+  background: color-mix(in srgb, var(--role-tone) 12%, var(--surface-raised));
+  color: var(--role-tone);
+}
+
+.client {
+  --role-tone: var(--color-brand-accent);
+}
+
+.admin {
+  --role-tone: var(--color-state-info-text);
+}
+
+.technician-internal,
+.technician-thirdparty {
+  --role-tone: var(--color-state-eco-text);
+}
+
+@media (min-width: 768px) {
+  .panels {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-items: start;
+  }
+}

@@ -639,7 +639,11 @@
       "signOutThis": "Keluar dari perangkat ini",
       "signOutAll": "Keluar dari semua perangkat",
       "empty": "Belum ada apa pun di sini",
-      "error": "Tidak dapat memuat"
+      "error": "Tidak dapat memuat",
+      "identityTitle": "Masuk sebagai",
+      "preferencesTitle": "Preferensi",
+      "sessionTitle": "Sesi ini",
+      "sessionBody": "Keluar di sini, atau di setiap perangkat yang pernah Anda gunakan."
     },
     "search": {
       "title": "Cari",

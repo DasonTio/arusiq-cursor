@@ -40,25 +40,55 @@ export function SessionActions() {
 export default function Profile() {
   const { t } = useTranslation();
   const { session } = useSession();
+  const role = session?.role ?? 'client';
 
   return (
     <section className={styles.root}>
       {session?.role === 'client' ? <ViewTabs items={ACCOUNT_VIEWS} /> : null}
       <h1>{t('shared.profile.title')}</h1>
-      <p className={styles.meta}>{session?.name}</p>
-      <p className={styles.meta}>{t(`roles.${session?.role ?? 'client'}`)}</p>
-      <LanguageSwitch />
-      {session?.role === 'admin' ? (
-        <div className={styles.actions}>
-          <Button variant="ghost" to="/settings">
-            {t('nav.admin.settings')}
-          </Button>
-          <Button variant="ghost" to="/audit">
-            {t('nav.admin.audit')}
-          </Button>
-        </div>
-      ) : null}
-      <SessionActions />
+
+      {/* The screen was a heading, two grey lines and three controls loose on
+          the canvas, with five hundred pixels of nothing under them. Three
+          panels: who you are, what you have set, and how you leave. */}
+      <div className={styles.panels}>
+        <section className={styles.panel} aria-labelledby="profile-identity">
+          <h2 className={styles.panelTitle} id="profile-identity">
+            {t('shared.profile.identityTitle')}
+          </h2>
+          <p className={styles.name}>{session?.name}</p>
+          {/* A role is a category, so it is a tinted chip rather than a third
+              grey line — and it is the one fact on this screen that decides
+              what the person can see. */}
+          <p className={`${styles.roleChip} ${styles[role] ?? ''}`}>
+            {t(`roles.${role}`)}
+          </p>
+        </section>
+
+        <section className={styles.panel} aria-labelledby="profile-prefs">
+          <h2 className={styles.panelTitle} id="profile-prefs">
+            {t('shared.profile.preferencesTitle')}
+          </h2>
+          <LanguageSwitch />
+          {session?.role === 'admin' ? (
+            <div className={styles.actions}>
+              <Button variant="ghost" to="/settings">
+                {t('nav.admin.settings')}
+              </Button>
+              <Button variant="ghost" to="/audit">
+                {t('nav.admin.audit')}
+              </Button>
+            </div>
+          ) : null}
+        </section>
+
+        <section className={styles.panel} aria-labelledby="profile-session">
+          <h2 className={styles.panelTitle} id="profile-session">
+            {t('shared.profile.sessionTitle')}
+          </h2>
+          <p className={styles.meta}>{t('shared.profile.sessionBody')}</p>
+          <SessionActions />
+        </section>
+      </div>
     </section>
   );
 }
