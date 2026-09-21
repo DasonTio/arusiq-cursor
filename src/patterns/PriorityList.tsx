@@ -81,9 +81,21 @@ export interface PriorityGroup {
 export interface PriorityListProps {
   groups: readonly PriorityGroup[];
   ariaLabelKey: I18nKey;
+  /**
+   * The rows are a SEQUENCE — a technician's route in travel order — so they
+   * stay in one column however much canvas there is. A lone group is
+   * otherwise split into two columns to use the width, and reading a route
+   * down one column and then down the next is how someone drives to the
+   * fourth stop first.
+   */
+  ordered?: boolean;
 }
 
-export function PriorityList({ groups, ariaLabelKey }: PriorityListProps) {
+export function PriorityList({
+  groups,
+  ariaLabelKey,
+  ordered = false,
+}: PriorityListProps) {
   const { t } = useTranslation();
 
   function titleNode(item: PriorityItem): ReactNode {
@@ -148,7 +160,15 @@ export function PriorityList({ groups, ariaLabelKey }: PriorityListProps) {
   };
 
   return (
-    <div className={styles.root} role="group" aria-label={t(ariaLabelKey)}>
+    <div
+      className={
+        groups.length === 1 && !ordered
+          ? `${styles.root} ${styles.single}`
+          : styles.root
+      }
+      role="group"
+      aria-label={t(ariaLabelKey)}
+    >
       {groups.map((group) => (
         <section key={group.id} className={styles.group}>
           <h3 className={styles.groupTitle}>{t(group.labelKey, group.labelValues)}</h3>

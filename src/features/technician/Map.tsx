@@ -125,6 +125,7 @@ export default function Map() {
       <MockBoundary explanationKey="tech.map.mapMock">
         <SectionHeader titleKey="tech.map.scheduleTitle" />
         <PriorityList
+          ordered
           ariaLabelKey="tech.map.title"
           groups={[
             {

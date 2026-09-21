@@ -36,6 +36,19 @@
     align-items: start;
     gap: var(--space-4) var(--space-3);
   }
+
+  /* ONE group filled the first column and left the second empty, so the
+     technician's route and the resident's visit history each used half a
+     1,440 px window with nothing beside them. The group takes the width and
+     its ROWS split into two columns instead — same short rows, no empty
+     canvas. */
+  .single {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .single .list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 .groupTitle {
