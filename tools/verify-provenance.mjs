@@ -26,6 +26,20 @@ const METRIC_COMPONENTS = [
   'CategoricalChart',
   'CarbonCard',
 ];
+/**
+ * A CSS declaration inside a `style={{ … }}` object. A proportional bar has to
+ * compute its own length — `inlineSize: ${(value / max) * 100}%` — and both
+ * the bare-figure and the concatenated-format rules read that as a measured
+ * figure rendered without provenance, which it is not: it is a CSS length and
+ * no reader ever sees it.
+ *
+ * Matches the line that OPENS a style object, and a property line inside one.
+ * Deliberately not "anything in braces": the rules must keep firing on
+ * ordinary interpolated text.
+ */
+const CSS_DECL =
+  /style\s*=\s*\{\{|^\s*(?:'--[\w-]+'|inlineSize|blockSize|width|height|min(?:Inline|Block)Size|max(?:Inline|Block)Size|flexBasis|transform|top|right|bottom|left|gridTemplateColumns|strokeDasharray)\s*:/;
+
 /** Units that mark a value as measured rather than decorative. */
 const UNIT = /\d\s*(kWh|kW\b|Wh\b|W\b|kgCO₂e|kgCO2e|ppm|°C|µg\/m³|IDR|Rp\s*[\d.]|%)/;
 
@@ -64,7 +78,7 @@ for (const file of files) {
     // component?") meant one correct Metric switched the rule off for every
     // other line in the file — the self-test caught it.
     const jsxText = raw.replace(/<[^>]*>/g, ' ');
-    if (UNIT.test(jsxText)) {
+    if (UNIT.test(jsxText) && !CSS_DECL.test(raw)) {
       add(
         file,
         n,

@@ -630,3 +630,44 @@ export interface NoticeListProps {
   /** The row's call to action. Required when `hrefFor` is given. */
   hintKey?: I18nKey;
 }
+
+/* ----------------------------------------------------------------- bar list */
+
+/** One row: a name, a figure, and optionally somewhere to go. */
+export interface BarListItem {
+  id: string;
+  /** Free text — a room the resident named, or a translated lever label. The
+   *  list never invents a string, so the caller translates before it gets
+   *  here. */
+  name: string;
+  /** `null` is MISSING, not zero: the row states its absence and draws no bar
+   *  (INV-NO-FABRICATION). */
+  value: number | null;
+  href?: string;
+  /** The row's call to action. Per row, because "Review Eco on the unit" and
+   *  "Open the weekly programme" are not the same errand. */
+  hintKey?: I18nKey;
+}
+
+/**
+ * A ranked list of one figure across N things — saving by lever, energy by
+ * space, energy by unit.
+ *
+ * `client.energy` drew all three as decks of full-width cards, one figure and
+ * one button each: twenty-two cards and about four thousand pixels of scroll
+ * for twenty-two numbers, on the screen whose whole job is comparing them.
+ * A bar makes the comparison the reader came for visible; the figure beside
+ * it keeps the exact value; the row is the link.
+ *
+ * `provenance` is required for the same reason it is on the charts: this is a
+ * figure, and an aggregate inherits the weakest provenance of its inputs.
+ */
+export interface BarListProps {
+  items: readonly BarListItem[];
+  /** The SYMBOL — "kWh", "IDR". */
+  unit: string;
+  provenance: Provenance;
+  accessibleNameKey: I18nKey;
+  /** Which channel the bars belong to. Energy is the accent; carbon is eco. */
+  tone?: 'accent' | 'eco';
+}

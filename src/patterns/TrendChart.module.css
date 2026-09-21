@@ -18,8 +18,13 @@
 
 /* The ratio governs the small end, the ceiling governs the large one: ten by
    three is right at the phone frame and half a page on a monitor. */
+/* `flex: 1 1 0` with a zero minimum, NOT `inline-size: 100%`: the plot sits
+   in a flex row beside the y ticks, and a hundred-percent basis resolves
+   against the whole row, so the drawing hung two pixels past the phone frame
+   and the page scrolled sideways. */
 .plot {
-  inline-size: 100%;
+  flex: 1 1 0;
+  min-inline-size: 0;
   aspect-ratio: 10 / 3;
   max-block-size: var(--space-11);
   overflow: visible;

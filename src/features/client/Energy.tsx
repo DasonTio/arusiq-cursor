@@ -28,6 +28,7 @@ import {
   type Reading,
   type Unit,
 } from '../../lib/simulation/index.ts';
+import { BarList } from '../../patterns/BarList.tsx';
 import { MetricGrid } from '../../patterns/MetricGrid.tsx';
 import { CalendarDays, Wallet, Zap } from 'lucide-react';
 import { MetricTile } from '../../patterns/MetricTile.tsx';
@@ -392,6 +393,14 @@ export default function Energy() {
                 value: format(series.completeness * 100),
               })}
             </p>
+            {/* The chart's text alternative. It sat at the very bottom of
+                the screen, four sections below the chart it describes. */}
+            <p className={styles.meta}>
+              {t('client.energy.chartAlt', {
+                actual: format(actualTotal),
+                baseline: format(baselineTotal),
+              })}
+            </p>
             <Button variant="ghost" to={series.method.href}>
               {t('client.energy.methodLink')}
             </Button>
@@ -423,77 +432,54 @@ export default function Energy() {
       </section>
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>{t('client.energy.leversTitle')}</h2>
-        <ul className={styles.list}>
-          {series.levers.map((lever) => {
-            return (
-              <li key={lever.key} className={styles.card}>
-                <p className={styles.cardTitle}>
-                  {t(`client.energy.lever.${lever.key}`)}
-                </p>
-                <Metric
-                  labelKey="client.energy.savingKwh"
-                  value={lever.kWh}
-                  unit="kWh"
-                  provenance={series.provenance}
-                  lastSeen={series.actual.at(-1)?.t ?? null}
-                />
-                <Button variant="ghost" to={LEVER_HREF[lever.key] ?? '/spaces'}>
-                  {t(`client.energy.leverAction.${lever.key}`)}
-                </Button>
-              </li>
-            );
-          })}
-        </ul>
+        {/* "Which lever saved most" is a ranking, and it was five cards in
+            record order with a button on each. */}
+        <BarList
+          accessibleNameKey="client.energy.leversTitle"
+          unit="kWh"
+          provenance={series.provenance}
+          items={series.levers.map((lever) => ({
+            id: lever.key,
+            name: t(`client.energy.lever.${lever.key}`),
+            value: lever.kWh,
+            href: LEVER_HREF[lever.key] ?? '/spaces',
+            hintKey: `client.energy.leverAction.${lever.key}`,
+          }))}
+        />
       </section>
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>{t('client.energy.byRoom')}</h2>
-        <ul className={styles.list}>
-          {rooms.map((row) => {
-            const kWh = periodKWh(row.series);
-            return (
-              <li key={row.roomName} className={styles.card}>
-                <p className={styles.cardTitle}>{row.roomName}</p>
-                <Metric
-                  labelKey="client.energy.energyMonth"
-                  value={kWh.value}
-                  unit="kWh"
-                  provenance={kWh.provenance}
-                  lastSeen={kWh.lastSeen}
-                />
-              </li>
-            );
-          })}
-        </ul>
+        <BarList
+          accessibleNameKey="client.energy.byRoom"
+          unit="kWh"
+          provenance={weakestProvenance(
+            rooms.map((row) => periodKWh(row.series).provenance),
+          )}
+          items={rooms.map((row) => ({
+            id: row.roomName,
+            name: row.roomName,
+            value: periodKWh(row.series).value,
+          }))}
+        />
       </section>
       <section className={styles.section}>
         <h2 className={styles.sectionTitle}>{t('client.energy.byUnit')}</h2>
-        <ul className={styles.list}>
-          {unitRows.map((row) => {
-            const kWh = periodKWh(row.series);
-            return (
-              <li key={row.unit.id} className={styles.card}>
-                <p className={styles.cardTitle}>{row.unit.name}</p>
-                <Metric
-                  labelKey="client.energy.energyMonth"
-                  value={kWh.value}
-                  unit="kWh"
-                  provenance={kWh.provenance}
-                  lastSeen={kWh.lastSeen}
-                />
-                <Button variant="ghost" to={links.unit(row.unit.id)}>
-                  {row.unit.name}
-                </Button>
-              </li>
-            );
-          })}
-        </ul>
+        {/* The button on every card repeated the unit's own name, so the deck
+            said each name twice and led nowhere the row could not. */}
+        <BarList
+          accessibleNameKey="client.energy.byUnit"
+          unit="kWh"
+          provenance={weakestProvenance(
+            unitRows.map((row) => periodKWh(row.series).provenance),
+          )}
+          items={unitRows.map((row) => ({
+            id: row.unit.id,
+            name: row.unit.name,
+            value: periodKWh(row.series).value,
+            href: links.unit(row.unit.id),
+          }))}
+        />
       </section>
-      <p className={styles.meta}>
-        {t('client.energy.chartAlt', {
-          actual: format(actualTotal),
-          baseline: format(baselineTotal),
-        })}
-      </p>
     </div>
   );
 }

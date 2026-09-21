@@ -19,6 +19,21 @@ const add = (file, line, rule, msg) => problems.push({ file, line, rule, msg });
 const TEXT_PROPS =
   /\b(placeholder|aria-label|title|alt|label|aria-description)\s*=\s*"([^"]{2,})"/g;
 const WORDS = /[A-Za-z]{2,}/;
+
+/**
+ * A CSS declaration inside a `style={{ … }}` object. A proportional bar has to
+ * compute its own length — `inlineSize: ${(value / max) * 100}%` — and both
+ * the bare-figure and the concatenated-format rules read that as a measured
+ * figure rendered without provenance, which it is not: it is a CSS length and
+ * no reader ever sees it.
+ *
+ * Matches the line that OPENS a style object, and a property line inside one.
+ * Deliberately not "anything in braces": the rules must keep firing on
+ * ordinary interpolated text.
+ */
+const CSS_DECL =
+  /style\s*=\s*\{\{|^\s*(?:'--[\w-]+'|inlineSize|blockSize|width|height|min(?:Inline|Block)Size|max(?:Inline|Block)Size|flexBasis|transform|top|right|bottom|left|gridTemplateColumns|strokeDasharray)\s*:/;
+
 /** Tolerated: pure markup, entities, numbers, single letters, code-ish tokens. */
 const IGNORE = /^[\s\d\p{P}\p{S}]*$/u;
 
@@ -95,7 +110,10 @@ for (const file of files) {
     }
 
     // --- Concatenated numbers, currency, dates ------------------------------
-    if (/\$\{[^}]*\}\s*(kWh|%|°C|kg|Rp|IDR)/.test(raw) || /(Rp|IDR)\s*\$\{/.test(raw))
+    if (
+      !CSS_DECL.test(raw) &&
+      (/\$\{[^}]*\}\s*(kWh|%|°C|kg|Rp|IDR)/.test(raw) || /(Rp|IDR)\s*\$\{/.test(raw))
+    )
       add(
         file,
         n,

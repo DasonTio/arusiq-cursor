@@ -30,8 +30,12 @@
 /* An aspect-ratio box, never a fixed height (D7 §12.2): the chart scales from
    375 px without a layout shift on load. The ratio matches the viewBox exactly
    (100 / 30), so the drawing fills it rather than letterboxing inside it. */
+/* `flex: 1 1 0` with a zero minimum, NOT `inline-size: 100%`: the plot sits
+   in a flex row beside the y ticks, and a hundred-percent basis resolves
+   against the whole row rather than the space left over. */
 .plot {
-  inline-size: 100%;
+  flex: 1 1 0;
+  min-inline-size: 0;
   aspect-ratio: 10 / 3;
   /* The ratio is right at the phone frame, where it stops the chart
      squashing. It is wrong above a laptop: ten-by-three on a wide monitor is

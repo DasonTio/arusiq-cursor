@@ -1052,7 +1052,8 @@
       "methodLink": "Cara ini dihitung",
       "completeness": "Kelengkapan {{value}} %",
       "coverage": "{{reporting}} dari {{total}} unit melapor",
-      "unitLine": "{{name}} · {{value}} kWh"
+      "unitLine": "{{name}} · {{value}} kWh",
+      "openUnit": "Buka unit"
     },
     "carbon": {
       "title": "Karbon",

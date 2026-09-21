@@ -1052,7 +1052,8 @@
       "methodLink": "How this was calculated",
       "completeness": "Completeness {{value}} %",
       "coverage": "{{reporting}} of {{total}} units reported",
-      "unitLine": "{{name}} · {{value}} kWh"
+      "unitLine": "{{name}} · {{value}} kWh",
+      "openUnit": "Open the unit"
     },
     "carbon": {
       "title": "Carbon",

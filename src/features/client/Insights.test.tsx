@@ -33,10 +33,11 @@ describe('client insights and account — FR-50 FR-60 FR-61 FR-70', () => {
       screen.getByRole('link', { name: 'How this was calculated' }),
     ).toHaveAttribute('href', expect.stringContaining('/insights?method='));
     expect(screen.getByText('Eco mode')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'See filter alerts' })).toHaveAttribute(
-      'href',
-      '/alerts',
-    );
+    // The lever rows are the links now, so the accessible name is the whole
+    // row — the lever, its saving and the errand it leads to.
+    expect(
+      screen.getByRole('link', { name: /Filter cleaning.*See filter alerts/ }),
+    ).toHaveAttribute('href', '/alerts');
   });
 
   it('opens the method room from the energy query', async () => {

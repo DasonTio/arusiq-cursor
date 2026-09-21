@@ -28,6 +28,14 @@ export function Good({ t, total, provenance }) {
       <button>{t('common.save')}</button>
       <input placeholder={t('form.email')} />
       <div style={{ marginInlineStart: 'var(--space-3)' }}>{total}</div>
+      {/* A proportional bar computes its own CSS length. It is not a measured
+          figure and no reader ever sees it, so neither the bare-figure rule
+          nor the concatenated-format rule may fire on it — delete the
+          CSS_DECL guard in either tool and this fixture stops being clean. */}
+      <span
+        className="bar"
+        style={{ inlineSize: total > 0 ? `${(total / 100) * 100}%` : '0%' }}
+      />
       <Metric value={5} unit="kWh" provenance={provenance} />
       <Button to="/accounts/approve?request=req-1">{t('common.review')}</Button>
     </div>
