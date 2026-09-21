@@ -69,6 +69,14 @@ export interface MetricProps {
    *  reported renders grey with a last-seen time, never as 0. */
   lastSeen?: string | null;
   trendKey?: I18nKey;
+  /**
+   * For a figure inside a TABLE CELL, where the column header is already the
+   * label. The label is kept for assistive technology and hidden visually,
+   * and the value drops to body size: a display-size figure with its own
+   * label repeated down every row took a quarter of the payments table and
+   * said "Balance due" five times under a column headed Balance.
+   */
+  compact?: boolean;
 }
 
 /* ---------------------------------------------------------------- severity */
@@ -718,4 +726,45 @@ export interface AssetTreeProps {
   labelKey: I18nKey;
   /** The word for a health-sensitive space. */
   sensitiveLabelKey: I18nKey;
+}
+
+/* --------------------------------------------------------------- data table */
+
+/**
+ * One column. `cell` returns a node so a figure can stay a `Metric` and a
+ * date can stay a time element — the table is layout and never formats.
+ */
+export interface DataColumn<Row> {
+  key: string;
+  labelKey: I18nKey;
+  /** Right-aligned and never wrapped: a figure is one figure. */
+  numeric?: boolean;
+  /**
+   * Never wrapped, but still start-aligned. A timestamp is one value and must
+   * not break across two lines, yet right-aligning a column of dates leaves
+   * them ragged down the left where the reader scans them.
+   */
+  nowrap?: boolean;
+  /** This column names the row, so its cell is a `th` with a row scope. */
+  rowHeader?: boolean;
+  cell: (row: Row) => ReactNode;
+}
+
+/**
+ * Repeating fields are a table (`35-dashboard-composition.md` §3), and five
+ * screens reached for one: payments, the three on settings, the audit log.
+ *
+ * The component exists for the part a hand-written table forgets. Below the
+ * 768 frame the columns no longer hold, so the table RECOMPOSES rather than
+ * shrinking: the header is clipped but stays in the accessibility tree, every
+ * cell becomes a block and carries its column name. That only works if every
+ * cell has its label, which is exactly the thing nobody remembers to add to
+ * the twelfth column — so the table writes it from the column definition.
+ */
+export interface DataTableProps<Row> {
+  /** The table's own name. Visually hidden; a table needs one regardless. */
+  captionKey: I18nKey;
+  columns: readonly DataColumn<Row>[];
+  rows: readonly Row[];
+  rowKey: (row: Row) => string;
 }

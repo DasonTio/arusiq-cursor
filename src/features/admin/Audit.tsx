@@ -9,14 +9,25 @@ import { Button } from '../../components/Button.tsx';
 import { MockBoundary } from '../../components/MockBoundary.tsx';
 import { LOAD_STATE, type LoadState } from '../../lib/domain/loadState.ts';
 import { simulatedTelemetry, walkUnits } from '../../lib/simulation/index.ts';
+import { DataTable } from '../../patterns/DataTable.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { useSession } from '../auth/session.ts';
 import styles from '../shared/Screen.module.css';
 
+/**
+ * One audit row, as four FIELDS rather than one sentence.
+ *
+ * The screen drew twenty-three identical cards in two columns, so the
+ * chronology zig-zagged left-right-left down the page and the only way to
+ * compare two events was to read both sentences in full. Same fields on every
+ * row means a table (§3), and a table needs the fields apart.
+ */
 interface AuditRow {
   id: string;
   at: string;
-  text: string;
+  kindKey: string;
+  subject: string;
+  detail: string;
 }
 
 export default function Audit() {
@@ -47,17 +58,17 @@ export default function Audit() {
             next.push({
               id: `restriction-${unit.id}`,
               at: unit.restriction.approval.at,
+              kindKey: 'admin.audit.kindRestriction',
+              subject: t(`restriction.${unit.restriction.step}`),
               // ADR-0015 OD-02 — rung 4 carries a third signature. An audit
               // row that shows two of three signatures is not an audit row.
-              text: unit.restriction.approval.signedOff
-                ? t('admin.audit.rowRestrictionSignedOff', {
-                    step: t(`restriction.${unit.restriction.step}`),
+              detail: unit.restriction.approval.signedOff
+                ? t('admin.audit.detailSignedOff', {
                     requester: unit.restriction.approval.requester,
                     approver: unit.restriction.approval.approver,
                     manager: unit.restriction.approval.signedOff.manager,
                   })
-                : t('admin.audit.rowRestriction', {
-                    step: t(`restriction.${unit.restriction.step}`),
+                : t('admin.audit.detailApproval', {
                     requester: unit.restriction.approval.requester,
                     approver: unit.restriction.approval.approver,
                   }),
@@ -67,10 +78,9 @@ export default function Audit() {
             next.push({
               id: `command-${unit.id}`,
               at: unit.control.lastCommand.at,
-              text: t('admin.audit.rowCommand', {
-                unit: unit.name,
-                state: t(`command.${unit.control.lastCommand.state}`),
-              }),
+              kindKey: 'admin.audit.kindCommand',
+              subject: unit.name,
+              detail: t(`command.${unit.control.lastCommand.state}`),
             });
           }
         });
@@ -78,10 +88,9 @@ export default function Audit() {
           next.push({
             id: `visit-${order.id}`,
             at: order.openedAt,
-            text: t('admin.audit.rowVisit', {
-              title: t(order.titleKey),
-              state: t(`workOrder.state.${order.state}`),
-            }),
+            kindKey: 'admin.audit.kindVisit',
+            subject: t(order.titleKey),
+            detail: t(`workOrder.state.${order.state}`),
           });
         });
         next.sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
@@ -150,26 +159,49 @@ export default function Audit() {
   return (
     <div className={styles.root}>
       <PageHeader titleKey="admin.audit.title" contextKey="admin.audit.purpose" />
-      <ul className={styles.list}>
-        {rows.map((row) => {
-          return (
-            <li key={row.id} className={styles.card}>
-              <p className={styles.cardTitle}>{row.text}</p>
-              <p className={styles.meta}>{formatDateTime(row.at)}</p>
-            </li>
-          );
-        })}
-      </ul>
+      {/* Newest first, in ONE column. Two columns of cards made the reader
+          scan left-right-left down a list whose whole meaning is its order. */}
+      <DataTable
+        captionKey="admin.audit.title"
+        rows={rows}
+        rowKey={(row) => row.id}
+        columns={[
+          {
+            key: 'at',
+            labelKey: 'admin.audit.colWhen',
+            rowHeader: true,
+            nowrap: true,
+            cell: (row) => <time dateTime={row.at}>{formatDateTime(row.at)}</time>,
+          },
+          {
+            key: 'kind',
+            labelKey: 'admin.audit.colKind',
+            cell: (row) => t(row.kindKey),
+          },
+          {
+            key: 'subject',
+            labelKey: 'admin.audit.colSubject',
+            cell: (row) => row.subject,
+          },
+          {
+            key: 'detail',
+            labelKey: 'admin.audit.colDetail',
+            cell: (row) => row.detail,
+          },
+        ]}
+      />
       <MockBoundary explanationKey="admin.audit.exportMock">
-        <Button
-          variant="secondary"
-          onClick={() => {
-            setExported(true);
-          }}
-        >
-          {t('admin.audit.export')}
-        </Button>
-        {exported ? <p>{t('admin.audit.exportMock')}</p> : null}
+        <div className={styles.choices}>
+          <Button
+            variant="secondary"
+            onClick={() => {
+              setExported(true);
+            }}
+          >
+            {t('admin.audit.export')}
+          </Button>
+          {exported ? <p>{t('admin.audit.exportMock')}</p> : null}
+        </div>
       </MockBoundary>
     </div>
   );

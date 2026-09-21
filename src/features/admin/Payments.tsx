@@ -16,6 +16,7 @@ import {
   type AccountStanding,
   type Property,
 } from '../../lib/simulation/index.ts';
+import { DataTable } from '../../patterns/DataTable.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { useSession } from '../auth/session.ts';
 import styles from '../shared/Screen.module.css';
@@ -117,110 +118,107 @@ export default function Payments() {
     <div className={styles.root}>
       <PageHeader titleKey="admin.payments.title" contextKey="admin.payments.purpose" />
       <MockBoundary explanationKey="admin.payments.mock">
-        <div className={tableStyles.panel}>
-          <table className={tableStyles.table}>
-            <caption className="sr-only">{t('admin.payments.purpose')}</caption>
-            <thead className={tableStyles.head}>
-              <tr>
-                <th scope="col">{t('admin.payments.colSite')}</th>
-                <th scope="col">{t('admin.payments.colStanding')}</th>
-                <th scope="col" className={tableStyles.numeric}>
-                  {t('admin.payments.colBalance')}
-                </th>
-                <th scope="col" className={tableStyles.numeric}>
-                  {t('admin.payments.colDue')}
-                </th>
-                <th scope="col">{t('admin.payments.colRung')}</th>
-                <th scope="col">{t('admin.payments.colApprovals')}</th>
-                <th scope="col">{t('admin.payments.colAction')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row) => {
+        <DataTable
+          captionKey="admin.payments.purpose"
+          rows={rows}
+          rowKey={(row) => row.property.id}
+          columns={[
+            {
+              key: 'site',
+              labelKey: 'admin.payments.colSite',
+              rowHeader: true,
+              nowrap: true,
+              cell: (row) => row.property.name,
+            },
+            {
+              key: 'standing',
+              labelKey: 'admin.payments.colStanding',
+              cell: (row) => t(`client.billing.state.${row.standing.state}`),
+            },
+            {
+              key: 'balance',
+              labelKey: 'admin.payments.colBalance',
+              numeric: true,
+              cell: (row) => (
+                <Metric
+                  compact
+                  labelKey="client.billing.balance"
+                  value={row.standing.balanceIdr.value}
+                  unit="IDR"
+                  provenance={row.standing.balanceIdr.provenance}
+                  lastSeen={row.standing.balanceIdr.lastSeen}
+                />
+              ),
+            },
+            {
+              key: 'due',
+              labelKey: 'admin.payments.colDue',
+              nowrap: true,
+              cell: (row) => (
+                <time dateTime={row.standing.dueAt}>
+                  {formatDateTime(row.standing.dueAt)}
+                </time>
+              ),
+            },
+            {
+              key: 'rung',
+              labelKey: 'admin.payments.colRung',
+              cell: (row) =>
+                row.standing.restriction ? (
+                  <span className={tableStyles.rung}>
+                    <SeverityIndicator
+                      severity={restrictionSeverity(row.standing.restriction.step)}
+                    />
+                    <span>{t(`restriction.${row.standing.restriction.step}`)}</span>
+                  </span>
+                ) : (
+                  t('client.billing.restrictionNone')
+                ),
+            },
+            {
+              key: 'approvals',
+              labelKey: 'admin.payments.colApprovals',
+              cell: (row) => {
                 const restriction = row.standing.restriction;
+                if (!restriction) return t('workOrder.result.notApplicable');
                 return (
-                  <tr key={row.property.id}>
-                    <th scope="row" className={tableStyles.site}>
-                      {row.property.name}
-                    </th>
-                    <td data-label={t('admin.payments.colStanding')}>
-                      {t(`client.billing.state.${row.standing.state}`)}
-                    </td>
-                    <td
-                      data-label={t('admin.payments.colBalance')}
-                      className={tableStyles.numeric}
-                    >
-                      <Metric
-                        labelKey="client.billing.balance"
-                        value={row.standing.balanceIdr.value}
-                        unit="IDR"
-                        provenance={row.standing.balanceIdr.provenance}
-                        lastSeen={row.standing.balanceIdr.lastSeen}
-                      />
-                    </td>
-                    <td
-                      data-label={t('admin.payments.colDue')}
-                      className={tableStyles.numeric}
-                    >
-                      <time dateTime={row.standing.dueAt}>
-                        {formatDateTime(row.standing.dueAt)}
-                      </time>
-                    </td>
-                    <td data-label={t('admin.payments.colRung')}>
-                      {restriction ? (
-                        <span className={tableStyles.rung}>
-                          <SeverityIndicator
-                            severity={restrictionSeverity(restriction.step)}
-                          />
-                          <span>{t(`restriction.${restriction.step}`)}</span>
-                        </span>
-                      ) : (
-                        t('client.billing.restrictionNone')
-                      )}
-                    </td>
-                    <td
-                      data-label={t('admin.payments.colApprovals')}
-                      className={tableStyles.approvals}
-                    >
-                      {restriction ? (
-                        <>
-                          <p>
-                            {t('client.billing.restrictionApprovers', {
-                              requester: restriction.approval.requester,
-                              approver: restriction.approval.approver,
-                              time: formatDateTime(restriction.approval.at),
-                            })}
-                          </p>
-                          {/* ADR-0015 OD-02 — the rung-4 management sign-off. */}
-                          {restriction.approval.signedOff ? (
-                            <p>
-                              {t('admin.approve.decidedSignedOff', {
-                                name: restriction.approval.signedOff.manager,
-                                time: formatDateTime(restriction.approval.signedOff.at),
-                              })}
-                            </p>
-                          ) : null}
-                        </>
-                      ) : (
-                        t('workOrder.result.notApplicable')
-                      )}
-                    </td>
-                    <td>
-                      {restriction ? (
-                        <Button
-                          variant="ghost"
-                          to={`/accounts/case?property=${encodeURIComponent(row.property.id)}`}
-                        >
-                          {t('admin.payments.openCase')}
-                        </Button>
-                      ) : null}
-                    </td>
-                  </tr>
+                  <span className={tableStyles.approvals}>
+                    <span>
+                      {t('client.billing.restrictionApprovers', {
+                        requester: restriction.approval.requester,
+                        approver: restriction.approval.approver,
+                        time: formatDateTime(restriction.approval.at),
+                      })}
+                    </span>
+                    {/* ADR-0015 OD-02 — the rung-4 management sign-off. */}
+                    {restriction.approval.signedOff ? (
+                      <span>
+                        {t('admin.approve.decidedSignedOff', {
+                          name: restriction.approval.signedOff.manager,
+                          time: formatDateTime(restriction.approval.signedOff.at),
+                        })}
+                      </span>
+                    ) : null}
+                  </span>
                 );
-              })}
-            </tbody>
-          </table>
-        </div>
+              },
+            },
+            {
+              key: 'action',
+              labelKey: 'admin.payments.colAction',
+              nowrap: true,
+              cell: (row) =>
+                row.standing.restriction ? (
+                  <Button
+                    variant="ghost"
+                    to={`/accounts/case?property=${encodeURIComponent(row.property.id)}`}
+                  >
+                    {t('admin.payments.openCase')}
+                  </Button>
+                ) : null,
+            },
+          ]}
+        />
       </MockBoundary>
     </div>
   );

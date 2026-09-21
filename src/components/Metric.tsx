@@ -16,6 +16,7 @@ export function Metric({
   provenance,
   lastSeen,
   trendKey,
+  compact = false,
 }: MetricProps) {
   const { t, i18n } = useTranslation();
   const missing = value === null;
@@ -37,9 +38,20 @@ export function Metric({
         })
       : null;
 
+  const rootClass = [
+    styles.root,
+    missing ? styles.missing : '',
+    compact ? styles.compact : '',
+  ]
+    .filter(Boolean)
+    .join(' ');
+
   return (
-    <div className={missing ? `${styles.root} ${styles.missing}` : styles.root}>
-      <p className={styles.label}>{t(labelKey)}</p>
+    <div className={rootClass}>
+      {/* Hidden, not dropped: in a table the column header carries the label
+          for a sighted reader, and a screen reader reading one cell out of
+          context still needs it. */}
+      <p className={compact ? 'sr-only' : styles.label}>{t(labelKey)}</p>
       <p className={styles.valueRow}>
         <span className={styles.value}>{formatted}</span>
         {missing ? null : <span className={styles.unit}>{unit}</span>}

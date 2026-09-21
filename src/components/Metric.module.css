@@ -60,3 +60,22 @@
     line-height: var(--line-height-h3);
   }
 }
+
+/* A figure in a table cell. The column header is the label, so the figure
+   steps down to body size and stops competing with the row beside it. */
+.compact .value {
+  font-family: var(--font-body);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-md);
+  font-weight: var(--font-weight-semibold);
+}
+
+.compact .unit {
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-gray-2);
+}
+
+.compact .valueRow {
+  white-space: nowrap;
+}
