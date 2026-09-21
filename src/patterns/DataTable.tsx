@@ -23,6 +23,7 @@ import styles from './DataTable.module.css';
 
 export function DataTable<Row>({
   captionKey,
+  captionValues,
   columns,
   rows,
   rowKey,
@@ -34,7 +35,7 @@ export function DataTable<Row>({
   return (
     <div className={styles.panel}>
       <table className={styles.table}>
-        <caption className="sr-only">{t(captionKey)}</caption>
+        <caption className="sr-only">{t(captionKey, captionValues)}</caption>
         <thead className={styles.head}>
           <tr>
             {columns.map((column) => (

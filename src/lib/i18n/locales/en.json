@@ -892,7 +892,12 @@
       "metaState": "Status",
       "metaPriority": "Priority",
       "metaAssignee": "Assignee",
-      "metaSla": "SLA due"
+      "metaSla": "SLA due",
+      "colCheck": "Check",
+      "colReading": "Reading",
+      "colEvidence": "Evidence",
+      "colResult": "Result",
+      "checklistCaption": "{{group}} checks"
     },
     "ladder": {
       "inForce": "In force now",
@@ -1249,7 +1254,10 @@
       "mapMock": "A fleet map is not drawn in Phase 1A.",
       "openDeviceHealth": "Device health",
       "activityTitle": "Recent commands",
-      "activityEmpty": "No commands have been sent yet."
+      "activityEmpty": "No commands have been sent yet.",
+      "colWhen": "When",
+      "colUnit": "Unit",
+      "colState": "State"
     },
     "dispatch": {
       "title": "Service board",

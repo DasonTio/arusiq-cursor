@@ -176,3 +176,25 @@
     padding: var(--space-4);
   }
 }
+
+/* --- the checklist table -------------------------------------------------
+   Twelve checks, each with the same five fields and a three-button verdict
+   group, drawn as twelve full-width cards: 3,169 px to record one visit. */
+
+.verdicts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+}
+
+.evidenceCell {
+  display: grid;
+  gap: var(--space-1);
+  min-inline-size: 0;
+}
+
+.metaInline {
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-gray-2);
+}

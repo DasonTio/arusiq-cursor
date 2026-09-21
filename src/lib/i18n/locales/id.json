@@ -892,7 +892,12 @@
       "metaState": "Status",
       "metaPriority": "Prioritas",
       "metaAssignee": "Teknisi",
-      "metaSla": "Batas SLA"
+      "metaSla": "Batas SLA",
+      "colCheck": "Pemeriksaan",
+      "colReading": "Pembacaan",
+      "colEvidence": "Bukti",
+      "colResult": "Hasil",
+      "checklistCaption": "Pemeriksaan {{group}}"
     },
     "ladder": {
       "inForce": "Berlaku sekarang",
@@ -1249,7 +1254,10 @@
       "mapMock": "Peta armada tidak digambar pada Fase 1A.",
       "openDeviceHealth": "Kesehatan perangkat",
       "activityTitle": "Perintah terbaru",
-      "activityEmpty": "Belum ada perintah yang dikirim."
+      "activityEmpty": "Belum ada perintah yang dikirim.",
+      "colWhen": "Waktu",
+      "colUnit": "Unit",
+      "colState": "Status"
     },
     "dispatch": {
       "title": "Papan layanan",

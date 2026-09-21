@@ -762,8 +762,16 @@ export interface DataColumn<Row> {
  * the twelfth column — so the table writes it from the column definition.
  */
 export interface DataTableProps<Row> {
-  /** The table's own name. Visually hidden; a table needs one regardless. */
+  /**
+   * The table's own name. Visually hidden; a table needs one regardless.
+   *
+   * It must not simply repeat a heading already above the table — a screen
+   * reader then announces "Indoor, heading" and "Indoor, table" one after the
+   * other. Name what the table IS, not what the section is about.
+   */
   captionKey: I18nKey;
+  /** Interpolation for `captionKey`, as `PageHeader` takes for its context. */
+  captionValues?: Record<string, string | number>;
   columns: readonly DataColumn<Row>[];
   rows: readonly Row[];
   rowKey: (row: Row) => string;

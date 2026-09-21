@@ -24,11 +24,15 @@ import {
   type WorkOrder as WorkOrderRecord,
   type WorkOrderOutcome,
 } from '../../lib/simulation/index.ts';
+import { DataTable } from '../../patterns/DataTable.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { useSession } from '../auth/session.ts';
 import styles from './WorkOrder.module.css';
 
 const VIEWS = ['brief', 'evidence', 'checklist', 'findings', 'closure'] as const;
+/** The three results a check can be recorded as, in the order they are
+ *  offered. `notRecorded` is a state, not a choice, so it is not here. */
+const CHECK_RESULTS = ['pass', 'fail', 'notApplicable'] as const;
 const VERDICTS: readonly FindingVerdict[] = [
   'confirmed',
   'notConfirmed',
@@ -347,82 +351,111 @@ export default function WorkOrder() {
                     {t('shared.work-order.noUnitChecklist')}
                   </p>
                 ) : (
-                  <ul className={styles.parts}>
-                    {group.items.map((item) => {
-                      return (
-                        <li key={item.id} className={styles.part}>
-                          <div className={styles.partTop}>
-                            <p className={styles.partName}>{t(item.labelKey)}</p>
-                            <p className={styles.meta}>
-                              {t(`workOrder.result.${item.result}`)}
-                            </p>
-                          </div>
-                          {item.measurement ? (
-                            <div className={styles.metrics}>
-                              <Metric
-                                labelKey={item.measurement.signalKey}
-                                value={item.measurement.observed?.value ?? null}
-                                unit={item.measurement.unit}
-                                provenance={
-                                  item.measurement.observed?.provenance ??
-                                  item.measurement.limit.provenance
-                                }
-                                lastSeen={item.measurement.observed?.lastSeen ?? null}
-                              />
-                              <Metric
-                                labelKey="shared.work-order.limit"
-                                value={item.measurement.limit.value}
-                                unit={item.measurement.unit}
-                                provenance={item.measurement.limit.provenance}
-                                lastSeen={item.measurement.limit.lastSeen}
-                              />
-                            </div>
-                          ) : null}
-                          {item.noteKey ? (
-                            <p className={styles.meta}>{t(item.noteKey)}</p>
-                          ) : null}
-                          {item.photos.map((photo) => {
-                            return (
-                              <p key={photo.id} className={styles.meta}>
+                  /* Twelve checks, each with the same five fields and a
+                     three-button verdict group, drawn as twelve full-width
+                     cards: 3,169 px to record a visit. The fields repeat, so
+                     it is a table (§3) — and the verdict group stays, because
+                     three buttons that record a result are a control, not a
+                     button on a card. */
+                  <DataTable
+                    captionKey="shared.work-order.checklistCaption"
+                    captionValues={{ group: t(group.labelKey) }}
+                    rows={group.items}
+                    rowKey={(item) => item.id}
+                    columns={[
+                      {
+                        key: 'check',
+                        labelKey: 'shared.work-order.colCheck',
+                        rowHeader: true,
+                        cell: (item) => t(item.labelKey),
+                      },
+                      {
+                        key: 'reading',
+                        labelKey: 'shared.work-order.colReading',
+                        numeric: true,
+                        cell: (item) =>
+                          item.measurement ? (
+                            <Metric
+                              compact
+                              labelKey={item.measurement.signalKey}
+                              value={item.measurement.observed?.value ?? null}
+                              unit={item.measurement.unit}
+                              provenance={
+                                item.measurement.observed?.provenance ??
+                                item.measurement.limit.provenance
+                              }
+                              lastSeen={item.measurement.observed?.lastSeen ?? null}
+                            />
+                          ) : (
+                            t('workOrder.result.notApplicable')
+                          ),
+                      },
+                      {
+                        key: 'limit',
+                        labelKey: 'shared.work-order.limit',
+                        numeric: true,
+                        cell: (item) =>
+                          item.measurement ? (
+                            <Metric
+                              compact
+                              labelKey="shared.work-order.limit"
+                              value={item.measurement.limit.value}
+                              unit={item.measurement.unit}
+                              provenance={item.measurement.limit.provenance}
+                              lastSeen={item.measurement.limit.lastSeen}
+                            />
+                          ) : (
+                            t('workOrder.result.notApplicable')
+                          ),
+                      },
+                      {
+                        key: 'evidence',
+                        labelKey: 'shared.work-order.colEvidence',
+                        cell: (item) => (
+                          <span className={styles.evidenceCell}>
+                            {item.noteKey ? <span>{t(item.noteKey)}</span> : null}
+                            {item.photos.map((photo) => (
+                              <span key={photo.id} className={styles.metaInline}>
                                 {t('shared.work-order.photoCaption', {
                                   label: t(photo.labelKey),
                                   time: formatDateTime(photo.takenAt),
                                 })}
-                              </p>
-                            );
-                          })}
-                          {editable ? (
-                            <div className={styles.choices}>
-                              <Button
-                                variant="secondary"
-                                onClick={() => {
-                                  recordItem(item, 'pass');
-                                }}
-                              >
-                                {t('workOrder.result.pass')}
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                onClick={() => {
-                                  recordItem(item, 'fail');
-                                }}
-                              >
-                                {t('workOrder.result.fail')}
-                              </Button>
-                              <Button
-                                variant="ghost"
-                                onClick={() => {
-                                  recordItem(item, 'notApplicable');
-                                }}
-                              >
-                                {t('workOrder.result.notApplicable')}
-                              </Button>
-                            </div>
-                          ) : null}
-                        </li>
-                      );
-                    })}
-                  </ul>
+                              </span>
+                            ))}
+                          </span>
+                        ),
+                      },
+                      {
+                        key: 'result',
+                        labelKey: 'shared.work-order.colResult',
+                        nowrap: true,
+                        cell: (item) =>
+                          editable ? (
+                            /* The recorded result is the PRESSED button, not
+                               a separate word beside three that all look the
+                               same — which is what the row did, so a failed
+                               check and a passed one were identical until you
+                               read the far right of the card. */
+                            <span className={styles.verdicts}>
+                              {CHECK_RESULTS.map((result) => (
+                                <Button
+                                  key={result}
+                                  variant={item.result === result ? 'primary' : 'ghost'}
+                                  pressed={item.result === result}
+                                  onClick={() => {
+                                    recordItem(item, result);
+                                  }}
+                                >
+                                  {t(`workOrder.result.${result}`)}
+                                </Button>
+                              ))}
+                            </span>
+                          ) : (
+                            t(`workOrder.result.${item.result}`)
+                          ),
+                      },
+                    ]}
+                  />
                 )}
               </div>
             );

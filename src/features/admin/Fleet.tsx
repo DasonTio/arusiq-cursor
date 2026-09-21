@@ -16,6 +16,7 @@ import {
   type Property,
 } from '../../lib/simulation/index.ts';
 import { AssetTree } from '../../patterns/AssetTree.tsx';
+import { DataTable } from '../../patterns/DataTable.tsx';
 import { PageHeader } from '../../patterns/PageHeader.tsx';
 import { useSession } from '../auth/session.ts';
 import Space from '../shared/Space.tsx';
@@ -149,25 +150,40 @@ export default function Fleet() {
         {activity.length === 0 ? (
           <p className={styles.meta}>{t('admin.fleet.activityEmpty')}</p>
         ) : (
-          <ul className={styles.list}>
-            {activity.map((unit) => {
-              return (
-                <li key={unit.id} className={styles.card}>
-                  <div className={styles.nodeTop}>
-                    <Button variant="ghost" to={href(unit.id)}>
-                      {unit.name}
-                    </Button>
-                    <p>{t(`command.${unit.control.lastCommand?.state}`)}</p>
-                  </div>
-                  {unit.control.lastCommand ? (
-                    <p className={styles.meta}>
-                      {formatDateTime(unit.control.lastCommand.at)}
-                    </p>
-                  ) : null}
-                </li>
-              );
-            })}
-          </ul>
+          /* One chronology, one table: the card grid made the newest-first
+             order zig-zag left-right-left down the page. */
+          <DataTable
+            captionKey="admin.fleet.activityTitle"
+            rows={activity}
+            rowKey={(unit) => unit.id}
+            columns={[
+              {
+                key: 'at',
+                labelKey: 'admin.fleet.colWhen',
+                rowHeader: true,
+                nowrap: true,
+                cell: (unit) => (
+                  <time dateTime={unit.control.lastCommand?.at}>
+                    {formatDateTime(unit.control.lastCommand?.at ?? '')}
+                  </time>
+                ),
+              },
+              {
+                key: 'unit',
+                labelKey: 'admin.fleet.colUnit',
+                cell: (unit) => (
+                  <Button variant="ghost" to={href(unit.id)}>
+                    {unit.name}
+                  </Button>
+                ),
+              },
+              {
+                key: 'state',
+                labelKey: 'admin.fleet.colState',
+                cell: (unit) => t(`command.${unit.control.lastCommand?.state}`),
+              },
+            ]}
+          />
         )}
       </section>
     </div>

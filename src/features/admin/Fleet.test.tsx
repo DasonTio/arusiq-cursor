@@ -43,4 +43,23 @@ describe('admin.fleet — Activity, the command log · FR-40', () => {
     const dining = within(activity).getByRole('link', { name: /Dining/ });
     expect(dining.getAttribute('href')).toBe('/fleet?node=unit-dining-1');
   });
+
+  it('renders the log as one chronology table, not a grid of two-fact cards', async () => {
+    renderFleet();
+    const activity = await screen.findByRole('region', { name: 'Recent commands' });
+    const table = within(activity).getByRole('table');
+    for (const column of ['When', 'Unit', 'State']) {
+      expect(
+        within(table).getByRole('columnheader', { name: column }),
+      ).toBeInTheDocument();
+    }
+    // Newest first: the log's meaning is its order.
+    const times = within(table)
+      .getAllByRole('rowheader')
+      .map((cell) =>
+        Date.parse(cell.querySelector('time')?.getAttribute('datetime') ?? ''),
+      );
+    expect(times.length).toBeGreaterThan(1);
+    expect([...times].sort((a, b) => b - a)).toEqual(times);
+  });
 });

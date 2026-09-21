@@ -82,6 +82,10 @@ describe('Work queue and work order — FR-32 FR-34 FR-11', () => {
     expect(screen.getByText('Electrical')).toBeInTheDocument();
     expect(screen.getByText('Compressor')).toBeInTheDocument();
     expect(screen.getByText('Air filter')).toBeInTheDocument();
+    // One table per group, each named for what it IS rather than repeating
+    // the heading above it — a screen reader should not hear "Indoor" twice.
+    expect(screen.getByRole('table', { name: 'Indoor checks' })).toBeInTheDocument();
+    expect(screen.getByRole('table', { name: 'Outdoor checks' })).toBeInTheDocument();
   });
 
   it('records a finding and refuses to close over a failed step', async () => {
