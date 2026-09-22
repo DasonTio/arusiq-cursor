@@ -383,3 +383,40 @@
     padding: var(--space-4);
   }
 }
+
+/* --- the room card, tightened ---------------------------------------------
+   Four stacked lines of identity and verdict cost eighty pixels a card, and
+   there are eight of them — 2,700 px of the phone frame was this one
+   section. The name carries its floor, and the comfort severity carries its
+   verdict. */
+
+.roomName {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-1) var(--space-2);
+}
+
+.roomVerdict,
+.roomEquipment {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+/* FR-53 — a designated space is marked wherever it appears. */
+.roomSensitive {
+  padding-block: var(--space-1);
+  padding-inline: var(--space-2);
+  border-radius: var(--radius-full);
+  background: color-mix(
+    in srgb,
+    var(--color-state-eco-text) 12%,
+    var(--surface-raised)
+  );
+  color: var(--color-state-eco-text);
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+}

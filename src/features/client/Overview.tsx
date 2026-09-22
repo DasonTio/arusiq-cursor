@@ -387,21 +387,30 @@ export default function Overview() {
             const humidity = readingOf(room.humidityPct);
             return (
               <li key={room.roomId} className={styles.roomItem}>
-                <div className={styles.roomTop}>
-                  <div>
-                    <p className={styles.roomName}>{room.name}</p>
-                    <p className={styles.roomMeta}>
-                      {room.floorNameKey ? t(room.floorNameKey) : room.floorName}
-                    </p>
-                    {room.healthSensitive ? (
-                      <p className={styles.roomMeta}>
-                        {t('client.overview.healthSensitive')}
-                      </p>
-                    ) : null}
-                  </div>
+                {/* The name and its floor are one identity, and the comfort
+                    severity and its verdict are one statement — "Warning:
+                    too warm". Four stacked lines became two, which is eighty
+                    pixels a card and eight cards on the phone frame.
+
+                    The comfort severity stays SEPARATE from the equipment
+                    roll-up below it, deliberately: merging them would let a
+                    warm afternoon and a failing compressor arrive at the
+                    reader as the same orange (D2 C-1). */}
+                <p className={styles.roomName}>
+                  {room.name}
+                  <span className={styles.roomMeta}>
+                    {room.floorNameKey ? t(room.floorNameKey) : room.floorName}
+                  </span>
+                  {room.healthSensitive ? (
+                    <span className={styles.roomSensitive}>
+                      {t('client.overview.healthSensitive')}
+                    </span>
+                  ) : null}
+                </p>
+                <p className={styles.roomVerdict}>
                   <SeverityIndicator severity={room.comfortSeverity} />
-                </div>
-                <p>{t(comfortLabelKey(room.verdict))}</p>
+                  <span>{t(comfortLabelKey(room.verdict))}</span>
+                </p>
                 <div className={styles.roomEvidence}>
                   <Metric
                     labelKey="client.overview.temperature"
@@ -430,13 +439,17 @@ export default function Overview() {
                     </ul>
                   </div>
                 ) : null}
-                <p className={styles.roomMeta}>{t('client.overview.equipment')}</p>
-                <SeverityRollUp
-                  severity={room.equipment.severity}
-                  contributing={room.equipment.contributing}
-                  total={room.equipment.total}
-                  href={room.href}
-                />
+                <p className={styles.roomEquipment}>
+                  <span className={styles.roomMeta}>
+                    {t('client.overview.equipment')}
+                  </span>
+                  <SeverityRollUp
+                    severity={room.equipment.severity}
+                    contributing={room.equipment.contributing}
+                    total={room.equipment.total}
+                    href={room.href}
+                  />
+                </p>
               </li>
             );
           })}
